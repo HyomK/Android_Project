@@ -10,6 +10,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initAfterBinding() {
         TODO("Not yet implemented")
-        호롤ㄹ로로
+        호롤ㄹ로로ㅁㄴㅇㄻㄴㅇㄹ
     }
 }
