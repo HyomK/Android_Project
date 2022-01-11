@@ -10,6 +10,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initAfterBinding() {
         TODO("Not yet implemented")
-        슬랙 연동 테스트
+        슬랙 연동 테스트  ㅁㄴㅇㄻㄴㅇㄹ
     }
 }
