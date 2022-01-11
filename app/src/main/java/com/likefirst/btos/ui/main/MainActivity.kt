@@ -9,6 +9,6 @@ import com.likefirst.btos.ui.BaseActivity
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     override fun initAfterBinding() {
-        아랄라
+        테스팅 커밋
     }
 }
