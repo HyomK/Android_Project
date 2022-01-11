@@ -9,6 +9,6 @@ import com.likefirst.btos.ui.BaseActivity
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     override fun initAfterBinding() {
-        테스팅 커밋
+        테스팅 커밋 추가추가
     }
 }
