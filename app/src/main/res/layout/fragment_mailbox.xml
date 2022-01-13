@@ -7,16 +7,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/mailbox_bg">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/mailbox_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/transparent"
-        android:text="X"
-        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/ic_close"
+
 
         />
 

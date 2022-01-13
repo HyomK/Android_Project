@@ -6,21 +6,23 @@
     android:paddingVertical="5dp">
 
     <LinearLayout
+        android:id="@+id/item_notify_layout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:clickable="true"
         >
 
         <TextView
+            android:id="@+id/item_notify_tv"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:layout_marginStart="30dp"
             android:textSize="17dp"
-            android:text="012345678901234567890123456789"
             android:gravity="center_vertical"
             android:maxLength="20"
             />
@@ -32,7 +34,7 @@
             android:layout_marginEnd="30dp"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_navigate"
             android:scaleType="centerCrop"
             />
 

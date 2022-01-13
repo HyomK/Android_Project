@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.likefirst.btos.R
 
@@ -25,22 +26,19 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         animationView.playAnimation()
 
         val mActivity = activity as MainActivity
-        binding.homeDrawerLayout.closeDrawers()
+
 
         binding.homeNotificationBtn.setOnClickListener {
-            binding.homeDrawerLayout.openDrawer((GravityCompat.START))
+            mActivity.findViewById<DrawerLayout>(R.id.main_layout).openDrawer((GravityCompat.START))
 
-        }
-        binding.sidebarExitBtn.setOnClickListener {
-            binding.homeDrawerLayout.closeDrawers()
         }
 
         binding.homeMailBtn.setOnClickListener {
-            mActivity.changeFragment(MailboxFragment()).moveFragment(R.id.home_mailbox_layout)
+            mActivity.changeFragment().moveFragment(R.id.home_mailbox_layout,MailboxFragment())
         }
 
         binding.homeWriteBtn.setOnClickListener {
-            mActivity.changeFragment(MailViewFragment()).moveFragment(R.id.home_main_layout)
+
         }
 
 
@@ -49,7 +47,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
-        //setWindowImage()
+        setWindowImage()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -62,7 +60,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
         if(now<=5){
             binding.windowIv.setImageResource(R.mipmap.window_morning)
-        }else if(now >=12 && now < 18) {
+        }else if(now in 12..18) {
             binding.windowIv.setImageResource(R.mipmap.window_afternoon)
         }else{
             binding.windowIv.setImageResource(R.mipmap.window_night)

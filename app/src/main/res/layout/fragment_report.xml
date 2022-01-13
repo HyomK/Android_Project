@@ -24,6 +24,7 @@
 
 
         <TextView
+            android:id="@+id/report_done_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,6 +162,23 @@
             android:layout_marginEnd="30dp"
             />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_gravity="center"
+        android:layout_width="320dp"
+        android:layout_height="140dp"
+        android:background="@drawable/report_edit_bg"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="15dp"
+            android:hint="직접 입력하기"
+            android:gravity="start"
+            android:textSize="14dp"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

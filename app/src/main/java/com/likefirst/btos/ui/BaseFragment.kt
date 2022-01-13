@@ -11,7 +11,7 @@ import com.likefirst.btos.R
 import com.likefirst.btos.utils.Inflate
 
 abstract class BaseFragment<VB : ViewBinding>(
-    val inflate: Inflate<VB>
+    private val inflate: Inflate<VB>
 ) : Fragment() {
     private var _binding: VB? = null
     protected val binding get() = _binding!!
