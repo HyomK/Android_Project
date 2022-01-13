@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BTOS</string>
+
+    <string-array name="report_items">
+        <item>""</item>
+        <item>삭제</item>
+        <item>신고</item>
+        <item>차단</item>
+
+    </string-array>
 </resources>

@@ -72,4 +72,10 @@ dependencies {
     //Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+
+    //lottie
+    implementation "com.airbnb.android:lottie:4.2.2"
+
+    //spiner custom
+    implementation 'com.google.android.material:material:1.4.0'
 }
