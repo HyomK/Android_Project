@@ -11,6 +11,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding> (ActivitySplashBindin
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this,LoginActivity::class.java)
             finish()
+            startActivity(intent)
         },5000)
     }
 
