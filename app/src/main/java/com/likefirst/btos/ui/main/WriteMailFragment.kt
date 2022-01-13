@@ -27,6 +27,11 @@ class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWrite
         binding.reportMenuList.onItemSelectedListener = SpinnerActivity()
         binding.reportMenuList.gravity = Gravity.CENTER
 
+        binding.letterwriteToolbar.toolbarBackIc.setOnClickListener{
+            val mActivity = activity as MainActivity
+            mActivity.supportFragmentManager.popBackStack()
+        }
+
 
 
     }

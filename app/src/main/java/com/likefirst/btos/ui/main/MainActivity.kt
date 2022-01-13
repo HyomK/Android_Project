@@ -11,6 +11,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
 
     override fun initAfterBinding() {
+
         val mButton = binding.mButton
 
         mButton.setOnClickListener{
@@ -67,6 +68,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 .replace(layout ,targetFragment!!)
                 .commit()
         }
+
     }
 
 
