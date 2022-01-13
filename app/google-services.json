@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "969188195320",
+    "project_id": "btos-7c7ee",
+    "storage_bucket": "btos-7c7ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969188195320:android:9ba9c157b6dd327d12740d",
+        "android_client_info": {
+          "package_name": "com.likefirst.btos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969188195320-ne8ipt9t7o9lgvp403r2afkn2sfvfc1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPGwWjrS827cukFJ_XW-zBKpfADPf67rk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969188195320-ne8ipt9t7o9lgvp403r2afkn2sfvfc1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

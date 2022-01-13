@@ -9,7 +9,6 @@ import com.likefirst.btos.ui.BaseActivity
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     override fun initAfterBinding() {
-        TODO("Not yet implemented")
-        슬랙 연동 테스트  ㅁㄴㅇㄻㄴㅇㄹ
+        테스팅 커밋 추가추가 더 추가
     }
 }
