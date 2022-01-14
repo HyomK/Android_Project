@@ -4,6 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android_Project/BTOS/app/src/main/res/layout/activity_main.xml" value="0.10625" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_back.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bg_diary.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_toggle_true.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_toggle_true2.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.2" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_main.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_diary_done_list_rv.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_diary.xml" value="0.2" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/menu/menu_diary.xml" value="0.24114583333333334" />
       </map>
     </option>
   </component>

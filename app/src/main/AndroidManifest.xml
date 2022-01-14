@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTOS">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.posting.DiaryActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
