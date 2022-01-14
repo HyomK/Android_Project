@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.main.LoginActivity"
-            android:exported="true">
-
+            android:name=".ui.main.LoginActivity">
         </activity>
-
+        <activity
+            android:name=".ui.main.OnboardingActivity">
+        </activity>
     </application>
 
 </manifest>
