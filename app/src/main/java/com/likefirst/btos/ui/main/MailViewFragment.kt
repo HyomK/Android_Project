@@ -45,7 +45,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 //신고
                 1 -> {
                     Log.d("selected", "moved")
-                    mActivity.changeFragment().moveFragment(R.id.home_main_layout,ReportFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.home_main_layout,ReportFragment())
                    // mActivity.supportFragmentManager.popBackStack()
                     onDestroyView()
                 }
@@ -99,7 +99,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
-                    mActivity.changeFragment().moveFragment(R.id.letterview_main_layout,WriteMailFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.letterview_main_layout,WriteMailFragment())
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")
@@ -152,7 +152,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 }
                 //신고
                 1 -> {
-                    mActivity.changeFragment().moveFragment(R.id.letterview_main_layout,ReportFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.letterview_main_layout,ReportFragment())
                 }
                 //차단
                 2 -> {

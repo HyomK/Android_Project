@@ -20,7 +20,7 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
         val mActivity = activity as MainActivity
 
         binding.reportToolbar.toolbarBackIc.setOnClickListener {
-            mActivity.changeFragment().removeFragment(this)
+            mActivity.ChangeFragment().removeFragment(this)
         }
         binding.reportToolbar.toolbarTitleTv.text="신고하기"
         binding.reportDoneBtn.setOnClickListener{

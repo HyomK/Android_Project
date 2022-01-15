@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.main
 
 
+import android.content.Intent
 import android.media.Image
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,6 +13,7 @@ import com.likefirst.btos.R
 
 import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.posting.DiaryActivity
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -34,11 +36,11 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
 
         binding.homeMailBtn.setOnClickListener {
-            mActivity.changeFragment().moveFragment(R.id.home_mailbox_layout,MailboxFragment())
+            mActivity.ChangeFragment().moveFragment(R.id.home_mailbox_layout,MailboxFragment())
         }
 
         binding.homeWriteBtn.setOnClickListener {
-
+            mActivity.startNextActivity(DiaryActivity::class.java)
         }
 
 

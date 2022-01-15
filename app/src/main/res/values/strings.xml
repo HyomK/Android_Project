@@ -6,4 +6,7 @@
         <item>신고</item>
         <item>차단</item>
     </string-array>
+
+    <string name="diary_public">공개</string>
+    <string name="diary_private">비공개</string>
 </resources>

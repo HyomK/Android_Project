@@ -3,12 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <font
-
         android:fontStyle="normal"
         android:font="@font/notosanskr_regular"
         android:fontWeight="400"
         app:fontStyle="normal"
         app:fontWeight="400"
         app:font="@font/notosanskr_regular"
+        tools:ignore="UnusedAttribute"/>
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/notosanskr_bold"
+        android:fontWeight="400"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/notosanskr_bold"
         tools:ignore="UnusedAttribute"/>
 </font-family>

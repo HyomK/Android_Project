@@ -2,7 +2,7 @@
 <androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="58dp"
+    android:layout_height="60dp"
     app:contentInsetStart="0dp"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/diary_back"
+            android:id="@+id/diary_back_iv"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:src="@drawable/ic_back"
@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageView
-            android:id="@+id/diary_check"
+            android:id="@+id/diary_check_iv"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:src="@drawable/ic_check"
@@ -32,8 +32,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <TextView
+            android:id="@+id/diary_toggle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/diary_public"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/notosanskr_bold"
+            app:layout_constraintTop_toTopOf="@id/diary_toggle_iv"
+            app:layout_constraintBottom_toBottomOf="@id/diary_toggle_iv"
+            app:layout_constraintEnd_toStartOf="@id/diary_toggle_iv"
+            android:layout_marginEnd="10dp"/>
+
         <ImageView
-            android:id="@+id/diary_toggle"
+            android:id="@+id/diary_toggle_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_toggle_true"
@@ -41,7 +54,7 @@
             android:elevation="1dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/diary_check"/>
+            app:layout_constraintEnd_toStartOf="@id/diary_check_iv"/>
 
         <ImageView
             android:id="@+id/diary_toggle_selector"
@@ -49,8 +62,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/select_toggle"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/diary_toggle"
-            app:layout_constraintStart_toStartOf="@id/diary_toggle"
+            app:layout_constraintEnd_toEndOf="@id/diary_toggle_iv"
+            app:layout_constraintStart_toStartOf="@id/diary_toggle_iv"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 

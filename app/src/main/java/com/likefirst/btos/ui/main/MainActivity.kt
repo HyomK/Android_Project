@@ -31,8 +31,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .replace(R.id.fr_layout, MailViewFragment())
                     .addToBackStack("")
                     .commit()
-
-
             }
         })
 
@@ -40,7 +38,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
        }
 
-    inner class changeFragment() {
+    inner class ChangeFragment() {
 
        //현재 Fragment를 삭제합니다
         fun removeFragment( presFragment: Fragment? ){
