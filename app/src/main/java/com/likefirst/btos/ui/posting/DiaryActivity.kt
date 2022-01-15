@@ -2,11 +2,14 @@ package com.likefirst.btos.ui.posting
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -15,6 +18,24 @@ import com.likefirst.btos.ui.main.MainActivity
 
 class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
     override fun initAfterBinding() {
+
+        val doneListAdapter = DiaryDoneListRVAdapter()
+
+        //doneList 엔터 입력 시 리사이클러뷰 갱신
+        binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, p2 ->
+            when (keyCode) {
+                KeyEvent.KEYCODE_ENTER -> {
+                    doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
+                    binding.diaryDoneListRv.apply{
+                        adapter = doneListAdapter
+                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                        overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+                    }
+                    binding.diaryDoneListEt.text = null
+                }
+            }
+            true
+        }
 
         binding.diaryDoneListEt.addTextChangedListener(object : TextWatcher{
 

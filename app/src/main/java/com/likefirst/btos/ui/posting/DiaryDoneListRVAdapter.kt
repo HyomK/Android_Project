@@ -9,6 +9,12 @@ import com.likefirst.btos.databinding.ItemDiaryDoneListRvBinding
 class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHolder>() {
     val doneLists : ArrayList<String> = ArrayList()
 
+    interface ItemClickListener{
+
+    }
+
+    private lateinit var mItemClickListener : ItemClickListener
+
     inner class ViewHolder(val binding: ItemDiaryDoneListRvBinding): RecyclerView.ViewHolder(binding.root) {
         fun initView(doneList : String) {
             binding.itemDiaryDoneListTv.text = doneList
@@ -26,5 +32,10 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
 
     override fun getItemCount(): Int {
         return doneLists.size
+    }
+
+    fun addDoneList(text : String){
+        this.doneLists.add(text)
+        notifyDataSetChanged()
     }
 }
