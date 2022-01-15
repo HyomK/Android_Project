@@ -3,7 +3,7 @@
     android:id="@+id/letterview_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brown"
+    android:background="@drawable/ic_bg_received"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
