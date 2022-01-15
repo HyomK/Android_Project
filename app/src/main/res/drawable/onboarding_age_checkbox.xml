@@ -4,7 +4,7 @@
     <item android:state_checked="false">
         <shape>
             <stroke android:color="@color/black" android:width="2dp" />
-            <corners android:radius="10dp" />
+            <corners android:radius="4dp" />
             <solid android:color="@color/white" />
         </shape>
     </item>
@@ -15,11 +15,11 @@
             <item>
                 <shape>
                     <corners android:radius="4dp" />
-                    <solid android:color="#e14f50" />
+                    <solid android:color="@color/black" />
                 </shape>
             </item>
             <!-- 이미지 영역 -->
-            <item android:drawable="@drawable/ic_home" android:top="4dp" android:right="4dp" android:bottom="4dp" android:left="4dp" />
+            <item android:drawable="@drawable/ic_check_true" android:top="4dp" android:right="4dp" android:bottom="4dp" android:left="4dp" />
         </layer-list>
     </item>
 </selector>
