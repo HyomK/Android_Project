@@ -25,6 +25,4 @@
         app:layout_constraintStart_toStartOf="@id/item_diary_done_list_background_iv"
         app:layout_constraintEnd_toEndOf="@id/item_diary_done_list_background_iv"/>
 
-    <
-
 </androidx.constraintlayout.widget.ConstraintLayout>

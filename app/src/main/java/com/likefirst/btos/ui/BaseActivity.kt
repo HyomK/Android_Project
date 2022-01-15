@@ -1,13 +1,21 @@
 package com.likefirst.btos.ui
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
+import com.airbnb.lottie.Lottie
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieConfig
+import com.likefirst.btos.R
 
 abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater) -> T): AppCompatActivity(){
     protected lateinit var binding: T
@@ -45,5 +53,19 @@ abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater
     // 키보드 숨기기
     fun hideKeyboard(v: View){
         imm?.hideSoftInputFromWindow(v.windowToken, 0)
+    }
+
+    //상태바 투명
+
+    fun Activity.setStatusBarTransparent() {
+        window.apply {
+            setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
+        if(Build.VERSION.SDK_INT >= 30) {	// API 30 에 적용
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
     }
 }
