@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/bottom_nav_menu_color_selector"
         app:showAsAction="always"
         android:enabled="true"
         tools:ignore="AlwaysShowAction"
