@@ -15,10 +15,13 @@
         <item name="windowNoTitle">true</item>
 
 
+
         <!--popup -->
 
         <item name="textAppearanceLargePopupMenu">@style/TextAppearance.App.Subtitle1</item>
         <item name="popupMenuBackground">@drawable/mail_popup_bg</item>
+
+        <item name="android:windowFullscreen">true</item>
 
     </style>
 

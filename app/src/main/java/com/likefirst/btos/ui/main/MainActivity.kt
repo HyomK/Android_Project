@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.main
 
+
 import android.util.Log
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -16,14 +17,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initAfterBinding() {
 
-        val mButton = binding.mButton
 
-        mButton.setOnClickListener{
-            supportFragmentManager
+
+        binding.mainBnv.itemIconTintList = null
+        supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fr_layout, HomeFragment())
                 .commit()
-         }
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
@@ -85,6 +85,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
 
     }
+
 
 
 }
