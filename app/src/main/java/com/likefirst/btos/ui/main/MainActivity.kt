@@ -12,12 +12,15 @@ import com.likefirst.btos.ui.BaseActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
+
     override fun initAfterBinding() {
+
+
+
         binding.mainBnv.itemIconTintList = null
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fr_layout, HomeFragment())
-                .commit()
+
+        ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
+
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
@@ -25,13 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         adapter.setMyItemCLickLister(object:NotifyRVAdapter.NotifyItemClickListener{
             override fun onClickItem() {
                 binding.mainLayout.closeDrawers()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fr_layout, MailViewFragment())
-
-                    .commit()
-
-
+                ChangeFragment().moveFragment(R.id.fr_layout, MailViewFragment())
             }
         })
 
@@ -39,7 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
        }
 
-    fun NotifyDrawerHandler(){
+    fun notifyDrawerHandler(){
         val stacks = supportFragmentManager.getFragments()
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
@@ -50,7 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
-    inner class changeFragment() {
+    inner class ChangeFragment() {
 
        //현재 Fragment를 삭제합니다
         fun removeFragment( presFragment: Fragment? ){

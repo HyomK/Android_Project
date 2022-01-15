@@ -1,15 +1,22 @@
 package com.likefirst.btos.ui.main
 
 
+import android.media.Image
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.likefirst.btos.R
+
 import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.posting.DiaryActivity
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -25,11 +32,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
 
         binding.homeNotificationBtn.setOnClickListener {
-            mActivity.NotifyDrawerHandler()
+            mActivity.notifyDrawerHandler()
+
         }
 
         binding.homeMailBtn.setOnClickListener {
-            mActivity.changeFragment().moveFragment(R.id.home_mailbox_layout,MailboxFragment())
+            mActivity.ChangeFragment().moveFragment(R.id.home_mailbox_layout,MailboxFragment())
         }
 
         binding.homeWriteBtn.setOnClickListener {
