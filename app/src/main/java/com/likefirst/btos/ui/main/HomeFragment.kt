@@ -13,7 +13,7 @@ import com.likefirst.btos.R
 
 import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
-import java.time.LocalDateTime
+import com.likefirst.btos.ui.posting.DiaryActivity
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -32,16 +32,16 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
 
         binding.homeNotificationBtn.setOnClickListener {
-            mActivity.NotifyDrawerHandler()
+            mActivity.notifyDrawerHandler()
 
         }
 
         binding.homeMailBtn.setOnClickListener {
-            mActivity.changeFragment().moveFragment(R.id.home_mailbox_layout,MailboxFragment())
+            mActivity.ChangeFragment().moveFragment(R.id.home_mailbox_layout,MailboxFragment())
         }
 
         binding.homeWriteBtn.setOnClickListener {
-
+            mActivity.startNextActivity(DiaryActivity::class.java)
         }
 
 
@@ -56,8 +56,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     @RequiresApi(Build.VERSION_CODES.O)
     fun setWindowImage(){
         val current : LocalTime = LocalTime.now()
-//        val formatter = DateTimeFormatter.ofPattern("h")
-//        val formatted = current.format(formatter)
         val now = current.hour
         Log.d("window", now.toString())
 

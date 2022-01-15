@@ -1,16 +1,14 @@
 package com.likefirst.btos.ui.main
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
-import android.view.*
-import android.widget.*
-import androidx.annotation.MenuRes
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentMailViewBinding
 import com.likefirst.btos.ui.BaseFragment
-import java.util.*
 
 class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBinding::inflate) {
 
@@ -45,7 +43,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 //신고
                 1 -> {
                     Log.d("selected", "moved")
-                    mActivity.changeFragment().moveFragment(R.id.home_main_layout,ReportFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.home_main_layout,ReportFragment())
                    // mActivity.supportFragmentManager.popBackStack()
                     onDestroyView()
                 }
@@ -86,7 +84,6 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
         }
 
 
-
         binding.letterviewSendBtn.setOnClickListener{
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")
@@ -99,7 +96,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
-                    mActivity.changeFragment().moveFragment(R.id.letterview_main_layout,WriteMailFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.letterview_main_layout,WriteMailFragment())
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")
@@ -152,7 +149,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 }
                 //신고
                 1 -> {
-                    mActivity.changeFragment().moveFragment(R.id.letterview_main_layout,ReportFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.letterview_main_layout,ReportFragment())
                 }
                 //차단
                 2 -> {

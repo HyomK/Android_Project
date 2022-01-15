@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.likefirst.btos"
-        minSdk 21
+        minSdk 23
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -37,6 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    compileSdkVersion 31
 }
 
 dependencies {
@@ -82,6 +83,7 @@ dependencies {
 
     //spiner custom
     implementation 'com.google.android.material:material:1.4.0'
+
 
     //FireBase
     implementation platform('com.google.firebase:firebase-bom:29.0.3')

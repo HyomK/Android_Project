@@ -9,18 +9,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-
-
-
- <androidx.constraintlayout.widget.ConstraintLayout
-     android:layout_width="match_parent"
-     android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fr_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/nav_layout"
+        app:layout_constraintBottom_toTopOf="@+id/main_bnv"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,54 +25,40 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/nav_layout"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_bnv"
         android:layout_width="match_parent"
         android:layout_height="66dp"
+        app:itemIconSize="50dp"
+        app:itemBackground="@color/white"
+        app:labelVisibilityMode="unlabeled"
 
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
-        <Button
-            android:id="@+id/mButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="화면전환"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
- </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:orientation="vertical"
         android:layout_gravity = "left"
         app:itemTextColor="#fff"
-        android:paddingTop="35dp"
+        android:paddingTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sidebar_notify_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/sidebar_notify_rv"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
-            tools:listitem="@layout/item_notify_rv"
             android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="30"
-            />
+            tools:listitem="@layout/item_notify_rv" />
 
     </com.google.android.material.navigation.NavigationView>
 

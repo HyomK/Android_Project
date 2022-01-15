@@ -1,9 +1,8 @@
 package com.likefirst.btos.ui.main
 
-import android.util.Log
+
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_OPEN
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -16,14 +15,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initAfterBinding() {
 
-        val mButton = binding.mButton
 
-        mButton.setOnClickListener{
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fr_layout, HomeFragment())
-                .commit()
-         }
+
+        binding.mainBnv.itemIconTintList = null
+
+        ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
+
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
@@ -31,13 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         adapter.setMyItemCLickLister(object:NotifyRVAdapter.NotifyItemClickListener{
             override fun onClickItem() {
                 binding.mainLayout.closeDrawers()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fr_layout, MailViewFragment())
-
-                    .commit()
-
-
+                ChangeFragment().moveFragment(R.id.fr_layout, MailViewFragment())
             }
         })
 
@@ -45,7 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
        }
 
-    fun NotifyDrawerHandler(){
+    fun notifyDrawerHandler(){
         val stacks = supportFragmentManager.getFragments()
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
@@ -56,7 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
-    inner class changeFragment() {
+    inner class ChangeFragment() {
 
        //현재 Fragment를 삭제합니다
         fun removeFragment( presFragment: Fragment? ){
@@ -85,6 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
 
     }
+
 
 
 }

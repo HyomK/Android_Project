@@ -2,15 +2,7 @@ package com.likefirst.btos.ui.main
 
 
 
-import android.app.Activity
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.core.os.bundleOf
-import com.likefirst.btos.R
-import com.likefirst.btos.databinding.ActivityMainBinding.inflate
 import com.likefirst.btos.databinding.FragmentReportBinding
 import com.likefirst.btos.ui.BaseFragment
 
@@ -20,9 +12,10 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
         val mActivity = activity as MainActivity
 
         binding.reportToolbar.toolbarBackIc.setOnClickListener {
-            mActivity.changeFragment().removeFragment(this)
+            mActivity.ChangeFragment().removeFragment(this)
         }
         binding.reportToolbar.toolbarTitleTv.text="신고하기"
+
         binding.reportDoneBtn.setOnClickListener{
             val dialog =CustomDialogFragment()
             val data = arrayOf("확인")
