@@ -19,4 +19,40 @@
         app:fontWeight="400"
         app:font="@font/notosanskr_bold"
         tools:ignore="UnusedAttribute"/>
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/aac_child_sky_shine"
+        android:fontWeight="400"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/aac_child_sky_shine"
+        tools:ignore="UnusedAttribute"/>
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/goyangchae"
+        android:fontWeight="400"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/goyangchae"
+        tools:ignore="UnusedAttribute"/>
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/handwriting_flower_smell"
+        android:fontWeight="400"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/handwriting_flower_smell"
+        tools:ignore="UnusedAttribute"/>
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/kotra_songeulssi"
+        android:fontWeight="400"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/kotra_songeulssi"
+        tools:ignore="UnusedAttribute"/>
 </font-family>

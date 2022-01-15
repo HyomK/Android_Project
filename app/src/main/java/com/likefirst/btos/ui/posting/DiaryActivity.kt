@@ -27,12 +27,10 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
         }
 
         //doneList 엔터 입력 시 리사이클러뷰 갱신
-        binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, p2 ->
-            when (keyCode) {
-                KeyEvent.KEYCODE_ENTER -> {
-                    doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
-                    binding.diaryDoneListEt.text = null
-                }
+        binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
+            if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
+                doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
+                binding.diaryDoneListEt.text = null
             }
             false
         }

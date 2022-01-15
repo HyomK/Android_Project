@@ -122,6 +122,8 @@
         android:layout_height="0dp"
         android:background="@null"
         android:maxLength="35"
+        android:textSize="14dp"
+        android:fontFamily="@font/handwriting_flower_smell"
         android:inputType="text"
         android:gravity="center_vertical"
         android:layout_marginHorizontal="10dp"
