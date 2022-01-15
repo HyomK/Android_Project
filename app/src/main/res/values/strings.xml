@@ -112,4 +112,8 @@
 
     <string name="diary_public">공개</string>
     <string name="diary_private">비공개</string>
+
+    <string-array name="delete_items">
+    <item>삭제</item>
+    </string-array>
 </resources>
