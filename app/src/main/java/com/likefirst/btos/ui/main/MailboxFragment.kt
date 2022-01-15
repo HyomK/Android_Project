@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.main
 
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.likefirst.btos.R
@@ -14,6 +15,8 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val presFragment  = this
         setClickListener(presFragment )
         setMailView( presFragment )
+
+
     }
 
     fun setMailView(presFragment :Fragment){
@@ -22,6 +25,8 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val data = Array(20) { i -> "Number of index: $i"  }
         val adapter =MailRVAdapter(data)
         binding.mailboxRv.adapter= adapter
+
+
 
         adapter.setMyItemCLickLister(object:MailRVAdapter.MailItemClickListener{
             override fun onClickItem() {

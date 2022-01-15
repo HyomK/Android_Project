@@ -1,0 +1,19 @@
+Index: app/src/main/java/com/likefirst/btos/ui/main/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.likefirst.btos.ui.main\r\n\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport com.likefirst.btos.R\r\nimport com.likefirst.btos.databinding.ActivityMainBinding\r\nimport com.likefirst.btos.ui.BaseActivity\r\n\r\nclass MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {\r\n\r\n    override fun initAfterBinding() {\r\n        테스팅 커밋\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/likefirst/btos/ui/main/MainActivity.kt b/app/src/main/java/com/likefirst/btos/ui/main/MainActivity.kt
+--- a/app/src/main/java/com/likefirst/btos/ui/main/MainActivity.kt	
++++ b/app/src/main/java/com/likefirst/btos/ui/main/MainActivity.kt	
+@@ -9,6 +9,6 @@
+ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+ 
+     override fun initAfterBinding() {
+-        테스팅 커밋
++        테스팅 커밋ㅁㄴㅇㄻㄴㅇㄹ
+     }
+ }
+\ No newline at end of file

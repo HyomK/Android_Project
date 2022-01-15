@@ -20,21 +20,21 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
     override fun initAfterBinding() {
 
         val doneListAdapter = DiaryDoneListRVAdapter()
+        binding.diaryDoneListRv.apply{
+            adapter = doneListAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        }
 
         //doneList 엔터 입력 시 리사이클러뷰 갱신
         binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, p2 ->
             when (keyCode) {
                 KeyEvent.KEYCODE_ENTER -> {
                     doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
-                    binding.diaryDoneListRv.apply{
-                        adapter = doneListAdapter
-                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                        overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-                    }
                     binding.diaryDoneListEt.text = null
                 }
             }
-            true
+            false
         }
 
         binding.diaryDoneListEt.addTextChangedListener(object : TextWatcher{

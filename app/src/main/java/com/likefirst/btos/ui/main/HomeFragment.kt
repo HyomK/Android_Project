@@ -4,6 +4,7 @@ package com.likefirst.btos.ui.main
 import android.content.Intent
 import android.media.Image
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -15,6 +16,7 @@ import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.posting.DiaryActivity
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -30,9 +32,9 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val mActivity = activity as MainActivity
 
 
-        binding.homeNotificationBtn.setOnClickListener {
-            mActivity.findViewById<DrawerLayout>(R.id.main_layout).openDrawer((GravityCompat.START))
 
+        binding.homeNotificationBtn.setOnClickListener {
+            mActivity.NotifyDrawerHandler()
         }
 
         binding.homeMailBtn.setOnClickListener {
@@ -54,18 +56,16 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setWindowImage(){
-        val current : LocalDateTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("h")
-        val formatted = current.format(formatter)
-        val now = formatted.toInt()
-
+        val current : LocalTime = LocalTime.now()
+        val now = current.hour
+        Log.d("window", now.toString())
 
         if(now<=5){
-            binding.windowIv.setImageResource(R.mipmap.window_morning)
+            binding.windowIv.setImageResource(R.drawable.window_morning)
         }else if(now in 12..18) {
-            binding.windowIv.setImageResource(R.mipmap.window_afternoon)
+            binding.windowIv.setImageResource(R.drawable.window_afternoon)
         }else{
-            binding.windowIv.setImageResource(R.mipmap.window_night)
+            binding.windowIv.setImageResource(R.drawable.window_night)
         }
     }
 

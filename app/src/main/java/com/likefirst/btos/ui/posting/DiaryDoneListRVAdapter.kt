@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.posting
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
 
     fun addDoneList(text : String){
         this.doneLists.add(text)
+        Log.d("test", doneLists.toString())
         notifyDataSetChanged()
     }
 }
