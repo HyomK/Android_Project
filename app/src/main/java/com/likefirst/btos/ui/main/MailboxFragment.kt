@@ -1,6 +1,5 @@
 package com.likefirst.btos.ui.main
 
-import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.likefirst.btos.R
@@ -36,7 +35,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 frgmn.arguments =bundleOf(
                     "body" to "mailtext"
                 )
-                mActivity.changeFragment().hideFragment(R.id.home_main_layout,presFragment,frgmn)
+                mActivity.ChangeFragment().hideFragment(R.id.home_main_layout,presFragment,frgmn)
             }
         })
     }
@@ -54,7 +53,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
             dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
                 override fun onButton1Clicked() {}
                 override fun onButton2Clicked() {
-                    mActivity.changeFragment().hideFragment(R.id.home_main_layout,presFragment,WriteMailFragment())
+                    mActivity.ChangeFragment().hideFragment(R.id.home_main_layout,presFragment,WriteMailFragment())
                     onDestroyView()
                 }
             })
