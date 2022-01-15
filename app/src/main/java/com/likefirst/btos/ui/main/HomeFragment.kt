@@ -56,8 +56,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     @RequiresApi(Build.VERSION_CODES.O)
     fun setWindowImage(){
         val current : LocalTime = LocalTime.now()
-//        val formatter = DateTimeFormatter.ofPattern("h")
-//        val formatted = current.format(formatter)
         val now = current.hour
         Log.d("window", now.toString())
 
