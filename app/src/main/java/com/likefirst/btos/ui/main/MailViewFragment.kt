@@ -86,7 +86,6 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
         }
 
 
-
         binding.letterviewSendBtn.setOnClickListener{
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")

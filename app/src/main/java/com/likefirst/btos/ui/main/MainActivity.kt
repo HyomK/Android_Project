@@ -20,10 +20,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
 
         binding.mainBnv.itemIconTintList = null
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fr_layout, HomeFragment())
-                .commit()
+
+        changeFragment().moveFragment(R.id.fr_layout,HomeFragment())
+
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
@@ -31,13 +30,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         adapter.setMyItemCLickLister(object:NotifyRVAdapter.NotifyItemClickListener{
             override fun onClickItem() {
                 binding.mainLayout.closeDrawers()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fr_layout, MailViewFragment())
-
-                    .commit()
-
-
+                changeFragment().moveFragment(R.id.fr_layout, MailViewFragment())
             }
         })
 
