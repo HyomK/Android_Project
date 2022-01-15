@@ -1,6 +1,10 @@
 package com.likefirst.btos.ui.main
 
 import android.util.Log
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_OPEN
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
@@ -30,7 +34,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.fr_layout, MailViewFragment())
-                    .addToBackStack("")
+
                     .commit()
 
 
@@ -40,6 +44,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.sidebarNotifyRv.adapter=adapter
 
        }
+
+    fun NotifyDrawerHandler(){
+        val stacks = supportFragmentManager.getFragments()
+        if(stacks.size ==1 ){
+            binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+            binding.mainLayout.openDrawer((GravityCompat.START))
+        }
+        else{
+            binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
+    }
 
     inner class changeFragment() {
 

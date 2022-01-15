@@ -36,12 +36,5 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="PopupCustom" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:bottomLeftRadius">12dp</item>
-        <item name="android:bottomRightRadius">12dp</item>
-        <item name="background">@drawable/mail_popup_bg </item>
-    </style>
-
 
 </resources>
