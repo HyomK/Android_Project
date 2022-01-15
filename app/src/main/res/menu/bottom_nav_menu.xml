@@ -10,17 +10,17 @@
         tools:ignore="AlwaysShowAction"
         android:title="" />
     <item
-        android:id="@+id/lookFragment"
+        android:id="@+id/ArchiveFragment"
         android:icon="@drawable/ic_archive"
         app:showAsAction="always"
         android:title="" />
     <item
-        android:id="@+id/searchFragment"
+        android:id="@+id/HistoryFragment"
         android:icon="@drawable/ic_history"
         app:showAsAction="always"
         android:title="" />
     <item
-        android:id="@+id/lockerFragment"
+        android:id="@+id/ProfileFragment"
         android:icon="@drawable/ic_profile"
         app:showAsAction="always"
         android:title="" />
