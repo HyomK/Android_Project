@@ -4,24 +4,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/bottom_nav_menu_color_selector"
+        android:icon="@drawable/bottom_nav_menu_home_selector"
         app:showAsAction="always"
         android:enabled="true"
         tools:ignore="AlwaysShowAction"
         android:title="" />
     <item
         android:id="@+id/ArchiveFragment"
-        android:icon="@drawable/ic_archive"
+        android:icon="@drawable/bottom_nav_menu_archive_selector"
         app:showAsAction="always"
         android:title="" />
     <item
         android:id="@+id/HistoryFragment"
-        android:icon="@drawable/ic_history"
+        android:icon="@drawable/bottom_nav_menu_history_selector"
         app:showAsAction="always"
         android:title="" />
     <item
         android:id="@+id/ProfileFragment"
-        android:icon="@drawable/ic_profile"
+        android:icon="@drawable/bottom_nav_menu_profile_selector"
         app:showAsAction="always"
         android:title="" />
 
