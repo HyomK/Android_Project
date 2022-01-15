@@ -1,10 +1,8 @@
 package com.likefirst.btos.ui.main
 
 
-import android.util.Log
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_OPEN
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -14,11 +12,7 @@ import com.likefirst.btos.ui.BaseActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
-
     override fun initAfterBinding() {
-
-
-
         binding.mainBnv.itemIconTintList = null
         supportFragmentManager
                 .beginTransaction()
