@@ -63,7 +63,7 @@ class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWrite
                 }
                 //신고
                 1 -> {
-                    mActivity.ChangeFragment().moveFragment(R.id.letterview_main_layout,ReportFragment())
+                    mActivity.changeFragment().moveFragment(R.id.letterview_main_layout,ReportFragment())
                 }
                 //차단
                 2 -> {
