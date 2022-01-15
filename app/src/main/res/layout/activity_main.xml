@@ -45,14 +45,14 @@
         android:orientation="vertical"
         android:layout_gravity = "left"
         app:itemTextColor="#fff"
-        android:paddingTop="35dp"
+        android:paddingTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sidebar_notify_rv"
-            android:layout_width="362dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:overScrollMode="never"

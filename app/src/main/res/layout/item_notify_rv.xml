@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingVertical="5dp">
+    android:paddingVertical="15dp">
 
     <LinearLayout
         android:id="@+id/item_notify_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="20dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,11 +18,12 @@
 
         <TextView
             android:id="@+id/item_notify_tv"
+            android:text="sample"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:layout_marginStart="30dp"
-            android:textSize="17dp"
+            android:textSize="14dp"
             android:gravity="center_vertical"
             android:maxLength="20"
             />
@@ -31,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.05"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="20dp"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_navigate"
