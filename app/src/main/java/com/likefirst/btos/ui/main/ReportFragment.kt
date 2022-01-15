@@ -23,6 +23,7 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
             mActivity.ChangeFragment().removeFragment(this)
         }
         binding.reportToolbar.toolbarTitleTv.text="신고하기"
+
         binding.reportDoneBtn.setOnClickListener{
             val dialog =CustomDialogFragment()
             val data = arrayOf("확인")
