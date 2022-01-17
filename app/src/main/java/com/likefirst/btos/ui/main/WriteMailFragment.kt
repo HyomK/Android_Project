@@ -1,31 +1,32 @@
 package com.likefirst.btos.ui.main
 
 import android.app.Activity
-import android.content.Context
-import android.view.ContextThemeWrapper
-import android.view.Gravity
+import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.PopupMenu
+import android.widget.*
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import com.likefirst.btos.R
-import com.likefirst.btos.databinding.DialogMailPopupBinding.inflate
 import com.likefirst.btos.databinding.FragmentMailWriteBinding
 import com.likefirst.btos.ui.BaseFragment
+import android.text.Editable
+
+import android.text.TextWatcher
+
+
+
+
+
 
 class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWriteBinding::inflate) {
+
     override fun initAfterBinding() {
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(), R.array.delete_items, android.R.layout.simple_spinner_dropdown_item
-        )
-
-        binding.reportMenuList?.setAdapter(adapter)
-        binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
+        Log.d("changedWrite", "change write")
+        val menuItem = resources.getStringArray(R.array.delete_items)
+        val adapter=ArrayAdapter( requireContext()!! ,R.layout.menu_dropdown_item, menuItem)
         binding.reportMenuList.onItemSelectedListener = SpinnerActivity()
-        binding.reportMenuList.gravity = Gravity.CENTER
+        binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
+        binding.reportMenuList.setAdapter(adapter)
 
         binding.letterwriteToolbar.toolbarBackIc.setOnClickListener{
             val mActivity = activity as MainActivity
@@ -33,8 +34,18 @@ class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWrite
         }
 
 
-
+        binding.letterwriteBodyEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                if (null !=  binding.letterwriteBodyEt.layout && binding.letterwriteBodyEt.layout.lineCount > 50) {
+                    binding.letterwriteBodyEt.text.delete( binding.letterwriteBodyEt.text.length - 1, binding.letterwriteBodyEt.text.length)
+                }
+            }
+        })
     }
+
+
 
     inner class SpinnerActivity : Activity(), AdapterView.OnItemSelectedListener {
 

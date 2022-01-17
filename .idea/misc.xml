@@ -4,63 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android_Project/BTOS/app/src/main/res/layout/activity_main.xml" value="0.10625" />
-<<<<<<< HEAD
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/bottom_nav_menu_history_selector.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/btn_rectangle.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/drop_menu_bg.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_back.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bg_diary.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_check.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_close.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_done_list_delete.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_dots.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_launcher_background.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_mailbox.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_mailbox_new.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_navigate.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_notification.xml" value="0.13697916666666668" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_notification_new.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_send.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_toggle_true.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_toggle_true2.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_write.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_writediary.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_writeletter.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/mail_popup_bg.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/mailbox_bg.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/report_edit_bg.xml" value="0.25729166666666664" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/font/font.xml" value="0.2713541666666667" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.264" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_main.xml" value="0.24114583333333334" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_mail_popup.xml" value="0.4" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_home.xml" value="0.264" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mail_view.xml" value="0.12083333333333333" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mail_write.xml" value="0.12083333333333333" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mailbox.xml" value="0.12083333333333333" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_report.xml" value="0.12083333333333333" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_diary_done_list_rv.xml" value="0.43771626297577854" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_mailbox_rv.xml" value="0.12083333333333333" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_notify_rv.xml" value="0.12083333333333333" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/test_tv.xml" value="0.12083333333333333" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_diary.xml" value="0.264" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_layout.xml" value="0.2" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/menu/menu_diary.xml" value="0.24114583333333334" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.13697916666666668" />
-=======
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/btn_rectangle.xml" value="0.15555555555555556" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/drop_menu_bg.xml" value="0.18796296296296297" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_mailbox.xml" value="0.19722222222222222" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/mail_popup.xml" value="0.15555555555555556" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/mail_popup_bg.xml" value="0.17592592592592593" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/mailbox_bg.xml" value="0.15555555555555556" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/onboarding_age_box.xml" value="0.13125" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/report_edit_bg.xml" value="0.17592592592592593" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/font/font.xml" value="0.15555555555555556" />
-        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_main.xml" value="0.13029315960912052" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_onboarding.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/dialog_mail_popup.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_home.xml" value="0.2870478413068845" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_letter_view.xml" value="0.18" />
-        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_mail_view.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_mail_view.xml" value="0.2" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_mail_write.xml" value="0.14994934143870314" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_mailbox.xml" value="0.18" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_post.xml" value="0.1" />
@@ -69,11 +27,12 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/item_mailbox_rv.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/item_notify_rv.xml" value="0.22" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/main_include_drawer.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/menu_dropdown_item.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/onboarding_dropdown_item.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/report_edit_bg.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/test_tv.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/toolbar_layout.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/menu/overflow_menu.xml" value="0.19074074074074074" />
->>>>>>> 571242a44797bae1d14158f997efb7028cfbd817
       </map>
     </option>
   </component>

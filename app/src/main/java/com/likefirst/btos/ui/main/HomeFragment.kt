@@ -59,7 +59,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val now = current.hour
         Log.d("window", now.toString())
 
-        if(now<=5){
+        if(now in 6..11){
             binding.windowIv.setImageResource(R.drawable.window_morning)
         }else if(now in 12..18) {
             binding.windowIv.setImageResource(R.drawable.window_afternoon)

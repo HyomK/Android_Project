@@ -57,7 +57,7 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="30"
+            tools:itemCount="500"
             tools:listitem="@layout/item_notify_rv" />
 
     </com.google.android.material.navigation.NavigationView>

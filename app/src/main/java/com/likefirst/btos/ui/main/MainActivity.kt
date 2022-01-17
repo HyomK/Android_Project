@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.main
 
 
+import android.util.Log
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
@@ -22,7 +23,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
 
 
-        val dataset = Array(30) { i -> "Number of index: $i"  }
+        val dataset = Array(1000) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
 
         adapter.setMyItemCLickLister(object:NotifyRVAdapter.NotifyItemClickListener{
@@ -38,10 +39,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     fun notifyDrawerHandler(){
         val stacks = supportFragmentManager.getFragments()
+        Log.d("Stack", stacks.size.toString())
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             binding.mainLayout.openDrawer((GravityCompat.START))
         }
+
         else{
             binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }

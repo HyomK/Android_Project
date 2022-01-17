@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.main
 
 import android.app.Activity
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -14,15 +15,36 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
 
     override fun initAfterBinding() {
         val mActivity = activity as MainActivity
-
+        val presFragment= this
         binding.mailviewBodyTv.text=arguments?.getString("body")
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(), R.array.report_items, android.R.layout.simple_spinner_dropdown_item
-        )
-
+        val menuItem = resources.getStringArray(R.array.report_items)
+        val adapter=ArrayAdapter( requireContext()!! ,R.layout.menu_dropdown_item, menuItem)
         binding.reportMenuList?.setAdapter(adapter)
         binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
+
+
+        binding.letterviewSendBtn.setOnClickListener{
+            val dialog = CustomDialogFragment()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "bodyContext" to "답장을 보낼까요?",
+                "btnData" to btn
+            )
+            // 버튼 클릭 이벤트 설정
+            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                override fun onButton1Clicked(){
+                }
+                override fun onButton2Clicked() {
+
+                    mActivity.ChangeFragment().hideFragment(R.id.main_layout,presFragment,WriteMailFragment())
+
+                }
+            })
+            dialog.show(mActivity.supportFragmentManager, "CustomDialog")
+
+        }
+
         binding.reportMenuList.setOnItemClickListener { adapterView, view, i, l ->
             val dialog = CustomDialogFragment()
             when (i) {
@@ -83,25 +105,6 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
 
         }
 
-
-        binding.letterviewSendBtn.setOnClickListener{
-            val dialog = CustomDialogFragment()
-            val btn= arrayOf("취소","확인")
-            dialog.arguments= bundleOf(
-                "bodyContext" to "답장을 보낼까요?",
-                "btnData" to btn
-            )
-            // 버튼 클릭 이벤트 설정
-            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
-                override fun onButton1Clicked(){
-                }
-                override fun onButton2Clicked() {
-                    mActivity.ChangeFragment().moveFragment(R.id.letterview_main_layout,WriteMailFragment())
-                }
-            })
-            dialog.show(mActivity.supportFragmentManager, "CustomDialog")
-
-        }
 
         binding.letterviewToolbar.toolbarBackIc.setOnClickListener{
             val mActivity =activity as MainActivity
