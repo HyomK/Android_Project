@@ -33,7 +33,7 @@
     <dimen name="profile_iv_radius">75dp</dimen>
     <dimen name="profile_level_textSize">14dp</dimen>
     <dimen name="profile_nickname_textSize">17dp</dimen>
-    <dimen name="profile_settingList_paddingVertical">35dp</dimen>
+    <dimen name="profile_settingList_paddingVertical">18dp</dimen>
 
     <!-- Flowerpot item -->
     <dimen name="flowerpot_layout_height">125dp </dimen>
@@ -44,6 +44,15 @@
     <dimen name="flowerpot_btn_height">35dp </dimen>
     <dimen name="flowerpot_btn_width">60dp </dimen>
 
+    <!-- app info -->
+    <dimen name="appInfo_marginTop">35dp</dimen>
+    <dimen name="appInfo_paddingHorizontal">40dp</dimen>
 
+    <!-- premium -->
+    <dimen name="premium_margin_Horizontal">40dp</dimen>
+    <dimen name="premium_margin_Top">35dp</dimen>
+    <dimen name="premium_viewpager_width"> 285dp</dimen>
+    <dimen name="premium_viewpager_height"> 350dp</dimen>
+pre
 
 </resources>

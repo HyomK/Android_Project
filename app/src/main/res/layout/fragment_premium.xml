@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/toolbar_layout" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/premium_margin_Top"
+        android:layout_marginHorizontal="@dimen/premium_margin_Horizontal"
+        android:text="@string/premium"
+        style="@style/detailTextStyle"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_rectangle"
+        android:text="프리미엄 가입"
+        style="@style/detailTextStyle"
+        android:minHeight="0dp"
+        android:paddingVertical="10dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2000"
+        style="@style/detailTextStyle"
+        />
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_gravity="center"
+        android:background="@drawable/btn_rectangle"
+        android:layout_marginTop="55dp"
+        android:layout_width="@dimen/premium_viewpager_width"
+        android:layout_height="@dimen/premium_viewpager_height"/>
+</LinearLayout>

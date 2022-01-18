@@ -1,26 +1,21 @@
 package com.likefirst.btos.ui.main
 
 import androidx.fragment.app.DialogFragment
-import android.R
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-
-import android.widget.TextView
-
 import android.os.Bundle
 import android.view.*
+import com.likefirst.btos.databinding.CustomDialogLayoutBinding
 
-import com.likefirst.btos.databinding.DialogMailPopupBinding
 
 
 class CustomDialogFragment(): DialogFragment(){
 
-    private var _binding: DialogMailPopupBinding? = null
+    private var _binding: CustomDialogLayoutBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding =  DialogMailPopupBinding.inflate(inflater, container, false)
+        _binding =  CustomDialogLayoutBinding.inflate(inflater, container, false)
         val view = binding.root
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
