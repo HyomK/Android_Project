@@ -28,18 +28,18 @@ class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWrite
         binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.reportMenuList.setAdapter(adapter)
 
-        binding.letterwriteToolbar.toolbarBackIc.setOnClickListener{
+        binding.letterWriteToolbar.toolbarBackIc.setOnClickListener{
             val mActivity = activity as MainActivity
             mActivity.supportFragmentManager.popBackStack()
         }
 
 
-        binding.letterwriteBodyEt.addTextChangedListener(object : TextWatcher {
+        binding.letterWriteBodyEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
             override fun afterTextChanged(editable: Editable) {
-                if (null !=  binding.letterwriteBodyEt.layout && binding.letterwriteBodyEt.layout.lineCount > 50) {
-                    binding.letterwriteBodyEt.text.delete( binding.letterwriteBodyEt.text.length - 1, binding.letterwriteBodyEt.text.length)
+                if (null !=  binding.letterWriteBodyEt.layout && binding.letterWriteBodyEt.layout.lineCount > 50) {
+                    binding.letterWriteBodyEt.text.delete( binding.letterWriteBodyEt.text.length - 1, binding.letterWriteBodyEt.text.length)
                 }
             }
         })

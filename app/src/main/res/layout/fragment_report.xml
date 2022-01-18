@@ -31,154 +31,33 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="완료"
-            android:textSize="18dp"
+            android:textSize="@dimen/setting_content_fontSize"
             android:layout_marginEnd="25dp"
-            android:fontFamily="@font/notosanskr_bold"
+            android:textStyle="bold"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="스팸"
-            android:gravity="center_vertical"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="17dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="70dp"
-            />
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="36dp"
-            android:src="@drawable/ic_check_false"
-            android:scaleType="centerCrop"
-            />
+    <include
+        android:id="@+id/report_item1"
+        layout="@layout/item_report" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="성적 컨텐츠"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="17dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="70dp"
-            />
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="36dp"
-            android:src="@drawable/ic_check_false"
-            android:scaleType="centerCrop"
-            />
+    <include
+        android:id="@+id/report_item2"
+        layout="@layout/item_report" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="혐오 발언 또는 괴롭힘"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="17dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="70dp"
-            />
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="36dp"
-            android:src="@drawable/ic_check_false"
-            android:scaleType="centerCrop"
-            />
+    <include
+        android:id="@+id/report_item3"
+        layout="@layout/item_report" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="마음에 들지 않습니다"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="17dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="70dp"
-            />
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+    <include
+        android:id="@+id/report_item4"
+        layout="@layout/item_report" />
+    <include
+        android:id="@+id/report_item5"
+        layout="@layout/item_report"
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="36dp"
-            android:src="@drawable/ic_check_false"
-            android:scaleType="centerCrop"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="기타"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="17dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="70dp"
-            />
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="36dp"
-            android:src="@drawable/ic_check_false"
-            android:scaleType="centerCrop"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_gravity="center"
         android:layout_width="320dp"

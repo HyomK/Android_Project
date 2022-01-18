@@ -22,4 +22,14 @@
         <item name="android:fontFamily">@font/notosanskr_regular</item>
     </style>
 
+    <style name="settingListStyle" parent="android:Widget.TextView">
+        <item name="android:textSize"> @dimen/setting_content_fontSize</item>
+         <item name="android:textStyle">bold</item>
+         <item name="android:layout_marginStart">35dp</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:color">@color/black</item>
+    </style>
+
+
 </resources>

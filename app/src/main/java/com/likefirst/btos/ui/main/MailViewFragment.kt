@@ -16,7 +16,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
     override fun initAfterBinding() {
         val mActivity = activity as MainActivity
         val presFragment= this
-        binding.mailviewBodyTv.text=arguments?.getString("body")
+        binding.mailViewBodyTv.text=arguments?.getString("body")
 
         val menuItem = resources.getStringArray(R.array.report_items)
         val adapter=ArrayAdapter( requireContext()!! ,R.layout.menu_dropdown_item, menuItem)
@@ -24,7 +24,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
         binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
 
 
-        binding.letterviewSendBtn.setOnClickListener{
+        binding.letterViewSendBtn.setOnClickListener{
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")
             dialog.arguments= bundleOf(
@@ -106,7 +106,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
         }
 
 
-        binding.letterviewToolbar.toolbarBackIc.setOnClickListener{
+        binding.letterViewToolbar.toolbarBackIc.setOnClickListener{
             val mActivity =activity as MainActivity
             mActivity.supportFragmentManager.popBackStack()
             onDestroyView()
@@ -115,19 +115,6 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
 
 
     }
-
-//    inner class PopmenuActiviy (): Activity(), PopupMenu.OnMenuItemClickListener {
-//
-//
-//        override fun onMenuItemClick(item: MenuItem?): Boolean {
-//            if (item?.itemId == R.id.option_1){
-//                Log.d("success", "Success")
-//                return true
-//            }
-//            return false;
-//        }
-//
-//    }
 
 
     inner class SpinnerActivity : Activity(), AdapterView.OnItemSelectedListener{
@@ -152,7 +139,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 }
                 //신고
                 1 -> {
-                    mActivity.ChangeFragment().moveFragment(R.id.letterview_main_layout,ReportFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.letterView_main_layout,ReportFragment())
                 }
                 //차단
                 2 -> {
