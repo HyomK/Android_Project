@@ -18,128 +18,173 @@
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_bg_diary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/diary_toolbar"/>
 
-    <HorizontalScrollView
-        android:id="@+id/diary_emotions_sv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:scrollbars="none"
-        android:overScrollMode="never"
-        app:layout_constraintTop_toBottomOf="@id/diary_toolbar"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:id="@+id/diary_emotions_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="23dp"
-                android:src="@drawable/emotion1"/>
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/emotion2"/>
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/emotion3"/>
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/emotion4"/>
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/emotion5"/>
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/emotion6"/>
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/emotion7"/>
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="23dp"
-                android:src="@drawable/emotion8"/>
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/diary_done_list_rv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="34dp"
-        tools:itemCount="0"
-        tools:listitem="@layout/item_diary_done_list_rv"
-        app:layout_constraintTop_toBottomOf="@id/diary_emotions_sv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <ImageView
-        android:id="@+id/diary_done_list_background_iv"
-        android:layout_width="match_parent"
-        android:layout_height="53dp"
-        android:src="@drawable/done_list"
-        android:scaleType="fitXY"
-        android:layout_marginHorizontal="30dp"
-        app:layout_constraintTop_toBottomOf="@id/diary_done_list_rv"
-        app:layout_constraintStart_toStartOf="@id/diary_done_list_rv"
-        app:layout_constraintEnd_toEndOf="@id/diary_done_list_rv"/>
-
-    <EditText
-        android:id="@+id/diary_done_list_et"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/diary_sv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@null"
-        android:maxLength="35"
-        android:textSize="14dp"
-        android:fontFamily="@font/handwriting_flower_smell"
-        android:inputType="text"
-        android:gravity="center_vertical"
-        android:layout_marginHorizontal="10dp"
-        app:layout_constraintTop_toTopOf="@id/diary_done_list_background_iv"
-        app:layout_constraintBottom_toBottomOf="@id/diary_done_list_background_iv"
-        app:layout_constraintStart_toStartOf="@id/diary_done_list_background_iv"
-        app:layout_constraintEnd_toStartOf="@id/diary_done_list_delete_iv"/>
+        app:layout_constraintTop_toBottomOf="@id/diary_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <ImageView
-        android:id="@+id/diary_done_list_delete_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_done_list_delete"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toTopOf="@id/diary_done_list_background_iv"
-        app:layout_constraintBottom_toBottomOf="@id/diary_done_list_background_iv"
-        app:layout_constraintEnd_toEndOf="@id/diary_done_list_background_iv"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/diary_emotions_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="43dp"
+                android:scrollbars="none"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+<!--            <HorizontalScrollView-->
+<!--                android:id="@+id/diary_emotions_sv"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="43dp"-->
+<!--                android:scrollbars="none"-->
+<!--                android:overScrollMode="never"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent">-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/diary_emotions_layout"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="23dp"-->
+<!--                        android:src="@drawable/emotion1"/>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:src="@drawable/emotion2"/>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:src="@drawable/emotion3"/>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:src="@drawable/emotion4"/>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:src="@drawable/emotion5"/>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:src="@drawable/emotion6"/>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:src="@drawable/emotion7"/>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="60dp"-->
+<!--                        android:layout_height="60dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:layout_marginEnd="23dp"-->
+<!--                        android:src="@drawable/emotion8"/>-->
+
+<!--                </LinearLayout>-->
+
+<!--            </HorizontalScrollView>-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/diary_done_list_rv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="34dp"
+                tools:itemCount="0"
+                tools:listitem="@layout/item_diary_done_list_rv"
+                app:layout_constraintTop_toBottomOf="@id/diary_emotions_rv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/diary_done_list_background_iv"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:src="@drawable/done_list"
+                android:scaleType="fitXY"
+                android:layout_marginHorizontal="30dp"
+                app:layout_constraintTop_toBottomOf="@id/diary_done_list_rv"
+                app:layout_constraintStart_toStartOf="@id/diary_done_list_rv"
+                app:layout_constraintEnd_toEndOf="@id/diary_done_list_rv"/>
+
+            <EditText
+                android:id="@+id/diary_done_list_et"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:textSize="@dimen/diary_doneList_font"
+                android:fontFamily="@font/handwriting_flower_smell"
+                android:inputType="textMultiLine"
+                android:gravity="center_vertical"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toTopOf="@id/diary_done_list_background_iv"
+                app:layout_constraintBottom_toBottomOf="@id/diary_done_list_background_iv"
+                app:layout_constraintStart_toStartOf="@id/diary_done_list_background_iv"
+                app:layout_constraintEnd_toStartOf="@id/diary_done_list_delete_iv"/>
+
+            <ImageView
+                android:id="@+id/diary_done_list_delete_iv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_done_list_delete"
+                android:layout_marginEnd="20dp"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="@id/diary_done_list_background_iv"
+                app:layout_constraintBottom_toBottomOf="@id/diary_done_list_background_iv"
+                app:layout_constraintEnd_toEndOf="@id/diary_done_list_background_iv"/>
+
+            <EditText
+                android:id="@+id/diary_contents_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/diary_contents_hint"
+                android:gravity="start"
+                android:background="@null"
+                android:inputType="textMultiLine"
+                android:textSize="@dimen/diary_contents_font"
+                android:fontFamily="@font/handwriting_flower_smell"
+                android:layout_marginTop="15dp"
+                app:layout_constraintStart_toStartOf="@id/diary_done_list_background_iv"
+                app:layout_constraintEnd_toEndOf="@id/diary_done_list_background_iv"
+                app:layout_constraintTop_toBottomOf="@id/diary_done_list_background_iv"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,20 +1,19 @@
 package com.likefirst.btos.ui.posting
 
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.os.bundleOf
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.ui.main.MainActivity
 
 class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
     override fun initAfterBinding() {
@@ -27,10 +26,24 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
         }
 
         //doneList 엔터 입력 시 리사이클러뷰 갱신
+//        binding.diaryDoneListEt.setOnEditorActionListener { textView, action, keyEvent ->
+//            var handled = false
+//            if (action == EditorInfo.IME_ACTION_DONE) {
+//                doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
+//                Log.d("string", binding.diaryDoneListEt.text.toString())
+//                binding.diaryDoneListEt.text = null
+//                binding.diaryDoneListEt.setSelection(0)
+//                handled = true
+//            }
+//            handled
+//        }
         binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
+                binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
                 doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
+                Log.d("string", binding.diaryDoneListEt.text.toString())
                 binding.diaryDoneListEt.text = null
+                binding.diaryDoneListEt.setSelection(0)
             }
             false
         }
@@ -42,14 +55,13 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (binding.diaryDoneListEt.lineCount >= 3){
-                    binding.diaryDoneListEt.setText(p0)
-                    binding.diaryDoneListEt.setSelection(1)
-                }
+
             }
 
             override fun afterTextChanged(p0: Editable?) {
-
+                if (null !=  binding.diaryDoneListEt.layout && binding.diaryDoneListEt.layout.lineCount > 2) {
+                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
+                }
             }
         })
 
@@ -59,43 +71,46 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
         }
 
         binding.diaryToolbar.diaryToggleIv.setOnClickListener {
-            var isPublic = false
-            if(binding.diaryToolbar.diaryToggleTv.text == "공개"){
-                isPublic = true
-            }
+            val isPublic = isPublic()
             diaryToggleSwitcher(isPublic)
         }
 
         binding.diaryToolbar.diaryCheckIv.setOnClickListener {
-            val dialog = CustomDialogFragment()
-            val data = arrayOf("취소", "확인")
-            dialog.arguments= bundleOf(
-                "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 수정, 삭제할 수 있습니다.",
-                "btnData" to data
-            )
-            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
-                override fun onButton1Clicked() {
+            if(isPublic()){
+                val dialog = CustomDialogFragment()
+                val data = arrayOf("취소", "확인")
+                dialog.arguments= bundleOf(
+                    "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 수정, 삭제할 수 있습니다.",
+                    "btnData" to data
+                )
+                dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                    override fun onButton1Clicked() {
 
-                }
-                override fun onButton2Clicked() {
+                    }
+                    override fun onButton2Clicked() {
 
-                }
-            })
-            dialog.show(this.supportFragmentManager, "CustomDialog")
+                    }
+                })
+                dialog.show(this.supportFragmentManager, "CustomDialog")
+            } else {
+                startActivityWithClear(DiaryViewerActivity::class.java)
+            }
         }
     }
 
-    fun diaryToggleSwitcher(isPublic : Boolean) : Boolean{
+    fun isPublic() : Boolean{
+        return binding.diaryToolbar.diaryToggleTv.text == "공개"
+    }
+
+    fun diaryToggleSwitcher(isPublic : Boolean){
         return if (isPublic){
             binding.diaryToolbar.diaryToggleIv.setImageResource(R.drawable.ic_toggle_false)
             binding.diaryToolbar.diaryToggleTv.text = "비공개"
             binding.diaryToolbar.diaryToggleSelector.visibility = View.INVISIBLE
-            false
         } else {
             binding.diaryToolbar.diaryToggleIv.setImageResource(R.drawable.ic_toggle_true)
             binding.diaryToolbar.diaryToggleTv.text = "공개"
             binding.diaryToolbar.diaryToggleSelector.visibility = View.VISIBLE
-            true
         }
     }
 }
