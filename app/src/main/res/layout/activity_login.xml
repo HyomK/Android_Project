@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@id/login_animation_lottie"/>
 
     <TextView
-        android:id="@+id/login_googlelogin_tv"
+        android:id="@+id/login_googleLogin_tvF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/notosanskr_regular"
@@ -50,6 +50,16 @@
         app:layout_constraintTop_toBottomOf="@id/login_welcome_tv"
         />
 
+
+<!--    <com.google.android.gms.common.SignInButton-->
+<!--        android:id="@+id/login_googlelogin_signinButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/login_welcome_tv"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:background="@drawable/login_googlelogin_box"/>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
