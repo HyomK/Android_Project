@@ -53,6 +53,12 @@
     <dimen name="premium_margin_Top">35dp</dimen>
     <dimen name="premium_viewpager_width"> 285dp</dimen>
     <dimen name="premium_viewpager_height"> 350dp</dimen>
-pre
+
+
+    <!-- flowerpot -->
+    <dimen name="plant_margin_Horizontal">20dp</dimen>
+    <dimen name="plant_margin_Top">15dp</dimen>
+
+
 
 </resources>

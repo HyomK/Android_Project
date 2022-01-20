@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "plantIdx": 1,
+      "plantName": "알로카시아",
+      "plantImgUrl": null,
+      "plantPrice": 1500,
+      "maxLevel": 9,
+      "Status": "active"
+    },
+    {
+      "plantIdx": 2,
+      "plantName": "몬테라스",
+      "plantImgUrl": null,
+      "plantPrice": 1200,
+      "maxLevel": 5,
+      "Status": "active"
+    },
+    {
+      "plantIdx": 3,
+      "plantName": "폴리셔스",
+      "plantImgUrl": null,
+      "plantPrice": 1270,
+      "maxLevel": 5,
+      "Status": "active"
+    },
+    {
+      "plantIdx": 4,
+      "plantName": "선인장",
+      "plantImgUrl": null,
+      "plantPrice": 1300,
+      "maxLevel": 3,
+      "Status": "active"
+    },
+    {
+      "plantIdx": 5,
+      "plantName": "산세베리아",
+      "plantImgUrl": null,
+      "plantPrice": 2000,
+      "maxLevel": 10,
+      "Status": "active"
+    },
+    {
+      "plantIdx": 6,
+      "plantName": "금낭화",
+      "plantImgUrl": null,
+      "plantPrice": 1000,
+      "maxLevel": 3,
+      "Status": "active"
+    }
+  ]
+}

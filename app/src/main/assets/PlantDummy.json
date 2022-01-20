@@ -14,18 +14,19 @@
         "plantName": "몬테라스",
         "plantImgUrl": null,
         "plantPrice": 1200,
-        "maxLevel": 5,
+        "maxLevel": 2,
         "currentLevel": 2,
         "userStatus": "selected"
     },
     {
-        "plantIdx": 3,
-        "plantName": "폴리셔스",
-        "plantImgUrl": null,
-        "plantPrice": 1270,
-        "maxLevel": 5,
-        "currentLevel": 5,
-        "userStatus": "active"
-    }
+            "plantIdx": 5,
+            "plantName": "산세베리아",
+            "plantImgUrl": null,
+            "plantPrice": 2000,
+            "maxLevel": 10,
+            "currentLevel": 3,
+            "userStatus": "active"
+     }
+
     ]
 }

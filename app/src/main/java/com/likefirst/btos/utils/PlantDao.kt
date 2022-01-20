@@ -5,19 +5,31 @@ import androidx.room.*
 @Dao
 interface PlantDao {
     @Insert
-    fun insert(plant:Plant)
+    fun insert(plant:PlantItem)
 
     @Update
-    fun update(plant:Plant)
+    fun update(plant:PlantItem)
 
     @Delete
-    fun delete(plant:Plant)
+    fun delete(plant:PlantItem)
 
-    @Query("SELECT * FROM PlantTable")
-    fun getPlants(): List<Plant>
+    @Query("SELECT * FROM PlantItemTable")
+    fun getPlants(): List<PlantItem>
 
-    @Query("SELECT * FROM PlantTable where plantIdx = :id")
-    fun getPlant(id: Int): Plant?
+    @Query("SELECT * FROM PlantItemTable where plantIdx = :id")
+    fun getPlant(id: Int): PlantItem?
+
+//
+//    @Update(entity = Plant::class)
+//    fun update(obj: PlantUpdate)
+
+
+
+
+   class  PlantUpdate {
+        var plantIdx : Int = 0
+        var plantName : String=""
+    }
 
 
 }
