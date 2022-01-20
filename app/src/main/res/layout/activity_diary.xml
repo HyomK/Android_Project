@@ -36,7 +36,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="50dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/diary_emotions_rv"
@@ -145,6 +146,7 @@
                 android:layout_height="0dp"
                 android:background="@null"
                 android:textSize="@dimen/diary_doneList_font"
+                android:maxLength="100"
                 android:fontFamily="@font/handwriting_flower_smell"
                 android:inputType="textMultiLine"
                 android:gravity="center_vertical"
@@ -174,6 +176,7 @@
                 android:background="@null"
                 android:inputType="textMultiLine"
                 android:textSize="@dimen/diary_contents_font"
+                android:layout_marginBottom="30dp"
                 android:fontFamily="@font/handwriting_flower_smell"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="@id/diary_done_list_background_iv"
@@ -181,10 +184,19 @@
                 app:layout_constraintTop_toBottomOf="@id/diary_done_list_background_iv"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1999.06.06"
+                android:textSize="@dimen/diary_contents_font"
+                android:textColor="@color/black"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/handwriting_flower_smell"
+                app:layout_constraintTop_toBottomOf="@id/diary_contents_et"
+                app:layout_constraintStart_toStartOf="@id/diary_contents_et"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

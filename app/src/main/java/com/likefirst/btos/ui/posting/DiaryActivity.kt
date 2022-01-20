@@ -1,5 +1,7 @@
 package com.likefirst.btos.ui.posting
 
+import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
@@ -16,7 +18,29 @@ import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 
 class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
+    @SuppressLint("Recycle")
     override fun initAfterBinding() {
+
+        // 이모션 리사이클러뷰 생성
+        val emotionColorIds = ArrayList<Int>()
+        val emotionGrayIds = ArrayList<Int>()
+        val emotionNames = resources.getStringArray(R.array.emotionNames)
+        for (num in 1..8){
+            val emotionColorId = resources.getIdentifier("emotion$num", "drawable", this.packageName)
+            emotionColorIds.add(emotionColorId)
+            val emotionGrayId = resources.getIdentifier("emotion$num"+"_gray", "drawable", this.packageName)
+            emotionGrayIds.add(emotionGrayId)
+        }
+        val emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames)
+        val emotionDecoration = DiaryEmotionRVItemDecoration()
+        emotionDecoration.setSize(this)
+        binding.diaryEmotionsRv.apply {
+            adapter = emotionAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            setItemViewCacheSize(8)
+            addItemDecoration(emotionDecoration)
+        }
 
         val doneListAdapter = DiaryDoneListRVAdapter()
         binding.diaryDoneListRv.apply{
@@ -26,17 +50,6 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
         }
 
         //doneList 엔터 입력 시 리사이클러뷰 갱신
-//        binding.diaryDoneListEt.setOnEditorActionListener { textView, action, keyEvent ->
-//            var handled = false
-//            if (action == EditorInfo.IME_ACTION_DONE) {
-//                doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
-//                Log.d("string", binding.diaryDoneListEt.text.toString())
-//                binding.diaryDoneListEt.text = null
-//                binding.diaryDoneListEt.setSelection(0)
-//                handled = true
-//            }
-//            handled
-//        }
         binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
                 binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)

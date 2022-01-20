@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="emotionNames">
+        <item>동글이</item>
+        <item>빵긋이</item>
+        <item>나른이</item>
+        <item>멍총이</item>
+        <item>우울이</item>
+        <item>찔찔이</item>
+        <item>빡빡이</item>
+        <item>칙칙이</item>
+    </string-array>
+</resources>
