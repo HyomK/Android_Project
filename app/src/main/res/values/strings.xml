@@ -116,4 +116,6 @@
     <string-array name="delete_items">
     <item>삭제</item>
     </string-array>
+
+    <string name="tutorial_finish">OKAY!</string>
 </resources>
