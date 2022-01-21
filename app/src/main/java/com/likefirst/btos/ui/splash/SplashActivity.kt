@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.splash
 
 import android.content.Intent
 import android.os.Handler
