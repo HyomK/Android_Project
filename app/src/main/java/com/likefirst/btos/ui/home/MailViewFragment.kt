@@ -1,8 +1,7 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.home
 
 import android.app.Activity
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -10,6 +9,10 @@ import androidx.core.os.bundleOf
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentMailViewBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.ui.main.ReportFragment
+import com.likefirst.btos.ui.main.WriteMailFragment
 
 class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBinding::inflate) {
 
@@ -32,12 +35,14 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 "btnData" to btn
             )
             // 버튼 클릭 이벤트 설정
-            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
 
-                    mActivity.ChangeFragment().hideFragment(R.id.main_layout,presFragment,WriteMailFragment())
+                    mActivity.ChangeFragment().hideFragment(R.id.main_layout,presFragment,
+                        WriteMailFragment()
+                    )
 
                 }
             })
@@ -56,7 +61,8 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                         "btnData" to btn
                     )
                     // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                    dialog.setButtonClickListener(object:
+                        CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {}
                         override fun onButton2Clicked() {}
                     })
@@ -65,7 +71,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 //신고
                 1 -> {
                     Log.d("selected", "moved")
-                    mActivity.ChangeFragment().moveFragment(R.id.home_main_layout,ReportFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.home_main_layout, ReportFragment())
                    // mActivity.supportFragmentManager.popBackStack()
                     onDestroyView()
                 }
@@ -77,7 +83,8 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                         "btnData" to btn
                     )
                     // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                    dialog.setButtonClickListener(object:
+                        CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {
                         }
                         override fun onButton2Clicked() {
@@ -88,7 +95,8 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                                 "btnData" to Checkbtn
                             )
                             // 버튼 클릭 이벤트 설정
-                            checkDialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                            checkDialog.setButtonClickListener(object:
+                                CustomDialogFragment.OnButtonClickListener {
                                 override fun onButton1Clicked() {
                                 }
                                 override fun onButton2Clicked() {
@@ -131,7 +139,8 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                         "btnData" to btn
                     )
                     // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                    dialog.setButtonClickListener(object:
+                        CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {}
                         override fun onButton2Clicked() {}
                     })
@@ -139,7 +148,9 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 }
                 //신고
                 1 -> {
-                    mActivity.ChangeFragment().moveFragment(R.id.letterView_main_layout,ReportFragment())
+                    mActivity.ChangeFragment().moveFragment(R.id.letterView_main_layout,
+                        ReportFragment()
+                    )
                 }
                 //차단
                 2 -> {
@@ -149,7 +160,8 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                         "btnData" to btn
                     )
                     // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                    dialog.setButtonClickListener(object:
+                        CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {
                         }
                         override fun onButton2Clicked() {
@@ -160,7 +172,8 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                                 "btnData" to Checkbtn
                             )
                             // 버튼 클릭 이벤트 설정
-                            checkDialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                            checkDialog.setButtonClickListener(object:
+                                CustomDialogFragment.OnButtonClickListener {
                                 override fun onButton1Clicked() {
                                 }
                                 override fun onButton2Clicked() {

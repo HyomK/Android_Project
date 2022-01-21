@@ -8,6 +8,7 @@
     xmlns:layout="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_cd"
         android:layout_width="@dimen/profile_layout_width"
         android:layout_height="@dimen/profile_layout_height"
         android:layout_marginHorizontal="@dimen/profile_view_marginHorizontal"
@@ -78,6 +79,7 @@
 
 
      <TextView
+      android:id="@+id/profile_premium_tv"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       style="@style/settingListStyle"
@@ -85,6 +87,7 @@
       android:paddingBottom="@dimen/profile_settingList_paddingVertical"
       />
     <TextView
+        android:id="@+id/profile_setting_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/settingListStyle"
@@ -92,6 +95,7 @@
         android:paddingBottom="@dimen/profile_settingList_paddingVertical"
         />
     <TextView
+        android:id="@+id/profile_notice_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/settingListStyle"
@@ -99,6 +103,7 @@
         android:paddingBottom="@dimen/profile_settingList_paddingVertical"
         />
     <TextView
+        android:id="@+id/profile_request_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/settingListStyle"

@@ -6,10 +6,14 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.fragment.plant.PlantFragment
+import com.likefirst.btos.ui.home.MailViewFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
@@ -20,7 +24,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         binding.mainBnv.itemIconTintList = null
 
-        ChangeFragment().moveFragment(R.id.fr_layout,PlantFragment())
+        ChangeFragment().moveFragment(R.id.fr_layout,ProfileFragment())
 
 
         val dataset = Array(1000) { i -> "Number of index: $i"  }
@@ -39,7 +43,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     fun notifyDrawerHandler(){
         val stacks = supportFragmentManager.getFragments()
-        Log.d("Stack", stacks.size.toString())
+        Log.d("Stack", stacks.toString())
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             binding.mainLayout.openDrawer((GravityCompat.START))
@@ -79,6 +83,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
 
     }
+
+    fun refreshFragment( fragmentManager: FragmentManager) {
+        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        ft.replace(R.id.flowerpot_rt_layout,PlantFragment())
+    }
+
 
 
 

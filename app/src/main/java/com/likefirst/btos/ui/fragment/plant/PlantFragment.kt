@@ -1,40 +1,56 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.fragment.plant
 
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
+import android.widget.LinearLayout
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.likefirst.btos.ApplicationClass.Companion.TAG
+import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.home.HomeFragment
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.Plant
 import com.likefirst.btos.utils.PlantDatabase
 import com.likefirst.btos.utils.PlantItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.util.*
-import java.util.Arrays.asList
-import java.util.stream.Collectors
-import java.util.stream.Stream
 import kotlin.collections.ArrayList
 
 class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate) {
     override fun initAfterBinding() {
-//
-//        val jsonString = getJsonDataFromAsset()
-//        val gson= Gson()
-//        val plantObjType = object: TypeToken<List<Plant>>() {}.type
-//        val plantObj : List<Plant> = gson.fromJson(jsonString, plantObjType)
-
+        val presFragment = this
+        val mActivity= activity as MainActivity
         val flowerpots = loadData()
-
         val adapter = PlantRVAdapter(flowerpots)
+        var isPop = false
+
         binding.flowerpotRv.adapter=adapter
 
 
+
+        adapter.setMyItemCLickLister(object:PlantRVAdapter.PlantItemClickListener{
+            override fun onClickShopItem(){
+                Log.d("RV SELECT","clicked")
+                mActivity.supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.flowerpot_popup_layout,PlantItemFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        })
+
+
+        binding.flowerpotToolbar.toolbarBackIc.setOnClickListener{
+            mActivity.ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
+        }
+
     }
+
 
    fun  loadData() : ArrayList<Plant> {
         val assetManager = resources.assets
@@ -128,3 +144,4 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
 
 }
+

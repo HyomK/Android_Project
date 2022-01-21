@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/plantinfo_rt_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/profile_view_marginHorizontal"
+        android:layout_marginVertical="@dimen/profile_view_marginVertical"
+        android:background="@drawable/plantinfo_bg"
+        >
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/plantinfo_back_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        android:layout_gravity="end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/profile_iv_width"
+            android:layout_height="@dimen/profile_iv_height"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
+            app:cardCornerRadius="@dimen/profile_iv_radius"
+            android:background="@color/white"
+            >
+            <ImageView
+                android:id="@+id/plantinfo_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/alocasia_3"
+                android:scaleType="centerCrop"
+                android:paddingBottom="40dp"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/plantinfo_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="알로카시아"
+            android:textSize="@dimen/profile_level_textSize"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:id="@+id/plantinfo_detail_tv"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="상세설명@@@@@@@@@@@@@@@@@@@@@@@@"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="30dp"
+            android:layout_marginHorizontal="@dimen/plantinfo_margin_Horizontal"
+            android:textSize="@dimen/plantinfo_detail_textSize"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textStyle="bold"
+            android:includeFontPadding="false"
+            android:layout_marginTop="15dp"
+            />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingHorizontal="2dp"
+        android:layout_gravity="center"
+        android:paddingBottom="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/plantinfo_level_tv"
+        android:text="3단계"
+        android:textStyle="bold"
+        android:fontFamily="@font/notosanskr_bold"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/profile_level_textSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"  />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/plantinfo_max_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:padding="1dp"
+        app:layout_constraintStart_toEndOf="@id/plantinfo_level_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/plantinfo_max_tv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:padding="3dp"
+            android:background="@drawable/ic_max_gray_bg"
+            android:text="MAX"
+            android:textColor="@color/white"
+            android:textSize="8dp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/plantinfo_select_btn"
+            app:layout_constraintStart_toEndOf="@id/plantinfo_max_layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_width="@dimen/plantinfo_btn_width"
+            android:layout_height="@dimen/plantinfo_btn_height"
+            android:background="@drawable/btn_rectangle"
+            android:text="1,200"
+            android:textStyle="bold"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
