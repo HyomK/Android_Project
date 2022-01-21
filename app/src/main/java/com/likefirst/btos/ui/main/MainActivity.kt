@@ -1,6 +1,8 @@
 package com.likefirst.btos.ui.main
 
 
+import android.content.Intent
+import android.util.Log
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
@@ -9,15 +11,22 @@ import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.archive.ArchiveFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
+    private val homeFragment = HomeFragment()
+    private val archiveFragment = ArchiveFragment()
 
     override fun initAfterBinding() {
 
         binding.mainBnv.itemIconTintList = null
 
-        ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
+        //초기화면 홈프래그먼트 설정
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fr_layout, homeFragment, "home")
+            .setReorderingAllowed(true)
+            .commitNowAllowingStateLoss()
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
@@ -30,6 +39,51 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         })
 
         binding.sidebarNotifyRv.adapter=adapter
+
+        binding.mainBnv.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> {
+                    if(homeFragment.isAdded){
+                        supportFragmentManager.beginTransaction()
+                            .hide(archiveFragment)
+                            .show(homeFragment)
+                            .setReorderingAllowed(true)
+                            .commitNowAllowingStateLoss()
+                        Log.d("homeclick", "added")
+                    } else {
+                        supportFragmentManager.beginTransaction()
+                            .hide(archiveFragment)
+                            .add(R.id.fr_layout, homeFragment, "home")
+                            .setReorderingAllowed(true)
+                            .commitAllowingStateLoss()
+                        Log.d("homeClick", "noadded")
+                    }
+
+                    return@setOnItemSelectedListener true
+                }
+
+                R.id.archiveFragment -> {
+                    if(archiveFragment.isAdded){
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .show(archiveFragment)
+                            .setReorderingAllowed(true)
+                            .commitNowAllowingStateLoss()
+                        Log.d("archiveClick", "added")
+                    } else {
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .add(R.id.fr_layout, archiveFragment, "home")
+                            .setReorderingAllowed(true)
+                            .commitAllowingStateLoss()
+                        Log.d("archiveClick", "noadded")
+                    }
+                    return@setOnItemSelectedListener true
+                }
+
+            }
+            false
+        }
 
        }
 
@@ -74,6 +128,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     }
 
+    override fun onBackPressed() {
+        if(homeFragment.isVisible){
+            super.onBackPressed()
+        } else {
+            if(homeFragment.isAdded){
+                supportFragmentManager.beginTransaction()
+                    .show(homeFragment)
+                    .hide(archiveFragment)
+                    .commitNow()
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .hide(archiveFragment)
+                    .add(R.id.fr_layout, homeFragment)
+                    .commitNow()
+            }
+            binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
+        }
+    }
 
 
 }

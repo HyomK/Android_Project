@@ -10,6 +10,7 @@ class ArchiveFragment : BaseFragment<FragmentArchiveBinding>(FragmentArchiveBind
         binding.archiveVp.apply {
             adapter = archiveAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            isSaveEnabled = false
         }
     }
 
