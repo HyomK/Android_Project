@@ -15,12 +15,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initAfterBinding() {
 
-
-
         binding.mainBnv.itemIconTintList = null
 
         ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
-
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
@@ -37,17 +34,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
        }
 
     fun notifyDrawerHandler(){
-        val stacks = supportFragmentManager.getFragments()
+        val stacks = supportFragmentManager.fragments
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             binding.mainLayout.openDrawer((GravityCompat.START))
         }
         else{
-            binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
     }
 
-    inner class ChangeFragment() {
+    inner class ChangeFragment {
 
        //현재 Fragment를 삭제합니다
         fun removeFragment( presFragment: Fragment? ){

@@ -42,6 +42,7 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
             addItemDecoration(emotionDecoration)
         }
 
+        //DoneList 리사이클러뷰 연결
         val doneListAdapter = DiaryDoneListRVAdapter()
         binding.diaryDoneListRv.apply{
             adapter = doneListAdapter
@@ -61,6 +62,7 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
             false
         }
 
+        //doneList 2줄 입력제한
         binding.diaryDoneListEt.addTextChangedListener(object : TextWatcher{
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
