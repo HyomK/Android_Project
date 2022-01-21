@@ -67,6 +67,9 @@ dependencies {
     //viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    //Indicator
+    implementation 'me.relex:circleindicator:2.1.4'
+
     //RoomDB
     implementation "androidx.room:room-runtime:$roomdb_version"
     kapt "androidx.room:room-compiler:$roomdb_version"
@@ -91,6 +94,9 @@ dependencies {
     //FireBase
     implementation platform('com.google.firebase:firebase-bom:29.0.3')
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+
+
 
 
 

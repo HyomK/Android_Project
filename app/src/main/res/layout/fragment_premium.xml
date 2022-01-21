@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -36,10 +37,43 @@
         android:text="2000"
         style="@style/detailTextStyle"
         />
-    <androidx.viewpager2.widget.ViewPager2
+    <FrameLayout
+        android:layout_marginTop="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/btn_rectangle"
-        android:layout_marginTop="55dp"
-        android:layout_width="@dimen/premium_viewpager_width"
-        android:layout_height="@dimen/premium_viewpager_height"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/premium_vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:overScrollMode="never" />
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/indicator"
+            app:ci_drawable="@drawable/black_indicator"
+            app:ci_drawable_unselected="@drawable/white_indicator"
+            android:layout_width="match_parent"
+            app:ci_width="3pt"
+            app:ci_height="3pt"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"/>
+
+<!--        <com.google.android.material.tabs.TabLayout-->
+<!--            android:id="@+id/tab_layout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_gravity="bottom|center"-->
+<!--            app:tabBackground="@drawable/selector_indicator"-->
+<!--            app:tabGravity="center"-->
+<!--            app:tabIndicatorHeight="0dp"-->
+<!--            app:tabSelectedTextColor="@android:color/transparent"-->
+<!--            app:tabTextColor="@android:color/transparent" />-->
+    </FrameLayout>
+
+
+
 </LinearLayout>

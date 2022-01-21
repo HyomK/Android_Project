@@ -13,6 +13,7 @@ import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.fragment.plant.PlantFragment
+import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -44,7 +45,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     fun notifyDrawerHandler(){
         val stacks = supportFragmentManager.getFragments()
         Log.d("Stack", stacks.toString())
-        if(stacks.size ==1 ){
+        val i =supportFragmentManager.getBackStackEntryAt(supportFragmentManager.getBackStackEntryCount() - 1);
+        Log.d("StackFront", i.name.toString())
+        if(stacks.size<1) return
+        val frontFragment : Fragment = stacks.get(0)
+        if(frontFragment is HomeFragment){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             binding.mainLayout.openDrawer((GravityCompat.START))
         }

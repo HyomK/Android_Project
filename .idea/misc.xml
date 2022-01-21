@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android_Project/BTOS/app/src/main/res/layout/activity_main.xml" value="0.10625" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/black_indicator.xml" value="0.22135416666666666" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/btn_rectangle.xml" value="0.15555555555555556" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/drop_menu_bg.xml" value="0.18796296296296297" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_dots.xml" value="0.2947916666666667" />
@@ -18,6 +19,8 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/plantinfo_bg.xml" value="0.13240740740740742" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/profile_bg.xml" value="0.2947916666666667" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/report_edit_bg.xml" value="0.17592592592592593" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/selector_indicator.xml" value="0.22135416666666666" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/white_indicator.xml" value="0.22135416666666666" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/font/font.xml" value="0.15555555555555556" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_main.xml" value="0.19479166666666667" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_onboarding.xml" value="0.5" />
@@ -47,6 +50,7 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/item_mailbox_rv.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/item_max.xml" value="0.5" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/item_notify_rv.xml" value="0.33" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/item_premium_vp.xml" value="0.16" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/item_report.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/main_include_drawer.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/profile_shop_bg.xml" value="0.1" />
