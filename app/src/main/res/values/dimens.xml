@@ -67,6 +67,10 @@
     <dimen name="plantinfo_btn_height">35dp </dimen>
     <dimen name="plantinfo_btn_width">70dp </dimen>
 
+    <dimen name="diary_doneList_font">14dp</dimen>
+    <dimen name="diary_contents_font">14dp</dimen>
+    <dimen name="archive_calendar_date">12dp</dimen>
+    <dimen name="archive_calendar_month">12dp</dimen>
 
 
 </resources>

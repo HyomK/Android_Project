@@ -13,6 +13,9 @@ import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.archive.ArchiveFragment
+import com.likefirst.btos.ui.home.HomeFragment
+import com.likefirst.btos.ui.home.MailViewFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
@@ -23,7 +26,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         binding.mainBnv.itemIconTintList = null
 
-        ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fr_layout, homeFragment, "home")
+            .setReorderingAllowed(true)
+            .commitNowAllowingStateLoss()
 
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
@@ -125,6 +131,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 .commit()
         }
 
+    }
+
+    override fun onBackPressed() {
+        if(homeFragment.isVisible){
+            super.onBackPressed()
+        } else {
+            if(homeFragment.isAdded){
+                supportFragmentManager.beginTransaction()
+                    .show(homeFragment)
+                    .hide(archiveFragment)
+                    .commitNow()
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .hide(archiveFragment)
+                    .add(R.id.fr_layout, homeFragment)
+                    .commitNow()
+            }
+            binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
+        }
     }
 
 
