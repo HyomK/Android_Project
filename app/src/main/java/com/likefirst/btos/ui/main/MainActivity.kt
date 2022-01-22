@@ -89,6 +89,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     fun notifyDrawerHandler(){
         val stacks = supportFragmentManager.fragments
+        Log.d("Stack", stacks.toString())
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             binding.mainLayout.openDrawer((GravityCompat.START))

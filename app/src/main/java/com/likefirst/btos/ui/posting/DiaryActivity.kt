@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.posting
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Resources
 import android.text.Editable
 import android.text.InputFilter
@@ -108,9 +109,14 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
                 })
                 dialog.show(this.supportFragmentManager, "CustomDialog")
             } else {
-                startActivityWithClear(DiaryViewerActivity::class.java)
+                goToDiaryViewer()
             }
         }
+    }
+
+    fun goToDiaryViewer(){
+        val intent = Intent(this, DiaryViewerActivity::class.java)
+        startActivity(intent)
     }
 
     fun isPublic() : Boolean{

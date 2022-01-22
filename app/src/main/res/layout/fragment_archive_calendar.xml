@@ -14,17 +14,26 @@
         android:textColor="@color/black"
         android:layout_marginBottom="50dp"
         android:textSize="@dimen/archive_calendar_month"
-        app:layout_constraintBottom_toTopOf="@id/archive_calendar_rv"
+        app:layout_constraintBottom_toTopOf="@id/archive_calendar_vp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-    
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/archive_calendar_rv"
-        android:layout_width="320dp"
-        android:layout_height="340dp"
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/archive_calendar_vp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/archive_calendar_rv"-->
+<!--        android:layout_width="320dp"-->
+<!--        android:layout_height="340dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
