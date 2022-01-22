@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp" >
+
+        <include
+            android:id="@+id/font_toolbar"
+            layout="@layout/toolbar_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+        <TextView
+            android:id="@+id/nickname_done_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="완료"
+            android:textSize="@dimen/setting_content_fontSize"
+            android:layout_marginEnd="25dp"
+            android:textStyle="bold"
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:paddingTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/settingListStyle"
+        android:text="기본"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/settingListStyle"
+        android:text="겨보손글씨"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/settingListStyle"
+        android:text="수신 설정"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/settingListStyle"
+        android:text="코트라 손글씨"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/settingListStyle"
+        android:text="몽돌"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/settingListStyle"
+        android:text="어비 돌돌체"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+
+        />
+
+</LinearLayout>

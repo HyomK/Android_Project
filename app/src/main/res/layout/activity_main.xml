@@ -32,7 +32,6 @@
         app:itemIconSize="50dp"
         app:itemBackground="@color/white"
         app:labelVisibilityMode="unlabeled"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +56,7 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="30"
+            tools:itemCount="500"
             tools:listitem="@layout/item_notify_rv" />
 
     </com.google.android.material.navigation.NavigationView>

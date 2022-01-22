@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/premium_toolbar"
+        layout="@layout/toolbar_layout" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/premium_margin_Top"
+        android:layout_marginHorizontal="@dimen/premium_margin_Horizontal"
+        android:text="@string/premium"
+        style="@style/detailTextStyle"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_rectangle"
+        android:text="프리미엄 가입"
+        style="@style/detailTextStyle"
+        android:minHeight="0dp"
+        android:paddingVertical="10dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2000"
+        style="@style/detailTextStyle"
+        />
+    <FrameLayout
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/premium_vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:overScrollMode="never" />
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/indicator"
+            app:ci_drawable="@drawable/black_indicator"
+            app:ci_drawable_unselected="@drawable/white_indicator"
+            android:layout_width="match_parent"
+            app:ci_width="3pt"
+            app:ci_height="3pt"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"/>
+
+<!--        <com.google.android.material.tabs.TabLayout-->
+<!--            android:id="@+id/tab_layout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_gravity="bottom|center"-->
+<!--            app:tabBackground="@drawable/selector_indicator"-->
+<!--            app:tabGravity="center"-->
+<!--            app:tabIndicatorHeight="0dp"-->
+<!--            app:tabSelectedTextColor="@android:color/transparent"-->
+<!--            app:tabTextColor="@android:color/transparent" />-->
+    </FrameLayout>
+
+
+
+</LinearLayout>

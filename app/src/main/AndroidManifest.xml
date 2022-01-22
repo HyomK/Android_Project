@@ -28,6 +28,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.posting.DiaryActivity"/>
+        <activity android:name=".ui.posting.DiaryViewerActivity"/>
         <activity
             android:name=".ui.splash.OnboardingActivity">
         </activity>

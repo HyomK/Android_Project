@@ -21,13 +21,8 @@ class NotifyRVAdapter(private val dataSet: Array<String>) : RecyclerView.Adapter
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView : TextView
-        val layout : LinearLayout
-
-        init{
-            textView = view.findViewById(R.id.item_notify_tv)
-            layout= view.findViewById(R.id.item_notify_layout)
-        }
+        val textView : TextView = view.findViewById(R.id.item_notify_tv)
+        val layout : LinearLayout = view.findViewById(R.id.item_notify_layout)
 
     }
 

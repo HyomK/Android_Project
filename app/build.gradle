@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 apply plugin: 'com.android.application'
@@ -66,9 +67,14 @@ dependencies {
     //viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    //Indicator
+    implementation 'me.relex:circleindicator:2.1.4'
+
     //RoomDB
     implementation "androidx.room:room-runtime:$roomdb_version"
     kapt "androidx.room:room-compiler:$roomdb_version"
+    // optional - RxJava2 support for Room
+    implementation "androidx.room:room-rxjava2:2.4.0"
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.9'

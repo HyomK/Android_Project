@@ -10,17 +10,17 @@
         tools:ignore="AlwaysShowAction"
         android:title="" />
     <item
-        android:id="@+id/ArchiveFragment"
+        android:id="@+id/archiveFragment"
         android:icon="@drawable/bottom_nav_menu_archive_selector"
         app:showAsAction="always"
         android:title="" />
     <item
-        android:id="@+id/HistoryFragment"
+        android:id="@+id/historyFragment"
         android:icon="@drawable/bottom_nav_menu_history_selector"
         app:showAsAction="always"
         android:title="" />
     <item
-        android:id="@+id/ProfileFragment"
+        android:id="@+id/profileFragment"
         android:icon="@drawable/bottom_nav_menu_profile_selector"
         app:showAsAction="always"
         android:title="" />

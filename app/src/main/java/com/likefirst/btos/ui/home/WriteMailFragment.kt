@@ -1,40 +1,49 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.home
 
 import android.app.Activity
-import android.content.Context
-import android.view.ContextThemeWrapper
-import android.view.Gravity
+import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.PopupMenu
+import android.widget.*
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import com.likefirst.btos.R
-import com.likefirst.btos.databinding.DialogMailPopupBinding.inflate
 import com.likefirst.btos.databinding.FragmentMailWriteBinding
 import com.likefirst.btos.ui.BaseFragment
+import android.text.Editable
+
+import android.text.TextWatcher
+import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.ui.main.MainActivity
+
 
 class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWriteBinding::inflate) {
+
     override fun initAfterBinding() {
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(), R.array.delete_items, android.R.layout.simple_spinner_dropdown_item
-        )
-
-        binding.reportMenuList?.setAdapter(adapter)
-        binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
+        Log.d("changedWrite", "change write")
+        val menuItem = resources.getStringArray(R.array.delete_items)
+        val adapter=ArrayAdapter( requireContext()!! ,R.layout.menu_dropdown_item, menuItem)
         binding.reportMenuList.onItemSelectedListener = SpinnerActivity()
-        binding.reportMenuList.gravity = Gravity.CENTER
+        binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
+        binding.reportMenuList.setAdapter(adapter)
 
-        binding.letterwriteToolbar.toolbarBackIc.setOnClickListener{
+        binding.letterWriteToolbar.toolbarBackIc.setOnClickListener{
             val mActivity = activity as MainActivity
             mActivity.supportFragmentManager.popBackStack()
         }
 
 
-
+        binding.letterWriteBodyEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                if (null !=  binding.letterWriteBodyEt.layout && binding.letterWriteBodyEt.layout.lineCount > 50) {
+                    binding.letterWriteBodyEt.text.delete( binding.letterWriteBodyEt.text.length - 1, binding.letterWriteBodyEt.text.length)
+                }
+            }
+        })
     }
+
+
 
     inner class SpinnerActivity : Activity(), AdapterView.OnItemSelectedListener {
 
@@ -52,7 +61,8 @@ class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWrite
                         "btnData" to btn
                     )
                     // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                    dialog.setButtonClickListener(object:
+                        CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {
                         }
 
