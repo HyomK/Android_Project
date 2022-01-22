@@ -12,10 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
-import com.airbnb.lottie.Lottie
-import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieConfig
-import com.likefirst.btos.R
 
 abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater) -> T): AppCompatActivity(){
     protected lateinit var binding: T

@@ -102,6 +102,8 @@
         <item>1923</item>
         <item>1922</item>
     </string-array>
+
+
     <string-array name="report_items">
         <item>삭제</item>
         <item>신고</item>
@@ -123,6 +125,8 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string-array name="delete_items">
     <item>삭제</item>
     </string-array>
+
+    <string name="tutorial_finish">OKAY!</string>
 
     <string name="premium">저편너머 프리미엄 회원이 되시면 일기와 편지를 여러가지 정렬방식으로 필터링해 볼 수 있어요.</string>
 </resources>
