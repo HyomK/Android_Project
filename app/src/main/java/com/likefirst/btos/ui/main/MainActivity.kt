@@ -49,14 +49,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
-                        Log.d("homeclick", "added")
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
-                        Log.d("homeClick", "noadded")
                     }
 
                     return@setOnItemSelectedListener true
@@ -69,14 +67,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
-                        Log.d("archiveClick", "added")
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .add(R.id.fr_layout, archiveFragment, "home")
+                            .add(R.id.fr_layout, archiveFragment, "archive")
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
-                        Log.d("archiveClick", "noadded")
                     }
                     return@setOnItemSelectedListener true
                 }
@@ -147,6 +143,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
         }
     }
-
-
 }

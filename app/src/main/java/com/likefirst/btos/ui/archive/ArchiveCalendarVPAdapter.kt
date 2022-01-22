@@ -14,6 +14,6 @@ class ArchiveCalendarVPAdapter(fragment: Fragment): FragmentStateAdapter(fragmen
     }
 
     override fun createFragment(position: Int): Fragment {
-        return ArchiveCalendarItemFragment()
+        return ArchiveCalendarItemFragment(position)
     }
 }
