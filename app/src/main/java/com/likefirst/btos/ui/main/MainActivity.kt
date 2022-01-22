@@ -7,26 +7,32 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
+import com.likefirst.btos.ui.fragment.ProfileFragment
+import com.likefirst.btos.ui.home.HomeFragment
+import com.likefirst.btos.ui.home.MailViewFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
+    private val profileFragment= ProfileFragment()
 
     override fun initAfterBinding() {
 
         binding.mainBnv.itemIconTintList = null
 
-        //초기화면 홈프래그먼트 설정
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
             .setReorderingAllowed(true)
             .commitNowAllowingStateLoss()
+
 
         val dataset = Array(30) { i -> "Number of index: $i"  }
         val adapter= NotifyRVAdapter(dataset)
@@ -46,13 +52,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     if(homeFragment.isAdded){
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
+                            .hide(profileFragment)
                             .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
+                            .hide(profileFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
+                            .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
                     }
@@ -64,32 +73,55 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     if(archiveFragment.isAdded){
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
+                            .hide(profileFragment)
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
+                            .hide(profileFragment)
                             .add(R.id.fr_layout, archiveFragment, "archive")
+                            .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
                     }
                     return@setOnItemSelectedListener true
                 }
 
+                R.id.profileFragment -> {
+                    if(profileFragment.isAdded){
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .hide(archiveFragment)
+                            .show(profileFragment)
+                            .setReorderingAllowed(true)
+                            .commitNowAllowingStateLoss()
+                        Log.d("profileClick", "added")
+                    } else {
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .hide(archiveFragment)
+                            .add(R.id.fr_layout, profileFragment, "profile")
+                            .show(profileFragment)
+                            .setReorderingAllowed(true)
+                            .commitAllowingStateLoss()
+                        Log.d("profileClick", "noadded")
+                    }
+                    return@setOnItemSelectedListener true
+                }
             }
             false
         }
-
        }
 
     fun notifyDrawerHandler(){
         val stacks = supportFragmentManager.fragments
-        Log.d("Stack", stacks.toString())
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             binding.mainLayout.openDrawer((GravityCompat.START))
         }
+
         else{
             binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
@@ -132,11 +164,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             if(homeFragment.isAdded){
                 supportFragmentManager.beginTransaction()
                     .show(homeFragment)
+                    .hide(profileFragment)
                     .hide(archiveFragment)
                     .commitNow()
             } else {
                 supportFragmentManager.beginTransaction()
                     .hide(archiveFragment)
+                    .hide(profileFragment)
                     .add(R.id.fr_layout, homeFragment)
                     .commitNow()
             }

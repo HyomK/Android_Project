@@ -1,7 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Toolbar layout. -->
+    <dimen name="toolbar_layout_height">60dp </dimen>
+    <dimen name="toolbar_layout_title_size">18dp</dimen>
+
+    <!-- Toolbar layout. -->
+    <dimen name="item_notify_height">20dp </dimen>
+    <dimen name="item_notify_fontSize">14dp </dimen>
+    <dimen name="item_notify_padding">15dp </dimen>
+
+    <!-- Setting content -->
+    <dimen name="setting_content_fontSize">17dp </dimen>
+<dimen name="setting_check_width">18dp </dimen>
+<dimen name="setting_check_height">18dp </dimen>
+
+    <!-- Mail Icon -->
+    <dimen name="icon_mail_margin">30dp </dimen>
+
+    <!-- Mail Text/Edit View -->
+    <dimen name="mail_view_marginVertical">55dp</dimen>
+    <dimen name="mail_view_marginHorizontal">45dp</dimen>
+
+    <!-- Profile View -->
+    <dimen name="profile_view_marginHorizontal">20dp</dimen>
+    <dimen name="profile_view_marginVertical">50dp</dimen>
+    <dimen name="profile_layout_height">290dp </dimen>
+    <dimen name="profile_layout_width">320dp </dimen>
+    <dimen name="profile_view_radius">10dp</dimen>
+    <dimen name="profile_iv_width">150dp </dimen>
+    <dimen name="profile_iv_height">150dp</dimen>
+    <dimen name="profile_iv_marginTop">35dp</dimen>
+    <dimen name="profile_iv_radius">75dp</dimen>
+    <dimen name="profile_level_textSize">14dp</dimen>
+    <dimen name="profile_nickname_textSize">17dp</dimen>
+    <dimen name="profile_settingList_paddingVertical">18dp</dimen>
+
+    <!-- Flowerpot item -->
+    <dimen name="flowerpot_layout_height">125dp </dimen>
+    <dimen name="flowerpot_layout_width">320dp </dimen>
+    <dimen name="flowerpot_marginHorizontal">20dp</dimen>
+    <dimen name="flowerpot_view_radius">50dp</dimen>
+    <dimen name="flowerpot_circle_size">104dp</dimen>
+    <dimen name="flowerpot_btn_height">35dp </dimen>
+    <dimen name="flowerpot_btn_width">60dp </dimen>
+
+    <!-- app info -->
+    <dimen name="appInfo_marginTop">35dp</dimen>
+    <dimen name="appInfo_paddingHorizontal">40dp</dimen>
+
+    <!-- premium -->
+    <dimen name="premium_margin_Horizontal">40dp</dimen>
+    <dimen name="premium_margin_Top">35dp</dimen>
+    <dimen name="premium_viewpager_width"> 285dp</dimen>
+    <dimen name="premium_viewpager_height"> 350dp</dimen>
+
+
+    <!-- flowerpot -->
+    <dimen name="plant_margin_Horizontal">20dp</dimen>
+    <dimen name="plant_margin_Top">15dp</dimen>
+
+
+    <!--- plant info -->
+    <dimen name="plantinfo_name_textSize">14dp</dimen>
+    <dimen name="plantinfo_detail_textSize">12dp</dimen>
+    <dimen name="plantinfo_margin_Horizontal">20dp</dimen>
+    <dimen name="plantinfo_btn_height">35dp </dimen>
+    <dimen name="plantinfo_btn_width">70dp </dimen>
+
     <dimen name="diary_doneList_font">14dp</dimen>
     <dimen name="diary_contents_font">14dp</dimen>
     <dimen name="archive_calendar_date">12dp</dimen>
     <dimen name="archive_calendar_month">12dp</dimen>
+
 </resources>

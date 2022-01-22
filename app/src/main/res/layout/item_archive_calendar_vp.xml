@@ -8,16 +8,18 @@
         android:id="@+id/testtv"
         android:layout_width="320dp"
         android:layout_height="340dp"
+        android:fontFamily="@font/aac_child_sky_shine"
         android:text="20sp"
         android:textColor="@color/black"
-        android:fontFamily="@font/aac_child_sky_shine"
         android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
 <!--        android:id="@+id/archive_calendar_rv"-->
 <!--        android:layout_width="320dp"-->
 <!--        android:layout_height="340dp"-->

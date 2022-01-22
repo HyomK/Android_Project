@@ -17,7 +17,7 @@
             android:id="@+id/popup_body"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.6"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="30dp"
@@ -28,12 +28,20 @@
             >
 
         </TextView>
+        <EditText
+            android:id="@+id/popup_edit"
+            android:layout_gravity="center"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:gravity="center_horizontal"
+            android:paddingTop="3dp"
 
             >
             <androidx.appcompat.widget.AppCompatButton
@@ -42,7 +50,7 @@
                 android:layout_height="35dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="25dp"
                 android:background="@drawable/btn_rectangle"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
@@ -62,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:background="@drawable/btn_rectangle"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="25dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:minWidth="0dp"

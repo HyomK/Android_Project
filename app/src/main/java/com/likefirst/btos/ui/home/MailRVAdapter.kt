@@ -1,11 +1,9 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 
@@ -15,11 +13,10 @@ class MailRVAdapter (private val dataSet: Array<String>) : RecyclerView.Adapter<
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-
+    private lateinit var mItemClickLister: MailItemClickListener
     interface MailItemClickListener{
         fun onClickItem()
     }
-    private lateinit var mItemClickLister: MailItemClickListener
 
     fun setMyItemCLickLister(itemClickLister: MailItemClickListener){
         mItemClickLister=itemClickLister

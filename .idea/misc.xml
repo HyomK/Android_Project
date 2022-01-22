@@ -39,13 +39,17 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.264" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary_viewer.xml" value="0.2" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_main.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/custom_dialog_layout.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_mail_popup.xml" value="0.4" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_appinfo_detail.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_archive.xml" value="0.23743589743589744" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_archive_calendar.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_archive_calendar.xml" value="0.264" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mail_view.xml" value="0.12083333333333333" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mail_write.xml" value="0.12083333333333333" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mailbox.xml" value="0.12083333333333333" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_nickname.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_report.xml" value="0.12083333333333333" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_calendar_rv.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_calendar_rv_date.xml" value="0.536" />
@@ -53,6 +57,7 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_calendar_vp.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_diary_done_list_rv.xml" value="0.43771626297577854" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_diary_emotion_rv.xml" value="0.4" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_flowerpot.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_mailbox_rv.xml" value="0.12083333333333333" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_notify_rv.xml" value="0.12083333333333333" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/onboarding_dropdown_item.xml" value="0.24114583333333334" />
