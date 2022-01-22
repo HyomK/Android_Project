@@ -16,8 +16,10 @@
             android:exported="true">
 
         </activity>
+        <activity android:name=".ui.posting.DiaryActivity"/>
+
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.splash.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,10 +28,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.posting.DiaryActivity"/>
-        <activity
-            android:name=".ui.splash.LoginActivity">
-        </activity>
         <activity
             android:name=".ui.splash.OnboardingActivity">
         </activity>

@@ -1,7 +1,11 @@
 package com.likefirst.btos.ui.splash
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
+import android.view.animation.AnimationUtils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -10,35 +14,36 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
 import com.google.android.gms.tasks.Task
+import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener {
     val G_SIGN_IN : Int = 1
-
+    lateinit var googleSignInClient: GoogleSignInClient
 
     override fun initAfterBinding() {
 
-        lateinit var googleSignInClient: GoogleSignInClient
+        val animFadeOut = AnimationUtils.loadAnimation(applicationContext, R.anim.fade_out)
+        val animFadeIn = AnimationUtils.loadAnimation(applicationContext, R.anim.fade_in)
+
+        // animation_FadeOut
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.loginLogoIv.visibility = View.VISIBLE
+            binding.loginLogoIv.startAnimation(animFadeOut)
+            binding.loginWelcomeTv.visibility = View.VISIBLE
+            binding.loginWelcomeTv.startAnimation(animFadeIn)
+            binding.loginGoogleLoginTv.visibility = View.VISIBLE
+            binding.loginGoogleLoginTv.startAnimation(animFadeIn)
+        },5000)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-//        binding.loginGoogleLoginTv.setSize(SignInButton.SIZE_STANDARD)
-
 
         binding.loginGoogleLoginTv.setOnClickListener{
             var signInIntent : Intent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, G_SIGN_IN)
         }
-        
-        //자동로그인
-//        val account = GoogleSignIn.getLastSignedInAccount(this)
-//        if(account==null){
-//            //자동 로그인 X
-//        }else{
-//            //자동 로그인
-//        }
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
