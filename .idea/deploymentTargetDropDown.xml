@@ -7,12 +7,19 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
+<<<<<<< HEAD
             <value value="C:\Users\family\.android\avd\New_Device_API_30.avd" />
+=======
+            <value value="C:\Users\kms10\.android\avd\5.4_FWVGA_API_30.avd" />
+>>>>>>> origin/mergeSample
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
+<<<<<<< HEAD
     <timeTargetWasSelectedWithDropDown value="2022-01-15T11:30:32.921303400Z" />
-
+=======
+    <timeTargetWasSelectedWithDropDown value="2022-01-13T18:24:29.504905900Z" />
+>>>>>>> origin/mergeSample
   </component>
 </project>

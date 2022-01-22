@@ -12,6 +12,5 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             finish()
             startActivity(intent)
         }
-
     }
 }
