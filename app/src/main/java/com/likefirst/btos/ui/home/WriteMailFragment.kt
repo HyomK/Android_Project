@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.home
 
 import android.app.Activity
 import android.util.Log
@@ -11,10 +11,8 @@ import com.likefirst.btos.ui.BaseFragment
 import android.text.Editable
 
 import android.text.TextWatcher
-
-
-
-
+import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.ui.main.MainActivity
 
 
 class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWriteBinding::inflate) {
@@ -63,7 +61,8 @@ class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWrite
                         "btnData" to btn
                     )
                     // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                    dialog.setButtonClickListener(object:
+                        CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {
                         }
 

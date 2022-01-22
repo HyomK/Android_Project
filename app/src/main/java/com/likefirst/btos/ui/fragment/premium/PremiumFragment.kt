@@ -1,21 +1,15 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.fragment.premium
 
 import android.content.Context
 import android.graphics.Rect
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.FloatRange
-import androidx.annotation.RequiresApi
-import androidx.core.view.get
-import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentPremiumBinding
 import com.likefirst.btos.ui.BaseFragment
-import me.relex.circleindicator.CircleIndicator
-import me.relex.circleindicator.CircleIndicator3
+import com.likefirst.btos.ui.main.MainActivity
 
 class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBinding :: inflate) {
     override fun initAfterBinding() {

@@ -12,6 +12,7 @@ import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.fragment.ProfileFragment
 import com.likefirst.btos.ui.fragment.plant.PlantFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
@@ -25,7 +26,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         binding.mainBnv.itemIconTintList = null
 
-        ChangeFragment().moveFragment(R.id.fr_layout,ProfileFragment())
+        ChangeFragment().moveFragment(R.id.fr_layout, ProfileFragment())
 
 
         val dataset = Array(1000) { i -> "Number of index: $i"  }

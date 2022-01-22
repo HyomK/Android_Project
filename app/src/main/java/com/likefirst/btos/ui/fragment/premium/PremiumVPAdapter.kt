@@ -1,13 +1,9 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.fragment.premium
 
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 
@@ -18,7 +14,7 @@ class PremiumVPAdapter (var items: ArrayList<Int> = arrayListOf()) : RecyclerVie
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
        val view= LayoutInflater.from(parent.context)
            .inflate(R.layout.item_premium_vp, parent, false)
