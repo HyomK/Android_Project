@@ -27,15 +27,19 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         val animFadeOut = AnimationUtils.loadAnimation(applicationContext, R.anim.fade_out)
         val animFadeIn = AnimationUtils.loadAnimation(applicationContext, R.anim.fade_in)
 
-        // animation_FadeOut
+        // animation_logo_FadeOut
         Handler(Looper.getMainLooper()).postDelayed({
             binding.loginLogoIv.visibility = View.VISIBLE
             binding.loginLogoIv.startAnimation(animFadeOut)
+        },5000)
+
+        // animation_loginText_FadeIn
+        Handler(Looper.getMainLooper()).postDelayed({
             binding.loginWelcomeTv.visibility = View.VISIBLE
             binding.loginWelcomeTv.startAnimation(animFadeIn)
             binding.loginGoogleLoginTv.visibility = View.VISIBLE
             binding.loginGoogleLoginTv.startAnimation(animFadeIn)
-        },5000)
+        },7000)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
