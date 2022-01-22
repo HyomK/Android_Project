@@ -28,6 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         binding.mainBnv.itemIconTintList = null
 
+        ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
