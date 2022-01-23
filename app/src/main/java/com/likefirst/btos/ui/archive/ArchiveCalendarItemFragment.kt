@@ -8,14 +8,15 @@ import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 import com.likefirst.btos.ui.BaseFragment
 import java.util.*
 
-class ArchiveCalendarItemFragment : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate) {
+class ArchiveCalendarItemFragment(val position: Int) : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate) {
 
     override fun initAfterBinding() {
         val calendarAdapter = ArchiveCalendarRVAdapter()
-        binding.archiveCalendarRv.apply {
-            adapter = calendarAdapter
-            layoutManager = GridLayoutManager(requireContext(), 7)
-        }
+        binding.testtv.text = position.toString()
+//        binding.archiveCalendarRv.apply {
+//            adapter = calendarAdapter
+//            layoutManager = GridLayoutManager(requireContext(), 7)
+//        }
     }
 
 }
