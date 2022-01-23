@@ -1,55 +1,70 @@
-package com.likefirst.btos.ui.fragment.plant
+package com.likefirst.btos.ui.profile.plant
 
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.view.View.OnTouchListener
-import android.widget.LinearLayout
-import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
 import com.likefirst.btos.ui.BaseFragment
-import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.utils.Plant
-import com.likefirst.btos.utils.PlantDatabase
-import com.likefirst.btos.utils.PlantItem
+import com.likefirst.btos.data.entities.Plant
+import com.likefirst.btos.data.local.PlantDatabase
+import com.likefirst.btos.data.entities.PlantItem
 import org.json.JSONObject
 import kotlin.collections.ArrayList
 
 class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate) {
+
     override fun initAfterBinding() {
         val presFragment = this
         val mActivity= activity as MainActivity
         val flowerpots = loadData()
         val adapter = PlantRVAdapter(flowerpots)
-        var isPop = false
+
 
         binding.flowerpotRv.adapter=adapter
-
-
 
         adapter.setMyItemCLickLister(object:PlantRVAdapter.PlantItemClickListener{
             override fun onClickShopItem(){
                 Log.d("RV SELECT","clicked")
-                mActivity.supportFragmentManager
+                requireActivity().supportFragmentManager
                     .beginTransaction()
                     .add(R.id.flowerpot_popup_layout,PlantItemFragment())
+                    .show(PlantItemFragment())
                     .addToBackStack(null)
                     .commit()
+
             }
         })
 
 
         binding.flowerpotToolbar.toolbarBackIc.setOnClickListener{
-            mActivity.ChangeFragment().moveFragment(R.id.fr_layout,HomeFragment())
+            val stacks =  mActivity.supportFragmentManager.getFragments()
+            Log.d("Stackfr",stacks.toString())
+            mActivity.supportFragmentManager.popBackStack()
+            this.onHiddenChanged(true)
         }
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("PlantFragment", "onDestroy")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("PlantFragment", "onDestroyView")
+    }
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("PlantFragment", "onDedatch")
+
+    }
+
+
+
 
 
    fun  loadData() : ArrayList<Plant> {
@@ -100,8 +115,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         val shopList =setShopItem(shopItemIdx)
 
 
-
-
        userPlantList.addAll(shopList) // 두개 붙이기
        Log.d(TAG, "shopItemIdx: $userPlantList" )
        return userPlantList
@@ -125,20 +138,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     }
 
-//    fun setUserItem(userItemIdx : ArrayList<Int>) : ArrayList<Plant>{
-//
-//        val plantDB = PlantDatabase.getInstance(requireContext()!!)
-//        val userList = ArrayList<Plant>()
-//        userItemIdx.forEach { it ->{
-//            val item = plantDB?.plantDao()?.getPlant(it)!!
-//            val plant= Plant(item.plantIdx,item.plantName, "",item.plantPrice, item.maxLevel, 0,"")
-//            userList.add(plant)
-//        }
-//        }
-//
-//        return userList
-//
-//    }
 
 
 

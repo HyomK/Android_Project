@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.fragment.premium
+package com.likefirst.btos.ui.profile.premium
 
 import android.view.LayoutInflater
 import android.view.View

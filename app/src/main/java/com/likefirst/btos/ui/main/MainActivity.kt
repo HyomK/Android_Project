@@ -1,28 +1,32 @@
 package com.likefirst.btos.ui.main
 
 
-import android.content.Intent
 import android.util.Log
+import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
+import com.google.android.material.navigation.NavigationBarView
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
-import com.likefirst.btos.ui.fragment.ProfileFragment
+import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
+import com.likefirst.btos.ui.profile.plant.PlantFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val profileFragment= ProfileFragment()
+    private val plantFragment=PlantFragment()
+    var isDrawerOpen =true
+
+
 
     override fun initAfterBinding() {
 
@@ -34,46 +38,52 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             .commitNowAllowingStateLoss()
 
 
-        val dataset = Array(30) { i -> "Number of index: $i"  }
-        val adapter= NotifyRVAdapter(dataset)
+        val dataset = Array(30) { i -> "Number of index: $i" }
+        val adapter = NotifyRVAdapter(dataset)
 
-        adapter.setMyItemCLickLister(object:NotifyRVAdapter.NotifyItemClickListener{
+        adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
             override fun onClickItem() {
                 binding.mainLayout.closeDrawers()
                 ChangeFragment().moveFragment(R.id.fr_layout, MailViewFragment())
             }
         })
 
-        binding.sidebarNotifyRv.adapter=adapter
+        binding.sidebarNotifyRv.adapter = adapter
+        binding.mainBnv.setOnItemSelectedListener { it ->BottomNavView().onNavigationItemSelected(it) }
+    }
 
-        binding.mainBnv.setOnItemSelectedListener {
+    inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
+        override fun onNavigationItemSelected(it: MenuItem): Boolean {
+
             when (it.itemId) {
                 R.id.homeFragment -> {
-                    if(homeFragment.isAdded){
+                    isDrawerOpen=true
+                    if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
-                            .hide(profileFragment)
+                            .remove(profileFragment)
                             .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
-                            .hide(profileFragment)
+                            .remove(profileFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
                             .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
                     }
 
-                    return@setOnItemSelectedListener true
+                    return true
                 }
 
                 R.id.archiveFragment -> {
-                    if(archiveFragment.isAdded){
+                    isDrawerOpen=false
+                    if (archiveFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .hide(profileFragment)
+                            .remove(profileFragment)
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
@@ -86,11 +96,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
                     }
-                    return@setOnItemSelectedListener true
+                    return true
                 }
-
                 R.id.profileFragment -> {
-                    if(profileFragment.isAdded){
+                    isDrawerOpen=false
+                    if (profileFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(archiveFragment)
@@ -108,23 +118,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .commitAllowingStateLoss()
                         Log.d("profileClick", "noadded")
                     }
-                    return@setOnItemSelectedListener true
+
+                    return true
                 }
             }
-            false
+            return false
         }
+
        }
 
+    }
+
+
+
     fun notifyDrawerHandler(){
-        val stacks = supportFragmentManager.fragments
+        val stacks = supportFragmentManager.getFragments()
         if(stacks.size ==1 ){
             binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             binding.mainLayout.openDrawer((GravityCompat.START))
-        }
-
-        else{
+        }else{
             binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         }
+
     }
 
     inner class ChangeFragment {
@@ -177,4 +192,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
         }
     }
+
+
+
+
+
 }
