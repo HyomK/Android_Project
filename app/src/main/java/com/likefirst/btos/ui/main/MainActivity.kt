@@ -49,65 +49,77 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.mainBnv.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.homeFragment -> {
-                    if(homeFragment.isAdded){
-                        supportFragmentManager.beginTransaction()
-                            .hide(archiveFragment)
-                            .hide(profileFragment)
-                            .show(homeFragment)
-                            .setReorderingAllowed(true)
-                            .commitNowAllowingStateLoss()
-                    } else {
-                        supportFragmentManager.beginTransaction()
-                            .hide(archiveFragment)
-                            .hide(profileFragment)
-                            .add(R.id.fr_layout, homeFragment, "home")
-                            .show(homeFragment)
-                            .setReorderingAllowed(true)
-                            .commitAllowingStateLoss()
-                    }
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fr_layout, homeFragment)
+                        .setReorderingAllowed(true)
+                        .commitAllowingStateLoss()
+//                    if(homeFragment.isAdded){
+//                        supportFragmentManager.beginTransaction()
+//                            .hide(archiveFragment)
+//                            .hide(profileFragment)
+//                            .show(homeFragment)
+//                            .setReorderingAllowed(true)
+//                            .commitNowAllowingStateLoss()
+//                    } else {
+//                        supportFragmentManager.beginTransaction()
+//                            .hide(archiveFragment)
+//                            .hide(profileFragment)
+//                            .add(R.id.fr_layout, homeFragment, "home")
+//                            .show(homeFragment)
+//                            .setReorderingAllowed(true)
+//                            .commitAllowingStateLoss()
+//                    }
 
                     return@setOnItemSelectedListener true
                 }
 
                 R.id.archiveFragment -> {
-                    if(archiveFragment.isAdded){
-                        supportFragmentManager.beginTransaction()
-                            .hide(homeFragment)
-                            .hide(profileFragment)
-                            .show(archiveFragment)
-                            .setReorderingAllowed(true)
-                            .commitNowAllowingStateLoss()
-                    } else {
-                        supportFragmentManager.beginTransaction()
-                            .hide(homeFragment)
-                            .hide(profileFragment)
-                            .add(R.id.fr_layout, archiveFragment, "archive")
-                            .show(archiveFragment)
-                            .setReorderingAllowed(true)
-                            .commitAllowingStateLoss()
-                    }
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fr_layout, archiveFragment)
+                        .setReorderingAllowed(true)
+                        .commitAllowingStateLoss()
+//                    if(archiveFragment.isAdded){
+//                        supportFragmentManager.beginTransaction()
+//                            .hide(homeFragment)
+//                            .hide(profileFragment)
+//                            .show(archiveFragment)
+//                            .setReorderingAllowed(true)
+//                            .commitNowAllowingStateLoss()
+//                    } else {
+//                        supportFragmentManager.beginTransaction()
+//                            .hide(homeFragment)
+//                            .hide(profileFragment)
+//                            .add(R.id.fr_layout, archiveFragment, "archive")
+//                            .show(archiveFragment)
+//                            .setReorderingAllowed(true)
+//                            .commitAllowingStateLoss()
+//                    }
                     return@setOnItemSelectedListener true
                 }
 
                 R.id.profileFragment -> {
-                    if(profileFragment.isAdded){
-                        supportFragmentManager.beginTransaction()
-                            .hide(homeFragment)
-                            .hide(archiveFragment)
-                            .show(profileFragment)
-                            .setReorderingAllowed(true)
-                            .commitNowAllowingStateLoss()
-                        Log.d("profileClick", "added")
-                    } else {
-                        supportFragmentManager.beginTransaction()
-                            .hide(homeFragment)
-                            .hide(archiveFragment)
-                            .add(R.id.fr_layout, profileFragment, "profile")
-                            .show(profileFragment)
-                            .setReorderingAllowed(true)
-                            .commitAllowingStateLoss()
-                        Log.d("profileClick", "noadded")
-                    }
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fr_layout, profileFragment)
+                        .setReorderingAllowed(true)
+                        .commitAllowingStateLoss()
+//                    if(profileFragment.isAdded){
+//                        supportFragmentManager.beginTransaction()
+//                            .hide(homeFragment)
+//                            .hide(archiveFragment)
+//                            .show(profileFragment)
+//                            .setReorderingAllowed(true)
+//                            .commitNowAllowingStateLoss()
+//                        Log.d("profileClick", "added")
+//                    } else {
+//                        supportFragmentManager.beginTransaction()
+//                            .hide(homeFragment)
+//                            .hide(archiveFragment)
+//                            .add(R.id.fr_layout, profileFragment, "profile")
+//                            .show(profileFragment)
+//                            .setReorderingAllowed(true)
+//                            .commitAllowingStateLoss()
+//                        Log.d("profileClick", "noadded")
+//                    }
                     return@setOnItemSelectedListener true
                 }
             }
@@ -161,19 +173,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if(homeFragment.isVisible){
             super.onBackPressed()
         } else {
-            if(homeFragment.isAdded){
-                supportFragmentManager.beginTransaction()
-                    .show(homeFragment)
-                    .hide(profileFragment)
-                    .hide(archiveFragment)
-                    .commitNow()
-            } else {
-                supportFragmentManager.beginTransaction()
-                    .hide(archiveFragment)
-                    .hide(profileFragment)
-                    .add(R.id.fr_layout, homeFragment)
-                    .commitNow()
-            }
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fr_layout, homeFragment)
+                .setReorderingAllowed(true)
+                .commitAllowingStateLoss()
+//            if(homeFragment.isAdded){
+//                supportFragmentManager.beginTransaction()
+//                    .show(homeFragment)
+//                    .hide(profileFragment)
+//                    .hide(archiveFragment)
+//                    .commitNow()
+//            } else {
+//                supportFragmentManager.beginTransaction()
+//                    .hide(archiveFragment)
+//                    .hide(profileFragment)
+//                    .add(R.id.fr_layout, homeFragment)
+//                    .commitNow()
+//            }
             binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
         }
     }
