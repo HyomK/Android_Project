@@ -1,4 +1,6 @@
-package com.likefirst.btos.utils
+package com.likefirst.btos.ui.profile.plant
+
+import com.likefirst.btos.data.entities.Plant
 
 interface PlantListView {
     fun onPlantListLoading()

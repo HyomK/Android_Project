@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.fragment.premium
+package com.likefirst.btos.ui.profile.premium
 
 import android.content.Context
 import android.graphics.Rect

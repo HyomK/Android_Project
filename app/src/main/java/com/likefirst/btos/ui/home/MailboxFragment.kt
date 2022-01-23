@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.home
 
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.likefirst.btos.R
@@ -15,10 +16,42 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val presFragment  = this
         setClickListener(presFragment )
         setMailView( presFragment )
-
-
     }
 
+    override fun onStart() {
+        super.onStart()
+        val mActivity = activity as MainActivity
+        mActivity.isDrawerOpen=false
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        onDetach()
+        Log.d("Mailbox","destroy")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("Mailbox","pause")
+        val mActivity = activity as MainActivity
+        mActivity.isDrawerOpen=true
+        mActivity.supportFragmentManager.beginTransaction()
+            .remove(this)
+            .show(HomeFragment())
+            .commit()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Mailbox","resume")
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        Log.d("Mailbox","onhidden ${isHidden}")
+        if(hidden ){
+
+        }
+    }
     fun setMailView(presFragment :Fragment){
 
         val mActivity = activity as MainActivity
@@ -36,7 +69,14 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 frgmn.arguments =bundleOf(
                     "body" to "mailtext"
                 )
-                mActivity.ChangeFragment().hideFragment(R.id.home_main_layout,presFragment,frgmn)
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.home_main_layout,frgmn)
+                    .hide(presFragment)
+                    .show(frgmn)
+                    .addToBackStack(null)
+                    .commit()
+
             }
         })
     }
@@ -65,6 +105,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
 
         binding.mailboxBackBtn.setOnClickListener{
             mActivity.supportFragmentManager.popBackStack()
+
         }
     }
 
