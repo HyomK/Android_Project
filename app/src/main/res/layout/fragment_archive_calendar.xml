@@ -6,7 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/archive_calendar_tv"
+        android:id="@+id/archive_calendar_year_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosanskr_bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/archive_calendar_month_tv"/>
+
+    <TextView
+        android:id="@+id/archive_calendar_month_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/notosanskr_bold"
@@ -21,7 +31,7 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/archive_calendar_vp"
         android:layout_width="320dp"
-        android:layout_height="340dp"
+        android:layout_height="360dp"
         app:layout_constraintVertical_bias="0.65"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
