@@ -72,4 +72,8 @@
     <dimen name="archive_calendar_date">12dp</dimen>
     <dimen name="archive_calendar_month">12dp</dimen>
 
+    <!--history-->
+    <dimen name="history_radiobutton_textSize">15sp</dimen>
+
+
 </resources>
