@@ -18,6 +18,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         setMailView( presFragment )
     }
 
+
     override fun onStart() {
         super.onStart()
         val mActivity = activity as MainActivity
@@ -36,7 +37,14 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val mActivity = activity as MainActivity
         mActivity.isMailOpen=false
 
+
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        onDetach()
+        Log.d("Mailbox","destroy")
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -64,7 +72,9 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 )
                 requireActivity().supportFragmentManager
                     .beginTransaction()
+
                     .add(R.id.home_main_layout,frgmn,"viewmail")
+
                     .hide(presFragment)
                     .show(frgmn)
                     .addToBackStack(null)

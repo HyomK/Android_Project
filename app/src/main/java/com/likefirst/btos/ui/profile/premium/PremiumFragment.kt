@@ -47,7 +47,6 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
         }
         binding.premiumVp.adapter = adapter
 
-
         TabLayoutMediator(binding.premiumTablayout, binding.premiumVp) { tab, position -> }.attach()
 
     }
