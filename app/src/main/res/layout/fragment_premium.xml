@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -50,16 +51,32 @@
             android:layout_gravity="center"
             android:overScrollMode="never" />
 
-        <me.relex.circleindicator.CircleIndicator3
-            android:id="@+id/indicator"
-            app:ci_drawable="@drawable/black_indicator"
-            app:ci_drawable_unselected="@drawable/white_indicator"
+<!--        <me.relex.circleindicator.CircleIndicator3-->
+<!--            android:id="@+id/indicator"-->
+<!--            app:ci_drawable="@drawable/black_indicator"-->
+<!--            app:ci_drawable_unselected="@drawable/white_indicator"-->
+<!--            android:layout_width="match_parent"-->
+<!--            app:ci_width="3pt"-->
+<!--            app:ci_height="3pt"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_gravity="bottom"/>-->
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/premium_tablayout"
             android:layout_width="match_parent"
-            app:ci_width="3pt"
-            app:ci_height="3pt"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="bottom"/>
+            android:layout_height="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="bottom"
+            android:background="@color/transparent"
+            app:tabBackground="@drawable/tutorial_indicator"
+            app:tabMaxWidth="30dp"
+            app:tabGravity="center"
+            app:tabPaddingEnd="9dp"
+            app:tabPaddingStart="7dp"
+            app:tabIndicatorHeight="0dp"
+     />
 
 <!--        <com.google.android.material.tabs.TabLayout-->
 <!--            android:id="@+id/tab_layout"-->

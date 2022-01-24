@@ -19,6 +19,7 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
         binding.archiveCalendarVp.apply {
             adapter = calendarAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            currentItem = Int.MAX_VALUE/2
         }
 
         fun initView() {

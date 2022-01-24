@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.splash
 
 import android.content.Intent
 import android.widget.ArrayAdapter
@@ -16,7 +16,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         binding.onboardingAgelist.dropDownHeight=350
 
         binding.onboardingOkayTv.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, TutorialActivity::class.java)
             finish()
             startActivity(intent)
         }

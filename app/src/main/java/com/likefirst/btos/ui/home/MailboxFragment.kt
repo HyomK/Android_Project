@@ -34,11 +34,8 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         super.onPause()
         Log.d("Mailbox","pause")
         val mActivity = activity as MainActivity
-        mActivity.isDrawerOpen=true
-        mActivity.supportFragmentManager.beginTransaction()
-            .remove(this)
-            .show(HomeFragment())
-            .commit()
+        mActivity.isMailOpen=false
+
     }
 
     override fun onResume() {
@@ -46,12 +43,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         Log.d("Mailbox","resume")
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        Log.d("Mailbox","onhidden ${isHidden}")
-        if(hidden ){
 
-        }
-    }
     fun setMailView(presFragment :Fragment){
 
         val mActivity = activity as MainActivity
@@ -63,6 +55,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
 
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
             override fun onClickItem() {
+
                 val frgmn = MailViewFragment()
                 // 테이블에 읽은 편지를 표시할 수 있는 isWritten =true
                 //body에 본문 내용을 서버에서 받아 넣음
@@ -71,7 +64,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 )
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.home_main_layout,frgmn)
+                    .add(R.id.home_main_layout,frgmn,"viewmail")
                     .hide(presFragment)
                     .show(frgmn)
                     .addToBackStack(null)
@@ -85,6 +78,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
 
         val mActivity = activity as MainActivity
         binding.mailboxWriteBtn.setOnClickListener {
+
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")
             dialog.arguments= bundleOf(
@@ -94,10 +88,15 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
             dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                 override fun onButton1Clicked() {}
                 override fun onButton2Clicked() {
-                    mActivity.ChangeFragment().hideFragment(R.id.home_main_layout,presFragment,
-                        WriteMailFragment()
-                    )
-                    onDestroyView()
+                    mActivity.notifyDrawerHandler("lock")
+                    mActivity.supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.home_main_layout, WriteMailFragment(), "writemail")
+                        .hide(presFragment)
+                        .addToBackStack(null)
+                        .show(MailboxFragment())
+                        .commit()
+
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")

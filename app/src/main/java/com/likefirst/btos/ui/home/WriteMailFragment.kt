@@ -81,4 +81,11 @@ class WriteMailFragment:BaseFragment<FragmentMailWriteBinding>(FragmentMailWrite
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+//        val mActivity = activity as MainActivity
+//        mActivity.notifyDrawerHandler("unlock")
+
+    }
+
 }

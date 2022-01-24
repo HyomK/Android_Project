@@ -25,6 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val profileFragment= ProfileFragment()
     private val plantFragment=PlantFragment()
     var isDrawerOpen =true
+    var isMailOpen=false
 
 
 
@@ -65,7 +66,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
-                        Log.d("homeclick", "added")
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
@@ -74,7 +74,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
-                        Log.d("homeClick", "noadded")
                     }
 
                     return true
@@ -89,16 +88,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
-                        Log.d("archiveClick", "added")
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .remove(profileFragment)
-                            .add(R.id.fr_layout, archiveFragment, "home")
+                            .hide(profileFragment)
+                            .add(R.id.fr_layout, archiveFragment, "archive")
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
-                        Log.d("archiveClick", "noadded")
                     }
                     return true
                 }
@@ -130,17 +127,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
 
 
+
     }
 
 
+    fun mailOpenStatus():Boolean{
+        return isMailOpen
+    }
 
-    fun notifyDrawerHandler(){
 
-        if(isDrawerOpen){
-            binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
-            binding.mainLayout.openDrawer((GravityCompat.START))
-        }else{
-            binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    fun notifyDrawerHandler(Option : String){
+
+        when(Option){
+            "open"->{
+                Log.d("Draw","open")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+                binding.mainLayout.openDrawer((GravityCompat.START))
+
+            }
+            "unlock"->{
+                Log.d("Draw","unlock")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+            }
+            "lock"->{
+                Log.d("Draw","lock")
+                binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
         }
 
     }
@@ -182,17 +194,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             if(homeFragment.isAdded){
                 supportFragmentManager.beginTransaction()
                     .show(homeFragment)
+                    .hide(profileFragment)
                     .hide(archiveFragment)
                     .commitNow()
             } else {
                 supportFragmentManager.beginTransaction()
                     .hide(archiveFragment)
+                    .hide(profileFragment)
                     .add(R.id.fr_layout, homeFragment)
                     .commitNow()
             }
             binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
         }
     }
+
+
 
 
 

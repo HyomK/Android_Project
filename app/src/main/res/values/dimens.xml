@@ -11,8 +11,8 @@
 
     <!-- Setting content -->
     <dimen name="setting_content_fontSize">17dp </dimen>
-    <dimen name="setting_check_width">18dp </dimen>
-    <dimen name="setting_check_height">18dp </dimen>
+<dimen name="setting_check_width">18dp </dimen>
+<dimen name="setting_check_height">18dp </dimen>
 
     <!-- Mail Icon -->
     <dimen name="icon_mail_margin">30dp </dimen>
@@ -63,7 +63,7 @@
     <!--- plant info -->
     <dimen name="plantinfo_name_textSize">14dp</dimen>
     <dimen name="plantinfo_detail_textSize">12dp</dimen>
-    <dimen name="plantinfo_margin_Horizontal">20dp</dimen>
+    <dimen name="plantinfo_margin_Horizontal">30dp</dimen>
     <dimen name="plantinfo_btn_height">35dp </dimen>
     <dimen name="plantinfo_btn_width">70dp </dimen>
 
