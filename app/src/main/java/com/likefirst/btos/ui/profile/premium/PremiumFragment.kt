@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.View
 import androidx.annotation.FloatRange
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayoutMediator
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentPremiumBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -45,9 +46,8 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
             page.translationX = -pageTranslationX * (position)
         }
         binding.premiumVp.adapter = adapter
-        binding.indicator.setViewPager(binding.premiumVp)
 
-        //TabLayoutMediator(binding.tabLayout, binding.premiumVp) { tab, position -> }.attach()
+        TabLayoutMediator(binding.premiumTablayout, binding.premiumVp) { tab, position -> }.attach()
 
     }
 

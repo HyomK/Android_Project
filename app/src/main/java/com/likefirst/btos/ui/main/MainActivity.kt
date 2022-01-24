@@ -13,10 +13,12 @@ import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
+
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
+
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -27,6 +29,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val profileFragment= ProfileFragment()
     private val plantFragment=PlantFragment()
     var isDrawerOpen =true
+
+    var isMailOpen=false
+
 
 
 
@@ -155,25 +160,37 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .commitAllowingStateLoss()
                         Log.d("profileClick", "noadded")
                     }
-
                     return true
                 }
             }
             return false
         }
 
-
     }
 
 
+    fun mailOpenStatus():Boolean{
+        return isMailOpen
+    }
 
-    fun notifyDrawerHandler(){
 
-        if(isDrawerOpen){
-            binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
-            binding.mainLayout.openDrawer((GravityCompat.START))
-        }else{
-            binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    fun notifyDrawerHandler(Option : String){
+
+        when(Option){
+            "open"->{
+                Log.d("Draw","open")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+                binding.mainLayout.openDrawer((GravityCompat.START))
+
+            }
+            "unlock"->{
+                Log.d("Draw","unlock")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+            }
+            "lock"->{
+                Log.d("Draw","lock")
+                binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
         }
 
     }
@@ -226,7 +243,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
         }
     }
-
-
-
 }

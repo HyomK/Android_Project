@@ -4,6 +4,7 @@ package com.likefirst.btos.ui.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.commit
 import com.airbnb.lottie.LottieAnimationView
 import com.likefirst.btos.R
 
@@ -26,14 +27,16 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
         val mActivity = activity as MainActivity
 
-        binding.homeWriteBtn.isClickable = !mActivity.isDrawerOpen
+      
         binding.homeNotificationBtn.setOnClickListener {
-            mActivity.notifyDrawerHandler()
+            if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
 
         }
 
         binding.homeMailBtn.setOnClickListener {
-            isMailboxOpen = true
+
+            mActivity.isMailOpen = true
+            mActivity.notifyDrawerHandler("lock")
 
             requireActivity().supportFragmentManager
                 .beginTransaction()
@@ -54,22 +57,19 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     override fun onHiddenChanged(hidden: Boolean) {
         Log.d("home","onhidden ${isHidden } mailopen ${isMailboxOpen }")
         val mActivity = activity as MainActivity
-        if(isHidden || isMailboxOpen ){
-            mActivity.isDrawerOpen=false
-            if(isMailboxOpen){
-                val item =  requireActivity().supportFragmentManager.fragments
-                Log.d("homeSTACK","homeitem  ${item.toString()} }")
-                requireActivity().supportFragmentManager.popBackStack()
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .show(this)
-                    .commit()
-                isMailboxOpen=false
-            }
 
+        if(isHidden || mActivity.isMailOpen ){
+            requireActivity().supportFragmentManager.commit {
+                requireActivity().supportFragmentManager.findFragmentByTag("mailbox")?.let { remove(it) }
+                requireActivity().supportFragmentManager.findFragmentByTag("writemail")?.let { remove(it) }
+                requireActivity().supportFragmentManager.findFragmentByTag("viewmail")?.let { remove(it) }
+            }
+            mActivity.isMailOpen=false
+            mActivity.notifyDrawerHandler("lock")
         }else{
-            mActivity.isDrawerOpen=true
-            isMailboxOpen=false
+            mActivity.notifyDrawerHandler("unlock")
+            binding.homeNotificationBtn.isClickable =true
+
         }
     }
 
@@ -79,6 +79,16 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         super.onStart()
         setWindowImage()
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        val mActivity = activity as MainActivity
+        setWindowImage()
+        binding.homeNotificationBtn.isClickable =true
+        isMailboxOpen=false
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setWindowImage(){

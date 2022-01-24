@@ -16,8 +16,6 @@
             android:exported="true">
 
         </activity>
-        <activity android:name=".ui.posting.DiaryActivity"/>
-
         <activity
             android:name=".ui.splash.LoginActivity"
             android:exported="true">
