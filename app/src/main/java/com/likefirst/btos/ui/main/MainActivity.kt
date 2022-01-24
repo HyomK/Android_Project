@@ -76,6 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .commitAllowingStateLoss()
                     }
 
+
                     return true
                 }
 
@@ -119,14 +120,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .commitAllowingStateLoss()
                         Log.d("profileClick", "noadded")
                     }
-
                     return true
                 }
             }
             return false
         }
-
-
 
     }
 
