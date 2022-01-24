@@ -1,7 +1,6 @@
 package com.likefirst.btos.ui.main
 
 
-import android.content.Intent
 import android.util.Log
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
@@ -14,15 +13,17 @@ import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
-import com.likefirst.btos.ui.profile.ProfileFragment
+import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
+import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
+    private val historyFragment = HistoryFragment()
     private val profileFragment= ProfileFragment()
     private val plantFragment=PlantFragment()
     var isDrawerOpen =true
@@ -62,6 +63,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
+                            .hide(historyFragment)
                             .remove(profileFragment)
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -71,6 +73,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .remove(profileFragment)
+                            .hide(historyFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -81,11 +84,37 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return true
                 }
 
+                R.id.historyFragment ->{
+                    isDrawerOpen=false
+                    if(historyFragment.isAdded){
+                        supportFragmentManager.beginTransaction()
+                            .hide(archiveFragment)
+                            .hide(homeFragment)
+                            .remove(profileFragment)
+                            .show(historyFragment)
+                            .setReorderingAllowed(true)
+                            .commitNowAllowingStateLoss()
+                        Log.d("historyClick", "added")
+                    }else{
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .hide(archiveFragment)
+                            .remove(profileFragment)
+                            .add(R.id.fr_layout, historyFragment, "history")
+                            .show(historyFragment)
+                            .setReorderingAllowed(true)
+                            .commitAllowingStateLoss()
+                        Log.d("historyClick", "noadded")
+                    }
+                }
+
+
                 R.id.archiveFragment -> {
                     isDrawerOpen=false
                     if (archiveFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
+                            .hide(historyFragment)
                             .remove(profileFragment)
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -95,6 +124,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .remove(profileFragment)
+                            .hide(historyFragment)
                             .add(R.id.fr_layout, archiveFragment, "home")
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -108,6 +138,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     if (profileFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
+                            .hide(historyFragment)
                             .hide(archiveFragment)
                             .show(profileFragment)
                             .setReorderingAllowed(true)
@@ -117,6 +148,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(archiveFragment)
+                            .hide(historyFragment)
                             .add(R.id.fr_layout, profileFragment, "profile")
                             .show(profileFragment)
                             .setReorderingAllowed(true)
