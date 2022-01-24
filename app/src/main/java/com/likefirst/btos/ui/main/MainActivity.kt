@@ -1,28 +1,33 @@
 package com.likefirst.btos.ui.main
 
 
-import android.content.Intent
 import android.util.Log
+import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
+import com.google.android.material.navigation.NavigationBarView
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
-import com.likefirst.btos.ui.fragment.ProfileFragment
+import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
+import com.likefirst.btos.ui.profile.plant.PlantFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val profileFragment= ProfileFragment()
+    private val plantFragment=PlantFragment()
+    var isDrawerOpen =true
+    var isMailOpen=false
+
+
 
     override fun initAfterBinding() {
 
@@ -34,109 +39,120 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             .commitNowAllowingStateLoss()
 
 
-        val dataset = Array(30) { i -> "Number of index: $i"  }
-        val adapter= NotifyRVAdapter(dataset)
+        val dataset = Array(30) { i -> "Number of index: $i" }
+        val adapter = NotifyRVAdapter(dataset)
 
-        adapter.setMyItemCLickLister(object:NotifyRVAdapter.NotifyItemClickListener{
+        adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
             override fun onClickItem() {
                 binding.mainLayout.closeDrawers()
                 ChangeFragment().moveFragment(R.id.fr_layout, MailViewFragment())
             }
         })
 
-        binding.sidebarNotifyRv.adapter=adapter
+        binding.sidebarNotifyRv.adapter = adapter
+        binding.mainBnv.setOnItemSelectedListener { it ->BottomNavView().onNavigationItemSelected(it) }
+    }
 
-        binding.mainBnv.setOnItemSelectedListener {
+    inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
+        override fun onNavigationItemSelected(it: MenuItem): Boolean {
+
             when (it.itemId) {
                 R.id.homeFragment -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fr_layout, homeFragment)
-                        .setReorderingAllowed(true)
-                        .commitAllowingStateLoss()
-//                    if(homeFragment.isAdded){
-//                        supportFragmentManager.beginTransaction()
-//                            .hide(archiveFragment)
-//                            .hide(profileFragment)
-//                            .show(homeFragment)
-//                            .setReorderingAllowed(true)
-//                            .commitNowAllowingStateLoss()
-//                    } else {
-//                        supportFragmentManager.beginTransaction()
-//                            .hide(archiveFragment)
-//                            .hide(profileFragment)
-//                            .add(R.id.fr_layout, homeFragment, "home")
-//                            .show(homeFragment)
-//                            .setReorderingAllowed(true)
-//                            .commitAllowingStateLoss()
-//                    }
+                    isDrawerOpen=true
+                    if (homeFragment.isAdded) {
+                        supportFragmentManager.beginTransaction()
+                            .hide(archiveFragment)
+                            .remove(profileFragment)
+                            .show(homeFragment)
+                            .setReorderingAllowed(true)
+                            .commitNowAllowingStateLoss()
+                    } else {
+                        supportFragmentManager.beginTransaction()
+                            .hide(archiveFragment)
+                            .remove(profileFragment)
+                            .add(R.id.fr_layout, homeFragment, "home")
+                            .show(homeFragment)
+                            .setReorderingAllowed(true)
+                            .commitAllowingStateLoss()
+                    }
 
-                    return@setOnItemSelectedListener true
+
+                    return true
                 }
 
                 R.id.archiveFragment -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fr_layout, archiveFragment)
-                        .setReorderingAllowed(true)
-                        .commitAllowingStateLoss()
-//                    if(archiveFragment.isAdded){
-//                        supportFragmentManager.beginTransaction()
-//                            .hide(homeFragment)
-//                            .hide(profileFragment)
-//                            .show(archiveFragment)
-//                            .setReorderingAllowed(true)
-//                            .commitNowAllowingStateLoss()
-//                    } else {
-//                        supportFragmentManager.beginTransaction()
-//                            .hide(homeFragment)
-//                            .hide(profileFragment)
-//                            .add(R.id.fr_layout, archiveFragment, "archive")
-//                            .show(archiveFragment)
-//                            .setReorderingAllowed(true)
-//                            .commitAllowingStateLoss()
-//                    }
-                    return@setOnItemSelectedListener true
+                    isDrawerOpen=false
+                    if (archiveFragment.isAdded) {
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .remove(profileFragment)
+                            .show(archiveFragment)
+                            .setReorderingAllowed(true)
+                            .commitNowAllowingStateLoss()
+                    } else {
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .hide(profileFragment)
+                            .add(R.id.fr_layout, archiveFragment, "archive")
+                            .show(archiveFragment)
+                            .setReorderingAllowed(true)
+                            .commitAllowingStateLoss()
+                    }
+                    return true
                 }
-
                 R.id.profileFragment -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fr_layout, profileFragment)
-                        .setReorderingAllowed(true)
-                        .commitAllowingStateLoss()
-//                    if(profileFragment.isAdded){
-//                        supportFragmentManager.beginTransaction()
-//                            .hide(homeFragment)
-//                            .hide(archiveFragment)
-//                            .show(profileFragment)
-//                            .setReorderingAllowed(true)
-//                            .commitNowAllowingStateLoss()
-//                        Log.d("profileClick", "added")
-//                    } else {
-//                        supportFragmentManager.beginTransaction()
-//                            .hide(homeFragment)
-//                            .hide(archiveFragment)
-//                            .add(R.id.fr_layout, profileFragment, "profile")
-//                            .show(profileFragment)
-//                            .setReorderingAllowed(true)
-//                            .commitAllowingStateLoss()
-//                        Log.d("profileClick", "noadded")
-//                    }
-                    return@setOnItemSelectedListener true
+                    isDrawerOpen=false
+                    if (profileFragment.isAdded) {
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .hide(archiveFragment)
+                            .show(profileFragment)
+                            .setReorderingAllowed(true)
+                            .commitNowAllowingStateLoss()
+                        Log.d("profileClick", "added")
+                    } else {
+                        supportFragmentManager.beginTransaction()
+                            .hide(homeFragment)
+                            .hide(archiveFragment)
+                            .add(R.id.fr_layout, profileFragment, "profile")
+                            .show(profileFragment)
+                            .setReorderingAllowed(true)
+                            .commitAllowingStateLoss()
+                        Log.d("profileClick", "noadded")
+                    }
+                    return true
                 }
             }
-            false
-        }
-       }
-
-    fun notifyDrawerHandler(){
-        val stacks = supportFragmentManager.fragments
-        if(stacks.size ==1 ){
-            binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
-            binding.mainLayout.openDrawer((GravityCompat.START))
+            return false
         }
 
-        else{
-            binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    }
+
+
+    fun mailOpenStatus():Boolean{
+        return isMailOpen
+    }
+
+
+    fun notifyDrawerHandler(Option : String){
+
+        when(Option){
+            "open"->{
+                Log.d("Draw","open")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+                binding.mainLayout.openDrawer((GravityCompat.START))
+
+            }
+            "unlock"->{
+                Log.d("Draw","unlock")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+            }
+            "lock"->{
+                Log.d("Draw","lock")
+                binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
         }
+
     }
 
     inner class ChangeFragment {
@@ -173,24 +189,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if(homeFragment.isVisible){
             super.onBackPressed()
         } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fr_layout, homeFragment)
-                .setReorderingAllowed(true)
-                .commitAllowingStateLoss()
-//            if(homeFragment.isAdded){
-//                supportFragmentManager.beginTransaction()
-//                    .show(homeFragment)
-//                    .hide(profileFragment)
-//                    .hide(archiveFragment)
-//                    .commitNow()
-//            } else {
-//                supportFragmentManager.beginTransaction()
-//                    .hide(archiveFragment)
-//                    .hide(profileFragment)
-//                    .add(R.id.fr_layout, homeFragment)
-//                    .commitNow()
-//            }
+            if(homeFragment.isAdded){
+                supportFragmentManager.beginTransaction()
+                    .show(homeFragment)
+                    .hide(profileFragment)
+                    .hide(archiveFragment)
+                    .commitNow()
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .hide(archiveFragment)
+                    .hide(profileFragment)
+                    .add(R.id.fr_layout, homeFragment)
+                    .commitNow()
+            }
             binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
         }
     }
+
+
+
+
+
 }

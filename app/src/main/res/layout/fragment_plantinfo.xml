@@ -29,27 +29,15 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
         />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/profile_iv_width"
-            android:layout_height="@dimen/profile_iv_height"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+        <ImageView
             android:layout_gravity="center"
-            app:cardCornerRadius="@dimen/profile_iv_radius"
-            android:background="@color/white"
-            >
-            <ImageView
-                android:id="@+id/plantinfo_iv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/alocasia_3"
-                android:scaleType="centerCrop"
-                android:paddingBottom="40dp"
-                />
+            android:id="@+id/plantinfo_iv"
+            android:layout_width="140dp"
+            android:layout_height="230dp"
+            android:src="@drawable/alocasia_3"
+            android:scaleType="fitEnd"
 
-        </androidx.cardview.widget.CardView>
+            />
 
         <TextView
             android:id="@+id/plantinfo_name_tv"

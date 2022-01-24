@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.fragment.plant
+package com.likefirst.btos.ui.profile.plant
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.utils.Plant
+import com.likefirst.btos.data.entities.Plant
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList

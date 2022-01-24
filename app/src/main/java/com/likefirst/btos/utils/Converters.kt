@@ -2,6 +2,7 @@ package com.likefirst.btos.utils
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.likefirst.btos.data.entities.Plant
 
 class Converters {
     @TypeConverter
