@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.text.Editable
 import android.text.InputFilter
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
@@ -40,8 +41,10 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
             }
 
             override fun afterTextChanged(p0: Editable?) {
+                Log.d("selection", binding.diaryDoneListEt.selectionStart.toString())
+                Log.d("length", binding.diaryDoneListEt.text.length.toString())
                 if (null !=  binding.diaryDoneListEt.layout && binding.diaryDoneListEt.layout.lineCount > 2) {
-                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
+                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
                 }
             }
         })
@@ -85,22 +88,25 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
             adapter = doneListAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            itemAnimator = null
         }
 
         //doneList 엔터 입력 시 리사이클러뷰 갱신
+        binding.diaryDoneListEt.imeOptions = EditorInfo.IME_ACTION_DONE
         binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
                 if(doneListAdapter.doneLists.size >= 10){
-                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
+                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
                     showOneBtnDialog("오늘하루 정말 알차게 사셨군요!! 아쉽지만 오늘 한 일은 10개까지만 작성이 가능합니다. 내일 또 봐요!", "doneListFullAlert")
                 } else {
-                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
-                    if(binding.diaryDoneListEt.text.toString() == ""){
+                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
+                    if(TextUtils.isEmpty(binding.diaryDoneListEt.text)){
                         showOneBtnDialog("오늘 한 일을 입력해 주세요!", "doneListNullAlert")
+                    } else {
+                        doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
+                        binding.diaryDoneListEt.text = null
+                        binding.diaryDoneListEt.setSelection(0)
                     }
-                    doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
-                    binding.diaryDoneListEt.text = null
-                    binding.diaryDoneListEt.setSelection(0)
                 }
             }
             false
