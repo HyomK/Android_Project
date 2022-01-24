@@ -25,6 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val profileFragment= ProfileFragment()
     private val plantFragment=PlantFragment()
     var isDrawerOpen =true
+    var isMailOpen=false
 
 
 
@@ -130,13 +131,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
 
+    fun mailOpenStatus():Boolean{
+        return isMailOpen
+    }
 
-    fun notifyDrawerHandler(){
-        if(isDrawerOpen){
-            binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
-            binding.mainLayout.openDrawer((GravityCompat.START))
-        }else{
-            binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+
+    fun notifyDrawerHandler(Option : String){
+
+        when(Option){
+            "open"->{
+                Log.d("Draw","open")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+                binding.mainLayout.openDrawer((GravityCompat.START))
+
+            }
+            "unlock"->{
+                Log.d("Draw","unlock")
+                binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+            }
+            "lock"->{
+                Log.d("Draw","lock")
+                binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
         }
 
     }
