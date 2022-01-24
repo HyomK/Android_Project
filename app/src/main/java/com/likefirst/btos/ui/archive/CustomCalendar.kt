@@ -49,7 +49,8 @@ class CustomCalendar(date : Date) {
         val maxDate = calendar.getActualMaximum(Calendar.DATE)
         var maxOffsetDate = maxDate - prevTail
 
-        for (i in 1..prevTail) dateList.add(++maxOffsetDate)
+//        for (i in 1..prevTail) dateList.add(++maxOffsetDate)
+        for (i in 1..prevTail) dateList.add(0)
     }
 
     private fun makeCurrentMonth(calendar: Calendar) {
@@ -59,6 +60,6 @@ class CustomCalendar(date : Date) {
     private fun makeNextHead() {
         var date = 1
 
-        for (i in 1..nextHead) dateList.add(date++)
-    }
+//        for (i in 1..nextHead) dateList.add(date++)
+        for (i in 1..nextHead) dateList.add(0)    }
 }

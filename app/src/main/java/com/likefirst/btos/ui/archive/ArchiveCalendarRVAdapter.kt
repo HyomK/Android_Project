@@ -1,19 +1,22 @@
 package com.likefirst.btos.ui.archive
 
+import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvDateBinding
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvEmptyBinding
 import java.lang.RuntimeException
 
-class ArchiveCalendarRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveCalendarRVAdapter(val calendarList : ArrayList<Int>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val EMPTY_CELL = 0
     private val DATE_CELL = 1
 
     inner class DateViewHolder(val binding : ItemArchiveCalendarRvDateBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun initView(){
-
+        fun initView(position: Int){
+            binding.itemArchiveCalendarTv.text = calendarList[position].toString()
         }
     }
 
@@ -21,6 +24,10 @@ class ArchiveCalendarRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         fun initView(){
 
         }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if(calendarList[position] == 0) EMPTY_CELL else DATE_CELL
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,7 +51,7 @@ class ArchiveCalendarRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
             holder.initView()
         }
         else if (holder is DateViewHolder){
-            holder.initView()
+            holder.initView(position)
         }
     }
 

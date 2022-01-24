@@ -27,15 +27,17 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
         val mActivity = activity as MainActivity
 
-
+      
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
 
         }
 
         binding.homeMailBtn.setOnClickListener {
+
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
+
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .add(R.id.home_mailbox_layout, MailboxFragment(), "mailbox")
@@ -55,6 +57,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     override fun onHiddenChanged(hidden: Boolean) {
         Log.d("home","onhidden ${isHidden } mailopen ${isMailboxOpen }")
         val mActivity = activity as MainActivity
+
         if(isHidden || mActivity.isMailOpen ){
             requireActivity().supportFragmentManager.commit {
                 requireActivity().supportFragmentManager.findFragmentByTag("mailbox")?.let { remove(it) }
@@ -66,6 +69,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }else{
             mActivity.notifyDrawerHandler("unlock")
             binding.homeNotificationBtn.isClickable =true
+
         }
     }
 

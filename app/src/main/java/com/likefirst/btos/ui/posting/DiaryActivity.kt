@@ -11,6 +11,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
@@ -23,49 +24,13 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
     override fun initAfterBinding() {
 
         // 이모션 리사이클러뷰 생성
-        val emotionColorIds = ArrayList<Int>()
-        val emotionGrayIds = ArrayList<Int>()
-        val emotionNames = resources.getStringArray(R.array.emotionNames)
-        for (num in 1..8){
-            val emotionColorId = resources.getIdentifier("emotion$num", "drawable", this.packageName)
-            emotionColorIds.add(emotionColorId)
-            val emotionGrayId = resources.getIdentifier("emotion$num"+"_gray", "drawable", this.packageName)
-            emotionGrayIds.add(emotionGrayId)
-        }
-        val emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames)
-        val emotionDecoration = DiaryEmotionRVItemDecoration()
-        emotionDecoration.setSize(this)
-        binding.diaryEmotionsRv.apply {
-            adapter = emotionAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-            setItemViewCacheSize(8)
-            addItemDecoration(emotionDecoration)
-        }
+        initEmotionRv()
 
         //DoneList 리사이클러뷰 연결
-        val doneListAdapter = DiaryDoneListRVAdapter()
-        binding.diaryDoneListRv.apply{
-            adapter = doneListAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        }
-
-        //doneList 엔터 입력 시 리사이클러뷰 갱신
-        binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
-            if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
-                binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
-                doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
-                Log.d("string", binding.diaryDoneListEt.text.toString())
-                binding.diaryDoneListEt.text = null
-                binding.diaryDoneListEt.setSelection(0)
-            }
-            false
-        }
+        initDoneListRv()
 
         //doneList 2줄 입력제한
         binding.diaryDoneListEt.addTextChangedListener(object : TextWatcher{
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -107,10 +72,79 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
 
                     }
                 })
-                dialog.show(this.supportFragmentManager, "CustomDialog")
+                dialog.show(this.supportFragmentManager, "PublicAlertDialog")
             } else {
                 goToDiaryViewer()
             }
+        }
+    }
+
+    fun initDoneListRv(){
+        val doneListAdapter = DiaryDoneListRVAdapter()
+        binding.diaryDoneListRv.apply{
+            adapter = doneListAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        }
+
+        //doneList 엔터 입력 시 리사이클러뷰 갱신
+        binding.diaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
+            if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
+                if(doneListAdapter.doneLists.size >= 10){
+                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
+                    showOneBtnDialog("오늘하루 정말 알차게 사셨군요!! 아쉽지만 오늘 한 일은 10개까지만 작성이 가능합니다. 내일 또 봐요!", "doneListFullAlert")
+                } else {
+                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.text.length - 1, binding.diaryDoneListEt.text.length)
+                    if(binding.diaryDoneListEt.text.toString() == ""){
+                        showOneBtnDialog("오늘 한 일을 입력해 주세요!", "doneListNullAlert")
+                    }
+                    doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
+                    binding.diaryDoneListEt.text = null
+                    binding.diaryDoneListEt.setSelection(0)
+                }
+            }
+            false
+        }
+    }
+
+    fun showOneBtnDialog(message : String, tag : String){
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to  message,
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked() {
+
+            }
+
+            override fun onButton2Clicked() {
+
+            }
+        })
+        dialog.show(this.supportFragmentManager, tag)
+    }
+
+    fun initEmotionRv(){
+        val emotionColorIds = ArrayList<Int>()
+        val emotionGrayIds = ArrayList<Int>()
+        val emotionNames = resources.getStringArray(R.array.emotionNames)
+        for (num in 1..8){
+            val emotionColorId = resources.getIdentifier("emotion$num", "drawable", this.packageName)
+            emotionColorIds.add(emotionColorId)
+            val emotionGrayId = resources.getIdentifier("emotion$num"+"_gray", "drawable", this.packageName)
+            emotionGrayIds.add(emotionGrayId)
+        }
+        val emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames)
+        val emotionDecoration = DiaryEmotionRVItemDecoration()
+        emotionDecoration.setSize(this)
+        binding.diaryEmotionsRv.apply {
+            adapter = emotionAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            setItemViewCacheSize(8)
+            addItemDecoration(emotionDecoration)
         }
     }
 
