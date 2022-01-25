@@ -11,8 +11,8 @@
 
     <!-- Setting content -->
     <dimen name="setting_content_fontSize">17dp </dimen>
-<dimen name="setting_check_width">18dp </dimen>
-<dimen name="setting_check_height">18dp </dimen>
+    <dimen name="setting_check_width">18dp </dimen>
+    <dimen name="setting_check_height">18dp </dimen>
 
     <!-- Mail Icon -->
     <dimen name="icon_mail_margin">30dp </dimen>
@@ -67,8 +67,10 @@
     <dimen name="plantinfo_btn_height">35dp </dimen>
     <dimen name="plantinfo_btn_width">70dp </dimen>
 
+    <!--archive font-->
     <dimen name="diary_doneList_font">14dp</dimen>
     <dimen name="diary_contents_font">14dp</dimen>
+    <dimen name="diary_contents_preview_font">14dp</dimen>
     <dimen name="archive_calendar_date">12dp</dimen>
     <dimen name="archive_calendar_month">12dp</dimen>
 

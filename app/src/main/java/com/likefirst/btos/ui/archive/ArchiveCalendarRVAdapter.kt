@@ -1,22 +1,30 @@
 package com.likefirst.btos.ui.archive
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvDateBinding
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvEmptyBinding
 import java.lang.RuntimeException
 
-class ArchiveCalendarRVAdapter(val calendarList : ArrayList<Int>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveCalendarRVAdapter(val calendarList : ArrayList<Int>, val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val EMPTY_CELL = 0
     private val DATE_CELL = 1
 
     inner class DateViewHolder(val binding : ItemArchiveCalendarRvDateBinding) : RecyclerView.ViewHolder(binding.root) {
         fun initView(position: Int){
             binding.itemArchiveCalendarTv.text = calendarList[position].toString()
+            if (position % 7 == 0){
+                val calendarRed = ContextCompat.getColor(context, R.color.notice_red)
+                binding.itemArchiveCalendarTv.setTextColor(calendarRed)
+            }
         }
     }
 
