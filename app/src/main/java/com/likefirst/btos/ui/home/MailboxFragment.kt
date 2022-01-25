@@ -25,11 +25,6 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         mActivity.isDrawerOpen=false
 
     }
-    override fun onDestroy() {
-        super.onDestroy()
-        onDetach()
-        Log.d("Mailbox","destroy")
-    }
 
     override fun onPause() {
         super.onPause()
