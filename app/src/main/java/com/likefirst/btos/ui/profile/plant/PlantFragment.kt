@@ -30,7 +30,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 Log.d("RV SELECT","clicked")
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.flowerpot_popup_layout,PlantItemFragment())
+                    .add(R.id.fr_layout,PlantItemFragment())
                     .show(PlantItemFragment())
                     .addToBackStack(null)
                     .commit()
