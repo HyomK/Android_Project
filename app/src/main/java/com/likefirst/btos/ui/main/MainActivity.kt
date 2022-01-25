@@ -51,7 +51,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
             override fun onClickItem() {
                 binding.mainLayout.closeDrawers()
-                ChangeFragment().moveFragment(R.id.fr_layout, MailViewFragment())
+
+                supportFragmentManager.commit {
+                    replace(R.id.fr_layout, MailViewFragment()).setReorderingAllowed(true)
+                    addToBackStack("")
+                }
+
             }
         })
 
@@ -69,7 +74,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(historyFragment)
-                            .remove(profileFragment)
+                            .hide(profileFragment)
                             .show(homeFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
@@ -77,7 +82,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
-                            .remove(profileFragment)
+                            .hide(profileFragment)
                             .hide(historyFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
                             .show(homeFragment)
@@ -95,7 +100,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(homeFragment)
-                            .remove(profileFragment)
+                            .hide(profileFragment)
                             .show(historyFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
@@ -104,7 +109,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(archiveFragment)
-                            .remove(profileFragment)
+                            .hide(profileFragment)
                             .add(R.id.fr_layout, historyFragment, "history")
                             .show(historyFragment)
                             .setReorderingAllowed(true)
@@ -120,7 +125,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(historyFragment)
-                            .remove(profileFragment)
+                            .hide(profileFragment)
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
@@ -128,7 +133,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     } else {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .remove(profileFragment)
+                            .hide(profileFragment)
                             .hide(historyFragment)
                             .add(R.id.fr_layout, archiveFragment, "home")
                             .show(archiveFragment)
@@ -195,35 +200,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     }
 
-    inner class ChangeFragment {
-
-       //현재 Fragment를 삭제합니다
-        fun removeFragment( presFragment: Fragment? ){
-            supportFragmentManager
-                .beginTransaction()
-                .remove( presFragment!!)
-                .commit()
-           // supportFragmentManager .popBackStack()
-        }
-
-        //pres -> target 으로 이동하고 backstack을 추가합니다
-        fun moveFragment(layout: Int,  targetFragment: Fragment?){ //targetFragment: 이동할 Fragment
-            supportFragmentManager.commit {
-                replace(layout, targetFragment!!).setReorderingAllowed(true)
-                addToBackStack("")
-            }
-        }
-
-        //pres -> target 으로 이동합니다
-        fun hideFragment(layout : Int, presFragment: Fragment? , targetFragment: Fragment?){
-            supportFragmentManager.beginTransaction()
-                .remove(presFragment!!)
-                .addToBackStack("")
-                .replace(layout ,targetFragment!!)
-                .commit()
-        }
-
-    }
 
     override fun onBackPressed() {
         if(homeFragment.isVisible){
@@ -233,10 +209,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 supportFragmentManager.beginTransaction()
                     .show(homeFragment)
                     .hide(archiveFragment)
+                    .hide(profileFragment)
                     .commitNow()
             } else {
                 supportFragmentManager.beginTransaction()
                     .hide(archiveFragment)
+                    .hide(profileFragment)
                     .add(R.id.fr_layout, homeFragment)
                     .commitNow()
             }

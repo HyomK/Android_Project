@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginBottom="15dp" >
+
+        <include
+            android:id="@+id/set_notify_toolbar"
+            layout="@layout/toolbar_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+        <TextView
+            android:id="@+id/set_notify_done_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="완료"
+            android:textSize="@dimen/setting_content_fontSize"
+            android:layout_marginEnd="25dp"
+            android:textStyle="bold"
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+        <TextView
+            android:id="@+id/set_notify_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/settingListStyle"
+            android:text="다른 사람의 편지 수신"
+            />
+
+        <ImageView
+            android:id="@+id/set_notify_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/select_toggle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/set_notify_toggle_iv"
+            app:layout_constraintStart_toStartOf="@id/set_notify_toggle_iv"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <ImageView
+            android:id="@+id/set_notify_toggle_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_toggle_true"
+            android:layout_marginEnd="35dp"
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+        <TextView
+            android:id="@+id/set_notify_age_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/settingListStyle"
+            android:text="비슷한 연령대에서만 편지 수신"
+            />
+        <ImageView
+            android:id="@+id/set_notify_age_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/select_toggle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/set_notify_age_toggle_iv"
+            app:layout_constraintStart_toStartOf="@id/set_notify_age_toggle_iv"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <ImageView
+            android:id="@+id/set_notify_age_toggle_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_toggle_true"
+            android:layout_marginEnd="35dp"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/settingListStyle"
+        android:text="차단 목록"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/set_notify_rv"
+        tools:listitem="@layout/item_blacklist"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

@@ -133,4 +133,6 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string name="history_radio1">발신인</string>
     <string name="history_radio2">일기만</string>
     <string name="history_radio3">편지만</string>
+
+    <string name="none_selected">선택안함</string>
 </resources>

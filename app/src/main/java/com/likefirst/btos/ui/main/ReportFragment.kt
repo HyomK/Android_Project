@@ -12,7 +12,7 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
         val mActivity = activity as MainActivity
 
         binding.reportToolbar.toolbarBackIc.setOnClickListener {
-            mActivity.ChangeFragment().removeFragment(this)
+            requireActivity().supportFragmentManager.popBackStack()
         }
         binding.reportToolbar.toolbarTitleTv.text="신고하기"
 

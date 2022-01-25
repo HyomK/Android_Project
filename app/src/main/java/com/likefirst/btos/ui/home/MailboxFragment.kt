@@ -39,11 +39,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
 
 
     }
-    override fun onDestroy() {
-        super.onDestroy()
-        onDetach()
-        Log.d("Mailbox","destroy")
-    }
+
 
 
     override fun onResume() {
