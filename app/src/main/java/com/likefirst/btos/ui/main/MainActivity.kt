@@ -32,9 +32,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     var isMailOpen=false
 
-
-
-
     override fun initAfterBinding() {
 
         binding.mainBnv.itemIconTintList = null
@@ -111,6 +108,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .commitAllowingStateLoss()
                         Log.d("historyClick", "noadded")
                     }
+                    return true
                 }
 
 
