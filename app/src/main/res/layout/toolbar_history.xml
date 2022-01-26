@@ -13,6 +13,17 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/history_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_marginStart="25dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
             android:id="@+id/history_search_iv"
             android:layout_width="26dp"
             android:layout_height="26dp"
