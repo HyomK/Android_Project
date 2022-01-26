@@ -165,7 +165,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             return false
         }
-
     }
 
 
