@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.history
 
+import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +22,8 @@ class SenderDetailFragment: BaseFragment<FragmentHistorySenderDetailBinding>(Fra
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.history_toolbar)
         val back = toolbar.findViewById<ImageView>(R.id.history_back_iv)
         back.visibility = View.VISIBLE
+        val search = toolbar.findViewById<ImageView>(R.id.history_search_iv)
+        search.visibility = View.GONE
 
         binding.itemHistorySenderTitle.text = items[0].sender
 
@@ -34,10 +37,10 @@ class SenderDetailFragment: BaseFragment<FragmentHistorySenderDetailBinding>(Fra
         recyclerViewAdapter.setMyItemClickListener(object :
             NoSenderRecyclerViewAdapter.MyItemClickListener {
             override fun MoveToDetail(historyIdx: Int) {
-//                mActivity.let {
-//                    val intent = Intent(context,HistoryDetailActivity::class.java)
-//                    startActivity(intent)
-//                }
+                mActivity.let {
+                    val intent = Intent(context,HistoryDetailActivity::class.java)
+                    startActivity(intent)
+                }
             }
         })
     }

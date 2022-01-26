@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.history
 
+import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.likefirst.btos.data.entities.History
 import com.likefirst.btos.databinding.FragmentHistoryMailBinding
@@ -21,10 +22,10 @@ class MailFragment: BaseFragment<FragmentHistoryMailBinding>(FragmentHistoryMail
 
         recyclerViewAdapter.setMyItemClickListener(object : NoSenderRecyclerViewAdapter.MyItemClickListener{
             override fun MoveToDetail(historyIdx: Int) {
-//                mActivity.let {
-//                    val intent = Intent(context,HistoryDetailActivity::class.java)
-//                    startActivity(intent)
-//                }
+                mActivity.let {
+                    val intent = Intent(context,HistoryDetailActivity::class.java)
+                    startActivity(intent)
+                }
             }
         })
     }
