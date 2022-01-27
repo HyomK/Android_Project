@@ -1,12 +1,16 @@
 package com.likefirst.btos.ui.archive
 
+import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.posting.DiaryActivity
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -18,6 +22,17 @@ class ArchiveCalendarItemFragment(val pageIndex: Int) : BaseFragment<ItemArchive
         binding.archiveCalendarRv.apply {
             adapter = calendarAdapter
             layoutManager = GridLayoutManager(requireContext(), 7)
+            val calendar = Calendar.getInstance()
+            calendar.time = getCalendar()
+            Log.d("calendar", calendar.toString())
+            calendarAdapter.setYearMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH ) + 1)
+            calendarAdapter.setOnDateSelectedListener(object : ArchiveCalendarRVAdapter.CalendarDateSelectedListener {
+                override fun onDateSelectedListener(year: Int, month: Int, date: Int) {
+                    Toast.makeText(requireContext(), "$year, $month, $date", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(requireContext(), DiaryActivity::class.java)
+                    startActivity(intent)
+                }
+            })
         }
     }
 

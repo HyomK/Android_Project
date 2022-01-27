@@ -17,6 +17,8 @@ import java.lang.RuntimeException
 class ArchiveCalendarRVAdapter(val calendarList : ArrayList<Int>, val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val EMPTY_CELL = 0
     private val DATE_CELL = 1
+    private var year = 0
+    private var month = 0
 
     inner class DateViewHolder(val binding : ItemArchiveCalendarRvDateBinding) : RecyclerView.ViewHolder(binding.root) {
         fun initView(position: Int){
@@ -26,6 +28,16 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<Int>, val context : 
                 binding.itemArchiveCalendarTv.setTextColor(calendarRed)
             }
         }
+    }
+
+    interface CalendarDateSelectedListener{
+        fun onDateSelectedListener(year : Int, month: Int, date: Int)
+    }
+
+    private lateinit var mCalendarDateSelectedListener: CalendarDateSelectedListener
+
+    fun setOnDateSelectedListener(calendarDateSelectedListener: CalendarDateSelectedListener){
+        mCalendarDateSelectedListener = calendarDateSelectedListener
     }
 
     inner class EmptyViewHolder(val binding : ItemArchiveCalendarRvEmptyBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -60,10 +72,18 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<Int>, val context : 
         }
         else if (holder is DateViewHolder){
             holder.initView(position)
+            holder.itemView.setOnClickListener {
+                mCalendarDateSelectedListener.onDateSelectedListener(year, month, calendarList[position])
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return 42
+    }
+
+    fun setYearMonth(year: Int, month: Int){
+        this.year = year
+        this.month = month
     }
 }
