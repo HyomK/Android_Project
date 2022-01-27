@@ -9,6 +9,15 @@
         "currentLevel": 1,
         "userStatus": "active"
     },
+      {
+        "plantIdx": 3,
+        "plantName": "알로카시아2",
+        "plantImgUrl": null,
+        "plantPrice": 1500,
+        "maxLevel": 9,
+        "currentLevel": 1,
+        "userStatus": "active"
+      },
     {
         "plantIdx": 2,
         "plantName": "몬테라스",

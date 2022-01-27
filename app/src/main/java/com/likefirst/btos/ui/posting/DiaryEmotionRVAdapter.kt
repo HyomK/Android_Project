@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.posting
 
+
 import android.content.res.Resources
 import android.text.TextUtils
 import android.util.Log

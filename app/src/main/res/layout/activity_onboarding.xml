@@ -83,6 +83,7 @@
             app:elevation="0dp"
             android:layout_marginTop="10dp"
             android:outlineProvider="none"
+            app:endIconDrawable="@drawable/ic_dropdown"
             app:layout_constraintTop_toBottomOf="@id/onboarding_agetext_tv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">

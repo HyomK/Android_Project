@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentMailViewBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -38,10 +39,10 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
-
-                    mActivity.ChangeFragment().hideFragment(R.id.main_layout,presFragment,
-                        WriteMailFragment()
-                    )
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .addToBackStack("")
+                        .replace(R.id.main_layout ,  WriteMailFragment())
+                        .commit()
 
                 }
             })
@@ -69,10 +70,10 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 }
                 //신고
                 1 -> {
-                    Log.d("selected", "moved")
-                    mActivity.ChangeFragment().moveFragment(R.id.home_main_layout, ReportFragment())
-                   // mActivity.supportFragmentManager.popBackStack()
-                    onDestroyView()
+                    requireActivity().supportFragmentManager.commit {
+                        replace(R.id.home_main_layout, ReportFragment()).setReorderingAllowed(true)
+                        addToBackStack("")
+                    }
                 }
                 //차단
                 2 -> {
@@ -147,9 +148,11 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 }
                 //신고
                 1 -> {
-                    mActivity.ChangeFragment().moveFragment(R.id.letterView_main_layout,
-                        ReportFragment()
-                    )
+                    requireActivity().supportFragmentManager.commit {
+                        replace(R.id.letterView_main_layout,
+                            ReportFragment()).setReorderingAllowed(true)
+                        addToBackStack("")
+                    }
                 }
                 //차단
                 2 -> {
@@ -190,45 +193,10 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
         }
 
         override fun onNothingSelected(parent: AdapterView<*>) {
-            Log.d("selected", "nothing")
+
         }
 
-//        override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//            Log.d("selected", "clicked")
-//        }
     }
-
-//    fun showMenu(v: View, @MenuRes menuRes: Int) {
-//        val popup = PopupMenu(requireContext()!!, v)
-//        popup.menuInflater.inflate(menuRes, popup.menu)
-//        val mActivity = activity as MainActivity
-//        val dialog = CustomDialogFragment()
-//        var option = null
-//
-//        popup.setOnDismissListener {
-//            // Respond to popup being dismissed.
-//        }
-//        // Show the popup menu.
-//        popup.show()
-//
-//        val btn= arrayOf("확인","취소")
-//        dialog.arguments= bundleOf(
-//            "bodyContext" to "정말 삭제하시겠습니까?",
-//            "btnData" to btn
-//        )
-//        // 버튼 클릭 이벤트 설정
-//        dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
-//            override fun onButton1Clicked() {
-//            }
-//
-//            override fun onButton2Clicked() {
-//            }
-//        })
-//        dialog.show(mActivity.supportFragmentManager, "CustomDialog")
-//    }
-
-
-
 
 
 }
