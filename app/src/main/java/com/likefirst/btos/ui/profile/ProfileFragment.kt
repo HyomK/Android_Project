@@ -47,7 +47,9 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if(isHidden){
+
+
+        if(isHidden &&isAdded){
             Log.d("premium","hidden")
             requireActivity().supportFragmentManager.commit{
                 requireActivity().supportFragmentManager

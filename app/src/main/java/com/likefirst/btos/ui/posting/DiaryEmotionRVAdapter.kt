@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.posting
 
+
 import android.content.res.Resources
 import android.text.TextUtils
 import android.util.Log
@@ -13,6 +14,8 @@ import com.likefirst.btos.databinding.ItemDiaryEmotionRvBinding
 class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                             val emotionGrayIds : ArrayList<Int>,
                             val emotionNames : Array<String>) : RecyclerView.Adapter<DiaryEmotionRVAdapter.ViewHolder>(){
+
+    var itemList = emotionColorIds
 
     inner class ViewHolder(val binding:ItemDiaryEmotionRvBinding) : RecyclerView.ViewHolder(binding.root) {
         fun initView(emotionColorId : Int){
@@ -36,25 +39,32 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.initView(emotionColorIds[position])
+        Log.d("onBindViewHolder", "bind!!!")
+        holder.initView(itemList[position])
         holder.binding.itemDiaryEmotionIv.setOnClickListener {
+            itemList = emotionGrayIds
             notifyItemRangeChanged(0, itemCount, "setEmotionGray")
+            Log.d("notify_1", "notify_1")
             notifyItemChanged(position, "setEmotion")
+            Log.d("notify_2", "notify_2")
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         if(payloads.isEmpty()){
             super.onBindViewHolder(holder, position, payloads)
+            Log.d("payLoadEmpty","empty")
         } else {
             for (payload in payloads){
                 if(payload is String){
                     val type = payload.toString()
                     if(TextUtils.equals(type, "setEmotionGray")){
                         holder.setEmotionGray(emotionGrayIds[position])
+                        Log.d("setEmotionGray", "setEmotionGray")
                     }
                     if (TextUtils.equals(type, "setEmotion")){
                         holder.setEmotionSelected(emotionColorIds[position], emotionNames[position])
+                        Log.d("setEmotion", "setEmotion")
                     }
                 }
             }
