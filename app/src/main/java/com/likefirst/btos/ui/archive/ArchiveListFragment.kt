@@ -21,7 +21,7 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         Log.d("to", to.toString())
 
         binding.archiveListToolbar.archiveListPeriodIv.setOnClickListener {
-            val periodDialog = ArchiveFragmentPeriodDialog(requireContext())
+            val periodDialog = ArchiveListPeriodDialog()
             periodDialog.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.ArchiveDatePickerStyle)
             periodDialog.show(childFragmentManager, periodDialog.tag)
         }

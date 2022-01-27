@@ -7,19 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.likefirst.btos.databinding.DialogArchivePeriodBinding
-import java.text.SimpleDateFormat
+import com.likefirst.btos.databinding.DialogArchiveListPeriodBinding
 import java.util.*
 
-class ArchiveFragmentPeriodDialog(context : Context): BottomSheetDialogFragment() {
-    lateinit var binding: DialogArchivePeriodBinding
+class ArchiveListPeriodDialog(): BottomSheetDialogFragment() {
+    lateinit var binding: DialogArchiveListPeriodBinding
+
+    companion object {
+        fun newInstance() : ArchiveListPeriodDialog{
+            return ArchiveListPeriodDialog()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DialogArchivePeriodBinding.inflate(inflater, container, false)
+        binding = DialogArchiveListPeriodBinding.inflate(inflater, container, false)
 
         initDatePickerSetting()
         initBtns()

@@ -1,25 +1,31 @@
 package com.likefirst.btos.ui.archive
 
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentArchiveCalendarBinding
 import com.likefirst.btos.ui.BaseFragment
-import java.lang.Math.abs
+import java.time.Year
 import java.util.*
 
-class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(FragmentArchiveCalendarBinding::inflate) {
+class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(FragmentArchiveCalendarBinding::inflate){
+
     var pageIndex = 0
     lateinit var currentDate : Date
     val mCalendar: Calendar = GregorianCalendar.getInstance()
     override fun initAfterBinding() {
 
-        setCalendar()
+        initCalendar()
+        setDatePicker()
     }
 
-    fun setCalendar(){
+    fun initCalendar(){
         val monthNames: Array<String> = resources.getStringArray(R.array.month)
         val MONTH_TODAY = mCalendar.get(Calendar.MONTH)
         val YEAR_TODAY = mCalendar.get(Calendar.YEAR)
@@ -62,16 +68,40 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
             })
         }
     }
-//    fun initView() {
-//        pageIndex -= (Int.MAX_VALUE / 2)
-//        Log.d("pageIndex", (pageIndex%12).toString())
-//        Log.e("Calendar Index", "Calender Index: $pageIndex")
-//
-//        val date = mCalendar.run {
-//            add(GregorianCalendar.MONTH, pageIndex)
-//            time
-//        }
-//        currentDate = date
-//        val month = monthNames[date.]
-//    }
+
+    fun setCalendar(year: Int, month: Int){
+        val monthNames: Array<String> = resources.getStringArray(R.array.month)
+        val oldCalendar = Calendar.getInstance()
+
+        // mCalendar를 newCalendar로 설정
+        mCalendar.set(year, month - 1, 1)
+
+        // 옮겨야 할 postion 계산
+        val yearGap = mCalendar.get(Calendar.YEAR) - oldCalendar.get(Calendar.YEAR)
+        val monthGap = mCalendar.get(Calendar.MONTH) - oldCalendar.get(Calendar.MONTH)
+        val position = (Int.MAX_VALUE/2 + (yearGap*12) + monthGap)
+
+        // 뷰 그려주기
+        binding.archiveCalendarVp.setCurrentItem(position, false)
+        binding.archiveCalendarYearTv.text = year.toString()
+        binding.archiveCalendarMonthTv.text = monthNames[month - 1]
+    }
+
+    fun setDatePicker(){
+        binding.archiveCalendarDateLayout.setOnClickListener{
+            val year = Integer.parseInt(binding.archiveCalendarYearTv.text.toString())
+            val monthText = binding.archiveCalendarMonthTv.text.toString()
+            val monthNames: Array<String> = resources.getStringArray(R.array.month)
+            val month = monthNames.indexOf(monthText) + 1
+
+            val datePickerDialog = ArchiveCalendarPeriodDialog.newInstance(year, month)
+            datePickerDialog.setDatePickerClickListener(object : ArchiveCalendarPeriodDialog.DatePickerClickListener{
+                override fun onDatePicked(year: Int, month: Int) {
+                    setCalendar(year, month)
+                }
+            })
+            datePickerDialog.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.ArchiveDatePickerStyle)
+            datePickerDialog.show(childFragmentManager, datePickerDialog.tag)
+        }
+    }
 }
