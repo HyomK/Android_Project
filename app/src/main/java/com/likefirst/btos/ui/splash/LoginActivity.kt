@@ -49,8 +49,8 @@ class LoginActivity
             binding.loginGoogleLoginTv.visibility = View.VISIBLE
             binding.loginGoogleLoginTv.startAnimation(animFadeIn)
 
-            if(getJwt(this)!=null)
-                authService.autologin(getJwt(this)!!)
+            if(getJwt()!=null)
+                authService.autologin(getJwt()!!)
         },5000)
 
         // animation_loginText_FadeIn
@@ -95,8 +95,8 @@ class LoginActivity
 
     override fun onLoginSuccess(login: Login) {
         binding.loginLoadingPb.visibility = View.GONE
-        saveJwt(this,login.jwt!!)
-        Log.e("LOGIN/JWT", getJwt(this)!!)
+        saveJwt(login.jwt!!)
+        Log.e("LOGIN/JWT", getJwt()!!)
         val intent = Intent(this, MainActivity::class.java)
         finish()
         startActivity(intent)
