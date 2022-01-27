@@ -1,7 +1,7 @@
 package com.likefirst.btos.ui.history
 
-import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.History
 import com.likefirst.btos.databinding.FragmentHistorySenderBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -15,16 +15,16 @@ class SenderFragment: BaseFragment<FragmentHistorySenderBinding>(FragmentHistory
     override fun initAfterBinding() {
         val mActivity = activity as MainActivity
 
-        val recyclerViewAdapter = RecyclerViewAdapter(context, items)
+        val recyclerViewAdapter = SenderRecyclerViewAdapter(context, items)
         binding.fragmentSenderRv.adapter = recyclerViewAdapter
         binding.fragmentSenderRv.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
 
-        recyclerViewAdapter.setMyItemClickListener(object : RecyclerViewAdapter.MyItemClickListener{
-            override fun MoveToDetail(historyIdx: Int) {
-                mActivity.let {
-                    val intent = Intent(context,HistoryDetailActivity::class.java)
-                    startActivity(intent)
-                }
+        recyclerViewAdapter.setMyItemClickListener(object : SenderRecyclerViewAdapter.MyItemClickListener{
+            override fun MoveToSenderDetail(historyIdx: Int) {
+                mActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.history_fragment,  SenderDetailFragment(), "senderdetail")
+                    .addToBackStack(null)
+                    .commit()
             }
         })
     }

@@ -31,9 +31,8 @@
         <activity
             android:name=".ui.splash.OnboardingActivity">
         </activity>
-        <activity android:name=".ui.splash.TutorialActivity">
-
-        </activity>
+        <activity android:name=".ui.splash.TutorialActivity"/>
+        <activity android:name=".ui.history.HistoryDetailActivity"/>
     </application>
 
 </manifest>
