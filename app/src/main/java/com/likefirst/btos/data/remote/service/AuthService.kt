@@ -2,9 +2,11 @@ package com.likefirst.btos.data.remote.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
+import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.remote.response.LoginResponse
 import com.likefirst.btos.data.remote.view.AutoLoginView
 import com.likefirst.btos.data.remote.view.LoginView
+import com.likefirst.btos.data.remote.view.SignUpView
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,6 +16,7 @@ class AuthService {
 
     private lateinit var loginView : LoginView
     private lateinit var autologinView : AutoLoginView
+    private lateinit var signupView: SignUpView
 
     private val AuthService = retrofit.create(RetrofitInterface::class.java)
 
@@ -23,6 +26,10 @@ class AuthService {
 
     fun setAutoLoginView(autologinView : AutoLoginView){
         this.autologinView = autologinView
+    }
+
+    fun setSignUpView(signupView : SignUpView){
+        this.signupView = signupView
     }
 
     fun login(email : String){
@@ -70,6 +77,28 @@ class AuthService {
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 autologinView.onAutoLoginFailure(400,"네트워크 오류가 발생했습니다.")
             }
+        })
+    }
+
+    fun signUp(user: User){
+        signupView.onSignUpLoading()
+
+        AuthService.signUp(user).enqueue(object : Callback<LoginResponse>{
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                val signUpResponse: LoginResponse = response.body()!!
+
+                Log.e("SIGNUP/API",signUpResponse.toString())
+
+                when(signUpResponse.code){
+                    1000 -> signupView.onSignUpSuccess(signUpResponse.result!!)
+                    else -> signupView.onSignUpFailure(signUpResponse.code,signUpResponse.message)
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                signupView.onSignUpFailure(400,"네트워크 오류가 발생했습니다.")
+            }
+
         })
     }
 }
