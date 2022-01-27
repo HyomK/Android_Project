@@ -111,7 +111,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return true
                 }
 
-
                 R.id.archiveFragment -> {
                     isDrawerOpen=false
                     if (archiveFragment.isAdded) {
@@ -163,7 +162,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             return false
         }
-
     }
 
 

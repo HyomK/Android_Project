@@ -5,39 +5,53 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/archive_calendar_year_tv"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/notosanskr_bold"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/archive_calendar_month_tv"/>
-
-    <TextView
-        android:id="@+id/archive_calendar_month_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/notosanskr_bold"
-        android:text="DECEMBER"
-        android:textColor="@color/black"
-        android:layout_marginBottom="50dp"
-        android:textSize="@dimen/archive_calendar_month"
-        app:layout_constraintBottom_toTopOf="@id/archive_calendar_vp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/archive_calendar_vp"
-        android:layout_width="320dp"
-        android:layout_height="360dp"
-        app:layout_constraintVertical_bias="0.65"
-        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/archive_calendar_date_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/archive_calendar_vp">
+
+            <TextView
+                android:id="@+id/archive_calendar_year_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosanskr_bold"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/archive_calendar_month_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosanskr_bold"
+                android:text="DECEMBER"
+                android:textColor="@color/black"
+                android:textSize="@dimen/archive_calendar_month"/>
+        </LinearLayout>
+
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/archive_calendar_vp"
+            android:layout_width="320dp"
+            android:layout_height="360dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     
 <!--    <androidx.recyclerview.widget.RecyclerView-->
 <!--        android:id="@+id/archive_calendar_rv"-->

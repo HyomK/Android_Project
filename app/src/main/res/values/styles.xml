@@ -37,5 +37,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!--Archive Date Picker style-->
+    <style name="ArchiveDatePickerStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/archive_date_picker_dialog_style</item>
+    </style>
+
 
 </resources>

@@ -51,7 +51,7 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
 
                 override fun afterTextChanged(p0: Editable?) {
                     if (null !=  holder.binding.itemDiaryDoneListEt.layout && holder.binding.itemDiaryDoneListEt.layout.lineCount > 2) {
-                        holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.text.length - 1, holder.binding.itemDiaryDoneListEt.text.length)
+                        holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
                     }
                 }
             })
@@ -59,13 +59,13 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
             //엔터 눌렀을 때 업데이트
             holder.binding.itemDiaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
                 if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
-                    holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.text.length - 1,
-                        holder.binding.itemDiaryDoneListEt.text.length)
+                    holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
                     setDoneList(holder, position)
                 }
                 false
             }
 
+            // 포커스 벗어났을 때 doneList 업데이트
             holder.binding.itemDiaryDoneListEt.onFocusChangeListener =
                 View.OnFocusChangeListener { view, hasFocus ->
                     if (!hasFocus){
