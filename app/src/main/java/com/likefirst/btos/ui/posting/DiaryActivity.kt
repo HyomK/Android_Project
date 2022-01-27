@@ -3,6 +3,7 @@ package com.likefirst.btos.ui.posting
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
+import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextUtils

@@ -28,13 +28,6 @@
             >
 
         </TextView>
-        <EditText
-            android:id="@+id/popup_edit"
-            android:layout_gravity="center"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

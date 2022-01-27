@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_marginTop="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/blocklist_bg"
+    android:layout_marginHorizontal="50dp">
+        <TextView
+            android:id="@+id/blacklist_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자몽에 이슬"
+            android:textSize="17dp"
+            android:layout_marginStart="30dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/blacklist_btn"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
+            android:background="@drawable/btn_rectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="15dp"
+            android:text="해제"
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
