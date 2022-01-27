@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/settingListStyle"
-        android:text="겨보손글씨"
+        android:text="교보손글씨"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
         />
     <TextView

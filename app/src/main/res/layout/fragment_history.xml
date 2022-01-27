@@ -12,6 +12,7 @@
         layout="@layout/toolbar_history"/>
 
     <RadioGroup
+        android:id="@+id/history_radiogroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -22,11 +23,11 @@
         app:layout_constraintTop_toBottomOf="@+id/history_toolbar">
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:id="@+id/history_radiobutton_first"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:text="@string/history_radio1"
             android:button="@null"
-            android:checked="true"
             android:background="@drawable/history_radiobutton_selector"
             android:gravity="center"
             android:paddingStart="9dp"
@@ -35,8 +36,9 @@
             android:layout_marginEnd="13dp"/>
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:id="@+id/history_radiobutton_second"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:text="@string/history_radio2"
             android:button="@null"
             android:background="@drawable/history_radiobutton_selector"
@@ -47,16 +49,47 @@
             android:layout_marginEnd="13dp"/>
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:id="@+id/history_radiobutton_third"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:text="@string/history_radio3"
             android:button="@null"
             android:background="@drawable/history_radiobutton_selector"
             android:gravity="center"
             android:paddingStart="9dp"
             android:paddingEnd="9dp"
-            android:textSize="@dimen/history_radiobutton_textSize"/>
+            android:textSize="@dimen/history_radiobutton_textSize" />
 
     </RadioGroup>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/history_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/history_radiogroup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+<!--    <androidx.viewpager2.widget.ViewPager2-->
+<!--        android:id="@+id/history_viewpager"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/history_radiogroup"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+
+    <!--    <com.google.android.material.tabs.TabLayout-->
+    <!--        android:id="@+id/history_tablayout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:gravity="center"-->
+    <!--        android:background="@color/transparent"-->
+    <!--        app:tabBackground="@drawable/history_radiobutton_selector"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/history_toolbar"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

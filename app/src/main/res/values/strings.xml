@@ -103,7 +103,7 @@
         <item>1922</item>
     </string-array>
 
-
+    <!--posting-->
     <string-array name="report_items">
         <item>삭제</item>
         <item>신고</item>
@@ -122,6 +122,12 @@ Ac turpis egestas sed tempus urna et pharetra pharetra massa. Velit ut tortor pr
 
 Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum tempus egestas sed. Laoreet suspendisse interdum consectetur libero. Eu augue ut lectus arcu bibendum at varius vel pharetra. Enim diam vulputate ut pharetra sit amet aliquam. In hendrerit gravida rutrum quisque non tellus orci ac auctor. Magna fermentum iaculis eu non diam. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis. Velit laoreet id donec ultrices tincidunt arcu non sodales. Fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien. Bibendum ut tristique et egestas quis ipsum. Faucibus vitae aliquet nec ullamcorper sit amet risus nullam eget. Egestas purus viverra accumsan in nisl nisi. Tristique senectus et netus et malesuada fames ac. Sed felis eget velit aliquet sagittis. Lobortis elementum nibh tellus molestie nunc non. Nunc sed id semper risus in. Odio morbi quis commodo odio aenean sed.</string>
 
+    <!--archive-->
+    <string name="archive_list_set_period">기간설정</string>
+    <string name="archive_list_period_from">부터</string>
+    <string name="archive_list_period_to">까지</string>
+    <string name="archive_list_period_cancel">취소</string>
+    <string name="archive_list_period_submit">완료</string>
     <string-array name="delete_items">
     <item>삭제</item>
     </string-array>

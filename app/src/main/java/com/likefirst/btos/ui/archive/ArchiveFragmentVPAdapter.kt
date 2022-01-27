@@ -5,7 +5,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class ArchiveFragmentVPAdapter(fragment : Fragment) : FragmentStateAdapter(fragment) {
 
-    val fragmentList = arrayListOf<Fragment>(ArchiveCalendarFragment(), ArchiveCalendarFragment())
+    val fragmentList = arrayListOf<Fragment>(ArchiveCalendarFragment(), ArchiveListFragment())
 
     override fun getItemCount(): Int {
         return 2
