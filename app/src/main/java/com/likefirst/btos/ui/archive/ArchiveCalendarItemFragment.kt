@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 class ArchiveCalendarItemFragment(val pageIndex: Int) : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate) {
 
     override fun initAfterBinding() {
-        val calendarAdapter = ArchiveCalendarRVAdapter(createCalendarList())
+        val calendarAdapter = ArchiveCalendarRVAdapter(createCalendarList(), requireContext())
 
         binding.archiveCalendarRv.apply {
             adapter = calendarAdapter

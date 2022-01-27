@@ -4,6 +4,38 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android_Project/BTOS/app/src/main/res/layout/activity_main.xml" value="0.10625" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/archive_date_picker_dialog_style.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/bottom_nav_menu_archive_selector.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/bottom_nav_menu_history_selector.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/history_radiobutton_selector.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_calendar.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_calendar_selector.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_check.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/selector_indicator.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/tutorial_image_box.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/tutorial_indicator.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.20277777777777778" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary_viewer.xml" value="0.20277777777777778" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_login.xml" value="0.23333333333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_onboarding.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_tutorial.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_archive_calendar_period.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_archive_period.xml" value="0.264" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_appinfo_detail.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_archive_calendar.xml" value="0.264" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_archive_list.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_archive_list_search.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_birth.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_font.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mail_view.xml" value="0.20277777777777778" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_calendar_rv_date.xml" value="0.23333333333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_list_rv_diary.xml" value="0.264" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_list_rv_month.xml" value="0.264" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_tutorialimage.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_archive.xml" value="0.32432432432432434" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_diary.xml" value="0.2361111111111111" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_history.xml" value="0.24114583333333334" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/black_indicator.xml" value="0.22135416666666666" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/blocklist_bg.xml" value="0.11927083333333334" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/btn_rectangle.xml" value="0.15555555555555556" />
