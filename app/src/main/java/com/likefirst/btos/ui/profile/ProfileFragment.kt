@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.profile
 
 import android.system.Os.remove
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentProfileBinding
@@ -20,18 +21,16 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
 
         binding.profileCd.setOnClickListener {
             mActivity.supportFragmentManager.beginTransaction()
-                .replace(R.id.fr_layout,  PlantFragment(), "profile")
-                .addToBackStack(null)
+                .add(R.id.fr_layout,  PlantFragment(), "plantrv")
+                .addToBackStack("profile-save")
                 .commit()
-            //mActivity.ChangeFragment().hideFragment(R.id.fr_layout,this, PlantFragment())
         }
 
         binding.profilePremiumTv.setOnClickListener {
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fr_layout, PremiumFragment(),"premium")
-                .show(PremiumFragment())
-                .addToBackStack(null)
+                .addToBackStack("profile-save")
                 .commit()
         }
         binding.profileSettingTv.setOnClickListener {
@@ -45,34 +44,31 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         }
     }
 
+    fun cleanUpFragment(  fragments: Array<String>){
+        fragments.forEach { fragment ->
+            requireActivity().supportFragmentManager.commit {
+                requireActivity().supportFragmentManager
+                    .findFragmentByTag(fragment)?.let { remove(it) }
+            }
+        }
+    }
+
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-
-
         if(isHidden &&isAdded){
-            Log.d("premium","hidden")
-            requireActivity().supportFragmentManager.commit{
-                requireActivity().supportFragmentManager
-                    .findFragmentByTag("premium")?.let { remove(it) }
-
+            val fragments = arrayOf("premium","plantrv")
+            cleanUpFragment(fragments)
             }
             if(isSettingOpen){
                 val fragments = arrayOf("setName","setBirth","setFont","setAppinfo","setNotify")
-                fragments.forEach { fragment ->
-                    requireActivity().supportFragmentManager.commit{
-                        requireActivity().supportFragmentManager
-                            .findFragmentByTag(fragment)?.let { remove(it) }
-                    }
-                }
+                cleanUpFragment(fragments)
             }
-
             requireActivity().supportFragmentManager.commit{
                 requireActivity().supportFragmentManager
                     .findFragmentByTag("setting")?.let { remove(it) }
             }
 
         }
-    }
 
 
 }

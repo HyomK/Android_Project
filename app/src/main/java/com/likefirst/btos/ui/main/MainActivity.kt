@@ -132,7 +132,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .hide(homeFragment)
                             .hide(profileFragment)
                             .hide(historyFragment)
-                            .add(R.id.fr_layout, archiveFragment, "home")
+                            .add(R.id.fr_layout, archiveFragment, "archive")
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
@@ -206,11 +206,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .show(homeFragment)
                     .hide(archiveFragment)
                     .hide(profileFragment)
+                    .hide(historyFragment)
                     .commitNow()
             } else {
                 supportFragmentManager.beginTransaction()
                     .hide(archiveFragment)
                     .hide(profileFragment)
+                    .hide(historyFragment)
                     .add(R.id.fr_layout, homeFragment)
                     .commitNow()
             }
