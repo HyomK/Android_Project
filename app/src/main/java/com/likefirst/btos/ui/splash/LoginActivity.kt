@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.splash
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -41,22 +42,22 @@ class LoginActivity
         Handler(Looper.getMainLooper()).postDelayed({
             binding.loginLogoIv.visibility = View.VISIBLE
             binding.loginLogoIv.startAnimation(animFadeOut)
+
+            //자동로그인
             val authService = AuthService()
             authService.setAutoLoginView(this)
+            Log.e("AUTOLOGIN/JWT",getJwt().toString())
+            if(getJwt()!=null)
+                authService.autologin()
+            else{
+                // animation_loginText_FadeIn
+                binding.loginWelcomeTv.visibility = View.VISIBLE
+                binding.loginWelcomeTv.startAnimation(animFadeIn)
+                binding.loginGoogleLoginTv.visibility = View.VISIBLE
+                binding.loginGoogleLoginTv.startAnimation(animFadeIn)
+            }
 
-            binding.loginWelcomeTv.visibility = View.VISIBLE
-            binding.loginWelcomeTv.startAnimation(animFadeIn)
-            binding.loginGoogleLoginTv.visibility = View.VISIBLE
-            binding.loginGoogleLoginTv.startAnimation(animFadeIn)
-
-            if(getJwt(this)!=null)
-                authService.autologin(getJwt(this)!!)
-        },5000)
-
-        // animation_loginText_FadeIn
-//        Handler(Looper.getMainLooper()).postDelayed({
-//
-//        },7000)
+        },3000)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
 
@@ -95,8 +96,8 @@ class LoginActivity
 
     override fun onLoginSuccess(login: Login) {
         binding.loginLoadingPb.visibility = View.GONE
-        saveJwt(this,login.jwt!!)
-        Log.e("LOGIN/JWT", getJwt(this)!!)
+        saveJwt(login.jwt!!)
+        Log.e("LOGIN/JWT", getJwt()!!)
         val intent = Intent(this, MainActivity::class.java)
         finish()
         startActivity(intent)
@@ -114,8 +115,9 @@ class LoginActivity
                 Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
                 val intent = Intent(this, OnboardingActivity::class.java)
-                Log.e("LOGIN/EMAIL", email)
-                intent.putExtra("email",email)
+                val bundle = Bundle()
+                bundle.putString("email",email)
+                intent.putExtra("mypackage",bundle)
                 finish()
                 startActivity(intent)
             }

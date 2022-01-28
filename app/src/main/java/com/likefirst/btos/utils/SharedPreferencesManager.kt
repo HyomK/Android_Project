@@ -1,12 +1,11 @@
 package com.likefirst.btos.utils
 
-import android.content.Context
-import com.likefirst.btos.ApplicationClass
+import com.likefirst.btos.ApplicationClass.Companion.mSharedPreferences
 
-fun saveJwt(context: Context, jwtToken: String) {
-    val editor = context.getSharedPreferences(ApplicationClass.TAG, Context.MODE_PRIVATE).edit()
+fun saveJwt(jwtToken: String) {
+    val editor = mSharedPreferences.edit()
     editor.putString("jwt", jwtToken)
     editor.apply()
 }
 
-fun getJwt(context : Context): String? = context.getSharedPreferences(ApplicationClass.TAG, Context.MODE_PRIVATE).getString("jwt", null)
+fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
