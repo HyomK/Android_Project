@@ -38,10 +38,6 @@
     </style>
 
 
-    <style name="AgeDropMenu" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-        <item name="endIconDrawable">@drawable/ic_dropdown</item>
-    </style>
 
     <!--Archive Date Picker style-->
     <style name="ArchiveDatePickerStyle" parent="Theme.Design.Light.BottomSheetDialog">

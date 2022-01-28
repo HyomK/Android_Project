@@ -22,7 +22,7 @@ class SenderFragment: BaseFragment<FragmentHistorySenderBinding>(FragmentHistory
         recyclerViewAdapter.setMyItemClickListener(object : SenderRecyclerViewAdapter.MyItemClickListener{
             override fun MoveToSenderDetail(historyIdx: Int) {
                 mActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.history_fragment,  SenderDetailFragment(), "senderdetail")
+                    .add(R.id.history_fragment,  SenderDetailFragment(), "senderdetail")
                     .addToBackStack(null)
                     .commit()
             }

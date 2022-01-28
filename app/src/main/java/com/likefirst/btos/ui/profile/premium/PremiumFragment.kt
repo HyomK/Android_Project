@@ -11,6 +11,7 @@ import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentPremiumBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.ui.profile.ProfileFragment
 
 class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBinding :: inflate) {
     override fun initAfterBinding() {
@@ -55,5 +56,6 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
     fun Context.dp2px(@FloatRange(from = 0.0) dp: Float): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
     }
+
 
 }

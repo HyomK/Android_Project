@@ -19,15 +19,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginBottom="50dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/archive_calendar_vp">
+            app:layout_constraintBottom_toTopOf="@id/archive_calendar_rg">
 
             <TextView
                 android:id="@+id/archive_calendar_year_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/archive_calendar_year"
                 android:fontFamily="@font/notosanskr_bold"
                 android:textColor="@color/black"/>
             <TextView
@@ -40,6 +41,46 @@
                 android:textSize="@dimen/archive_calendar_month"/>
         </LinearLayout>
 
+        <RadioGroup
+            android:id="@+id/archive_calendar_rg"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@id/archive_calendar_date_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/archive_calendar_vp">
+
+            <RadioButton
+                android:id="@+id/archive_calendar_done_list_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/archive_calendar_radiobutton_selector"
+                android:button="@null"
+                android:fontFamily="@font/notosanskr_bold"
+                android:gravity="center"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
+                android:text="@string/archive_calendar_radio_done_list"
+                android:textColor="@color/black"
+                android:textSize="@dimen/history_radiobutton_textSize" />
+
+            <RadioButton
+                android:id="@+id/archive_calendar_emotion_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/archive_calendar_radiobutton_selector"
+                android:button="@null"
+                android:fontFamily="@font/notosanskr_bold"
+                android:gravity="center"
+                android:text="@string/archive_calendar_radio_emotion"
+                android:textColor="@color/black"
+                android:textSize="@dimen/history_radiobutton_textSize" />
+
+        </RadioGroup>
 
 
         <androidx.viewpager2.widget.ViewPager2

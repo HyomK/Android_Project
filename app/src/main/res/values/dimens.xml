@@ -72,7 +72,8 @@
     <dimen name="diary_contents_font">14dp</dimen>
     <dimen name="diary_contents_preview_font">14dp</dimen>
     <dimen name="archive_calendar_date">12dp</dimen>
-    <dimen name="archive_calendar_month">12dp</dimen>
+    <dimen name="archive_calendar_month">14dp</dimen>
+    <dimen name="archive_calendar_year">14dp</dimen>
 
     <!--archive period-->
     <dimen name="archive_list_period_main">14dp</dimen>
@@ -81,7 +82,7 @@
     <dimen name="archive_list_period_submit">14dp</dimen>
 
     <!--history-->
-    <dimen name="history_radiobutton_textSize">15sp</dimen>
+    <dimen name="history_radiobutton_textSize">10sp</dimen>
 
 
 </resources>

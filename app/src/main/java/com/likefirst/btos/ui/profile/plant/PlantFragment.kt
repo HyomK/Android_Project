@@ -11,6 +11,7 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.entities.PlantItem
+import com.likefirst.btos.ui.profile.ProfileFragment
 import org.json.JSONObject
 import kotlin.collections.ArrayList
 
@@ -47,24 +48,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         }
 
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("PlantFragment", "onDestroy")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("PlantFragment", "onDestroyView")
-    }
-    override fun onDetach() {
-        super.onDetach()
-        Log.d("PlantFragment", "onDedatch")
-
-    }
-
-
-
 
 
    fun  loadData() : ArrayList<Plant> {
@@ -140,6 +123,18 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
 
 
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(isHidden && isAdded){
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fr_layout, ProfileFragment(),"profile")
+                .remove(this)
+                .commit()
+
+        }
+    }
 
 
 }

@@ -36,6 +36,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
 
     }
 
+
     override fun onResume() {
         super.onResume()
         Log.d("Mailbox","resume")
