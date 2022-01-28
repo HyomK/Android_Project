@@ -15,6 +15,7 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.main.ReportFragment
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
+import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 
 class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBinding::inflate) {
@@ -43,7 +44,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
-                   mActivity.startNextActivity(MailWriteActivity::class.java)
+                    mActivity.startNextActivity(MailReplyActivity::class.java)
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")

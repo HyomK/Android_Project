@@ -9,7 +9,6 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
-import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 
 class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate){
@@ -54,7 +53,13 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 frgmn.arguments =bundleOf(
                     "body" to "mailtext"
                 )
-                mActivity.startNextActivity(MailReplyActivity::class.java)
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.home_main_layout,frgmn,"viewmail")
+                    .hide(presFragment)
+                    .show(frgmn)
+                    .addToBackStack(null)
+                    .commit()
 
             }
         })
