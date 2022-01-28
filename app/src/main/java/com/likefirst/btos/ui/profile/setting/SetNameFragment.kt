@@ -3,8 +3,10 @@ package com.likefirst.btos.ui.profile.setting
 import android.view.View
 import com.likefirst.btos.databinding.FragmentNicknameBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.MainActivity
 
-class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBinding::inflate) {
+class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBinding::inflate),
+    MainActivity.onBackPressedListener  {
     override fun initAfterBinding() {
 
         binding.nicknameToolbar.toolbarTitleTv.text="닉네임 변경"
@@ -30,4 +32,8 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
             }
         }
     }
+    override fun onBackPressed() {
+        requireActivity().supportFragmentManager.popBackStack()
+    }
+
 }

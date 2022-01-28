@@ -2,7 +2,10 @@ package com.likefirst.btos.ui.main
 
 
 
+import android.view.View
+import android.widget.ImageView
 import androidx.core.os.bundleOf
+import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentReportBinding
 import com.likefirst.btos.ui.BaseFragment
 
@@ -16,7 +19,45 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
         }
         binding.reportToolbar.toolbarTitleTv.text="신고하기"
 
-        binding.reportDoneBtn.setOnClickListener{
+        val index = arrayOf("스팸", "성적 컨텐츠","혐오 발언 또는 괴롭힘", "마음에 들지 않습니다", "기타")
+
+        binding.reportItem1.itemReportTv.text="스팸"
+        binding.reportItem2.itemReportTv.text="성적 컨텐츠"
+        binding.reportItem3.itemReportTv.text="혐오 발언 또는 괴롭힘"
+        binding.reportItem4.itemReportTv.text="마음에 들지 않습니다"
+        binding.reportItem5.itemReportTv.text="기타"
+
+        binding.reportItem1.itemReportIv.setOnClickListener {
+            checkBoxHandler(binding)
+            binding.reportItem1.itemReportIv.setImageResource(R.drawable.ic_check_true)
+        }
+
+        binding.reportItem2.itemReportIv.setOnClickListener {
+            checkBoxHandler(binding)
+            binding.reportItem2.itemReportIv.setImageResource(R.drawable.ic_check_true)
+        }
+        binding.reportItem3.itemReportIv.setOnClickListener {
+            checkBoxHandler(binding)
+            binding.reportItem3.itemReportIv.setImageResource(R.drawable.ic_check_true)
+        }
+
+        binding.reportItem4.itemReportIv.setOnClickListener {
+            checkBoxHandler(binding)
+            binding.reportItem4.itemReportIv.setImageResource(R.drawable.ic_check_true)
+        }
+
+        binding.reportItem5.itemReportIv.setOnClickListener {
+            checkBoxHandler(binding)
+            binding.reportItem5.itemReportIv.setImageResource(R.drawable.ic_check_true)
+        }
+
+        binding.reportToolbar.toolbarBackIc.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
+
+
+       binding.reportDoneBtn.setOnClickListener{
             val dialog =CustomDialogFragment()
             val data = arrayOf("확인")
             dialog.arguments= bundleOf(
@@ -34,6 +75,14 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
 
     }
 
+
+    fun checkBoxHandler( binding: FragmentReportBinding) {
+        binding.reportItem1.itemReportIv.setImageResource(R.drawable.ic_check_false)
+        binding.reportItem2.itemReportIv.setImageResource(R.drawable.ic_check_false)
+        binding.reportItem3.itemReportIv.setImageResource(R.drawable.ic_check_false)
+        binding.reportItem4.itemReportIv.setImageResource(R.drawable.ic_check_false)
+        binding.reportItem5.itemReportIv.setImageResource(R.drawable.ic_check_false)
+    }
 
 
 

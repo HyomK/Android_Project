@@ -67,29 +67,33 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-
-        if(isHidden && isAdded){
-            Log.d("listFragment", requireActivity().supportFragmentManager.fragments.toString())
-            val fragments = arrayOf("historydiary","historymail","senderdetail","history")
-            fragments.forEach { fragment ->
-                requireActivity().supportFragmentManager.commit{
-                    requireActivity().supportFragmentManager
-                        .findFragmentByTag(fragment)?.let { remove(it) }
-                }
-            }
-        }
-
-    }
+//    override fun onHiddenChanged(hidden: Boolean) {
+//        super.onHiddenChanged(hidden)
+//        if(isHidden && isAdded){
+//            Log.d("listFragment", requireActivity().supportFragmentManager.fragments.toString())
+//            val fragments = arrayOf("historydiary","historymail","senderdetail")
+//            fragments.forEach { fragment ->
+//                requireActivity().supportFragmentManager.commit{
+//                    requireActivity().supportFragmentManager
+//                        .findFragmentByTag(fragment)?.let { remove(it) }
+//                }
+//            }
+//        }
+//
+//    }
 
     override fun onStart() {
         super.onStart()
+        Log.d("history","isopen")
         binding.historyToolbar.historyBackIv.visibility = View.GONE
-        requireActivity().supportFragmentManager
+
+        val checkStart = requireActivity().supportFragmentManager.findFragmentByTag("historysender")
+        if(checkStart==null)
+            requireActivity().supportFragmentManager
             .beginTransaction()
-            .replace(R.id.history_fragment,SenderFragment(), "historysender")
+            .add(R.id.history_fragment,SenderFragment(), "historysender")
             .commit()
+
     }
 
 }

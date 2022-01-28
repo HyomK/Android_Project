@@ -5,8 +5,9 @@ import android.widget.ArrayAdapter
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentBirthBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.MainActivity
 
-class SetBirthFragment:BaseFragment<FragmentBirthBinding>(FragmentBirthBinding::inflate) {
+class SetBirthFragment:BaseFragment<FragmentBirthBinding>(FragmentBirthBinding::inflate), MainActivity.onBackPressedListener  {
     override fun initAfterBinding() {
 
         val agelist = resources.getStringArray(R.array.onboarding_agelist)
@@ -16,20 +17,17 @@ class SetBirthFragment:BaseFragment<FragmentBirthBinding>(FragmentBirthBinding::
         binding.birthList.dropDownHeight=450
 
         var item=0
-//        binding.birthList.setOnItemClickListener { adapterView, view, i, l ->
-//            run {
-//                item = adapterView.getPositionForView(view)
-//                Log.d("Birth", agelist[item])
-//
-//            }
-//        }
-
 
         binding.birthToolbar.toolbarTitleTv.text="생년 변경"
         binding.birthToolbar.toolbarBackIc.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-
     }
+
+
+    override fun onBackPressed() {
+        requireActivity().supportFragmentManager.popBackStack()
+    }
+
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/letterView_main_layout"
+    android:id="@+id/MailWrite_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_bg_received"
+    android:background="@drawable/ic_bg_sent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -14,17 +14,18 @@
         >
 
         <include
-            android:id="@+id/letterView_toolbar"
+            android:id="@+id/MailWrite_toolbar"
             layout="@layout/toolbar_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <FrameLayout
-            android:id="@+id/letterWrite_send_op"
-            android:layout_width="80dp"
+            android:id="@+id/MailWrite_send_op"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,61 +33,57 @@
             >
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/letterView_menu_sp"
+                android:id="@+id/MailWrite_menu_sp"
                 style="@style/customDropMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:layout_gravity="center"
+                android:layout_gravity="right|center_vertical"
+                android:textAlignment="center"
                 android:gravity="center"
+                android:background="@drawable/drop_menu_bg"
                 app:boxBackgroundColor="@android:color/white"
-                app:endIconDrawable="@drawable/ic_dots"
+                app:endIconDrawable="@drawable/ic__null"
+                app:endIconTint="@color/white"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:endIconTint="@android:color/black"
-                app:elevation="0dp"
-                android:outlineProvider="none"
+                android:textColorHint="@color/white"
                 >
 
                 <AutoCompleteTextView
-                    android:id="@+id/report_menu_list"
-                    android:layout_width="match_parent"
+                    android:id="@+id/MailWrite_menu_list"
+                    android:layout_width="79dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:dropDownWidth="wrap_content"
+                    android:ellipsize="end"
                     android:gravity="center"
                     android:inputType="none"
-                    android:dropDownWidth="wrap_content"
-                    android:background="@null"
-                    android:ellipsize="end"
                     android:maxLines="1"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:singleLine="true"
-
+                    android:text=""
 
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <View
-                android:layout_gravity="start"
-                android:background="@color/white"
-                android:layout_width="27dp"
-                android:layout_height="60dp"/>
-        </FrameLayout>
 
+        </FrameLayout>
         <View
-            android:id="@+id/letterView_hide_view"
+            android:id="@+id/MailWrite_hide_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="start"
             android:background="@color/white" />
 
         <ImageView
-            android:id="@+id/letterView_menu_btn"
+            android:id="@+id/MailWrite_menu_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,36 +96,30 @@
             />
 
 
-        <ImageView
-            android:id="@+id/letterView_send_btn"
+
+        <ImageButton
+            android:id="@+id/MailWrite_write_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="70dp"
-            android:src="@drawable/ic_send"
-            android:background="@color/transparent"
+            android:src="@drawable/ic_write"
+            android:background="@color/white"
             />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
+    <EditText
+        android:id="@+id/MailWrite_body_et"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:overScrollMode="never"
-        >
-        <TextView
-            android:id="@+id/mailView_body_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
-            android:layout_marginVertical="@dimen/mail_view_marginVertical"
-
-            />
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+        android:layout_marginVertical="@dimen/mail_view_marginVertical"
+        android:background="@null"
+        android:inputType="textMultiLine"
+        />
 
 </LinearLayout>

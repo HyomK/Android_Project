@@ -2,9 +2,11 @@ package com.likefirst.btos.ui.profile.premium
 
 import android.content.Context
 import android.graphics.Rect
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.FloatRange
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.likefirst.btos.R
@@ -13,7 +15,10 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 
-class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBinding :: inflate) {
+class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBinding :: inflate),MainActivity.onBackPressedListener {
+
+
+
     override fun initAfterBinding() {
 
         val mActivity = activity as MainActivity
@@ -57,5 +62,9 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
     }
 
+
+    override fun onBackPressed() {
+        requireActivity().supportFragmentManager.popBackStack()
+    }
 
 }

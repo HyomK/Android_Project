@@ -55,20 +55,20 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if(isHidden &&isAdded){
-            val fragments = arrayOf("premium","plantrv")
+        if (isHidden && isAdded) {
+            val fragments = arrayOf("premium", "plantrv","plantItem")
             cleanUpFragment(fragments)
-            }
-            if(isSettingOpen){
-                val fragments = arrayOf("setName","setBirth","setFont","setAppinfo","setNotify")
+            if (isSettingOpen) {
+                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo", "setNotify")
                 cleanUpFragment(fragments)
             }
-            requireActivity().supportFragmentManager.commit{
+            requireActivity().supportFragmentManager.commit {
                 requireActivity().supportFragmentManager
                     .findFragmentByTag("setting")?.let { remove(it) }
             }
 
         }
+    }
 
 
 }

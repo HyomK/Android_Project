@@ -20,6 +20,10 @@ import com.likefirst.btos.ui.home.MailViewFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
 
 import com.likefirst.btos.ui.profile.plant.PlantFragment
+import com.likefirst.btos.ui.main.MainActivity.onBackPressedListener
+
+
+
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
@@ -29,8 +33,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val profileFragment= ProfileFragment()
     private val plantFragment=PlantFragment()
     var isDrawerOpen =true
-
     var isMailOpen=false
+
+    public interface onBackPressedListener {
+        fun onBackPressed();
+    }
+
 
     override fun initAfterBinding() {
 
@@ -53,7 +61,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     replace(R.id.fr_layout, MailViewFragment()).setReorderingAllowed(true)
                     addToBackStack("")
                 }
-
             }
         })
 
@@ -201,6 +208,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if(homeFragment.isVisible){
             super.onBackPressed()
         } else {
+
+            val fragmentList = supportFragmentManager.fragments
+            for (fragment in fragmentList) {
+                if (fragment is onBackPressedListener) {
+                    (fragment as onBackPressedListener).onBackPressed()
+                    return
+                }
+            }
+
             if(homeFragment.isAdded){
                 supportFragmentManager.beginTransaction()
                     .show(homeFragment)

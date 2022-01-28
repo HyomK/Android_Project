@@ -15,7 +15,7 @@ import com.likefirst.btos.ui.profile.ProfileFragment
 import org.json.JSONObject
 import kotlin.collections.ArrayList
 
-class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate) {
+class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  {
 
     override fun initAfterBinding() {
         val presFragment = this
@@ -31,7 +31,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 Log.d("RV SELECT","clicked")
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.fr_layout,PlantItemFragment())
+                    .add(R.id.fr_layout,PlantItemFragment(),"plantItem")
                     .show(PlantItemFragment())
                     .addToBackStack(null)
                     .commit()
@@ -39,12 +39,9 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             }
         })
 
-
         binding.flowerpotToolbar.toolbarBackIc.setOnClickListener{
             val stacks =  mActivity.supportFragmentManager.getFragments()
-            Log.d("Stackfr",stacks.toString())
             mActivity.supportFragmentManager.popBackStack()
-            this.onHiddenChanged(true)
         }
 
     }
@@ -124,18 +121,9 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
 
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if(isHidden && isAdded){
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fr_layout, ProfileFragment(),"profile")
-                .remove(this)
-                .commit()
-
-        }
+    override fun onBackPressed() {
+        requireActivity().supportFragmentManager.popBackStack()
     }
-
 
 }
 
