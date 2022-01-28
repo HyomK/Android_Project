@@ -58,10 +58,10 @@ class AuthService {
         })
     }
 
-    fun autologin(jwt : String){
+    fun autologin(){
         autologinView.onAutoLoginLoading()
 
-        AuthService.autoLogin(jwt).enqueue(object : Callback<LoginResponse>{
+        AuthService.autoLogin().enqueue(object : Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
 
                 val autoLoginResponse: LoginResponse = response.body()!!
@@ -90,7 +90,7 @@ class AuthService {
                 Log.e("SIGNUP/API",signUpResponse.toString())
 
                 when(signUpResponse.code){
-                    1000 -> signupView.onSignUpSuccess(signUpResponse.result!!)
+                    1000 -> signupView.onSignUpSuccess(signUpResponse.result)
                     else -> signupView.onSignUpFailure(signUpResponse.code,signUpResponse.message)
                 }
             }

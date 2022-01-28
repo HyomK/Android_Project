@@ -5,8 +5,11 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.remote.response.Login
+import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -29,20 +32,17 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
         binding.onboardingOkayTv.setOnClickListener {
             // loginactivity에서 넘어온 email 받기
-//            val intent = getIntent()
-//            val email = intent.getStringExtra("email").toString()
+            val intent = getIntent()
+            val bundle = intent.getBundleExtra("mypackage")
+            val email = bundle?.getString("email").toString()
 
             val nickname = binding.onboardingNameEt.text.toString()
             val birth = binding.onboardingAgelist.text.toString().toInt()
-            Log.e("SIGNUP", "email:\nnickname:$nickname\nbirth:$birth")
+            Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
 
-            val intent = Intent(this,TutorialActivity::class.java)
-            finish()
-            startActivity(intent)
-
-//            val authService = AuthService()
-//            authService.setSignUpView(this)
-//            authService.signUp(User(email,nickname,birth))
+            val authService = AuthService()
+            authService.setSignUpView(this)
+            authService.signUp(User(email,nickname,birth))
         }
     }
 
@@ -54,6 +54,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         binding.onboardingLoadingPb.visibility = View.GONE
 
         Log.e("SIGNUP/userIdx", login.userIdx.toString())
+        Toast.makeText(this,"회원가입에 성공하였습니다.\n로그인화면으로 돌아갑니다.", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, LoginActivity::class.java)
         finish()
         startActivity(intent)
@@ -61,7 +62,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onSignUpFailure(code: Int, message: String) {
         binding.onboardingLoadingPb.visibility = View.GONE
-
+        Log.e("SIGNUP/FAIL", message)
         when(code){
             4000 -> {
                 Log.e("SIGNUP/FAIL", message)

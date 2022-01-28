@@ -132,7 +132,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .hide(homeFragment)
                             .hide(profileFragment)
                             .hide(historyFragment)
-                            .add(R.id.fr_layout, archiveFragment, "home")
+                            .add(R.id.fr_layout, archiveFragment, "archive")
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
