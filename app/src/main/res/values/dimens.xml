@@ -82,7 +82,7 @@
     <dimen name="archive_list_period_submit">14dp</dimen>
 
     <!--history-->
-    <dimen name="history_radiobutton_textSize">10sp</dimen>
+    <dimen name="history_radiobutton_textSize">10dp</dimen>
 
 
 </resources>
