@@ -27,26 +27,26 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
         binding.reportItem4.itemReportTv.text="마음에 들지 않습니다"
         binding.reportItem5.itemReportTv.text="기타"
 
-        binding.reportItem1.itemReportIv.setOnClickListener {
+        binding.reportItem1.itemReportLayout.setOnClickListener {
             checkBoxHandler(binding)
             binding.reportItem1.itemReportIv.setImageResource(R.drawable.ic_check_true)
         }
 
-        binding.reportItem2.itemReportIv.setOnClickListener {
+        binding.reportItem2.itemReportLayout.setOnClickListener {
             checkBoxHandler(binding)
             binding.reportItem2.itemReportIv.setImageResource(R.drawable.ic_check_true)
         }
-        binding.reportItem3.itemReportIv.setOnClickListener {
+        binding.reportItem3.itemReportLayout.setOnClickListener {
             checkBoxHandler(binding)
             binding.reportItem3.itemReportIv.setImageResource(R.drawable.ic_check_true)
         }
 
-        binding.reportItem4.itemReportIv.setOnClickListener {
+        binding.reportItem4.itemReportLayout.setOnClickListener {
             checkBoxHandler(binding)
             binding.reportItem4.itemReportIv.setImageResource(R.drawable.ic_check_true)
         }
 
-        binding.reportItem5.itemReportIv.setOnClickListener {
+        binding.reportItem5.itemReportLayout.setOnClickListener {
             checkBoxHandler(binding)
             binding.reportItem5.itemReportIv.setImageResource(R.drawable.ic_check_true)
         }

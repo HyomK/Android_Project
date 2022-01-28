@@ -1,9 +1,12 @@
 package com.likefirst.btos.ui.history
 
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.HistoryDetail
 import com.likefirst.btos.databinding.ActivityHistoryDetailBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.MainActivity
 
 class HistoryDetailActivity : BaseActivity<ActivityHistoryDetailBinding>(
     ActivityHistoryDetailBinding::inflate) {
@@ -30,4 +33,16 @@ class HistoryDetailActivity : BaseActivity<ActivityHistoryDetailBinding>(
             LinearLayoutManager.VERTICAL, false
         )
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val pos = intent.extras?.getString("backPos")
+        val editor= getSharedPreferences("HistoryBackPos", MODE_PRIVATE).edit()
+        editor.putString("backPos",pos)
+        editor.commit()
+        Log.d("historyTagBack",pos.toString())
+
+    }
+
+
 }

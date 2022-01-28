@@ -39,9 +39,35 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
             onBackPressed()
         }
 
+        binding.MailWriteBodyEt.hint="|누군가 들어줬으면 하는 말이 있나요?"
+
+        binding.MailWriteCheckBtn.setOnClickListener {
+            val dialog = CustomDialogFragment()
+            val btn= arrayOf("아니오","예")
+            dialog.arguments= bundleOf(
+                "bodyContext" to
+                        "편지를 작성할까요?" +
+                        "\n편지를 보내면 랜덤한 사람에게 지금 바로 보내지고,답장을 받을 수 있습니다." +
+                        "\n(광고 재생 후 작성페이지로 전환됩니다.)",
+                "btnData" to btn
+            )
+            // 버튼 클릭 이벤트 설정
+            dialog.setButtonClickListener(object:
+                CustomDialogFragment.OnButtonClickListener {
+                override fun onButton1Clicked() {
+                }
+                override fun onButton2Clicked() {
+                    binding.MailWriteMenuBtn.visibility= View.VISIBLE
+                    binding.MailWriteWriteBtn.visibility=View.VISIBLE
+                    binding.MailWriteHideView.visibility=View.VISIBLE
+                    binding.MailWriteCheckBtn.visibility=View.GONE
+                }
+            })
+            dialog.show(supportFragmentManager, "CustomDialog")
+        }
+
         binding.MailWriteMenuList.setOnItemClickListener { adapterView, view, i, l ->
             val dialog = CustomDialogFragment()
-            Log.d("spinner","itemclick")
             binding.MailWriteHideView.visibility=View.VISIBLE
             when (i) {
                 //삭제
@@ -62,10 +88,15 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     dialog.show(supportFragmentManager, "CustomDialog")
                 }
             }
-
         }
 
 
+        binding.MailWriteWriteBtn.setOnClickListener {
+            binding.MailWriteMenuBtn.visibility= View.INVISIBLE
+            binding.MailWriteWriteBtn.visibility=View.INVISIBLE
+            binding.MailWriteCheckBtn.visibility=View.VISIBLE
+            //   binding.MailReplyHideView.visibility=View.VISIBLE
+        }
 
 
         binding.MailWriteBodyEt.addTextChangedListener(object : TextWatcher {
@@ -82,40 +113,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                 }
             }
         })
-    }
-
-
-    inner class SpinnerActivity : Activity(), AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-            val dialog = CustomDialogFragment()
-            Log.d("spinner","itemclick")
-
-            when (pos) {
-                //삭제
-                0 -> {
-                    val btn= arrayOf("확인","취소")
-                    dialog.arguments= bundleOf(
-                        "bodyContext" to "정말 삭제하시겠습니까?",
-                        "btnData" to btn
-                    )
-                    // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object:
-                        CustomDialogFragment.OnButtonClickListener {
-                        override fun onButton1Clicked() {
-                        }
-                        override fun onButton2Clicked() {
-                        }
-                    })
-                    dialog.show(supportFragmentManager, "CustomDialog")
-                }
-                1->{
-                    Log.d("spinner","itemclick item1")
-                }
-            }
-        }
-        override fun onNothingSelected(parent: AdapterView<*>) {
-            // Another interface callback
-        }
     }
 
 

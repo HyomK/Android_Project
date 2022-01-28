@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.likefirst.btos.R
@@ -40,6 +41,8 @@ class SenderDetailFragment: BaseFragment<FragmentHistorySenderDetailBinding>(Fra
             override fun MoveToDetail(historyIdx: Int) {
                 mActivity.let {
                     val intent = Intent(context,HistoryDetailActivity::class.java)
+                    val bundle = bundleOf("backPos" to "historydetail")
+                    intent.putExtras(bundle)
                     startActivity(intent)
                 }
             }

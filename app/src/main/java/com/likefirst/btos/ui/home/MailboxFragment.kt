@@ -9,6 +9,7 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
+import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 
 class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate){
@@ -34,13 +35,6 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val mActivity = activity as MainActivity
         mActivity.isMailOpen=false
 
-
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Mailbox","resume")
     }
 
 
@@ -49,7 +43,6 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val data = Array(20) { i -> "Number of index: $i"  }
         val adapter = MailRVAdapter(data)
         binding.mailboxRv.adapter= adapter
-
 
 
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
@@ -61,15 +54,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 frgmn.arguments =bundleOf(
                     "body" to "mailtext"
                 )
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-
-                    .add(R.id.home_main_layout,frgmn,"viewmail")
-
-                    .hide(presFragment)
-                    .show(frgmn)
-                    .addToBackStack(null)
-                    .commit()
+                mActivity.startNextActivity(MailReplyActivity::class.java)
 
             }
         })
@@ -91,7 +76,6 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 override fun onButton2Clicked() {
                     mActivity.notifyDrawerHandler("lock")
                     mActivity.startNextActivity(MailWriteActivity::class.java)
-
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")
