@@ -1,13 +1,10 @@
 package com.likefirst.btos.ui.profile.setting
 
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentSettingBinding
 import com.likefirst.btos.ui.BaseFragment
-import com.likefirst.btos.ui.home.WriteMailFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.EditDialogFragment
 

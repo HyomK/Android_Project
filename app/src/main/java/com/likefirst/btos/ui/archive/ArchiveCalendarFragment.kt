@@ -21,11 +21,11 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
     val mCalendar: Calendar = GregorianCalendar.getInstance()
     override fun initAfterBinding() {
 
-        initCalendar()
+        initCalendar(0)
         setDatePicker()
     }
 
-    fun initCalendar(){
+    fun initCalendar(viewMode : Int){
         val monthNames: Array<String> = resources.getStringArray(R.array.month)
         val MONTH_TODAY = mCalendar.get(Calendar.MONTH)
         val YEAR_TODAY = mCalendar.get(Calendar.YEAR)
@@ -34,7 +34,7 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
         binding.archiveCalendarMonthTv.text = monthNames[MONTH_TODAY]
         binding.archiveCalendarYearTv.text = YEAR_TODAY.toString()
 
-        val calendarAdapter = ArchiveCalendarVPAdapter(this)
+        val calendarAdapter = ArchiveCalendarVPAdapter(this, viewMode)
         binding.archiveCalendarVp.apply {
             adapter = calendarAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
@@ -67,6 +67,7 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
                 }
             })
         }
+        setCalendarRadioBtn()
     }
 
     fun setCalendar(year: Int, month: Int){
@@ -102,6 +103,19 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
             })
             datePickerDialog.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.ArchiveDatePickerStyle)
             datePickerDialog.show(childFragmentManager, datePickerDialog.tag)
+        }
+    }
+
+    fun setCalendarRadioBtn(){
+        binding.archiveCalendarRg.setOnCheckedChangeListener { radioGroup, checkedId ->
+            when (checkedId){
+                R.id.archive_calendar_done_list_rb -> {
+                    initCalendar(0)
+                }
+                R.id.archive_calendar_emotion_rb -> {
+                    initCalendar(1)
+                }
+            }
         }
     }
 }

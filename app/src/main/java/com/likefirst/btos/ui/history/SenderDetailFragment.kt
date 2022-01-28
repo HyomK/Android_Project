@@ -44,4 +44,12 @@ class SenderDetailFragment: BaseFragment<FragmentHistorySenderDetailBinding>(Fra
             }
         })
     }
+
+    override fun onPause() {
+        super.onPause()
+        if(isAdded){
+            requireActivity().supportFragmentManager.popBackStack()
+
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package com.likefirst.btos.ui.history
 
+import android.util.Log
 import android.view.View
+import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentHistoryBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -59,6 +61,22 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
                         .beginTransaction()
                         .replace(R.id.history_fragment, MailFragment(), "historymail")
                         .commit()
+                }
+            }
+        }
+
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+
+        if(isHidden && isAdded){
+            Log.d("listFragment", requireActivity().supportFragmentManager.fragments.toString())
+            val fragments = arrayOf("historydiary","historymail","senderdetail","history")
+            fragments.forEach { fragment ->
+                requireActivity().supportFragmentManager.commit{
+                    requireActivity().supportFragmentManager
+                        .findFragmentByTag(fragment)?.let { remove(it) }
                 }
             }
         }

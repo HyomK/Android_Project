@@ -8,6 +8,7 @@ import com.likefirst.btos.databinding.FragmentMailboxBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.ui.posting.WriteMailFragment
 
 class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate){
 
@@ -34,6 +35,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
 
 
     }
+
 
     override fun onResume() {
         super.onResume()

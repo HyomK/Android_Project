@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.home
+package com.likefirst.btos.ui.posting
 
 import android.app.Activity
 import android.util.Log

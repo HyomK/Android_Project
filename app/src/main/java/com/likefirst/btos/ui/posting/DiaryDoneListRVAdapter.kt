@@ -12,6 +12,7 @@ import com.likefirst.btos.databinding.ItemDiaryDoneListRvBinding
 
 class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHolder>() {
     val doneLists : ArrayList<String> = ArrayList()
+    var doneListWatcher = ""
 
     interface ItemClickListener
 
@@ -51,7 +52,10 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
 
                 override fun afterTextChanged(p0: Editable?) {
                     if (null !=  holder.binding.itemDiaryDoneListEt.layout && holder.binding.itemDiaryDoneListEt.layout.lineCount > 2) {
-                        holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
+                        holder.binding.itemDiaryDoneListEt.setText(doneListWatcher)
+                        holder.binding.itemDiaryDoneListEt.setSelection(doneListWatcher.length)
+                    } else {
+                        doneListWatcher = holder.binding.itemDiaryDoneListEt.text.toString()
                     }
                 }
             })

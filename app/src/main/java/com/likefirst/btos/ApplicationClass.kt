@@ -3,7 +3,6 @@ package com.likefirst.btos
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.likefirst.btos.config.XAccessTokenInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,6 +21,7 @@ class ApplicationClass : Application() {
         lateinit var mSharedPreferences: SharedPreferences
 
         lateinit var retrofit: Retrofit
+        lateinit var retrofit : Retrofit
     }
 
     override fun onCreate() {
