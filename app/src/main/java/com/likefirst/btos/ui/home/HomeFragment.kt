@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.home
 
 
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -14,7 +15,9 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.plant.PlantItemFragment
+import com.likefirst.btos.utils.dateToString
 import java.time.LocalTime
+import java.util.*
 
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -49,7 +52,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
 
         binding.homeWriteBtn.setOnClickListener {
-            mActivity.startNextActivity(DiaryActivity::class.java)
+            val date = dateToString(Date())
+            val intent = Intent(requireContext(), DiaryActivity::class.java)
+            intent.putExtra("diaryDate", date)
+            startActivity(intent)
         }
 
     }

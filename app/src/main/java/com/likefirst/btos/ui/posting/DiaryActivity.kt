@@ -21,17 +21,26 @@ import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.utils.dateToString
+import java.util.*
+import kotlin.collections.ArrayList
 
-class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
+class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
         var doneListWatcher = ""
+
+        // contents 초기화
+        initContents()
 
         // 이모션 리사이클러뷰 생성
         initEmotionRv()
 
         //DoneList 리사이클러뷰 연결
         initDoneListRv()
+
+        // 툴바 동작구현
+        setToolbar()
 
         //doneList 2줄 입력제한
         binding.diaryDoneListEt.addTextChangedListener(object : TextWatcher{
@@ -52,7 +61,12 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
                 }
             }
         })
+    }
 
+    fun initContents(){
+        binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
+    }
+    fun setToolbar(){
         //툴바 버튼 동작구현
         binding.diaryToolbar.diaryBackIv.setOnClickListener {
             onBackPressed()
@@ -103,7 +117,9 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
                     binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
                     showOneBtnDialog("오늘하루 정말 알차게 사셨군요!! 아쉽지만 오늘 한 일은 10개까지만 작성이 가능합니다. 내일 또 봐요!", "doneListFullAlert")
                 } else {
-                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
+                    if(binding.diaryDoneListEt.lineCount == 2){
+                        binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
+                    }
                     if(TextUtils.isEmpty(binding.diaryDoneListEt.text)){
                         showOneBtnDialog("오늘 한 일을 입력해 주세요!", "doneListNullAlert")
                     } else {

@@ -21,6 +21,10 @@ import kotlin.collections.ArrayList
 
 class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate) {
 
+    companion object{
+        var viewMode = 0
+    }
+
     override fun initAfterBinding() {
         val dummyData = ArrayList<CalendarInfo>()
         dummyData.add(CalendarInfo("2022.01.01", 0,1, 3))

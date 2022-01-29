@@ -1,6 +1,8 @@
 package com.likefirst.btos.ui.archive
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,5 +88,11 @@ class ArchiveCalendarPeriodDialog(val year: Int, val month: Int): BottomSheetDia
             mDatePickerClickListener.onDatePicked(year, month)
             dismiss()
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        ArchiveCalendarFragment.datePickerFlag = true
+        Log.d("dataPickerFlag", ArchiveCalendarFragment.datePickerFlag.toString())
+        super.onDismiss(dialog)
     }
 }
