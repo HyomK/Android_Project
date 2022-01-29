@@ -80,17 +80,19 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
     fun updateDoneList(position : Int, doneList : String){
         doneLists[position] = doneList
         notifyItemChanged(position)
+        DiaryActivity.doneLists = doneLists
     }
 
     fun deleteDoneList(position : Int){
         doneLists.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemCount)
+        DiaryActivity.doneLists = doneLists
     }
 
     fun addDoneList(text : String){
         this.doneLists.add(text)
-        Log.d("test", doneLists.toString())
         notifyItemInserted(doneLists.size)
+        DiaryActivity.doneLists = doneLists
     }
 }

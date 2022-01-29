@@ -15,6 +15,8 @@ import com.likefirst.btos.databinding.ItemArchiveCalendarRvDateBinding
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvEmptyBinding
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvIconBinding
 import java.lang.RuntimeException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val context : Context, val viewMode: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val EMPTY_CELL = 0
@@ -24,8 +26,7 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val c
     private val DONELIST_MODE = 0
     private val EMOTION_MODE = 1
     private var ViewMode = 0
-    private var year = 0
-    private var month = 0
+    private lateinit var date : Date
 
     inner class DateViewHolder(val binding : ItemArchiveCalendarRvDateBinding) : RecyclerView.ViewHolder(binding.root) {
         fun initView(position: Int){
@@ -87,7 +88,7 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val c
     }
 
     interface CalendarDateSelectedListener{
-        fun onDateSelectedListener(year : Int, month: Int, date: Int)
+        fun onDateSelectedListener(date : Date, dayInt: Int)
     }
 
     private lateinit var mCalendarDateSelectedListener: CalendarDateSelectedListener
@@ -128,7 +129,7 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val c
             is DateViewHolder -> {
                 holder.initView(position)
                 holder.itemView.setOnClickListener {
-                    mCalendarDateSelectedListener.onDateSelectedListener(year, month, calendarList[position].dateInt)
+                    mCalendarDateSelectedListener.onDateSelectedListener(date, calendarList[position].dateInt)
                 }
             }
             is LeafViewHolder -> {
@@ -144,9 +145,8 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val c
         return 42
     }
 
-    fun setYearMonth(year: Int, month: Int){
-        this.year = year
-        this.month = month
+    fun setDate(date : Date){
+        this.date = date
     }
 
     fun setViewMode(viewMode : Int){

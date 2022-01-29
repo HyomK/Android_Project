@@ -12,3 +12,4 @@ fun dateToString(value: Date) : String{
     val fm = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
     return fm.format(value)
 }
+

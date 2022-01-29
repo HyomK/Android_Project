@@ -8,6 +8,7 @@ import com.likefirst.btos.data.entities.CalendarInfo
 import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.posting.DiaryActivity
+import com.likefirst.btos.utils.dateToString
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -30,14 +31,24 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
         binding.archiveCalendarRv.apply {
             adapter = calendarAdapter
             layoutManager = GridLayoutManager(requireContext(), 7)
-            val calendar = Calendar.getInstance()
-            calendar.time = getCalendar()
-            calendarAdapter.setYearMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH ) + 1)
+            calendarAdapter.setDate(getCalendar())
             calendarAdapter.setOnDateSelectedListener(object : ArchiveCalendarRVAdapter.CalendarDateSelectedListener {
-                override fun onDateSelectedListener(year: Int, month: Int, date: Int) {
-                    Toast.makeText(requireContext(), "$year, $month, $date", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(requireContext(), DiaryActivity::class.java)
-                    startActivity(intent)
+                override fun onDateSelectedListener(date: Date, dayInt : Int) {
+                    val calendar = GregorianCalendar.getInstance()
+                    calendar.time = date
+                    calendar.set(Calendar.DAY_OF_MONTH, dayInt)
+
+                    // 오늘 날짜랑 비교 (1. calendar = GregorianCalendar.getInstance() : 0
+                    //                   2. calendar > GregorianCalendar.getInstance() : 1
+                    //                   3. calendar < GregorianCalendar.getInstance() : -1)
+                    if(calendar.compareTo(GregorianCalendar.getInstance()) == 1){
+                        Toast.makeText(requireContext(), "미래의 일기는 작성할 수 없어요!!!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val dateString = dateToString(calendar.time)
+                        val intent = Intent(requireContext(), DiaryActivity::class.java)
+                        intent.putExtra("diaryDate", dateString)
+                        startActivity(intent)
+                    }
                 }
             })
         }

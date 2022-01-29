@@ -7,5 +7,5 @@ data class CalendarInfo(
     val dateInt : Int = 0,
     @ColumnInfo(name = "doneListNum") val doneListNum : Int?,
     @ColumnInfo(name = "emotionIdx") val emotionIdx : Int?
-) {
+){
 }

@@ -26,6 +26,4 @@ interface UserDao {
 
     @Query("SELECT * FROM UserTable")
     fun getUser(): User
-
-
 }
