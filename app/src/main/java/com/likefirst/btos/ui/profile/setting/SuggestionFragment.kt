@@ -5,8 +5,9 @@ import android.widget.ArrayAdapter
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentSuggestBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.MainActivity
 
-class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBinding::inflate){
+class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBinding::inflate),MainActivity.onBackPressedListener{
     override fun initAfterBinding() {
 
         val menuItem = resources.getStringArray(R.array.suggest_item)
@@ -24,5 +25,9 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
             requireActivity().supportFragmentManager.popBackStack()
         }
 
+    }
+
+    override fun onBackPressed() {
+        requireActivity().supportFragmentManager.popBackStack()
     }
 }

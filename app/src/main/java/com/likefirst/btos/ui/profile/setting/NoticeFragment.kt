@@ -1,12 +1,14 @@
-package com.likefirst.btos.ui.profile
+package com.likefirst.btos.ui.profile.setting
 
 import android.util.Log
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentNoticeBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.profile.setting.NoticeRVAdapter
 
-class NoticeFragment: BaseFragment<FragmentNoticeBinding>(FragmentNoticeBinding::inflate) {
+class NoticeFragment: BaseFragment<FragmentNoticeBinding>(FragmentNoticeBinding::inflate),
+    MainActivity.onBackPressedListener  {
     override fun initAfterBinding() {
         binding.profileNoticeToolbar.toolbarTitleTv.text="공지사항"
 
@@ -28,6 +30,10 @@ class NoticeFragment: BaseFragment<FragmentNoticeBinding>(FragmentNoticeBinding:
         binding.profileNoticeRv.adapter=noticeAdapter
 
 
+    }
+
+    override fun onBackPressed() {
+        requireActivity().supportFragmentManager.popBackStack()
     }
 
 

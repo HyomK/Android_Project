@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.profile.plant
+package com.likefirst.btos.data.remote.view
 
 import com.likefirst.btos.data.entities.Plant
 

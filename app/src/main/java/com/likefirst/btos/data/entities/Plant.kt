@@ -11,8 +11,7 @@ import kotlinx.android.parcel.Parcelize
 data class Plant(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "plantIdx")
-    var plantIdx: Int= 0, // album의 pk는 임의로 지정해주기 위해 autogenerate 안씁니다.
-
+    var plantIdx: Int= 0,
     @ColumnInfo(name = "plantName") var plantName: String?="",
     @ColumnInfo(name = "plantImgUrl") var plantImgUrl: String? = "",
     @ColumnInfo(name = "plantPrice") var plantPrice: Int= 0,
