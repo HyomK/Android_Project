@@ -130,7 +130,6 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
                 R.id.archive_calendar_emotion_rb -> {
                     initCalendar(1)
                     setCalendar(year, month)
-
                 }
             }
         }

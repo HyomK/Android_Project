@@ -1,8 +1,10 @@
 package com.likefirst.btos.ui.posting
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.hardware.input.InputManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
@@ -12,6 +14,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,26 +44,6 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
         // 툴바 동작구현
         setToolbar()
-
-        //doneList 2줄 입력제한
-        binding.diaryDoneListEt.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                if (null !=  binding.diaryDoneListEt.layout && binding.diaryDoneListEt.layout.lineCount > 2) {
-                    binding.diaryDoneListEt.setText(doneListWatcher)
-                    binding.diaryDoneListEt.setSelection(doneListWatcher.length)
-                } else {
-                    doneListWatcher = p0.toString()
-                }
-            }
-        })
     }
 
     fun initContents(){
@@ -117,7 +100,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                     binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
                     showOneBtnDialog("오늘하루 정말 알차게 사셨군요!! 아쉽지만 오늘 한 일은 10개까지만 작성이 가능합니다. 내일 또 봐요!", "doneListFullAlert")
                 } else {
-                    if(binding.diaryDoneListEt.lineCount == 2){
+                    if(binding.diaryDoneListEt.text.length < 100){
                         binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
                     }
                     if(TextUtils.isEmpty(binding.diaryDoneListEt.text)){
@@ -129,6 +112,19 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                     }
                 }
             }
+//            if (keyCode == EditorInfo.IME_ACTION_SEND){
+//                if(doneListAdapter.doneLists.size >= 10){
+//                    showOneBtnDialog("오늘하루 정말 알차게 사셨군요!! 아쉽지만 오늘 한 일은 10개까지만 작성이 가능합니다. 내일 또 봐요!", "doneListFullAlert")
+//                } else {
+//                    if(TextUtils.isEmpty(binding.diaryDoneListEt.text)){
+//                        showOneBtnDialog("오늘 한 일을 입력해 주세요!", "doneListNullAlert")
+//                    } else {
+//                        doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
+//                        binding.diaryDoneListEt.text = null
+//                        binding.diaryDoneListEt.setSelection(0)
+//                    }
+//                }
+//            }
             false
         }
     }
