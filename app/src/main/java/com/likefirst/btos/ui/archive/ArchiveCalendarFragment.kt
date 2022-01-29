@@ -30,6 +30,7 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
     }
 
     fun initCalendar(viewMode : Int){
+        mCalendar.time = Date()
         val monthNames: Array<String> = resources.getStringArray(R.array.month)
         val MONTH_TODAY = mCalendar.get(Calendar.MONTH)
         val YEAR_TODAY = mCalendar.get(Calendar.YEAR)
@@ -116,12 +117,20 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
 
     fun setCalendarRadioBtn(){
         binding.archiveCalendarRg.setOnCheckedChangeListener { radioGroup, checkedId ->
+            val year = Integer.parseInt(binding.archiveCalendarYearTv.text.toString())
+            val monthText = binding.archiveCalendarMonthTv.text.toString()
+            val monthNames: Array<String> = resources.getStringArray(R.array.month)
+            val month = monthNames.indexOf(monthText) + 1
+            Log.d("date", "$year, $month")
             when (checkedId){
                 R.id.archive_calendar_done_list_rb -> {
                     initCalendar(0)
+                    setCalendar(year, month)
                 }
                 R.id.archive_calendar_emotion_rb -> {
                     initCalendar(1)
+                    setCalendar(year, month)
+
                 }
             }
         }
