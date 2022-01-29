@@ -20,6 +20,6 @@ data class LetterResponse(
 
 data class  ResultLetter(
     @SerializedName("type") val type : String,
-    @SerializedName("content") val content : ArrayList<Letter>,
-    @SerializedName("senderFontIdx") val senderFontIdx : Int,
+    @SerializedName("content") val content : Letter,
+    @SerializedName("senderFontIdx") val senderFontIdx : Int
 )

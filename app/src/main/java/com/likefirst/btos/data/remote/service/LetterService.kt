@@ -22,21 +22,27 @@ class LetterService{
         this.letterView=letterView
     }
 
-    fun loadLetter(userId:String){
+    fun loadLetter(type:String,userId:String){
         letterView.onLetterLoading()
 
-        LetterService.loadLetter(userId).enqueue(object:Callback<LetterResponse> {
+        LetterService.loadLetter(type,userId).enqueue(object:Callback<LetterResponse> {
             override fun onResponse(call: Call<LetterResponse>, response: Response<LetterResponse>) {
                 val letterResponse: LetterResponse =response.body()!!
-                Log.e("Letter/API",  letterResponse.toString())
-
+                Log.d("Letter/APIcode",  letterResponse.toString())
+                Log.d("Letter/API",letterResponse.code.toString())
                 when( letterResponse.code){
-                    1000->letterView.onLetterSuccess( letterResponse.result.content)
-                    else->letterView.onLetterFailure( letterResponse.code,  letterResponse.message)
+                    1000->{
+                        letterView.onLetterSuccess( letterResponse.result.content)
+                        return
+                    }
+
+                    else->   letterView.onLetterFailure( letterResponse.code,  letterResponse.message)
                 }
+
             }
 
             override fun onFailure(call: Call<LetterResponse>, t: Throwable) {
+
                 letterView.onLetterFailure(4000,"데이터베이스 연결에 실패하였습니다.")
                 letterView.onLetterFailure(6006,"일기 복호화에 실패하였습니다.")
             }

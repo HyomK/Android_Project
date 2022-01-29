@@ -5,6 +5,6 @@ import com.likefirst.btos.data.remote.response.Diary
 
 interface DiaryView {
     fun onDiaryLoading()
-    fun onDiarySuccess(diaryList : ArrayList<Diary>)
+    fun onDiarySuccess(diaryList : Diary)
     fun onDiaryFailure(code : Int, message : String)
 }

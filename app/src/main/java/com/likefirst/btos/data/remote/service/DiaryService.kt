@@ -18,11 +18,11 @@ class DiaryService {
         this.diaryView=diaryView
     }
 
-    fun loadDiary(userId:String){
+    fun loadDiary(type:String, userId:String){
 
         diaryView.onDiaryLoading()
 
-        DiaryService.loadDiary(userId).enqueue(object:Callback<DiaryResponse>{
+        DiaryService.loadDiary(type,userId).enqueue(object:Callback<DiaryResponse>{
             override fun onResponse(call: Call<DiaryResponse>, response: Response<DiaryResponse>) {
                 val diaryResponse:DiaryResponse=response.body()!!
                 Log.e("Diary/API",  diaryResponse.toString())

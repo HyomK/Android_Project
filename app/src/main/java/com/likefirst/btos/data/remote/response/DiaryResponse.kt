@@ -24,5 +24,5 @@ data class DiaryResponse(
 
 data class ResultDiary(
     @SerializedName("type") val type : String,
-    @SerializedName("content") val content : ArrayList<Diary>,
+    @SerializedName("content") val content : Diary,
 )

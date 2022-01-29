@@ -3,10 +3,7 @@ package com.likefirst.btos.utils
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.remote.response.*
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface RetrofitInterface {
 
@@ -26,20 +23,23 @@ interface RetrofitInterface {
         @Path("userId") id: String
     ): Call<MailboxResponse>
 
-    @GET("/mailboxes/mail?type=diary&idx={userId}")
+    @GET("/mailboxes/mail")
     fun loadDiary(
-        @Path("userId") id: String,
+        @Query("type") type: String,
+        @Query("idx")idx: String
     ): Call<DiaryResponse>
 
-    @GET("/mailboxes/mail?type=letter&idx={userId}")
+    @GET("/mailboxes/mail")
     fun loadLetter(
-        @Path("userId") id: String,
+        @Query("type") type: String,
+        @Query("idx")idx: String
     ): Call<LetterResponse>
 
 
-    @GET("/mailboxes/mail?type=reply&idx={userId}")
+    @GET("/mailboxes/mail")
     fun loadReply(
-        @Path("userId") id: String,
+        @Query("type") type: String,
+        @Query("idx")idx: String
     ): Call<ReplyResponse>
 
 

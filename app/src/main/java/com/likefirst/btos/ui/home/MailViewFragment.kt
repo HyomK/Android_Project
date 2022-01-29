@@ -107,9 +107,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                     })
                     dialog.show(mActivity.supportFragmentManager, "CustomDialog")
                 }
-
             }
-
         }
 
 

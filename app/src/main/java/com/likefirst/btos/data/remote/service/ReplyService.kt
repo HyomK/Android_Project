@@ -19,11 +19,11 @@ class ReplyService {
         this.replyView=replyView
     }
 
-    fun loadReply(userId:String){
+    fun loadReply(type:String,userId:String){
 
         replyView.onReplyLoading()
 
-        ReplyService. loadReply(userId).enqueue(object: Callback<ReplyResponse> {
+        ReplyService. loadReply(type,userId).enqueue(object: Callback<ReplyResponse> {
             override fun onResponse(call: Call<ReplyResponse>, response: Response<ReplyResponse>) {
                 val replyResponse: ReplyResponse =response.body()!!
                 Log.e("Reply/API", replyResponse.toString())

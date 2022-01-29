@@ -5,6 +5,6 @@ import com.likefirst.btos.data.remote.response.Letter
 
 interface LetterView {
     fun onLetterLoading()
-    fun onLetterSuccess(letterList : ArrayList<Letter> )
+    fun onLetterSuccess(letter :Letter )
     fun onLetterFailure(code : Int, message : String)
 }

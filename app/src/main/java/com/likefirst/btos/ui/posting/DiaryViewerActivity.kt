@@ -9,6 +9,16 @@ import com.likefirst.btos.ui.main.MainActivity
 
 class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiaryViewerBinding::inflate) {
     override fun initAfterBinding() {
+
+        val diary=intent.getBundleExtra("context")
+        val sender=intent.getBundleExtra("sender")
+        val date= intent.getBundleExtra("date")
+
+
+
+
+
+
         val doneListAdapter = DiaryViewerDoneListRVAdapter()
         binding.diaryViewerDoneListRv.apply {
             adapter = doneListAdapter
