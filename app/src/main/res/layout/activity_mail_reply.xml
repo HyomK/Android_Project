@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/MailWrite_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/MailReply_toolbar_layout"
+        >
+
+        <include
+            android:id="@+id/MailReply_toolbar"
+            layout="@layout/toolbar_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+
+        <FrameLayout
+            android:id="@+id/MailReply_send_op"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/MailReply__menu_sp"
+                style="@style/customDropMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="right|center_vertical"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:background="@drawable/drop_menu_bg"
+                app:boxBackgroundColor="@android:color/white"
+                app:endIconDrawable="@drawable/ic__null"
+                app:endIconTint="@color/white"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                android:textColorHint="@color/white"
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/MailReply_menu_list"
+                    android:layout_width="79dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:dropDownWidth="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:singleLine="true"
+                    android:text=""
+
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </FrameLayout>
+        <View
+            android:id="@+id/MailReply_hide_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_gravity="start"
+            android:background="@color/white" />
+
+        <ImageView
+            android:id="@+id/MailReply_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="25dp"
+            android:src="@drawable/ic_dots"
+            android:background="@color/transparent"
+            android:contextClickable="false"
+            android:visibility="invisible"
+            />
+
+
+
+        <ImageButton
+            android:id="@+id/MailReply_write_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="70dp"
+            android:src="@drawable/ic_write"
+            android:background="@color/white"
+            android:visibility="invisible"
+            />
+
+        <ImageButton
+            android:id="@+id/MailReply_check_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_check"
+            android:background="@color/white"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<androidx.constraintlayout.widget.ConstraintLayout
+    app:layout_constraintTop_toBottomOf="@+id/MailReply_toolbar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_bg_sent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <EditText
+        android:id="@+id/MailReply_body_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+        android:layout_marginVertical="@dimen/mail_view_marginVertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@null"
+        android:inputType="textMultiLine"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

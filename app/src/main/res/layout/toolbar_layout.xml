@@ -29,6 +29,7 @@
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:gravity="center"
+        android:textColor="@color/black"
         android:fontFamily="@font/notosanskr_bold"
         android:layout_marginStart="60dp"
 

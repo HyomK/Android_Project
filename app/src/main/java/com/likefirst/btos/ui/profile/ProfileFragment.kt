@@ -12,6 +12,7 @@ import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.profile.setting.SettingFragment
+import com.likefirst.btos.ui.profile.setting.SuggestionFragment
 
 class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     var isSettingOpen = false
@@ -42,6 +43,21 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 .addToBackStack(null)
                 .commit()
         }
+        binding.profileNoticeTv.setOnClickListener {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fr_layout, NoticeFragment(),"notice")
+                .addToBackStack("profile-save")
+                .commit()
+        }
+        binding.profileSuggestTv.setOnClickListener {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fr_layout, SuggestionFragment(),"suggestion")
+                .addToBackStack("profile-save")
+                .commit()
+        }
+
     }
 
     fun cleanUpFragment(  fragments: Array<String>){
@@ -56,7 +72,8 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (isHidden && isAdded) {
-            val fragments = arrayOf("premium", "plantrv")
+            val fragments = arrayOf("premium", "plantrv","plantItem","notice")
+
             cleanUpFragment(fragments)
             if (isSettingOpen) {
                 val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo", "setNotify")

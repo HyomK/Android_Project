@@ -20,12 +20,6 @@ interface PlantDao {
     @Query("SELECT * FROM PlantItemTable where plantIdx = :id")
     fun getPlant(id: Int): PlantItem?
 
-//
-//    @Update(entity = Plant::class)
-//    fun update(obj: PlantUpdate)
-
-
-
 
    class  PlantUpdate {
         var plantIdx : Int = 0

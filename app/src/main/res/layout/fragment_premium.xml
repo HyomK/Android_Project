@@ -14,6 +14,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginTop="@dimen/premium_margin_Top"
         android:layout_marginHorizontal="@dimen/premium_margin_Horizontal"
         android:text="@string/premium"
@@ -24,6 +25,7 @@
         android:layout_width="115dp"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_rectangle"
+        android:textColor="@color/black"
         android:text="프리미엄 가입"
         style="@style/detailTextStyle"
         android:minHeight="0dp"
@@ -36,6 +38,7 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:text="2000"
         style="@style/detailTextStyle"
         />

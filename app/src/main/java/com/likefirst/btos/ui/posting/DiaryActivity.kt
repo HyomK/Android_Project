@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
+
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
@@ -138,7 +139,7 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
     fun initEmotionRv(){
         val emotionColorIds = ArrayList<Int>()
         val emotionGrayIds = ArrayList<Int>()
-        val emotionNames = resources.getStringArray(R.array.emotionNames)
+        val emotionNames = resources.getStringArray(com.likefirst.btos.R.array.emotionNames)
         for (num in 1..8){
             val emotionColorId = resources.getIdentifier("emotion$num", "drawable", this.packageName)
             emotionColorIds.add(emotionColorId)

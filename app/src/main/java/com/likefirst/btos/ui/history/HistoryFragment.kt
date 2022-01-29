@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.history
 
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentHistoryBinding
@@ -53,13 +54,13 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
                 R.id.history_radiobutton_second-> {
                     requireActivity().supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.history_fragment, DiaryFragment(), "historydiary")
+                        .add(R.id.history_fragment, DiaryFragment(), "historydiary")
                         .commit()
                 }
                 R.id.history_radiobutton_third-> {
                     requireActivity().supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.history_fragment, MailFragment(), "historymail")
+                        .add(R.id.history_fragment, MailFragment(), "historymail")
                         .commit()
                 }
             }
@@ -67,29 +68,60 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
+    fun setDisplay(){
 
-        if(isHidden && isAdded){
-            Log.d("listFragment", requireActivity().supportFragmentManager.fragments.toString())
-            val fragments = arrayOf("historydiary","historymail","senderdetail","history")
-            fragments.forEach { fragment ->
-                requireActivity().supportFragmentManager.commit{
-                    requireActivity().supportFragmentManager
-                        .findFragmentByTag(fragment)?.let { remove(it) }
-                }
+        val spf= requireActivity().getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE)
+        val backPos= spf.getString("backPos","historysender")
+        Log.d("historyTag","backPos -> ${ backPos}")
+        when(backPos){
+            "historysender"->{
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.history_fragment,SenderFragment(), "historysender")
+                    .commit()
+                binding.historyRadiobuttonFirst.isChecked=true
+            }
+            "historydiary" -> {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.history_fragment,DiaryFragment(), "historydiary")
+                    .commit()
+                binding.historyRadiobuttonSecond.isChecked=true
+            }
+            "historymail" -> {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.history_fragment,MailFragment(), "historymail")
+                    .commit()
+                binding.historyRadiobuttonThird.isChecked=true
+            }
+            "historydetail" -> {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.history_fragment,SenderFragment(), "historysender")
+                    .addToBackStack(null)
+                    .add(R.id.history_fragment,SenderDetailFragment(), "historydetail")
+                    .commit()
             }
         }
-
     }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(isAdded){
+            Log.d("historyTagShow","isSWHO")
+            val editor= requireActivity().getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
+            editor.putString("backPos","historysender")
+            editor.commit()
+            setDisplay()
+        }
+    }
+
 
     override fun onStart() {
         super.onStart()
         binding.historyToolbar.historyBackIv.visibility = View.GONE
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.history_fragment,SenderFragment(), "historysender")
-            .commit()
+        setDisplay()
     }
 
 }

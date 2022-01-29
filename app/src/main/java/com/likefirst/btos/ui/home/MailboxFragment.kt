@@ -8,7 +8,7 @@ import com.likefirst.btos.databinding.FragmentMailboxBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.posting.WriteMailFragment
+import com.likefirst.btos.ui.posting.MailWriteActivity
 
 class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate){
 
@@ -33,23 +33,14 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val mActivity = activity as MainActivity
         mActivity.isMailOpen=false
 
-
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Mailbox","resume")
     }
 
 
     fun setMailView(presFragment :Fragment){
-
         val mActivity = activity as MainActivity
         val data = Array(20) { i -> "Number of index: $i"  }
         val adapter = MailRVAdapter(data)
         binding.mailboxRv.adapter= adapter
-
 
 
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
@@ -63,9 +54,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 )
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-
                     .add(R.id.home_main_layout,frgmn,"viewmail")
-
                     .hide(presFragment)
                     .show(frgmn)
                     .addToBackStack(null)
@@ -90,14 +79,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 override fun onButton1Clicked() {}
                 override fun onButton2Clicked() {
                     mActivity.notifyDrawerHandler("lock")
-                    mActivity.supportFragmentManager
-                        .beginTransaction()
-                        .add(R.id.home_main_layout, WriteMailFragment(), "writemail")
-                        .hide(presFragment)
-                        .addToBackStack(null)
-                        .show(MailboxFragment())
-                        .commit()
-
+                    mActivity.startNextActivity(MailWriteActivity::class.java)
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")

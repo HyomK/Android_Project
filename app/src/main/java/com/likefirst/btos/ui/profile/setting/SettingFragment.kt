@@ -7,9 +7,11 @@ import com.likefirst.btos.databinding.FragmentSettingBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.EditDialogFragment
+import com.likefirst.btos.ui.main.MainActivity
 
-class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate) {
-    private var status =false
+class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate), MainActivity.onBackPressedListener  {
+    private var status =true
+
     override fun initAfterBinding() {
 
         binding.settingToolbar.toolbarBackIc.setOnClickListener {
@@ -75,45 +77,64 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
 
         }
         binding.settingSecession.setOnClickListener {
-            val dialog =EditDialogFragment()
-            val btn= arrayOf("취소","탈퇴")
-            dialog.arguments= bundleOf(
-                "bodyContext" to "정말 계정삭제를 원하신다면 현재 닉네임을 입력해주세요\n이후 데이터는 모두 사라집니다",
-                "btnData" to btn
-            )
-            // 버튼 클릭 이벤트 설정
-            dialog.setButtonClickListener(object: EditDialogFragment.OnButtonClickListener {
-                override fun onButton1Clicked(){
-                }
-                override fun onButton2Clicked() {
-
-                }
-                override fun onEditHandler(name:String) {
-                    val dialog = CustomDialogFragment()
-                    val btn= arrayOf("확인")
-                    if(name == "username"){  // username dummy
-                        dialog.arguments= bundleOf(
-                            "bodyContext" to "탈퇴 되었습니다",
-                            "btnData" to btn
-                        )
-                    }else{
-                        dialog.arguments= bundleOf(
-                            "bodyContext" to "닉네임이 일치하지 않습니다",
-                            "btnData" to btn
-                        )
-                    }
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
-                        override fun onButton1Clicked(){
-                        }
-                        override fun onButton2Clicked() {
-                        }
-                    })
-                    dialog.show(requireActivity().supportFragmentManager, "CustomDialog")
-                }
-            })
-            dialog.show(requireActivity().supportFragmentManager, "EditDialog")
+            checkSecession()
         }
     }
+
+    fun checkSecession(){
+        val secessionDialog = CustomDialogFragment()
+        val btn= arrayOf("취소","탈퇴")
+        secessionDialog.arguments= bundleOf(
+            "bodyContext" to "정말 계정을 삭제하시겠습니까?\n삭제한 데이터는 다시 찾을 수 없습니다.",
+            "btnData" to btn
+        )
+        secessionDialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked(){
+            }
+            override fun onButton2Clicked() {
+
+                val dialog =EditDialogFragment()
+                val btn= arrayOf("취소","탈퇴")
+                dialog.arguments= bundleOf(
+                    "bodyContext" to "정말 계정삭제를 원하신다면 현재 닉네임을 입력해주세요\n이후 데이터는 모두 사라집니다",
+                    "btnData" to btn
+                )
+                // 버튼 클릭 이벤트 설정
+                dialog.setButtonClickListener(object: EditDialogFragment.OnButtonClickListener {
+                    override fun onButton1Clicked(){}
+
+                    override fun onButton2Clicked(){}
+
+                    override fun onEditHandler(name:String) {
+                        val dialog = CustomDialogFragment()
+                        val btn= arrayOf("확인")
+                        if(name == "username"){  // username dummy
+                            dialog.arguments= bundleOf(
+                                "bodyContext" to "탈퇴 되었습니다",
+                                "btnData" to btn
+                            )
+                        }else{
+                            dialog.arguments= bundleOf(
+                                "bodyContext" to "닉네임이 일치하지 않습니다",
+                                "btnData" to btn
+                            )
+                        }
+                        dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
+                            override fun onButton1Clicked(){
+                            }
+                            override fun onButton2Clicked() {
+                            }
+                        })
+                        dialog.show(requireActivity().supportFragmentManager, "CustomDialog")
+                    }
+                })
+                dialog.show(requireActivity().supportFragmentManager, "EditDialog")
+            }
+        })
+        secessionDialog.show(requireActivity().supportFragmentManager, "CustomDialog")
+    }
+
+
 
     fun pushToggleSwitcher(status: Boolean):Boolean {
         if (status) {
@@ -127,6 +148,8 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
 
     }
 
+    override fun onBackPressed() {
+        requireActivity().supportFragmentManager.popBackStack()
+    }
 
-
-}
+    }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:clickable="true"
+    android:clickable="false"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -33,6 +33,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="완료"
             android:textSize="@dimen/setting_content_fontSize"
+            android:textColor="@color/black"
             android:layout_marginEnd="25dp"
             android:textStyle="bold"
             />
@@ -66,6 +67,7 @@
         android:background="@drawable/report_edit_bg"
         >
         <EditText
+            android:id="@+id/report_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
@@ -74,6 +76,7 @@
             android:hint="직접 입력하기"
             android:gravity="start"
             android:textSize="14dp"
+            android:maxLength="200"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
