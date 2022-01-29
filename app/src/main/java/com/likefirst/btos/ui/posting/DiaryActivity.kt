@@ -31,8 +31,6 @@ import kotlin.collections.ArrayList
 class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
-        var doneListWatcher = ""
-
         // contents 초기화
         initContents()
 
@@ -44,11 +42,28 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
         // 툴바 동작구현
         setToolbar()
+
+        binding.diaryContentsEt.addTextChangedListener(object :  TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if(null !=  binding.diaryContentsEt.layout && binding.diaryContentsEt.layout.lineCount > 100){
+                    binding.diaryContentsEt.text.delete(binding.diaryContentsEt.selectionStart - 1, binding.diaryContentsEt.selectionStart)
+                }
+            }
+
+        })
     }
 
     fun initContents(){
         binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
     }
+
     fun setToolbar(){
         //툴바 버튼 동작구현
         binding.diaryToolbar.diaryBackIv.setOnClickListener {
@@ -112,19 +127,6 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                     }
                 }
             }
-//            if (keyCode == EditorInfo.IME_ACTION_SEND){
-//                if(doneListAdapter.doneLists.size >= 10){
-//                    showOneBtnDialog("오늘하루 정말 알차게 사셨군요!! 아쉽지만 오늘 한 일은 10개까지만 작성이 가능합니다. 내일 또 봐요!", "doneListFullAlert")
-//                } else {
-//                    if(TextUtils.isEmpty(binding.diaryDoneListEt.text)){
-//                        showOneBtnDialog("오늘 한 일을 입력해 주세요!", "doneListNullAlert")
-//                    } else {
-//                        doneListAdapter.addDoneList(binding.diaryDoneListEt.text.toString())
-//                        binding.diaryDoneListEt.text = null
-//                        binding.diaryDoneListEt.setSelection(0)
-//                    }
-//                }
-//            }
             false
         }
     }
