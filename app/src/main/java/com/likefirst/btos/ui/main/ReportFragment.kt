@@ -5,9 +5,11 @@ package com.likefirst.btos.ui.main
 import android.view.View
 import android.widget.ImageView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentReportBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.home.MailViewFragment
 
 class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding::inflate) {
 

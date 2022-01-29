@@ -24,9 +24,9 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
         val mActivity = activity as MainActivity
         val presFragment= this
         binding.mailViewBodyTv.text=arguments?.getString("body")
-
         val menuItem = resources.getStringArray(R.array.report_items)
         val adapter=ArrayAdapter( requireContext()!! ,R.layout.menu_dropdown_item, menuItem)
+
         binding.reportMenuList?.setAdapter(adapter)
         binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
 
@@ -72,7 +72,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 //신고
                 1 -> {
                     requireActivity().supportFragmentManager.commit {
-                        replace(R.id.home_main_layout, ReportFragment()).setReorderingAllowed(true)
+                        add(R.id.home_main_layout, ReportFragment())
                         addToBackStack("")
                     }
                 }
@@ -121,6 +121,8 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
             onDestroyView()
         }
     }
+
+
 
 
 }
