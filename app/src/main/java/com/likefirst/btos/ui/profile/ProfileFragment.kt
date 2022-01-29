@@ -57,6 +57,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         super.onHiddenChanged(hidden)
         if (isHidden && isAdded) {
             val fragments = arrayOf("premium", "plantrv","plantItem")
+
             cleanUpFragment(fragments)
             if (isSettingOpen) {
                 val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo", "setNotify")

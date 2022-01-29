@@ -35,6 +35,15 @@
         android:background="@drawable/ic_bg_received"
         app:layout_constraintTop_toBottomOf="@id/item_history_sender_title">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            app:layout_constraintTop_toTopOf="@id/item_history_layout"
+            app:layout_constraintStart_toStartOf="@+id/item_history_layout"
+            app:layout_constraintEnd_toEndOf="@id/item_history_layout"
+            app:layout_constraintBottom_toBottomOf="@id/item_history_layout"/>
+
         <TextView
             android:id="@+id/item_history_content"
             android:layout_width="match_parent"
