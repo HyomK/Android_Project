@@ -14,7 +14,7 @@ class SetBirthFragment:BaseFragment<FragmentBirthBinding>(FragmentBirthBinding::
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.onboarding_dropdown_item,agelist)
         binding.birthList.setAdapter(arrayAdapter)
         binding.birthList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
-        binding.birthList.dropDownHeight=450
+        binding.birthList.dropDownHeight=300
 
         var item=0
 

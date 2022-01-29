@@ -28,7 +28,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
         adapter.setMyItemCLickLister(object:PlantRVAdapter.PlantItemClickListener{
             override fun onClickShopItem(){
-                Log.d("RV SELECT","clicked")
                 requireActivity().supportFragmentManager
                     .beginTransaction()
                     .add(R.id.fr_layout,PlantItemFragment(),"plantItem")

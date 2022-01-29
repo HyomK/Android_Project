@@ -12,12 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTOS">
         <activity
-            android:name=".ui.main.MainActivity"
-            android:exported="true" >
 
+            android:name=".ui.splash.LoginActivity"
+            android:exported="true" >
         </activity>
         <activity
-            android:name=".ui.splash.LoginActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

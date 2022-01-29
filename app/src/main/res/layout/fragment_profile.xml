@@ -104,7 +104,7 @@
         android:paddingBottom="@dimen/profile_settingList_paddingVertical"
         />
     <TextView
-        android:id="@+id/profile_request_tv"
+        android:id="@+id/profile_suggest_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/settingListStyle"
