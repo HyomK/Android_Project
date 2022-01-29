@@ -1,10 +1,5 @@
 package com.likefirst.btos.ui.home
 
-import android.app.Activity
-import android.content.Intent
-import android.util.Log
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
@@ -17,6 +12,7 @@ import com.likefirst.btos.ui.main.ReportFragment
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
+
 
 class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBinding::inflate) {
 
@@ -109,7 +105,6 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                     dialog.show(mActivity.supportFragmentManager, "CustomDialog")
                 }
 
-
             }
 
         }
@@ -121,9 +116,6 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
             onDestroyView()
         }
     }
-
-
-
 
 }
 

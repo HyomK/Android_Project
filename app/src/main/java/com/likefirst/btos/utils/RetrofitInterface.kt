@@ -5,7 +5,6 @@ import com.likefirst.btos.data.remote.response.LoginResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface RetrofitInterface {
@@ -14,8 +13,8 @@ interface RetrofitInterface {
     fun login(@Body email: String) : Call<LoginResponse>
 
     @GET("/auth/jwt")
-    fun autoLogin(@Header("x-access-token") jwt: String) : Call<LoginResponse>
-
+    fun autoLogin() : Call<LoginResponse>
+    //@Header("x-access-token") jwt: String
     @POST("/users")
     fun signUp(@Body user: User) : Call<LoginResponse>
 }

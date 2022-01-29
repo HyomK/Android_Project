@@ -25,6 +25,7 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
+        var doneListWatcher = ""
 
         // 이모션 리사이클러뷰 생성
         initEmotionRv()
@@ -43,10 +44,11 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                Log.d("selection", binding.diaryDoneListEt.selectionStart.toString())
-                Log.d("length", binding.diaryDoneListEt.text.length.toString())
                 if (null !=  binding.diaryDoneListEt.layout && binding.diaryDoneListEt.layout.lineCount > 2) {
-                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
+                    binding.diaryDoneListEt.setText(doneListWatcher)
+                    binding.diaryDoneListEt.setSelection(doneListWatcher.length)
+                } else {
+                    doneListWatcher = p0.toString()
                 }
             }
         })

@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 
-class ArchiveCalendarVPAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
+class ArchiveCalendarVPAdapter(fragment: Fragment, val viewMode : Int): FragmentStateAdapter(fragment) {
 
     val centerPosition = Int.MAX_VALUE/2
 
@@ -19,6 +19,6 @@ class ArchiveCalendarVPAdapter(fragment: Fragment): FragmentStateAdapter(fragmen
     override fun createFragment(position: Int): Fragment {
         val pageIndex = position - centerPosition
 
-        return ArchiveCalendarItemFragment(pageIndex)
+        return ArchiveCalendarItemFragment(pageIndex,viewMode)
     }
 }

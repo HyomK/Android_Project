@@ -13,13 +13,6 @@ import java.util.*
 class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArchiveListBinding::inflate){
 
     override fun initAfterBinding() {
-        // String -> Date
-        val from = "2018-09-06 11:11:11"
-        val fm = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
-        val to: Date = fm.parse(from)!!
-
-        Log.d("to", to.toString())
-
         binding.archiveListToolbar.archiveListPeriodIv.setOnClickListener {
             val periodDialog = ArchiveListPeriodDialog()
             periodDialog.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.ArchiveDatePickerStyle)

@@ -8,7 +8,6 @@ import com.likefirst.btos.databinding.FragmentMailboxBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 
 class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate){

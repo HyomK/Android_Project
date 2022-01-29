@@ -73,6 +73,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             when (it.itemId) {
                 R.id.homeFragment -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fr_layout, homeFragment)
+//                        .setReorderingAllowed(true)
+//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=true
                     if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
@@ -94,11 +98,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             .commitAllowingStateLoss()
                         Log.d("homeClick", "noadded")
                     }
-
                     return true
                 }
 
                 R.id.historyFragment ->{
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fr_layout, historyFragment)
+//                        .setReorderingAllowed(true)
+//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=false
                     if(historyFragment.isAdded){
                         supportFragmentManager.beginTransaction()
@@ -124,6 +131,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 }
 
                 R.id.archiveFragment -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fr_layout, archiveFragment)
+//                        .setReorderingAllowed(true)
+//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=false
                     if (archiveFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
@@ -148,6 +159,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return true
                 }
                 R.id.profileFragment -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fr_layout, profileFragment)
+//                        .setReorderingAllowed(true)
+//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=false
                     if (profileFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
@@ -176,9 +191,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
-
     fun mailOpenStatus():Boolean{
         return isMailOpen
+
     }
 
 
@@ -206,7 +221,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onBackPressed() {
         if(homeFragment.isVisible){
-            super.onBackPressed()
+            finish()
         } else {
 
             val fragmentList = supportFragmentManager.fragments
