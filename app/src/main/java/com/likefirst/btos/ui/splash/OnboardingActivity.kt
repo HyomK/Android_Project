@@ -8,13 +8,18 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
 import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.view.GetProfileView
 import com.likefirst.btos.data.remote.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 
-class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate), SignUpView{
+class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate), SignUpView, GetProfileView{
+
+    val authService = AuthService()
 
     override fun initAfterBinding() {
 
@@ -40,9 +45,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             val birth = binding.onboardingAgelist.text.toString().toInt()
             Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
 
-            val authService = AuthService()
             authService.setSignUpView(this)
-            authService.signUp(User(email,nickname,birth))
+            authService.signUp(UserSign(email,nickname,birth))
         }
     }
 
@@ -53,7 +57,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
 
-        Log.e("SIGNUP/userIdx", login.userIdx.toString())
+        //프로필 정보 가져와서 userdb에 저장
+        authService.setGetProfileView(this)
+        authService.getProfile(login.userIdx)
+
         Toast.makeText(this,"회원가입에 성공하였습니다.\n로그인화면으로 돌아갑니다.", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, LoginActivity::class.java)
         finish()
@@ -68,5 +75,19 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 Log.e("SIGNUP/FAIL", message)
             }
         }
+    }
+
+    override fun onGetProfileViewLoading() {
+    }
+
+    override fun onGetProfileViewSuccess(user: User) {
+        //UserDB에 프로필 정보 저장
+        val userDB = UserDatabase.getInstance(this)?.userDao()
+        userDB?.insert(user)
+        Log.e("PROFILE/API",userDB?.getUser().toString())
+    }
+
+    override fun onGetProfileViewFailure(code: Int, message: String) {
+
     }
 }
