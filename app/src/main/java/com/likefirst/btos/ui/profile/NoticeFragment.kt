@@ -1,6 +1,5 @@
 package com.likefirst.btos.ui.profile
 
-import android.util.Log
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentNoticeBinding
 import com.likefirst.btos.ui.BaseFragment
