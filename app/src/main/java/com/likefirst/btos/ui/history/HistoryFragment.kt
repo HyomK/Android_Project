@@ -3,7 +3,6 @@ package com.likefirst.btos.ui.history
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentHistoryBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -52,15 +51,19 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
                         .commit()
                 }
                 R.id.history_radiobutton_second-> {
+                    binding.historyToolbar.historyBackIv.visibility = View.GONE
+                    binding.historyToolbar.historySearchIv.visibility = View.VISIBLE
                     requireActivity().supportFragmentManager
                         .beginTransaction()
-                        .add(R.id.history_fragment, DiaryFragment(), "historydiary")
+                        .replace(R.id.history_fragment, DiaryFragment(), "historydiary")
                         .commit()
                 }
                 R.id.history_radiobutton_third-> {
+                    binding.historyToolbar.historyBackIv.visibility = View.GONE
+                    binding.historyToolbar.historySearchIv.visibility = View.VISIBLE
                     requireActivity().supportFragmentManager
                         .beginTransaction()
-                        .add(R.id.history_fragment, MailFragment(), "historymail")
+                        .replace(R.id.history_fragment, MailFragment(), "historymail")
                         .commit()
                 }
             }
@@ -72,7 +75,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
         val spf= requireActivity().getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE)
         val backPos= spf.getString("backPos","historysender")
-        Log.d("historyTag","backPos -> ${ backPos}")
+        Log.e("historyTag","backPos -> ${ backPos}")
         when(backPos){
             "historysender"->{
                 requireActivity().supportFragmentManager
@@ -84,14 +87,14 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
             "historydiary" -> {
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.history_fragment,DiaryFragment(), "historydiary")
+                    .replace(R.id.history_fragment,DiaryFragment(), "historydiary")
                     .commit()
                 binding.historyRadiobuttonSecond.isChecked=true
             }
             "historymail" -> {
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.history_fragment,MailFragment(), "historymail")
+                    .replace(R.id.history_fragment,MailFragment(), "historymail")
                     .commit()
                 binding.historyRadiobuttonThird.isChecked=true
             }
@@ -100,27 +103,26 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
                     .beginTransaction()
                     .add(R.id.history_fragment,SenderFragment(), "historysender")
                     .addToBackStack(null)
-                    .add(R.id.history_fragment,SenderDetailFragment(), "historydetail")
+                    .replace(R.id.history_fragment,SenderDetailFragment(), "historydetail")
                     .commit()
             }
         }
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if(isAdded){
-            Log.d("historyTagShow","isSWHO")
-            val editor= requireActivity().getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
-            editor.putString("backPos","historysender")
-            editor.commit()
-            setDisplay()
-        }
-    }
+//    override fun onHiddenChanged(hidden: Boolean) {
+//        super.onHiddenChanged(hidden)
+//        if(isAdded){
+//            Log.e("historyTagShow","isSWHO")
+//            val editor= requireActivity().getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
+//            editor.putString("backPos","historysender")
+//            editor.commit()
+//            setDisplay()
+//        }
+//    }
 
 
     override fun onStart() {
         super.onStart()
-        binding.historyToolbar.historyBackIv.visibility = View.GONE
         setDisplay()
     }
 

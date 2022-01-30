@@ -1,5 +1,8 @@
 package com.likefirst.btos.ui.history
 
+import android.view.View
+import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.History
@@ -14,7 +17,6 @@ class SenderFragment: BaseFragment<FragmentHistorySenderBinding>(FragmentHistory
 
     override fun initAfterBinding() {
         val mActivity = activity as MainActivity
-
         val recyclerViewAdapter = SenderRecyclerViewAdapter(context, items)
         binding.fragmentSenderRv.adapter = recyclerViewAdapter
         binding.fragmentSenderRv.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
@@ -22,10 +24,19 @@ class SenderFragment: BaseFragment<FragmentHistorySenderBinding>(FragmentHistory
         recyclerViewAdapter.setMyItemClickListener(object : SenderRecyclerViewAdapter.MyItemClickListener{
             override fun MoveToSenderDetail(historyIdx: Int) {
                 mActivity.supportFragmentManager.beginTransaction()
-                    .add(R.id.history_fragment,  SenderDetailFragment(), "senderdetail")
+                    .replace(R.id.history_fragment,  SenderDetailFragment(), "senderdetail")
                     .addToBackStack(null)
                     .commit()
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.history_toolbar)
+        val back = toolbar.findViewById<ImageView>(R.id.history_back_iv)
+        val search = toolbar.findViewById<ImageView>(R.id.history_search_iv)
+        back.visibility = View.GONE
+        search.visibility = View.VISIBLE
     }
 }

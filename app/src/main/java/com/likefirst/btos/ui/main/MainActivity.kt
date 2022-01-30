@@ -3,24 +3,21 @@ package com.likefirst.btos.ui.main
 
 import android.util.Log
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.android.material.navigation.NavigationBarView
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
-
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
-
 import com.likefirst.btos.ui.profile.plant.PlantFragment
-import com.likefirst.btos.ui.main.MainActivity.onBackPressedListener
 
 
 
@@ -107,6 +104,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 //                        .setReorderingAllowed(true)
 //                        .commitNowAllowingStateLoss()
                     isDrawerOpen=false
+                    val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
+                    editor.clear()
+                    editor.commit()
                     if(historyFragment.isAdded){
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
