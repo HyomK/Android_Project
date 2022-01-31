@@ -42,6 +42,7 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
                     //                   2. calendar > GregorianCalendar.getInstance() : 1
                     //                   3. calendar < GregorianCalendar.getInstance() : -1)
                     if(calendar.compareTo(GregorianCalendar.getInstance()) == 1){
+                        // TODO: Toast는 커스텀이 deprecated 되었기 때문에 SnackBar를 이용해서 커스텀 진행
                         Toast.makeText(requireContext(), "미래의 일기는 작성할 수 없어요!!!", Toast.LENGTH_SHORT).show()
                     } else {
                         val dateString = dateToString(calendar.time)
