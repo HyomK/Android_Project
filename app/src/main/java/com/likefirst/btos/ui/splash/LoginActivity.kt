@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
@@ -27,6 +26,7 @@ import com.likefirst.btos.data.remote.view.LoginView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
@@ -45,7 +45,6 @@ class LoginActivity
         // animation_logo_FadeOut
         Handler(Looper.getMainLooper()).postDelayed({
             binding.loginLogoIv.visibility = View.VISIBLE
-            binding.loginLogoIv.startAnimation(animFadeOut)
 
             //자동로그인
             authService.setAutoLoginView(this)
@@ -53,6 +52,7 @@ class LoginActivity
             if(getJwt()!=null)
                 authService.autologin()
             else{
+                binding.loginLogoIv.startAnimation(animFadeOut)
                 // animation_loginText_FadeIn
                 binding.loginWelcomeTv.visibility = View.VISIBLE
                 binding.loginWelcomeTv.startAnimation(animFadeIn)
@@ -62,10 +62,8 @@ class LoginActivity
 
         },3000)
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-
+        val gso = getGSO()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
         binding.loginGoogleLoginTv.setOnClickListener{
             var signInIntent : Intent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, G_SIGN_IN)
@@ -157,7 +155,7 @@ class LoginActivity
     override fun onGetProfileViewSuccess(user: User) {
         //UserDB에 프로필 정보 저장
         val userDB = UserDatabase.getInstance(this)?.userDao()
-        userDB?.insert(user)
+        userDB?.updateUsers(user)
         Log.e("PROFILE/API",userDB?.getUser().toString())
     }
 
