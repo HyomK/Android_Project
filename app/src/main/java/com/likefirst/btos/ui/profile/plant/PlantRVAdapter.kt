@@ -52,7 +52,7 @@ class PlantRVAdapter(private val dataSet: ArrayList<Plant>) : RecyclerView.Adapt
         holder.plantName.text= item.plantName
        holder.plantImage.setImageResource(R.drawable.alocasia_3)
 
-       if(item.userStatus==""){ //미보유 아이템
+       if(item.plantStatus==""){ //미보유 아이템
            holder.layout.setBackgroundResource(R.drawable.profile_shop_bg)
            holder.plantLevel.text=item.maxLevel.toString()+"단계"
            holder.status.visibility=View.GONE
@@ -65,7 +65,7 @@ class PlantRVAdapter(private val dataSet: ArrayList<Plant>) : RecyclerView.Adapt
            holder.maxIv.setBackgroundResource(R.drawable.ic_max_bg)
            holder.maxIv.visibility= if(item.currentLevel == item.maxLevel) View.VISIBLE else View.GONE
 
-           if(item.userStatus=="selected"){
+           if(item.plantStatus=="selected"){
                holder.status.visibility==View.VISIBLE
                holder.selectBtn.visibility=View.GONE
 

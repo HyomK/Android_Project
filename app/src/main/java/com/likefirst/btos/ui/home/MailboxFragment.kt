@@ -100,11 +100,18 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val id=spf.getInt("Idx",-1)
         val senderName=spf.getString("senderName","")
         val sendAt=spf.getString("sendAt","")
+
         Log.d("Letter/API-DIARY",id.toString())
         if(id!=-1){
-            val bundle=bundleOf("context" to diary, "date" to sendAt, "sender" to senderName)
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .addToBackStack("mailbox")
+                .commit()
+
+            val bundle=bundleOf("date" to sendAt, "sender" to senderName)
             val  intent: Intent = Intent(requireContext()!!,DiaryViewerActivity::class.java)
             intent.putExtras(bundle)
+            intent.putExtra("diary",diary)
             requireActivity().startActivity(intent)
         }
     }

@@ -42,5 +42,24 @@ interface RetrofitInterface {
         @Query("idx")idx: String
     ): Call<ReplyResponse>
 
+    // -------------------PlantList-------------------------- //
+
+    @GET("/plant/{userId}/list")
+    fun loadPlantList(
+        @Path("userId") id: String
+    ): Call<PlantResponse>
+
+    @PATCH("/plant/{userId}/select")
+    fun selectPlant(
+        @Query("userId") userId: String,
+        @Query("PlantId") PlantId:String
+    ): Call<PlantResponse>
+
+    @POST("/plant/{userId}/buy")
+    fun buyPlant(
+        @Query("userId") userId: String,
+        @Query("PlantId") PlantId:String
+    ): Call<PlantResponse>
+
 
 }

@@ -10,13 +10,14 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "PlantTable")
 data class Plant(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "plantIdx")
-    var plantIdx: Int= 0,
-    @ColumnInfo(name = "plantName") var plantName: String?="",
-    @ColumnInfo(name = "plantImgUrl") var plantImgUrl: String? = "",
+    @ColumnInfo(name = "plantIdx") var plantIdx: Int= 0,
+    @ColumnInfo(name = "plantName") var plantName: String,
+    @ColumnInfo(name = "plantImgUrl") var plantImgUrl: String,
+    @ColumnInfo(name = "plantInfo") var plantInfo: String,
     @ColumnInfo(name = "plantPrice") var plantPrice: Int= 0,
     @ColumnInfo(name = "maxLevel") var maxLevel: Int= 0,
     @ColumnInfo(name = "currentLevel") var currentLevel: Int= 0,
-    @ColumnInfo(name = "userStatus") var userStatus:String? = ""
+    @ColumnInfo(name = "plantStatus") var plantStatus:String,
+    @ColumnInfo(name = "isOwn") var isOwn:Boolean,
 
 ): Parcelable

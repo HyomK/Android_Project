@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.likefirst.btos.data.remote.response.DoneList
 import com.likefirst.btos.databinding.ItemDiaryDoneListRvBinding
 
-class DiaryViewerDoneListRVAdapter : RecyclerView.Adapter<DiaryViewerDoneListRVAdapter.ViewHolder>() {
+class DiaryViewerDoneListRVAdapter(val doneListData : ArrayList<DoneList>) : RecyclerView.Adapter<DiaryViewerDoneListRVAdapter.ViewHolder>() {
     inner class ViewHolder(val binding : ItemDiaryDoneListRvBinding) : RecyclerView.ViewHolder(binding.root) {
         fun initItem(){
             binding.itemDiaryDoneListDeleteIv.visibility = View.GONE
-            binding.itemDiaryDoneListTv.text = "아랄ㄹ라라라라랄ㄹㄹ라라"
+            // binding.itemDiaryDoneListTv.text = "아랄ㄹ라라라라랄ㄹㄹ라라"
         }
     }
 
@@ -21,9 +22,10 @@ class DiaryViewerDoneListRVAdapter : RecyclerView.Adapter<DiaryViewerDoneListRVA
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.initItem()
+        holder.binding.itemDiaryDoneListTv.text=doneListData[position].content
     }
 
     override fun getItemCount(): Int {
-        return 8
+        return doneListData.size
     }
 }

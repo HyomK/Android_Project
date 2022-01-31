@@ -104,14 +104,14 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
         val plantDB = PlantDatabase.getInstance(requireContext()!!)
         val shopList = ArrayList<Plant>()
-        shopItemIdx.forEach { it ->
-            run {
-                val item = plantDB?.plantDao()?.getPlant(it)!!
-                val plant =
-                    Plant(item.plantIdx, item.plantName, "", item.plantPrice, item.maxLevel, 0, "")
-                shopList.add(plant)
-            }
-        }
+//        shopItemIdx.forEach { it ->
+//            run {
+//                val item = plantDB?.plantDao()?.getPlant(it)!!
+//                val plant =
+//                    Plant(item.plantIdx, item.plantName, "", item.plantPrice, item.maxLevel, 0, "")
+//                shopList.add(plant)
+//            }
+//        }
 
         return shopList
 

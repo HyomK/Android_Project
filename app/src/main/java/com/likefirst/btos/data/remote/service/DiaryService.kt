@@ -34,8 +34,8 @@ class DiaryService {
             }
 
             override fun onFailure(call: Call<DiaryResponse>, t: Throwable) {
-               diaryView.onDiaryFailure(4000,"데이터베이스 연결에 실패하였습니다.")
-                diaryView.onDiaryFailure(6006,"일기 복호화에 실패하였습니다.")
+                diaryView.onDiaryFailure(4000,"데이터베이스 연결에 실패하였습니다.")
+                diaryView.onDiaryFailure(6005,"일기 복호화에 실패하였습니다.")
             }
 
         })
