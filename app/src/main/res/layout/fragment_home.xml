@@ -91,7 +91,7 @@
                 android:id="@+id/lottie_animation"
                 android:layout_width="00dp"
                 android:layout_height="wrap_content"
-                app:lottie_rawRes="@raw/alocasia_3"
+                app:lottie_fileName="alocasia_splash.json"
                 app:lottie_loop="true"
                 app:lottie_autoPlay="true"
                 app:layout_constraintBottom_toBottomOf="parent"

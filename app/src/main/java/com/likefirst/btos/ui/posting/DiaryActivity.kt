@@ -102,13 +102,15 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                     }
                     override fun onButton2Clicked() {
                         goToDiaryViewer()
+                        saveLastPostingDate(Date())
+
                     }
                 })
                 dialog.show(this.supportFragmentManager, "PublicAlertDialog")
             } else {
                 goToDiaryViewer()
+                saveLastPostingDate(Date())
             }
-            saveLastPostingDate(Date())
         }
     }
 

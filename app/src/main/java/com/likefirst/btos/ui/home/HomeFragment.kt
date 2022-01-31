@@ -16,20 +16,20 @@ import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.plant.PlantItemFragment
 import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.getLastPostingDate
 import java.time.LocalTime
 import java.util.*
+import kotlin.time.Duration.Companion.milliseconds
 
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
    var isMailboxOpen =false
 
     override fun initAfterBinding() {
-        val animationView: LottieAnimationView = binding.lottieAnimation
-        animationView.loop(true)
-        animationView.playAnimation()
 
         val mActivity = activity as MainActivity
 
+        initFlowerPot()
       
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
@@ -77,6 +77,24 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             binding.homeNotificationBtn.isClickable =true
 
         }
+    }
+
+    fun initFlowerPot(){
+        val animationView: LottieAnimationView = binding.lottieAnimation
+        val lastPostingDate = getLastPostingDate()
+        Log.d("lastPostingDate", lastPostingDate.toString())
+        val mCalendar = GregorianCalendar.getInstance()
+        val currentMillis = mCalendar.timeInMillis
+        val lastMillis = mCalendar.timeInMillis
+        val diffPostingDate = (currentMillis - lastMillis) / 1000 / (24*60*60)
+        if (diffPostingDate >= 5){
+            animationView.setAnimation("alocasia_sad_3.json")
+        } else {
+            animationView.setAnimation("alocasia_3.json")
+        }
+        animationView.loop(true)
+        animationView.playAnimation()
+        // TODO: 서버 반영해서 유저가 선택한 화분에 따라서 표시되게 변경, 현재는 더미데이터일 뿐임
     }
 
 
