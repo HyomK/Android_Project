@@ -2,9 +2,11 @@ package com.likefirst.btos.data.remote.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
-import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.remote.response.GetProfileResponse
 import com.likefirst.btos.data.remote.response.LoginResponse
 import com.likefirst.btos.data.remote.view.AutoLoginView
+import com.likefirst.btos.data.remote.view.GetProfileView
 import com.likefirst.btos.data.remote.view.LoginView
 import com.likefirst.btos.data.remote.view.SignUpView
 import com.likefirst.btos.utils.RetrofitInterface
@@ -17,6 +19,7 @@ class AuthService {
     private lateinit var loginView : LoginView
     private lateinit var autologinView : AutoLoginView
     private lateinit var signupView: SignUpView
+    private lateinit var getprofileView: GetProfileView
 
     private val AuthService = retrofit.create(RetrofitInterface::class.java)
 
@@ -30,6 +33,10 @@ class AuthService {
 
     fun setSignUpView(signupView : SignUpView){
         this.signupView = signupView
+    }
+
+    fun setGetProfileView(getprofileView: GetProfileView){
+        this.getprofileView = getprofileView
     }
 
     fun login(email : String){
@@ -69,7 +76,7 @@ class AuthService {
                 Log.e("AUTOLOGIN/API",autoLoginResponse.toString())
 
                 when(autoLoginResponse.code){
-                    1000 -> autologinView.onAutoLoginSuccess()
+                    1000 -> autologinView.onAutoLoginSuccess(autoLoginResponse.result)
                     else -> autologinView.onAutoLoginFailure(autoLoginResponse.code,autoLoginResponse.message)
                 }
             }
@@ -80,7 +87,7 @@ class AuthService {
         })
     }
 
-    fun signUp(user: User){
+    fun signUp(user: UserSign){
         signupView.onSignUpLoading()
 
         AuthService.signUp(user).enqueue(object : Callback<LoginResponse>{
@@ -97,6 +104,26 @@ class AuthService {
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 signupView.onSignUpFailure(400,"네트워크 오류가 발생했습니다.")
+            }
+
+        })
+    }
+
+    fun getProfile(useridx: Int){
+        getprofileView.onGetProfileViewLoading()
+
+        AuthService.getProfile(useridx).enqueue(object : Callback<GetProfileResponse>{
+            override fun onResponse(call: Call<GetProfileResponse>, response: Response<GetProfileResponse>) {
+                val getProfileResponse : GetProfileResponse = response.body()!!
+
+                when(getProfileResponse.code){
+                    1000 -> getprofileView.onGetProfileViewSuccess(getProfileResponse.result)
+                    else -> getprofileView.onGetProfileViewFailure(getProfileResponse.code,getProfileResponse.message)
+                }
+            }
+
+            override fun onFailure(call: Call<GetProfileResponse>, t: Throwable) {
+                getprofileView.onGetProfileViewFailure(400, "네트워크 오류가 발생했습니다.")
             }
 
         })

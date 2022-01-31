@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.commit
 import com.airbnb.lottie.LottieAnimationView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.local.UserDatabase
 
 import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment

@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.history
 
 import android.content.Intent
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioGroup
 import androidx.appcompat.widget.Toolbar
@@ -15,13 +16,14 @@ import com.likefirst.btos.ui.main.MainActivity
 
 class SenderDetailFragment: BaseFragment<FragmentHistorySenderDetailBinding>(FragmentHistorySenderDetailBinding::inflate),MainActivity.onBackPressedListener {
 
-    val items = List(100, { i -> History(i, "부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자. " +
+    val items = List(20, { i -> History(i, "부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자. " +
                 "부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.", "2021.12.12", "처음이", 1, 3) })
 
     lateinit var radiogroup : RadioGroup
     lateinit var toolbar: Toolbar
     lateinit var back : ImageView
     lateinit var search : ImageView
+    lateinit var edittext : EditText
 
     override fun initAfterBinding() {
 
@@ -32,6 +34,9 @@ class SenderDetailFragment: BaseFragment<FragmentHistorySenderDetailBinding>(Fra
 
         search = toolbar.findViewById<ImageView>(R.id.history_search_iv)
         search.visibility = View.GONE
+
+        edittext = toolbar.findViewById<EditText>(R.id.history_search_et)
+        edittext.visibility = View.GONE
 
         val mActivity = activity as MainActivity
 

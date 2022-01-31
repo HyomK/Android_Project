@@ -10,7 +10,20 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "UserTable")
 data class User (
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "email") var email: String= "",
+    @ColumnInfo(name = "userIdx") var userIdx: Int? = 1,
+    @ColumnInfo(name = "email") var email: String="",
     @ColumnInfo(name = "nickName") var nickName: String="",
-    @ColumnInfo(name = "birth") var birth: Int = 0
+    @ColumnInfo(name = "birth") var birth: Int = 0,
+    @ColumnInfo(name = "selectedPlantIdx") var selectedPlantIdx: Int? = 1,
+    @ColumnInfo(name = "isPremium") var premium: String? = "free",
+    @ColumnInfo(name = "recOthers") var recOthers: Boolean? = true,
+    @ColumnInfo(name = "recSimilarAge") var recSimilarAge: Boolean? = true,
+    @ColumnInfo(name = "fontIdx") var fontIdx: Int? = 1,
+    @ColumnInfo(name = "pushAlarm") var pushAlarm: Boolean? = true
 ): Parcelable
+
+data class UserSign(
+    @ColumnInfo(name = "email") var email: String="",
+    @ColumnInfo(name = "nickName") var nickName: String="",
+    @ColumnInfo(name = "birth") var birth: Int = 0,
+)

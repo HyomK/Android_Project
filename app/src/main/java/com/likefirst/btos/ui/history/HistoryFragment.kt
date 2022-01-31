@@ -27,10 +27,10 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
             else{
 
                 // 검색 화면에서 뒤로가기를 누른 경우 (Edittext와 뒤로가기 버튼이 없어지며 HistoryFragment로 돌아온다.)
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.history_fragment,SenderFragment(), "historysender")
-                    .commit()
+//                requireActivity().supportFragmentManager
+//                    .beginTransaction()
+//                    .replace(R.id.history_fragment,SenderFragment(), "historysender")
+//                    .commit()
                 binding.historyToolbar.historyBackIv.visibility = View.GONE
                 binding.historyToolbar.historySearchEt.visibility = View.GONE
             }
@@ -51,16 +51,16 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
                         .commit()
                 }
                 R.id.history_radiobutton_second-> {
-                    binding.historyToolbar.historyBackIv.visibility = View.GONE
-                    binding.historyToolbar.historySearchIv.visibility = View.VISIBLE
+//                    binding.historyToolbar.historyBackIv.visibility = View.GONE
+//                    binding.historyToolbar.historySearchIv.visibility = View.VISIBLE
                     requireActivity().supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.history_fragment, DiaryFragment(), "historydiary")
                         .commit()
                 }
                 R.id.history_radiobutton_third-> {
-                    binding.historyToolbar.historyBackIv.visibility = View.GONE
-                    binding.historyToolbar.historySearchIv.visibility = View.VISIBLE
+//                    binding.historyToolbar.historyBackIv.visibility = View.GONE
+//                    binding.historyToolbar.historySearchIv.visibility = View.VISIBLE
                     requireActivity().supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.history_fragment, MailFragment(), "historymail")

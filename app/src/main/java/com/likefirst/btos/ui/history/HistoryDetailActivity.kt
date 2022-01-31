@@ -15,7 +15,13 @@ class HistoryDetailActivity : BaseActivity<ActivityHistoryDetailBinding>(
     override fun initAfterBinding() {
 
         binding.historyDetailToolbar.apply {
-            historyDetailBackIv.setOnClickListener { finish() }
+            historyDetailBackIv.setOnClickListener {
+                finish()
+                val pos = intent.extras?.getString("backPos")
+                val editor= getSharedPreferences("HistoryBackPos", MODE_PRIVATE).edit()
+                editor.putString("backPos",pos)
+                editor.commit()
+            }
             historySendIv.setOnClickListener {
 
             }

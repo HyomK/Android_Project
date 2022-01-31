@@ -1,8 +1,5 @@
 package com.likefirst.btos.ui.history
 
-import android.view.View
-import android.widget.ImageView
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.History
@@ -31,12 +28,4 @@ class SenderFragment: BaseFragment<FragmentHistorySenderBinding>(FragmentHistory
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-        val toolbar = requireActivity().findViewById<Toolbar>(R.id.history_toolbar)
-        val back = toolbar.findViewById<ImageView>(R.id.history_back_iv)
-        val search = toolbar.findViewById<ImageView>(R.id.history_search_iv)
-        back.visibility = View.GONE
-        search.visibility = View.VISIBLE
-    }
 }
