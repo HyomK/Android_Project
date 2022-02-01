@@ -25,4 +25,13 @@
         <item>NOVEMBER</item>
         <item>DECEMBER</item>
     </string-array>
+
+    <string-array name="plant">
+        <item>알로카시아</item>
+        <item>산세베리아</item>
+        <item>금낭화</item>
+        <item>선인장</item>
+        <item>안스리움</item>
+        <item>비모란</item>
+    </string-array>
 </resources>

@@ -8,6 +8,7 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View.GONE
 
 
 class PlantItemFragment:BaseFragment<FragmentPlantinfoBinding>(FragmentPlantinfoBinding::inflate) {
@@ -17,10 +18,16 @@ class PlantItemFragment:BaseFragment<FragmentPlantinfoBinding>(FragmentPlantinfo
         val mActivity= activity as MainActivity
         val bundle = this.arguments
         if (bundle != null) {
-           var plant = bundle.getParcelable<Plant>("plantItem")
-            binding.plantinfoNameTv.text=plant?.plantName
-            binding.plantinfoDetailTv.text=plant?.plantInfo
-            binding.plantinfoSelectBtn.text=plant?.plantPrice.toString()
+           var plant = bundle.getParcelable<Plant>("plantItem")!!
+            binding.plantinfoNameTv.text=plant.plantName
+            binding.plantinfoDetailTv.text=plant.plantInfo
+            if(!plant.isOwn){
+                binding.plantinfoSelectBtn.text=plant.plantPrice.toString()
+            }else{
+                binding.plantinfoSelectBtn.visibility=GONE;
+            }
+
+
         }
         binding.plantinfoRtLayout.isClickable=true
 

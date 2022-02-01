@@ -24,8 +24,11 @@ interface PlantDao {
     @Query("UPDATE PlantTable SET plantStatus= :status WHERE plantIdx = :id")
     fun setPlantStatus(id: Int, status : String)
 
+
     @Query("SELECT * FROM PlantTable where plantStatus = :status")
     fun getSelectedPlant(status:String):Plant?
 
+    @Query("UPDATE PlantTable SET isOwn = :isOwn WHERE plantIdx = :plantIdx")
+    fun setPlantIsOwn(isOwn:Boolean, plantIdx:Int)
 
 }

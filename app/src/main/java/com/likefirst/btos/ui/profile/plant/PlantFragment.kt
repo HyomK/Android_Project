@@ -22,18 +22,13 @@ import kotlin.collections.ArrayList
 
 class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  , PlantSelectView, PlantBuyView{
 
-    interface SelectListener {
-        fun isSuccessToSelect(isSuccess : Boolean)
-    }
-
     val USERIDX=2
-    private val plantBuyView:PlantBuyView =this
+
     override fun initAfterBinding() {
         val mActivity= activity as MainActivity
         val adapter = PlantRVAdapter(loadData())
         val plantSelectView :PlantSelectView =this
-
-        val plantService = PlantService()
+        val plantBuyView:PlantBuyView =this
 
         binding.flowerpotRv.adapter=adapter
 
@@ -80,8 +75,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
 
-
-
     override fun onBackPressed() {
         requireActivity().supportFragmentManager.popBackStack()
     }
@@ -94,6 +87,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         Log.d("Plantbuy/API","succes")
         val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
         plantDB.plantDao().setPlantStatus(plantIdx,"active")
+        plantDB.plantDao().setPlantIsOwn(true,plantIdx)
 
     }
 

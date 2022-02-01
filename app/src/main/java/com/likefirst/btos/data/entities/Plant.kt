@@ -17,19 +17,16 @@ data class Plant(
     @SerializedName("plantIdx") val plantIdx: Int,
 
     @ColumnInfo(name = "plantName")
-    @SerializedName( "plantName") var plantName: String,
-
-    @ColumnInfo(name = "plantImgUrl")
-    @SerializedName( "plantImgUrl") var plantImgUrl: String?="",
+    @SerializedName( "plantName") val plantName: String,
 
     @ColumnInfo(name = "plantInfo")
-    @SerializedName( "plantInfo") var plantInfo: String,
+    @SerializedName( "plantInfo") val plantInfo: String,
 
     @ColumnInfo(name = "plantPrice")
-    @SerializedName( "plantPrice") var plantPrice: Int,
+    @SerializedName( "plantPrice") val plantPrice: Int,
 
     @ColumnInfo(name = "maxLevel")
-    @SerializedName("maxLevel") var maxLevel: Int,
+    @SerializedName("maxLevel") val maxLevel: Int,
 
     @ColumnInfo(name = "currentLevel")
     @SerializedName( "currentLevel") var currentLevel: Int= 0,

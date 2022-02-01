@@ -53,7 +53,7 @@ class PlantRVAdapter(private val dataSet: List<Plant>) : RecyclerView.Adapter<Pl
         holder.plantName.text= item.plantName
         holder.plantImage.setImageResource(R.drawable.alocasia_3)
 
-       if(item.plantStatus=="inactive"){ //미보유 아이템
+       if(item.isOwn==false){ //미보유 아이템
            holder.layout.setBackgroundResource(R.drawable.profile_shop_bg)
            holder.plantLevel.text=item.maxLevel.toString()+"단계"
            holder.status.visibility=View.GONE
@@ -63,7 +63,6 @@ class PlantRVAdapter(private val dataSet: List<Plant>) : RecyclerView.Adapter<Pl
            holder.selectBtn.setOnClickListener{
              buyItem(position)
            }
-
        }else {
            holder.layout.setBackgroundResource(R.drawable.profile_bg)
            holder.plantLevel.text=item.currentLevel.toString()+"단계"
@@ -90,10 +89,10 @@ class PlantRVAdapter(private val dataSet: List<Plant>) : RecyclerView.Adapter<Pl
     override fun getItemCount(): Int {
        return dataSet.size
     }
-
     fun buyItem(position :Int){
         mItemClickLister.onClickBuyItem(dataSet[position])
         dataSet[position].plantStatus="active"
+        dataSet[position].isOwn=true
         dataSet[position].currentLevel=0
         notifyItemChanged(position)
     }
@@ -105,7 +104,6 @@ class PlantRVAdapter(private val dataSet: List<Plant>) : RecyclerView.Adapter<Pl
                 if (plant.plantStatus == "selected") {
                     dataSet[index].plantStatus = "active"
                     notifyDataSetChanged()
-
 
                 }
             }

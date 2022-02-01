@@ -56,7 +56,7 @@ interface RetrofitInterface {
 
     @PATCH("/plants/select")
     fun selectPlant(
-        @Body PlantBuyRequest : PlantRequest
+        @Body PlantSelectRequest : PlantRequest
     ): Call<PlantResponse>
 
 
