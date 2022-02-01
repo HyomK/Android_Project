@@ -8,18 +8,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/letterView_toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         >
 
         <include
             android:id="@+id/letterView_toolbar"
             layout="@layout/toolbar_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             />
 
         <FrameLayout
@@ -98,7 +98,6 @@
             android:contextClickable="false"
             />
 
-
         <ImageView
             android:id="@+id/letterView_send_btn"
             android:layout_width="wrap_content"
@@ -112,23 +111,60 @@
             />
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
+        app:layout_constraintTop_toBottomOf="@id/letterView_toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
         android:overScrollMode="never"
         >
-        <TextView
-            android:id="@+id/mailView_body_tv"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
-            android:layout_marginVertical="@dimen/mail_view_marginVertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="bodydddddddd"
+                android:id="@+id/mailView_body_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+                android:textColor="@color/black"
+                android:textSize="14dp"
 
-            />
+                />
+            <TextView
+                android:layout_marginTop="30dp"
+                android:id="@+id/mailView_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/mailView_body_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:text="date"
+                android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+                />
+            <TextView
+                android:id="@+id/mailView_sender_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mailView_date_tv"
+                android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+                android:text="sender"
+                />
+        </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>

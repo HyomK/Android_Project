@@ -1,16 +1,13 @@
 package com.likefirst.btos.ui.profile
 
-import android.system.Os.remove
-import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentProfileBinding
 import com.likefirst.btos.ui.BaseFragment
-import com.likefirst.btos.ui.home.MailboxFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.ui.profile.setting.NoticeFragment
 import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
 

@@ -1,120 +1,82 @@
 package com.likefirst.btos.ui.profile.plant
 
+import android.os.Bundle
+import android.os.FileUtils
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.likefirst.btos.ApplicationClass.Companion.TAG
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.local.PlantDatabase
-import com.likefirst.btos.data.entities.PlantItem
+import com.likefirst.btos.data.remote.response.PlantRequest
+import com.likefirst.btos.data.remote.response.PlantResponse
+import com.likefirst.btos.data.remote.service.PlantService
+import com.likefirst.btos.data.remote.view.plant.PlantBuyView
+import com.likefirst.btos.data.remote.view.plant.PlantSelectView
+import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
-import org.json.JSONObject
 import kotlin.collections.ArrayList
 
-class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  {
+class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  , PlantSelectView, PlantBuyView{
 
+    interface SelectListener {
+        fun isSuccessToSelect(isSuccess : Boolean)
+    }
+
+    val USERIDX=2
+    private val plantBuyView:PlantBuyView =this
     override fun initAfterBinding() {
-        val presFragment = this
         val mActivity= activity as MainActivity
-        val flowerpots = loadData()
-        val adapter = PlantRVAdapter(flowerpots)
+        val adapter = PlantRVAdapter(loadData())
+        val plantSelectView :PlantSelectView =this
 
+        val plantService = PlantService()
 
         binding.flowerpotRv.adapter=adapter
 
         adapter.setMyItemCLickLister(object:PlantRVAdapter.PlantItemClickListener{
-            override fun onClickShopItem(){
+            override fun onClickInfoItem(plant:Plant){
+                val plantItemFragment = PlantItemFragment()
+                val bundle = Bundle()
+                bundle.putParcelable("plantItem",plant)
+                plantItemFragment.arguments=bundle
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.fr_layout,PlantItemFragment(),"plantItem")
-                    .show(PlantItemFragment())
-                    .addToBackStack(null)
+                    .add(R.id.fr_layout,plantItemFragment,"plantItem").addToBackStack(null)
                     .commit()
+
+            }
+
+            override fun onClickSelectItem(plant : Plant) {
+                val plantService = PlantService()
+                plantService.setPlantSelectView(plantSelectView)
+                val request :PlantRequest = PlantRequest(USERIDX,plant.plantIdx)
+                plantService.selectPlant( request )
+            }
+
+            override fun onClickBuyItem(plant : Plant) {
+                val plantService = PlantService()
+                plantService.setPlantBuyView(plantBuyView)
+                val request :PlantRequest = PlantRequest(USERIDX,plant.plantIdx)
+                plantService.buyPlant(request)
 
             }
         })
 
         binding.flowerpotToolbar.toolbarBackIc.setOnClickListener{
-            val stacks =  mActivity.supportFragmentManager.getFragments()
             mActivity.supportFragmentManager.popBackStack()
         }
 
     }
 
 
-   fun  loadData() : ArrayList<Plant> {
-        val assetManager = resources.assets
-        val gson=Gson()
+   fun  loadData() : List<Plant> {
         val plantDB = PlantDatabase.getInstance(requireContext()!!)
-        val plantObjType = object: TypeToken<Plant>() {}.type
-        var inputStream= assetManager.open("PlantDummy.json")
-        var jsonString = inputStream.bufferedReader().use { it.readText() }
-        var jObject = JSONObject(jsonString)
-        var jArray = jObject.getJSONArray("result")
-        var userPlantList= ArrayList<Plant>()
-        var plantItems= ArrayList<PlantItem>()
-
-
-        for (i in 0 until jArray.length()) {
-            val obj = jArray.getJSONObject(i)
-            val plantObj = gson.fromJson(obj.toString() , Plant::class.java)
-            userPlantList.add(plantObj)
-         }
-
-        inputStream= assetManager.open("PlantItems.json")
-        jsonString = inputStream.bufferedReader().use { it.readText() }
-        jObject = JSONObject(jsonString)
-        jArray = jObject.getJSONArray("items")
-
-       for (i in 0 until jArray.length()) {
-           val obj = jArray.getJSONObject(i)
-           val plantObj = gson.fromJson(obj.toString() , PlantItem::class.java)
-           plantItems.add(plantObj)
-       }
-
-        Log.d(TAG, "roomDB: $userPlantList" )
-
-        plantItems.forEach { i ->
-           run {
-               if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
-                   plantDB?.plantDao()?.insert(i)
-               } else {
-                   plantDB?.plantDao()?.update(i)
-               }
-           }
-        }  // 전체 화분 목록 DB 업데이트
-
-        val totItemIdx = plantItems.map{i -> i.plantIdx}
-        val userItemIdx = userPlantList.map{i -> i.plantIdx}
-        val shopItemIdx = totItemIdx.subtract(userItemIdx) //차집합
-        val shopList =setShopItem(shopItemIdx)
-
-
-       userPlantList.addAll(shopList) // 두개 붙이기
-       Log.d(TAG, "shopItemIdx: $userPlantList" )
-       return userPlantList
-
-    }
-
-    fun setShopItem(shopItemIdx : Set<Int>) : ArrayList<Plant>{
-
-        val plantDB = PlantDatabase.getInstance(requireContext()!!)
-        val shopList = ArrayList<Plant>()
-        shopItemIdx.forEach { it ->
-            run {
-                val item = plantDB?.plantDao()?.getPlant(it)!!
-                val plant =
-                    Plant(item.plantIdx, item.plantName, "", item.plantPrice, item.maxLevel, 0, "")
-                shopList.add(plant)
-            }
-        }
-
-        return shopList
-
+        val list =plantDB?.plantDao()?.getPlants()!!
+        return list
     }
 
 
@@ -123,6 +85,42 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     override fun onBackPressed() {
         requireActivity().supportFragmentManager.popBackStack()
     }
+
+    override fun onPlantBuyError(Dialog: CustomDialogFragment) {
+        Dialog.show(requireActivity().supportFragmentManager,"plantError")
+    }
+
+    override fun onPlantBuySuccess(plantIdx: Int, response : PlantResponse) {
+        Log.d("Plantbuy/API","succes")
+        val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
+        plantDB.plantDao().setPlantStatus(plantIdx,"active")
+
+    }
+
+    override fun onPlantBuyFailure(code: Int, message: String) {
+        Log.d("Plantbuy/API",message.toString())
+    }
+
+
+    override fun onPlantSelectError(Dialog: CustomDialogFragment) {
+        Dialog.show(requireActivity().supportFragmentManager,"plantError")
+
+    }
+
+    override fun onPlantSelectSuccess(plantIdx: Int, request: PlantResponse) {
+        Log.d("Plantselect/API",request.isSuccess.toString())
+
+        val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
+        val selected = plantDB.plantDao().getSelectedPlant("selected")!!
+        plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
+        plantDB.plantDao().setPlantStatus(plantIdx,"selected")
+
+    }
+
+    override fun onPlantSelectFailure(code: Int, message: String) {
+        TODO("Not yet implemented")
+    }
+
 
 }
 
