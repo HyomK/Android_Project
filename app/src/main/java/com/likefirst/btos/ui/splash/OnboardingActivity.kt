@@ -10,14 +10,15 @@ import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.response.Login
-import com.likefirst.btos.data.remote.service.AuthService
-import com.likefirst.btos.data.remote.view.GetProfileView
-import com.likefirst.btos.data.remote.view.SignUpView
+import com.likefirst.btos.data.remote.users.response.Login
+import com.likefirst.btos.data.remote.users.service.AuthService
+import com.likefirst.btos.data.remote.users.view.GetProfileView
+import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 
-class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate), SignUpView, GetProfileView{
+class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
+    SignUpView, GetProfileView {
 
     val authService = AuthService()
 

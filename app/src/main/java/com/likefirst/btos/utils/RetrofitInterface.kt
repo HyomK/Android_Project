@@ -1,8 +1,8 @@
 package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.UserSign
-import com.likefirst.btos.data.remote.response.GetProfileResponse
-import com.likefirst.btos.data.remote.response.LoginResponse
+import com.likefirst.btos.data.remote.users.response.GetProfileResponse
+import com.likefirst.btos.data.remote.users.response.LoginResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
