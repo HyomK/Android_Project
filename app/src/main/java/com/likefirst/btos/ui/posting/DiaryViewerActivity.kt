@@ -17,6 +17,7 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
             goToHome()
         }
         initView()
+        initToolbar()
     }
 
     fun initView(){
@@ -37,6 +38,13 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
         setDoneListRv(intentDataset.doneLists)
         binding.diaryViewerContentsTv.text = intentDataset.contents
         binding.diaryViewerDateTv.text = intentDataset.diaryDate
+    }
+
+    fun initToolbar(){
+        binding.diaryViewerMoreIv.setOnClickListener {
+            //TODO: 공개/비공개 전환
+            //  삭제 기능 구현
+       }
     }
 
     fun setDoneListRv(doneLists : ArrayList<String>){
