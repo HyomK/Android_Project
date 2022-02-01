@@ -1,30 +1,32 @@
 package com.likefirst.btos.data.local
 
 import androidx.room.*
-import com.likefirst.btos.data.entities.PlantItem
+import com.likefirst.btos.data.entities.Plant
+
 
 @Dao
 interface PlantDao {
     @Insert
-    fun insert(plant: PlantItem)
+    fun insert(plant: Plant)
 
     @Update
-    fun update(plant: PlantItem)
+    fun update(plant: Plant)
 
     @Delete
-    fun delete(plant: PlantItem)
+    fun delete(plant:Plant)
 
-    @Query("SELECT * FROM PlantItemTable")
-    fun getPlants(): List<PlantItem>
+    @Query("SELECT * FROM PlantTable")
+    fun getPlants(): List<Plant>
 
-    @Query("SELECT * FROM PlantItemTable where plantIdx = :id")
-    fun getPlant(id: Int): PlantItem?
+    @Query("SELECT * FROM PlantTable where plantIdx = :id")
+    fun getPlant(id: Int): Plant?
 
+    @Query("UPDATE PlantTable SET plantStatus= :status WHERE plantIdx = :id")
+    fun setPlantStatus(id: Int, status : String)
 
-   class  PlantUpdate {
-        var plantIdx : Int = 0
-        var plantName : String=""
-    }
+    @Query("SELECT * FROM PlantTable where plantStatus = :status")
+    fun getSelectedPlant(status:String):Plant?
+
 
 
 }

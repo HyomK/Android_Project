@@ -4,12 +4,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.likefirst.btos.data.entities.PlantItem
-import com.likefirst.btos.utils.Converters
+
+import androidx.room.TypeConverter
+import com.likefirst.btos.data.entities.Plant
 
 
-@TypeConverters(Converters::class)
-@Database(entities = [PlantItem::class], version = 3)
+@Database(entities = [Plant::class], version = 3)
 abstract class PlantDatabase: RoomDatabase() {
         abstract fun plantDao(): PlantDao
         companion object{

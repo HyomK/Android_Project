@@ -2,12 +2,19 @@ package com.likefirst.btos.data.remote.service
 
 
 import android.util.Log
+import androidx.core.os.bundleOf
 import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.remote.response.Plant
+import com.likefirst.btos.data.remote.response.PlantRequest
 import com.likefirst.btos.data.remote.response.PlantResponse
-import com.likefirst.btos.data.remote.response.ReplyResponse
-import com.likefirst.btos.data.remote.view.PlantListView
+import com.likefirst.btos.data.remote.view.plant.PlantBuyView
+import com.likefirst.btos.data.remote.view.plant.PlantListView
+import com.likefirst.btos.data.remote.view.plant.PlantSelectView
+import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.ui.profile.plant.PlantRVAdapter
 import com.likefirst.btos.utils.RetrofitInterface
+import com.likefirst.btos.utils.errorDialog
+import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,11 +22,23 @@ import retrofit2.Response
 class PlantService {
 
     private lateinit var plantView : PlantListView
+    private lateinit var plantSelectView: PlantSelectView
+    private lateinit var plantBuyView: PlantBuyView
     private val PlantService = ApplicationClass.retrofit.create(RetrofitInterface::class.java)
 
-    fun setPlantListView(plantView: PlantListView){
+
+    fun setPlantListView(plantView: MainActivity){
         this.plantView=plantView
     }
+
+    fun setPlantSelectView(plantSelectView: PlantSelectView){
+        this.plantSelectView=plantSelectView
+    }
+
+    fun setPlantBuyView(plantBuyView: PlantBuyView){
+        this.plantBuyView=plantBuyView
+    }
+
 
     fun loadPlantList(userId:String){
         plantView.onPlantListLoading()
@@ -30,7 +49,7 @@ class PlantService {
                 Log.e("Reply/API", plantResponse.toString())
 
                 when(plantResponse.code){
-                    1000->plantView.onPlantListSuccess( plantResponse.result)
+                    1000->plantView.onPlantListSuccess( plantResponse.result!!)
                     else->plantView.onPlantListFailure( plantResponse.code,plantResponse.message)
                 }
             }
@@ -42,39 +61,55 @@ class PlantService {
         })
     }
 
-    fun selectPlant(userId:String, plantId:String){
-        PlantService.selectPlant(userId,plantId).enqueue(object:Callback<PlantResponse>{
+    fun selectPlant(request: PlantRequest){
+        PlantService.selectPlant(request).enqueue(object:Callback<PlantResponse>{
             override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
-                val plantResponse: PlantResponse =response.body()!!
-                Log.e("Plant/API", plantResponse.toString())
-                when(plantResponse.code){
-                    1000->plantView.onPlantSelectSuccess( plantResponse.isSuccess)
-                    else->plantView.onPlantListFailure( plantResponse.code,plantResponse.message)
+                val plantResponse: PlantResponse? = response.body()
+                if(plantResponse==null){
+                    plantSelectView.onPlantSelectError(errorDialog())
+                    return
                 }
+                Log.e("PlantSELECT/API", plantResponse.toString())
+
+                if(response.isSuccessful){
+                    plantSelectView.onPlantSelectSuccess(request.plantIdx,response.body()!!)
+                }else{
+                    plantSelectView.onPlantSelectFailure( plantResponse.code,plantResponse.message)
+                }
+
             }
 
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
-                plantView.onPlantSelectFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
+                plantSelectView.onPlantSelectFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
             }
         })
 
     }
-    fun buyPlant(userId:String, plantId:String){
-        PlantService.buyPlant(userId,plantId).enqueue(object:Callback<PlantResponse>{
+    fun buyPlant(request: PlantRequest){
+        PlantService.buyPlant(request).enqueue(object:Callback<PlantResponse>{
             override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
-                val plantResponse: PlantResponse =response.body()!!
-                Log.e("Plant/API", plantResponse.toString())
-                when(plantResponse.code){
-                    1000->plantView.onPlantBuySuccess( plantResponse.isSuccess)
-                    else->plantView.onPlantBuyFailure( plantResponse.code,plantResponse.message)
+                val plantResponse =response.body()
+                if(plantResponse==null){
+                    plantBuyView.onPlantBuyError(errorDialog())
+                    return
                 }
+
+                if(response.isSuccessful){
+                    plantBuyView.onPlantBuySuccess(request.plantIdx,response.body()!!)
+                }else{
+                    plantBuyView.onPlantBuyFailure( plantResponse.code,plantResponse.message)
+                }
+
+                Log.e("PlantBUY/API", plantResponse.toString())
+
             }
+
 
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
-                plantView.onPlantBuyFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
+                plantBuyView.onPlantBuyFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
             }
-
         })
     }
 
 }
+

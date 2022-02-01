@@ -3,7 +3,7 @@ package com.likefirst.btos.data.remote.service
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.remote.response.LetterResponse
-import com.likefirst.btos.data.remote.view.LetterView
+import com.likefirst.btos.data.remote.view.mailbox.LetterView
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback

@@ -2,9 +2,8 @@ package com.likefirst.btos.data.remote.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.remote.response.DiaryResponse
 import com.likefirst.btos.data.remote.response.ReplyResponse
-import com.likefirst.btos.data.remote.view.ReplyView
+import com.likefirst.btos.data.remote.view.mailbox.ReplyView
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback

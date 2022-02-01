@@ -14,18 +14,19 @@ import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PlantRVAdapter(private val dataSet: ArrayList<Plant>) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
+class PlantRVAdapter(private val dataSet: List<Plant>) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: PlantItemClickListener
 
     interface PlantItemClickListener{
-        fun onClickShopItem()
+        fun onClickInfoItem(plant : Plant)
+        fun onClickSelectItem(plant : Plant)
+        fun onClickBuyItem(plant : Plant)
     }
 
     fun setMyItemCLickLister(itemClickLister: PlantItemClickListener){
         mItemClickLister=itemClickLister
     }
-
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -46,19 +47,23 @@ class PlantRVAdapter(private val dataSet: ArrayList<Plant>) : RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val item = dataSet[position]
+        val item = dataSet[position]
         val won = NumberFormat.getCurrencyInstance(Locale.KOREA).format(item.plantPrice)
 
         holder.plantName.text= item.plantName
-       holder.plantImage.setImageResource(R.drawable.alocasia_3)
+        holder.plantImage.setImageResource(R.drawable.alocasia_3)
 
-       if(item.plantStatus==""){ //미보유 아이템
+       if(item.plantStatus=="inactive"){ //미보유 아이템
            holder.layout.setBackgroundResource(R.drawable.profile_shop_bg)
            holder.plantLevel.text=item.maxLevel.toString()+"단계"
            holder.status.visibility=View.GONE
            holder.selectBtn.visibility=View.VISIBLE
            holder.selectBtn.text=won
            holder.maxIv.setBackgroundResource(R.drawable.ic_max_gray_bg)
+           holder.selectBtn.setOnClickListener{
+             buyItem(position)
+           }
+
        }else {
            holder.layout.setBackgroundResource(R.drawable.profile_bg)
            holder.plantLevel.text=item.currentLevel.toString()+"단계"
@@ -74,15 +79,45 @@ class PlantRVAdapter(private val dataSet: ArrayList<Plant>) : RecyclerView.Adapt
                holder.selectBtn.visibility=View.VISIBLE
                holder.selectBtn.text="선택"
                holder.selectBtn.setOnClickListener{
-                   mItemClickLister.onClickShopItem()
+                //  mItemClickLister.onClickSelectItem(dataSet[position])
+                   selectItem(position)
                }
            }
-
        }
+        holder.plantImage.setOnClickListener { mItemClickLister.onClickInfoItem(dataSet[position])  }
     }
 
     override fun getItemCount(): Int {
        return dataSet.size
     }
+
+    fun buyItem(position :Int){
+        mItemClickLister.onClickBuyItem(dataSet[position])
+        dataSet[position].plantStatus="active"
+        dataSet[position].currentLevel=0
+        notifyItemChanged(position)
+    }
+
+    fun selectItem(position: Int){
+        mItemClickLister.onClickSelectItem(dataSet[position])
+        dataSet.forEachIndexed { index, plant ->
+            run {
+                if (plant.plantStatus == "selected") {
+                    dataSet[index].plantStatus = "active"
+                    notifyDataSetChanged()
+
+
+                }
+            }
+        }
+
+        dataSet[position].plantStatus="selected"
+        if(dataSet[position].currentLevel==-1) dataSet[position].currentLevel=0
+        //notifyItemChanged(position)
+        notifyDataSetChanged()
+
+    }
+
+
 
 }

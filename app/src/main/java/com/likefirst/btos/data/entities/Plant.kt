@@ -3,6 +3,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 
@@ -10,14 +11,31 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "PlantTable")
 data class Plant(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "plantIdx") var plantIdx: Int= 0,
-    @ColumnInfo(name = "plantName") var plantName: String,
-    @ColumnInfo(name = "plantImgUrl") var plantImgUrl: String,
-    @ColumnInfo(name = "plantInfo") var plantInfo: String,
-    @ColumnInfo(name = "plantPrice") var plantPrice: Int= 0,
-    @ColumnInfo(name = "maxLevel") var maxLevel: Int= 0,
-    @ColumnInfo(name = "currentLevel") var currentLevel: Int= 0,
-    @ColumnInfo(name = "plantStatus") var plantStatus:String,
-    @ColumnInfo(name = "isOwn") var isOwn:Boolean,
 
-): Parcelable
+    @ColumnInfo(name = "plantIdx")
+    @SerializedName("plantIdx") val plantIdx: Int,
+
+    @ColumnInfo(name = "plantName")
+    @SerializedName( "plantName") var plantName: String,
+
+    @ColumnInfo(name = "plantImgUrl")
+    @SerializedName( "plantImgUrl") var plantImgUrl: String?="",
+
+    @ColumnInfo(name = "plantInfo")
+    @SerializedName( "plantInfo") var plantInfo: String,
+
+    @ColumnInfo(name = "plantPrice")
+    @SerializedName( "plantPrice") var plantPrice: Int,
+
+    @ColumnInfo(name = "maxLevel")
+    @SerializedName("maxLevel") var maxLevel: Int,
+
+    @ColumnInfo(name = "currentLevel")
+    @SerializedName( "currentLevel") var currentLevel: Int= 0,
+
+    @ColumnInfo(name = "plantStatus")
+    @SerializedName( "plantStatus") var plantStatus:String,
+
+    @ColumnInfo(name = "isOwn")
+    @SerializedName( "isOwn") var isOwn:Boolean,
+) : Parcelable

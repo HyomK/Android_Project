@@ -1,16 +1,13 @@
 package com.likefirst.btos.data.remote.service
 
 import android.util.Log
-import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.remote.response.Mailbox
 import com.likefirst.btos.data.remote.response.MailboxResponse
-import com.likefirst.btos.data.remote.view.MailboxView
+import com.likefirst.btos.data.remote.view.mailbox.MailboxView
 import com.likefirst.btos.utils.RetrofitInterface
-import com.likefirst.btos.data.entities.User
-import com.likefirst.btos.data.remote.view.DiaryView
-import com.likefirst.btos.data.remote.view.LetterView
-import com.likefirst.btos.data.remote.view.ReplyView
+import com.likefirst.btos.data.remote.view.mailbox.DiaryView
+import com.likefirst.btos.data.remote.view.mailbox.LetterView
+import com.likefirst.btos.data.remote.view.mailbox.ReplyView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,8 +15,8 @@ import retrofit2.Response
 class MailboxService {
     private lateinit var mailboxView: MailboxView
     private lateinit var diaryView: DiaryView
-    private lateinit var letterView:LetterView
-    private lateinit var replyView:ReplyView
+    private lateinit var letterView: LetterView
+    private lateinit var replyView: ReplyView
 
 
     private val mailboxService= ApplicationClass.retrofit.create(RetrofitInterface::class.java)

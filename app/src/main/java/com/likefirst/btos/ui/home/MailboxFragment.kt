@@ -1,7 +1,6 @@
 package com.likefirst.btos.ui.home
 
 import android.content.Intent
-import android.provider.CallLog
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -10,13 +9,12 @@ import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.response.Diary
 import com.likefirst.btos.data.remote.response.Letter
 import com.likefirst.btos.data.remote.response.Mailbox
-import com.likefirst.btos.data.remote.response.MailboxResponse
 import com.likefirst.btos.data.remote.service.DiaryService
 import com.likefirst.btos.data.remote.service.LetterService
 import com.likefirst.btos.data.remote.service.MailboxService
-import com.likefirst.btos.data.remote.view.DiaryView
-import com.likefirst.btos.data.remote.view.LetterView
-import com.likefirst.btos.data.remote.view.MailboxView
+import com.likefirst.btos.data.remote.view.mailbox.DiaryView
+import com.likefirst.btos.data.remote.view.mailbox.LetterView
+import com.likefirst.btos.data.remote.view.mailbox.MailboxView
 import com.likefirst.btos.databinding.FragmentMailboxBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
@@ -25,7 +23,8 @@ import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 
 
-class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),MailboxView,LetterView,
+class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),
+    MailboxView, LetterView,
     DiaryView {
 
 
@@ -34,7 +33,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
         val presFragment  = this
         val mailboxService=MailboxService()
         mailboxService.setMailboxView(this)
-        mailboxService.loadMailbox("1")
+        mailboxService.loadMailbox("2")
         setClickListener(presFragment)
 
     }

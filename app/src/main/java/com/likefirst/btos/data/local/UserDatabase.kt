@@ -6,9 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.likefirst.btos.data.entities.User
-import com.likefirst.btos.utils.Converters
 
-@TypeConverters(Converters::class)
+
 @Database(entities = [User::class], version = 3)
 abstract class UserDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
