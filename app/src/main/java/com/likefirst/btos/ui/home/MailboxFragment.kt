@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.DiaryInfo
 import com.likefirst.btos.data.remote.response.Diary
 import com.likefirst.btos.data.remote.response.Letter
 import com.likefirst.btos.data.remote.response.Mailbox
@@ -21,6 +22,7 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
+import com.likefirst.btos.utils.toArrayList
 
 
 class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),
@@ -107,10 +109,10 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
                 .addToBackStack("mailbox")
                 .commit()
 
-            val bundle=bundleOf("date" to sendAt, "sender" to senderName)
+            val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
+            val Diary =DiaryInfo(diaryDate = sendAt, doneLists =doneList.toArrayList(),emotionIdx = diary.emotionIdx,contents = diary.content,userName=senderName!!)
             val  intent: Intent = Intent(requireContext()!!,DiaryViewerActivity::class.java)
-            intent.putExtras(bundle)
-            intent.putExtra("diary",diary)
+            intent.putExtra("diaryInfo",Diary)
             requireActivity().startActivity(intent)
         }
     }

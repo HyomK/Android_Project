@@ -54,14 +54,7 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
 
     fun setDoneListRv(doneLists : ArrayList<String>){
 
-        val diary=intent.getParcelableExtra<Diary>("diary")!!
-        val sender=intent.getBundleExtra("sender")
-        val date= intent.getBundleExtra("date")
-
-        binding.diaryViewerEmotionIv.setImageResource( resources.getIdentifier("emotion${diary.emotionIdx}", "drawable", packageName))
-        binding.diaryViewerContentsTv.text=diary.content
-        val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
-        val doneListAdapter = DiaryViewerDoneListRVAdapter(doneList.toArrayList())
+        val doneListAdapter = DiaryViewerDoneListRVAdapter(doneLists)
 
         binding.diaryViewerDoneListRv.apply {
             adapter = doneListAdapter
