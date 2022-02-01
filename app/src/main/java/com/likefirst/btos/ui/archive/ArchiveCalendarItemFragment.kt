@@ -2,20 +2,13 @@ package com.likefirst.btos.ui.archive
 
 import android.content.Intent
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.CalendarInfo
 import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.posting.DiaryActivity
-import com.likefirst.btos.utils.Converters
-import com.likefirst.btos.utils.getJwt
-import com.likefirst.btos.utils.stringToDate
-import okhttp3.internal.format
-import java.text.SimpleDateFormat
+import com.likefirst.btos.utils.dateToString
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,14 +31,25 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
         binding.archiveCalendarRv.apply {
             adapter = calendarAdapter
             layoutManager = GridLayoutManager(requireContext(), 7)
-            val calendar = Calendar.getInstance()
-            calendar.time = getCalendar()
-            calendarAdapter.setYearMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH ) + 1)
+            calendarAdapter.setDate(getCalendar())
             calendarAdapter.setOnDateSelectedListener(object : ArchiveCalendarRVAdapter.CalendarDateSelectedListener {
-                override fun onDateSelectedListener(year: Int, month: Int, date: Int) {
-                    Toast.makeText(requireContext(), "$year, $month, $date", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(requireContext(), DiaryActivity::class.java)
-                    startActivity(intent)
+                override fun onDateSelectedListener(date: Date, dayInt : Int) {
+                    val calendar = GregorianCalendar.getInstance()
+                    calendar.time = date
+                    calendar.set(Calendar.DAY_OF_MONTH, dayInt)
+
+                    // 오늘 날짜랑 비교 (1. calendar = GregorianCalendar.getInstance() : 0
+                    //                   2. calendar > GregorianCalendar.getInstance() : 1
+                    //                   3. calendar < GregorianCalendar.getInstance() : -1)
+                    if(calendar.compareTo(GregorianCalendar.getInstance()) == 1){
+                        // TODO: Toast는 커스텀이 deprecated 되었기 때문에 SnackBar를 이용해서 커스텀 진행
+                        Toast.makeText(requireContext(), "미래의 일기는 작성할 수 없어요!!!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val dateString = dateToString(calendar.time)
+                        val intent = Intent(requireContext(), DiaryActivity::class.java)
+                        intent.putExtra("diaryDate", dateString)
+                        startActivity(intent)
+                    }
                 }
             })
         }

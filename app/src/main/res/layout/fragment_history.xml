@@ -26,41 +26,49 @@
 
         <RadioButton
             android:id="@+id/history_radiobutton_first"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:text="@string/history_radio1"
-            android:button="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginEnd="13dp"
             android:background="@drawable/history_radiobutton_selector"
+            android:button="@null"
+            android:fontFamily="@font/notosanskr_bold"
             android:gravity="center"
             android:paddingStart="9dp"
             android:paddingEnd="9dp"
-            android:textSize="@dimen/history_radiobutton_textSize"
-            android:layout_marginEnd="13dp"/>
+            android:text="@string/history_radio1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/history_radiobutton_textSize" />
 
         <RadioButton
             android:id="@+id/history_radiobutton_second"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:text="@string/history_radio2"
-            android:button="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginEnd="13dp"
             android:background="@drawable/history_radiobutton_selector"
+            android:button="@null"
+            android:fontFamily="@font/notosanskr_bold"
             android:gravity="center"
             android:paddingStart="9dp"
             android:paddingEnd="9dp"
-            android:textSize="@dimen/history_radiobutton_textSize"
-            android:layout_marginEnd="13dp"/>
+            android:text="@string/history_radio2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/history_radiobutton_textSize" />
 
         <RadioButton
             android:id="@+id/history_radiobutton_third"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:text="@string/history_radio3"
-            android:button="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginEnd="13dp"
             android:background="@drawable/history_radiobutton_selector"
+            android:button="@null"
+            android:fontFamily="@font/notosanskr_bold"
             android:gravity="center"
             android:paddingStart="9dp"
             android:paddingEnd="9dp"
+            android:text="@string/history_radio3"
+            android:textColor="@color/black"
             android:textSize="@dimen/history_radiobutton_textSize" />
+
 
     </RadioGroup>
 

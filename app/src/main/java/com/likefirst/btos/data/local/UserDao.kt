@@ -27,5 +27,6 @@ interface UserDao {
     @Query("SELECT * FROM UserTable")
     fun getUser(): User
 
-
+    @Query("DELETE FROM UserTable")
+    fun deleteAll()
 }

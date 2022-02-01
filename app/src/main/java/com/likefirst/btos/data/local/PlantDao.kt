@@ -25,6 +25,4 @@ interface PlantDao {
         var plantIdx : Int = 0
         var plantName : String=""
     }
-
-
 }

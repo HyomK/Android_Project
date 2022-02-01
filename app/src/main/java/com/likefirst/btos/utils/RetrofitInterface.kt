@@ -1,11 +1,13 @@
 package com.likefirst.btos.utils
 
-import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.remote.response.GetProfileResponse
 import com.likefirst.btos.data.remote.response.LoginResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface RetrofitInterface {
 
@@ -16,5 +18,8 @@ interface RetrofitInterface {
     fun autoLogin() : Call<LoginResponse>
     //@Header("x-access-token") jwt: String
     @POST("/users")
-    fun signUp(@Body user: User) : Call<LoginResponse>
+    fun signUp(@Body user: UserSign) : Call<LoginResponse>
+
+    @GET("/users/{useridx}")
+    fun getProfile(@Path("useridx") useridx: Int): Call<GetProfileResponse>
 }

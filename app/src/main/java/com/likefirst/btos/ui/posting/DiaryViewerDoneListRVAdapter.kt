@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.databinding.ItemDiaryDoneListRvBinding
 
-class DiaryViewerDoneListRVAdapter : RecyclerView.Adapter<DiaryViewerDoneListRVAdapter.ViewHolder>() {
+class DiaryViewerDoneListRVAdapter(val doneLists : ArrayList<String>) : RecyclerView.Adapter<DiaryViewerDoneListRVAdapter.ViewHolder>() {
     inner class ViewHolder(val binding : ItemDiaryDoneListRvBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun initItem(){
+        fun initItem(position: Int){
             binding.itemDiaryDoneListDeleteIv.visibility = View.GONE
-            binding.itemDiaryDoneListTv.text = "아랄ㄹ라라라라랄ㄹㄹ라라"
+            binding.itemDiaryDoneListTv.text = doneLists[position]
         }
     }
 
@@ -20,10 +20,10 @@ class DiaryViewerDoneListRVAdapter : RecyclerView.Adapter<DiaryViewerDoneListRVA
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.initItem()
+        holder.initItem(position)
     }
 
     override fun getItemCount(): Int {
-        return 8
+        return doneLists.size
     }
 }

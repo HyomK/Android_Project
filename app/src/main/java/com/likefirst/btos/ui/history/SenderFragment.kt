@@ -14,7 +14,6 @@ class SenderFragment: BaseFragment<FragmentHistorySenderBinding>(FragmentHistory
 
     override fun initAfterBinding() {
         val mActivity = activity as MainActivity
-
         val recyclerViewAdapter = SenderRecyclerViewAdapter(context, items)
         binding.fragmentSenderRv.adapter = recyclerViewAdapter
         binding.fragmentSenderRv.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
@@ -22,10 +21,11 @@ class SenderFragment: BaseFragment<FragmentHistorySenderBinding>(FragmentHistory
         recyclerViewAdapter.setMyItemClickListener(object : SenderRecyclerViewAdapter.MyItemClickListener{
             override fun MoveToSenderDetail(historyIdx: Int) {
                 mActivity.supportFragmentManager.beginTransaction()
-                    .add(R.id.history_fragment,  SenderDetailFragment(), "senderdetail")
+                    .replace(R.id.history_fragment,  SenderDetailFragment(), "senderdetail")
                     .addToBackStack(null)
                     .commit()
             }
         })
     }
+
 }

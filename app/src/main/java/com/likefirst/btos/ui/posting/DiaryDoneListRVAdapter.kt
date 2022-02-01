@@ -40,30 +40,12 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
             holder.binding.itemDiaryDoneListEt.visibility = View.VISIBLE
             holder.binding.itemDiaryDoneListEt.setText(text)
 
-            //doneList 2줄 입력제한
-            holder.binding.itemDiaryDoneListEt.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    if (null !=  holder.binding.itemDiaryDoneListEt.layout && holder.binding.itemDiaryDoneListEt.layout.lineCount > 2) {
-                        holder.binding.itemDiaryDoneListEt.setText(doneListWatcher)
-                        holder.binding.itemDiaryDoneListEt.setSelection(doneListWatcher.length)
-                    } else {
-                        doneListWatcher = holder.binding.itemDiaryDoneListEt.text.toString()
-                    }
-                }
-            })
-
             //엔터 눌렀을 때 업데이트
             holder.binding.itemDiaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
                 if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
-                    holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
+                    if(holder.binding.itemDiaryDoneListEt.text.length < 100){
+                        holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
+                    }
                     setDoneList(holder, position)
                 }
                 false
@@ -98,17 +80,19 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
     fun updateDoneList(position : Int, doneList : String){
         doneLists[position] = doneList
         notifyItemChanged(position)
+        DiaryActivity.doneLists = doneLists
     }
 
     fun deleteDoneList(position : Int){
         doneLists.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemCount)
+        DiaryActivity.doneLists = doneLists
     }
 
     fun addDoneList(text : String){
         this.doneLists.add(text)
-        Log.d("test", doneLists.toString())
         notifyItemInserted(doneLists.size)
+        DiaryActivity.doneLists = doneLists
     }
 }

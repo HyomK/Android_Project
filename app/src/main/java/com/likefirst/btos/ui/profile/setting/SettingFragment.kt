@@ -1,13 +1,19 @@
 package com.likefirst.btos.ui.profile.setting
 
+import android.content.Intent
 import android.view.View
 import androidx.core.os.bundleOf
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentSettingBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.EditDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.ui.splash.LoginActivity
+import com.likefirst.btos.utils.getGSO
+import com.likefirst.btos.utils.removeJwt
+import kotlin.system.exitProcess
 
 class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate), MainActivity.onBackPressedListener  {
     private var status =true
@@ -59,6 +65,13 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
+                    val gso = getGSO()
+                    val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+                    googleSignInClient.signOut()
+                    removeJwt()
+                    val intent = Intent(requireContext(),LoginActivity::class.java)
+                    startActivity(intent)
+                    exitProcess(0)
                 }
             })
             dialog.show(requireActivity().supportFragmentManager, "CustomDialog")

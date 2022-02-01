@@ -3,6 +3,8 @@
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,6 +22,7 @@
         android:text="닉네임 변경"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
         />
+
     <TextView
         android:id="@+id/setting_birth"
         android:layout_width="match_parent"
@@ -28,6 +31,7 @@
         android:text="생년 변경"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
         />
+
     <TextView
         android:id="@+id/setting_notification"
         android:layout_width="match_parent"
@@ -70,7 +74,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ic_toggle_true"
             android:layout_marginEnd="35dp"
-
             />
 
 

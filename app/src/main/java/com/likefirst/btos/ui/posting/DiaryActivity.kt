@@ -2,30 +2,46 @@ package com.likefirst.btos.ui.posting
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.Resources
-import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.DiaryInfo
 
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.saveLastPostingDate
+import java.util.*
+import kotlin.collections.ArrayList
 
-class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
+class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
+
+    companion object{
+        var emotionIdx : Int? = null
+        var doneLists = ArrayList<String>()
+        var contents = ""
+    }
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
-        var doneListWatcher = ""
+
+        // companion object 초기화
+        emotionIdx = null
+        doneLists = arrayListOf()
+        contents = ""
+
+        // contents 초기화
+        initContents()
 
         // 이모션 리사이클러뷰 생성
         initEmotionRv()
@@ -33,10 +49,11 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
         //DoneList 리사이클러뷰 연결
         initDoneListRv()
 
-        //doneList 2줄 입력제한
-        binding.diaryDoneListEt.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        // 툴바 동작구현
+        setToolbar()
 
+        binding.diaryContentsEt.addTextChangedListener(object :  TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -44,15 +61,23 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                if (null !=  binding.diaryDoneListEt.layout && binding.diaryDoneListEt.layout.lineCount > 2) {
-                    binding.diaryDoneListEt.setText(doneListWatcher)
-                    binding.diaryDoneListEt.setSelection(doneListWatcher.length)
-                } else {
-                    doneListWatcher = p0.toString()
+                if(null !=  binding.diaryContentsEt.layout && binding.diaryContentsEt.layout.lineCount > 100){
+                    binding.diaryContentsEt.text.delete(binding.diaryContentsEt.selectionStart - 1, binding.diaryContentsEt.selectionStart)
                 }
             }
-        })
 
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    fun initContents(){
+        binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
+    }
+
+    fun setToolbar(){
         //툴바 버튼 동작구현
         binding.diaryToolbar.diaryBackIv.setOnClickListener {
             onBackPressed()
@@ -76,12 +101,15 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
 
                     }
                     override fun onButton2Clicked() {
+                        goToDiaryViewer()
+                        saveLastPostingDate(Date())
 
                     }
                 })
                 dialog.show(this.supportFragmentManager, "PublicAlertDialog")
             } else {
                 goToDiaryViewer()
+                saveLastPostingDate(Date())
             }
         }
     }
@@ -103,7 +131,9 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
                     binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
                     showOneBtnDialog("오늘하루 정말 알차게 사셨군요!! 아쉽지만 오늘 한 일은 10개까지만 작성이 가능합니다. 내일 또 봐요!", "doneListFullAlert")
                 } else {
-                    binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
+                    if(binding.diaryDoneListEt.text.length < 100){
+                        binding.diaryDoneListEt.text.delete( binding.diaryDoneListEt.selectionStart - 1, binding.diaryDoneListEt.selectionStart)
+                    }
                     if(TextUtils.isEmpty(binding.diaryDoneListEt.text)){
                         showOneBtnDialog("오늘 한 일을 입력해 주세요!", "doneListNullAlert")
                     } else {
@@ -159,7 +189,9 @@ class DiaryActivity : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::i
     }
 
     fun goToDiaryViewer(){
+        contents = binding.diaryContentsEt.text.toString()
         val intent = Intent(this, DiaryViewerActivity::class.java)
+        intent.putExtra("diaryInfo", DiaryInfo(binding.diaryDateTv.text.toString(), doneLists, emotionIdx, contents, "유저 더미데이터"))
         startActivity(intent)
     }
 
