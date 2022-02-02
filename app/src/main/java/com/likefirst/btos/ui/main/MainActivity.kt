@@ -3,6 +3,7 @@ package com.likefirst.btos.ui.main
 
 import android.util.Log
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,19 +25,21 @@ import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
-import com.likefirst.btos.ui.profile.plant.PlantFragment
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
+
+class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
 
     var USERIDX=-1
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
     private val profileFragment= ProfileFragment()
-    private val plantFragment=PlantFragment()
+
     var isDrawerOpen =true
     var isMailOpen=false
+
+
 
     public interface onBackPressedListener {
         fun onBackPressed();

@@ -25,7 +25,7 @@ class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Ad
     interface PlantItemClickListener{
         fun onClickInfoItem(plant : Plant)
         fun onClickSelectItem(plant : Plant)
-        fun onClickBuyItem(plant : Plant)
+        fun onClickBuyItem(plant : Pair<Plant,Int>):Pair<Plant, Int>
     }
 
     fun setMyItemCLickLister(itemClickLister: PlantItemClickListener){
@@ -93,10 +93,8 @@ class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Ad
        return dataSet.size
     }
     fun buyItem(position :Int){
-        mItemClickLister.onClickBuyItem(dataSet[position].first )
-        dataSet[position].first.plantStatus="active"
-        dataSet[position].first.isOwn=true
-        dataSet[position].first.currentLevel=0
+        val result = mItemClickLister.onClickBuyItem(dataSet[position])
+        dataSet[position]=result
         reset(dataSet)
     }
 
@@ -122,7 +120,6 @@ class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Ad
     @SuppressLint("NotifyDataSetChanged")
     fun reset(origin:ArrayList<Pair<Plant,Int>>){
         val newData =origin.sortedWith(ComparePlant)
-        Log.d("PLANTSELECT/ ", newData.toString())
         dataSet.clear()
         dataSet.addAll(newData)
         notifyDataSetChanged()

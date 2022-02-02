@@ -9,7 +9,7 @@ import com.likefirst.btos.data.remote.view.plant.PlantBuyView
 import com.likefirst.btos.data.remote.view.plant.PlantInitView
 import com.likefirst.btos.data.remote.view.plant.PlantListView
 import com.likefirst.btos.data.remote.view.plant.PlantSelectView
-import com.likefirst.btos.ui.splash.LoginActivity
+import com.likefirst.btos.ui.splash.OnboardingActivity
 import com.likefirst.btos.utils.RetrofitInterface
 import com.likefirst.btos.utils.errorDialog
 import retrofit2.Call
@@ -26,7 +26,7 @@ class PlantService {
     private val PlantService = ApplicationClass.retrofit.create(RetrofitInterface::class.java)
 
 
-    fun setPlantListView(plantView: LoginActivity){
+    fun setPlantListView(plantView: PlantListView){
         this.plantView=plantView
     }
 
@@ -130,6 +130,8 @@ class PlantService {
             }
         })
     }
+
+
 
 }
 

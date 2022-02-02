@@ -7,22 +7,28 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
 import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.service.PlantService
 import com.likefirst.btos.data.remote.view.GetProfileView
 import com.likefirst.btos.data.remote.view.LoginView
 import com.likefirst.btos.data.remote.view.SignUpView
+import com.likefirst.btos.data.remote.view.plant.PlantInitView
+import com.likefirst.btos.data.remote.view.plant.PlantListView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
-class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate), SignUpView, GetProfileView, LoginView {
+class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate), SignUpView, GetProfileView, LoginView,PlantInitView, PlantListView {
 
     val authService = AuthService()
+    val plantService= PlantService()
     lateinit var email: String
 
     override fun initAfterBinding() {
@@ -63,6 +69,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
         authService.setLoginView(this)
         authService.login(email)
+        plantService.initPlant(login.userIdx)
     }
 
     override fun onSignUpFailure(code: Int, message: String) {
@@ -88,6 +95,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             userDB.insert(user)
         }
         Log.e("PROFILE/API", userDB?.getUser().toString())
+
+        updatePlantDB()
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -124,5 +133,46 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
     }
 
+    override fun onPlantInitSuccess() {
+
+    }
+
+    override fun onPlantInitFailure(code: Int, message: String) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
+        Log.e("PlantInit/FAIL",code.toString()+ message)
+    }
+
+    fun updatePlantDB(){
+        val userDB= UserDatabase.getInstance(this)!!
+        val USERIDX=userDB.userDao().getUser().userIdx!!
+        val plantService =PlantService()
+        plantService.setPlantListView(this)
+        plantService.loadPlantList( USERIDX.toString())
+
+    }
+
+    override fun onPlantListLoading() {
+
+    }
+
+    override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
+        val plantDB = PlantDatabase.getInstance(this)
+        Log.d("Plant/API",plantList.toString())
+        plantList.forEach { i ->
+            run {
+                if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
+                    plantDB?.plantDao()?.insert(i)
+                } else {
+                    plantDB?.plantDao()?.update(i)
+                }
+            }
+        }  // 전체 화분 목록 DB 업데이트
+    }
+
+
+
+    override fun onPlantListFailure(code: Int, message: String) {
+        Log.d("Plant/API",code.toString()+"fail to load...")
+    }
 
 }

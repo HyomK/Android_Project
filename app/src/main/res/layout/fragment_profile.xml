@@ -15,28 +15,22 @@
         android:layout_marginHorizontal="@dimen/profile_view_marginHorizontal"
         android:layout_marginVertical="@dimen/profile_view_marginVertical"
         android:background="@drawable/profile_bg"
+        android:textColor="@color/black"
         >
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/profile_iv"
             android:layout_width="@dimen/profile_iv_width"
             android:layout_height="@dimen/profile_iv_height"
+            android:src="@drawable/alocasia_3_circle"
+            android:layout_marginTop="@dimen/profile_iv_marginTop"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/profile_iv_marginTop"
-            app:cardCornerRadius="@dimen/profile_iv_radius"
-            android:background="@color/white"
-            >
-            <ImageView
-                android:id="@+id/profile_iv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/alocasia_3"
-                android:scaleType="centerCrop"
-                android:paddingBottom="40dp"
-                />
+            />
 
-        </androidx.cardview.widget.CardView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,10 +50,21 @@
                 android:textSize="@dimen/profile_level_textSize"
                 android:fontFamily="@font/notosanskr_bold"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 />
 
-           <include
-               layout="@layout/item_max"  />
+           <TextView
+               android:id="@+id/profile_max_tv"
+               android:layout_width="28dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:background="@drawable/ic_max_bg"
+               android:layout_marginStart="8dp"
+               android:text="MAX"
+               android:textColor="@color/white"
+               android:textSize="8dp"
+               android:textStyle="bold"
+               android:gravity="center" />
 
         </LinearLayout>
         <TextView
@@ -75,6 +80,7 @@
             android:fontFamily="@font/notosanskr_bold"
             android:textStyle="bold"
             android:includeFontPadding="false"
+            android:textColor="@color/black"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

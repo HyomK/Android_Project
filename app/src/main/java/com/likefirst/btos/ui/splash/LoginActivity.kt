@@ -26,7 +26,6 @@ import com.likefirst.btos.data.remote.service.PlantService
 import com.likefirst.btos.data.remote.view.AutoLoginView
 import com.likefirst.btos.data.remote.view.GetProfileView
 import com.likefirst.btos.data.remote.view.LoginView
-import com.likefirst.btos.data.remote.view.plant.PlantInitView
 import com.likefirst.btos.data.remote.view.plant.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -36,7 +35,7 @@ import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
 class LoginActivity
-    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener, LoginView, AutoLoginView, GetProfileView,PlantInitView,PlantListView {
+    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener, LoginView, AutoLoginView, GetProfileView,PlantListView {
     val G_SIGN_IN : Int = 1
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var email : String
@@ -108,8 +107,6 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        plantService.initPlant(login.userIdx)
-
 
         val intent = Intent(this, MainActivity::class.java)
         finish()
@@ -148,8 +145,6 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-        updatePlantDB()
-
         val intent = Intent(this, MainActivity::class.java)
         finish()
         startActivity(intent)
@@ -164,8 +159,10 @@ class LoginActivity
 
     override fun onGetProfileViewSuccess(user: User) {
         //UserDB에 프로필 정보 저장
+
+        Log.e("PROFILE/API",user.toString())
         val userDB = UserDatabase.getInstance(this)?.userDao()
-        if(userDB == null){
+        if(userDB?.getUser() == null){
             userDB?.insert(user)
         } else {
             userDB.update(user)
@@ -183,7 +180,6 @@ class LoginActivity
     fun updatePlantDB(){
         val userDB= UserDatabase.getInstance(this)!!
         val USERIDX=userDB.userDao().getUser().userIdx!!
-        val plantService =PlantService()
         plantService.setPlantListView(this)
         plantService.loadPlantList(USERIDX.toString())
 
@@ -213,13 +209,6 @@ class LoginActivity
         Log.d("Plant/API",code.toString()+"fail to load...")
     }
 
-    override fun onPlantInitSuccess() {
-        updatePlantDB()
-    }
-
-    override fun onPlantInitFailure(code: Int, message: String) {
-
-    }
 
 
 }
