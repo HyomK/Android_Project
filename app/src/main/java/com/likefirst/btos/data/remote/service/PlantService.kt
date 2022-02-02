@@ -45,7 +45,7 @@ class PlantService {
         PlantService.loadPlantList(userId).enqueue(object:Callback<PlantResponse>{
             override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
                 val plantResponse: PlantResponse =response.body()!!
-                Log.e("Reply/API", plantResponse.toString())
+                Log.e("PlantListLoad/API", plantResponse.toString())
 
                 when(plantResponse.code){
                     1000->plantView.onPlantListSuccess( plantResponse.result!!)

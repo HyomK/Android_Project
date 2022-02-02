@@ -20,6 +20,8 @@ import com.likefirst.btos.data.remote.view.plant.PlantBuyView
 import com.likefirst.btos.data.remote.view.plant.PlantSelectView
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
+import com.likefirst.btos.utils.toArrayList
+import java.util.Comparator
 import kotlin.collections.ArrayList
 
 class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  , PlantSelectView, PlantBuyView{
@@ -29,7 +31,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     override fun initAfterBinding() {
         val mActivity= activity as MainActivity
         val Plants =loadData()
-        val adapter = PlantRVAdapter(Plants, getPlantProfile(Plants))
+        val adapter = PlantRVAdapter(getPlantProfile(Plants))
         val plantSelectView :PlantSelectView =this
         val plantBuyView:PlantBuyView =this
         val userDB= UserDatabase.getInstance(requireContext())!!
@@ -53,7 +55,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             override fun onClickSelectItem(plant : Plant) {
                 val plantService = PlantService()
                 plantService.setPlantSelectView(plantSelectView)
-                val request :PlantRequest = PlantRequest(USERIDX,plant.plantIdx)
+                val request = PlantRequest(USERIDX,plant.plantIdx)
                 plantService.selectPlant( request )
             }
 
@@ -72,23 +74,28 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     }
 
-    fun getPlantProfile(plantList:List<Plant>):List<Int>{
+   fun  loadData() : ArrayList<Plant> {
+        val plantDB = PlantDatabase.getInstance(requireContext()!!)
+        var list =plantDB?.plantDao()?.getPlants()!!
+        list  =list.sortedWith(ComparePlant)
+        val sorted=list.toArrayList()
+        Log.d("PLANT/SORTED",sorted.toString())
+        return sorted
+    }
+
+    fun getPlantProfile(plantList:ArrayList<Plant>):ArrayList<Pair<Plant,Int>>{
         val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
         val activity = activity as MainActivity
-        val ImageList = plantList.map{plant: Plant ->
+        val ImageList = plantList.map{plant: Plant -> Pair<Plant, Int>(
+            plant,
             requireContext()!!.resources.getIdentifier(
                 plantName[plant.plantIdx-1]
                         +"_"+plant.maxLevel.toString()
                         +"_circle","drawable",
                 activity.packageName)
+        )
         }
-        return ImageList
-    }
-
-   fun  loadData() : List<Plant> {
-        val plantDB = PlantDatabase.getInstance(requireContext()!!)
-        val list =plantDB?.plantDao()?.getPlants()!!
-        return list
+        return ImageList.toArrayList()
     }
 
 
@@ -125,13 +132,32 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         val selected = plantDB.plantDao().getSelectedPlant("selected")!!
         plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
         plantDB.plantDao().setPlantStatus(plantIdx,"selected")
+        Log.d("Plantselect/DB",plantDB.plantDao().getPlants().toString())
 
     }
 
     override fun onPlantSelectFailure(code: Int, message: String) {
 
     }
-
+    class ComparePlant {
+        companion object : Comparator<Plant> {
+            override fun compare(a:Plant, b:Plant): Int {
+                var p1=0
+                var p2=0
+                when(a.plantStatus){
+                    "selected"-> p1= 10
+                    "active"-> p1=3
+                    "inactive"-> p1=2
+                }
+                when(b.plantStatus){
+                    "selected"-> p2= 10
+                    "active"-> p2=3
+                    "inactive"-> p2=2
+                }
+                return p2-p1
+            }
+        }
+    }
 
 }
 
