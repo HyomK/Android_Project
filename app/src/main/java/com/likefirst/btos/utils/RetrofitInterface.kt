@@ -1,13 +1,13 @@
 package com.likefirst.btos.utils
 
+import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface RetrofitInterface {
 
@@ -22,4 +22,10 @@ interface RetrofitInterface {
 
     @GET("/users/{useridx}")
     fun getProfile(@Path("useridx") useridx: Int): Call<GetProfileResponse>
+
+    @PATCH("/users/{userIdx}/sad")
+    fun updateIsSad(
+        @Path("userIdx") userIdx: Int,
+        @Body isSad : UserIsSad
+    ) : Call<BaseResponse>
 }

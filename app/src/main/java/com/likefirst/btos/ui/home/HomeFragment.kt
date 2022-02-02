@@ -1,9 +1,9 @@
 package com.likefirst.btos.ui.home
 
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
+import android.service.autofill.UserData
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -16,25 +16,30 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.UserIsSad
+import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.users.service.UpdateUserService
+import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
-import com.likefirst.btos.ui.profile.plant.PlantFragment
-import com.likefirst.btos.ui.profile.plant.PlantItemFragment
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
+import com.likefirst.btos.utils.saveLastPostingDate
 import java.time.LocalTime
 import java.util.*
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.collections.HashMap
 
 
-public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
-   var isMailboxOpen =false
+public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
+    var isMailboxOpen =false
 
     override fun initAfterBinding() {
 
         val mActivity = activity as MainActivity
+        val updateUserService = UpdateUserService()
+        updateUserService.setUpdateIsSadView(this)
 
         initFlowerPot()
       
@@ -87,15 +92,16 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initFlowerPot(){
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         val animationView: LottieAnimationView = binding.lottieAnimation
         val lastPostingDate = getLastPostingDate()
-        Log.d("lastPostingDate", lastPostingDate.toString())
         val mCalendar = GregorianCalendar.getInstance()
         val currentMillis = mCalendar.timeInMillis
-        mCalendar.set(Calendar.YEAR, 2000)
+        mCalendar.time = lastPostingDate
         val lastMillis = mCalendar.timeInMillis
         val diffPostingDate = (currentMillis - lastMillis) / 1000 / (24*60*60)
-        if (diffPostingDate >= 5){
+        if (userDB!!.getIsSad() || diffPostingDate >= 5){
+            userDB.updateIsSad(true)
             initSadPot(animationView)
         } else {
             initHappyPot(animationView)
@@ -111,29 +117,24 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initSadPot(animationView: LottieAnimationView){
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         animationView.setAnimation("alocasia_sad_3.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
 
         // 테스트 기기 추가
-        // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 한다.
+        // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
         val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
         MobileAds.setRequestConfiguration(
             RequestConfiguration.Builder()
                 .setTestDeviceIds(testDeviceIds)
                 .build()
         )
-        animationView.setOnClickListener {
-            loadInterstitialAd()
-        }
-    }
-
-    fun loadInterstitialAd(){
         val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
         val adLoadCallback = object: RewardedAdLoadCallback() {
             override fun onRewardedAdLoaded() {
                 // Ad successfully loaded.
-                Log.d("rewardLoadSuccess", "yeeeeeeeeeeee")
+                Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
             }
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
                 // Ad failed to load.
@@ -141,7 +142,14 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             }
         }
         mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+        animationView.setOnClickListener {
+            // TODO: 광고 재생 후 보상코드로 변경
+            loadInterstitialAd(mRewardedVideoAd)
+        }
+    }
 
+    fun loadInterstitialAd(mRewardedVideoAd : RewardedAd){
+        val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
         if (mRewardedVideoAd.isLoaded) {
             val activityContext = context as MainActivity
             val adCallback = object: RewardedAdCallback() {
@@ -153,8 +161,9 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 }
                 override fun onUserEarnedReward(@NonNull reward: RewardItem) {
                     // User earned reward.
-                    Log.d("reward", reward.amount.toString())
-                    Log.d("reward", reward.type.toString())
+                    val updateUserService = UpdateUserService()
+                    updateUserService.setUpdateIsSadView(this@HomeFragment)
+                    updateUserService.updateIsSad(userDB.getUser().userIdx!!, UserIsSad(false))
                 }
                 override fun onRewardedAdFailedToShow(adError: AdError) {
                     // Ad failed to display.
@@ -196,5 +205,20 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }else{
             binding.windowIv.setImageResource(R.drawable.window_night)
         }
+    }
+
+    override fun onUpdateLoading() {
+        // TODO: 로딩애니메이션 구현
+    }
+
+    override fun onUpdateSuccess(isSad : UserIsSad) {
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        userDB!!.updateIsSad(isSad.isSad!!)
+        saveLastPostingDate(Date())
+        initFlowerPot()
+    }
+
+    override fun onUpdateFailure(code: Int, message: String) {
+        // TODO: 에러처리
     }
 }

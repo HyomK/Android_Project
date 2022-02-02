@@ -84,7 +84,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onGetProfileViewSuccess(user: User) {
         //UserDB에 프로필 정보 저장
         val userDB = UserDatabase.getInstance(this)?.userDao()
-        if(userDB == null){
+        if(userDB?.getUser() == null){
             userDB?.insert(user)
         } else {
             userDB.deleteAll()

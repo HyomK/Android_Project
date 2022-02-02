@@ -28,6 +28,9 @@ fun saveLastPostingDate(date : Date){
 }
 
 fun getLastPostingDate() : Date {
-    val dateLong = mSharedPreferences.getLong("lastPostingDate", Date().time)
+    val dateDefault = GregorianCalendar(1999, 0,6)
+    val date = dateDefault.time
+//    val dateLong = mSharedPreferences.getLong("lastPostingDate", Date().time)
+    val dateLong = mSharedPreferences.getLong("lastPostingDate", date.time)
     return Date(dateLong)
 }

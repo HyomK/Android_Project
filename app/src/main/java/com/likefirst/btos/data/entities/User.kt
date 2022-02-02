@@ -15,6 +15,7 @@ data class User (
     @ColumnInfo(name = "nickName") var nickName: String="",
     @ColumnInfo(name = "birth") var birth: Int = 0,
     @ColumnInfo(name = "selectedPlantIdx") var selectedPlantIdx: Int? = 1,
+    var isSad: Boolean? = false,
     @ColumnInfo(name = "isPremium") var premium: String? = "free",
     @ColumnInfo(name = "recOthers") var recOthers: Boolean? = true,
     @ColumnInfo(name = "recSimilarAge") var recSimilarAge: Boolean? = true,
@@ -26,4 +27,8 @@ data class UserSign(
     @ColumnInfo(name = "email") var email: String="",
     @ColumnInfo(name = "nickName") var nickName: String="",
     @ColumnInfo(name = "birth") var birth: Int = 0,
+)
+
+data class UserIsSad(
+    @ColumnInfo(name = "isSad") var isSad: Boolean?
 )

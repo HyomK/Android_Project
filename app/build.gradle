@@ -72,6 +72,7 @@ dependencies {
 
     //RoomDB
     implementation "androidx.room:room-runtime:$roomdb_version"
+    implementation "androidx.room:room-ktx:$roomdb_version"
     kapt "androidx.room:room-compiler:$roomdb_version"
     // optional - RxJava2 support for Room
     implementation "androidx.room:room-rxjava2:2.4.0"

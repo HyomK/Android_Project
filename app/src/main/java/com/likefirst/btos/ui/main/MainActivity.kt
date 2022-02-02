@@ -106,7 +106,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     isDrawerOpen=false
                     val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
                     editor.clear()
-                    editor.commit()
+                    editor.apply()
                     if(historyFragment.isAdded){
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
