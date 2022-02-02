@@ -7,6 +7,7 @@ import android.service.autofill.UserData
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
@@ -22,6 +23,7 @@ import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.utils.dateToString
@@ -114,14 +116,15 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
+        animationView.setOnClickListener {
+
+        }
     }
 
     fun initSadPot(animationView: LottieAnimationView){
-        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         animationView.setAnimation("alocasia_sad_3.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
-
         // 테스트 기기 추가
         // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
         val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
@@ -143,14 +146,13 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
         mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
         animationView.setOnClickListener {
-            // TODO: 광고 재생 후 보상코드로 변경
-            loadInterstitialAd(mRewardedVideoAd)
+            showUpdateSadPotDialog(mRewardedVideoAd)
         }
     }
 
     fun loadInterstitialAd(mRewardedVideoAd : RewardedAd){
-        val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
         if (mRewardedVideoAd.isLoaded) {
+            val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
             val activityContext = context as MainActivity
             val adCallback = object: RewardedAdCallback() {
                 override fun onRewardedAdOpened() {
@@ -205,6 +207,42 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }else{
             binding.windowIv.setImageResource(R.drawable.window_night)
         }
+    }
+
+    fun showUpdateSadPotDialog(mRewardedVideoAd: RewardedAd){
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("취소", "확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to "시무룩이 상태에서는 화분이 더이상 성장하지 않습니다. 시무룩이 상태를 해제할까요? (광고영상이 하나 재생돼요!)",
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+            override fun onButton1Clicked() {
+
+            }
+            override fun onButton2Clicked() {
+                loadInterstitialAd(mRewardedVideoAd)
+            }
+        })
+        dialog.show(this.parentFragmentManager, "showUpdateSadPotDialog")
+    }
+
+    fun showAdLoadFailedDialog(){
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to "아직 광고가 생성되지 않았어요. 조금뒤에 다시 시도해주세요!!",
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+            override fun onButton1Clicked() {
+
+            }
+            override fun onButton2Clicked() {
+
+            }
+        })
+        dialog.show(this.parentFragmentManager, "showAdLoadFailedDialog")
     }
 
     override fun onUpdateLoading() {

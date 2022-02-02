@@ -28,6 +28,7 @@ fun saveLastPostingDate(date : Date){
 }
 
 fun getLastPostingDate() : Date {
+    // TODO: 앱 배포시에는 dateLong 기본값을 오늘날짜로 해주어야함 Date().time
     val dateDefault = GregorianCalendar(1999, 0,6)
     val date = dateDefault.time
 //    val dateLong = mSharedPreferences.getLong("lastPostingDate", Date().time)
