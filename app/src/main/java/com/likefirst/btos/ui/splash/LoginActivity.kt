@@ -16,13 +16,18 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
 import com.google.android.gms.tasks.Task
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
 import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.service.PlantService
 import com.likefirst.btos.data.remote.view.AutoLoginView
 import com.likefirst.btos.data.remote.view.GetProfileView
 import com.likefirst.btos.data.remote.view.LoginView
+import com.likefirst.btos.data.remote.view.plant.PlantInitView
+import com.likefirst.btos.data.remote.view.plant.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
@@ -31,11 +36,12 @@ import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
 class LoginActivity
-    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener, LoginView, AutoLoginView, GetProfileView {
+    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener, LoginView, AutoLoginView, GetProfileView,PlantInitView,PlantListView {
     val G_SIGN_IN : Int = 1
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var email : String
     val authService = AuthService()
+    val plantService=PlantService()
 
     override fun initAfterBinding() {
 
@@ -102,6 +108,8 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
+        plantService.initPlant(login.userIdx)
+
 
         val intent = Intent(this, MainActivity::class.java)
         finish()
@@ -140,6 +148,8 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
+        updatePlantDB()
+
         val intent = Intent(this, MainActivity::class.java)
         finish()
         startActivity(intent)
@@ -161,9 +171,55 @@ class LoginActivity
             userDB.update(user)
         }
         Log.e("PROFILE/API",userDB?.getUser().toString())
+
+        updatePlantDB()
+
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
 
     }
+
+    fun updatePlantDB(){
+        val userDB= UserDatabase.getInstance(this)!!
+        val USERIDX=userDB.userDao().getUser().userIdx!!
+        val plantService =PlantService()
+        plantService.setPlantListView(this)
+        plantService.loadPlantList(USERIDX.toString())
+
+    }
+
+    override fun onPlantListLoading() {
+
+    }
+
+    override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
+        val plantDB = PlantDatabase.getInstance(this)
+        Log.d("Plant/API",plantList.toString())
+        plantList.forEach { i ->
+            run {
+                if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
+                    plantDB?.plantDao()?.insert(i)
+                } else {
+                    plantDB?.plantDao()?.update(i)
+                }
+            }
+        }  // 전체 화분 목록 DB 업데이트
+    }
+
+
+
+    override fun onPlantListFailure(code: Int, message: String) {
+        Log.d("Plant/API",code.toString()+"fail to load...")
+    }
+
+    override fun onPlantInitSuccess() {
+        updatePlantDB()
+    }
+
+    override fun onPlantInitFailure(code: Int, message: String) {
+
+    }
+
+
 }

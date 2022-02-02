@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.local.PlantDatabase
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.service.PlantService
 import com.likefirst.btos.data.remote.view.plant.PlantBuyView
 import com.likefirst.btos.data.remote.view.plant.PlantListView
@@ -26,9 +27,9 @@ import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),
-    PlantListView{
-    val USERIDX=2
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
+
+    var USERIDX=-1
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
@@ -45,7 +46,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun initAfterBinding() {
 
         binding.mainBnv.itemIconTintList = null
-        updatePlantDB()
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
@@ -76,10 +76,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             when (it.itemId) {
                 R.id.homeFragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.fr_layout, homeFragment)
-//                        .setReorderingAllowed(true)
-//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=true
                     if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
@@ -262,40 +258,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     }
 
-    fun updateRoomDB(){
-        updatePlantDB()
-    }
 
-    fun updatePlantDB(){
-
-        val plantService =PlantService()
-        plantService.setPlantListView(this)
-        plantService.loadPlantList(USERIDX.toString())
-
-
-    }
-
-    override fun onPlantListLoading() {
-
-    }
-
-    override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
-        val plantDB = PlantDatabase.getInstance(this)
-        Log.d("Plant/API",plantList.toString())
-        plantList.forEach { i ->
-            run {
-                if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
-                    plantDB?.plantDao()?.insert(i)
-                } else {
-                    plantDB?.plantDao()?.update(i)
-                }
-            }
-        }  // 전체 화분 목록 DB 업데이트
-    }
-
-
-
-    override fun onPlantListFailure(code: Int, message: String) {
-        Log.d("Plant/API",code.toString()+"fail to load...")
-    }
 }

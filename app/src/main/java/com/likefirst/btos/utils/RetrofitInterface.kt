@@ -65,4 +65,9 @@ interface RetrofitInterface {
         @Body PlantBuyRequest : PlantRequest
     ): Call<PlantResponse>
 
+    @POST("/plants/{userId}/initialize")
+    fun initPlant(
+        @Body userIdx : Int
+    ): Call<PlantResponse>
+
 }

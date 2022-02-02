@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.profile.plant
 
+import android.media.Image
 import android.os.Bundle
 import android.os.FileUtils
 import android.util.Log
@@ -11,6 +12,7 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.local.PlantDatabase
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.PlantRequest
 import com.likefirst.btos.data.remote.response.PlantResponse
 import com.likefirst.btos.data.remote.service.PlantService
@@ -22,13 +24,16 @@ import kotlin.collections.ArrayList
 
 class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  , PlantSelectView, PlantBuyView{
 
-    val USERIDX=2
+    var USERIDX=-1
 
     override fun initAfterBinding() {
         val mActivity= activity as MainActivity
-        val adapter = PlantRVAdapter(loadData())
+        val Plants =loadData()
+        val adapter = PlantRVAdapter(Plants, getPlantProfile(Plants))
         val plantSelectView :PlantSelectView =this
         val plantBuyView:PlantBuyView =this
+        val userDB= UserDatabase.getInstance(requireContext())!!
+        USERIDX=userDB.userDao().getUser().userIdx!!
 
         binding.flowerpotRv.adapter=adapter
 
@@ -67,6 +72,18 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     }
 
+    fun getPlantProfile(plantList:List<Plant>):List<Int>{
+        val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
+        val activity = activity as MainActivity
+        val ImageList = plantList.map{plant: Plant ->
+            requireContext()!!.resources.getIdentifier(
+                plantName[plant.plantIdx-1]
+                        +"_"+plant.maxLevel.toString()
+                        +"_circle","drawable",
+                activity.packageName)
+        }
+        return ImageList
+    }
 
    fun  loadData() : List<Plant> {
         val plantDB = PlantDatabase.getInstance(requireContext()!!)
@@ -112,7 +129,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
     override fun onPlantSelectFailure(code: Int, message: String) {
-        TODO("Not yet implemented")
+
     }
 
 

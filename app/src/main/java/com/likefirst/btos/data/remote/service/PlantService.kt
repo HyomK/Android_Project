@@ -2,19 +2,16 @@ package com.likefirst.btos.data.remote.service
 
 
 import android.util.Log
-import androidx.core.os.bundleOf
 import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.data.remote.response.PlantRequest
 import com.likefirst.btos.data.remote.response.PlantResponse
 import com.likefirst.btos.data.remote.view.plant.PlantBuyView
+import com.likefirst.btos.data.remote.view.plant.PlantInitView
 import com.likefirst.btos.data.remote.view.plant.PlantListView
 import com.likefirst.btos.data.remote.view.plant.PlantSelectView
-import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.profile.plant.PlantRVAdapter
+import com.likefirst.btos.ui.splash.LoginActivity
 import com.likefirst.btos.utils.RetrofitInterface
 import com.likefirst.btos.utils.errorDialog
-import kotlinx.coroutines.flow.callbackFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,10 +21,12 @@ class PlantService {
     private lateinit var plantView : PlantListView
     private lateinit var plantSelectView: PlantSelectView
     private lateinit var plantBuyView: PlantBuyView
+    private lateinit var plantInitView: PlantInitView
+
     private val PlantService = ApplicationClass.retrofit.create(RetrofitInterface::class.java)
 
 
-    fun setPlantListView(plantView: MainActivity){
+    fun setPlantListView(plantView: LoginActivity){
         this.plantView=plantView
     }
 
@@ -76,7 +75,6 @@ class PlantService {
                 }else{
                     plantSelectView.onPlantSelectFailure( plantResponse.code,plantResponse.message)
                 }
-
             }
 
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
@@ -107,6 +105,28 @@ class PlantService {
 
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
                 plantBuyView.onPlantBuyFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
+            }
+        })
+    }
+
+    fun initPlant(userId: Int){
+        PlantService.initPlant(userId).enqueue(object:Callback<PlantResponse>{
+            override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
+                val plantResponse =response.body()!!
+
+                if(response.isSuccessful){
+                    plantInitView.onPlantInitSuccess()
+                }else{
+                    plantInitView.onPlantInitFailure( plantResponse.code,plantResponse.message)
+                }
+                Log.e("PlantInit/API", plantResponse.toString())
+
+            }
+
+
+            override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
+                plantInitView.onPlantInitFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
+                plantInitView.onPlantInitFailure( 7000,"해당 유저의 화분 초기화에 실패하였습니다.")
             }
         })
     }

@@ -10,13 +10,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
+import com.likefirst.btos.utils.resourceFilter
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PlantRVAdapter(private val dataSet: List<Plant>) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
+class PlantRVAdapter( val dataSet: List<Plant> , val initImage :List<Int>) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: PlantItemClickListener
+
 
     interface PlantItemClickListener{
         fun onClickInfoItem(plant : Plant)
@@ -51,7 +53,8 @@ class PlantRVAdapter(private val dataSet: List<Plant>) : RecyclerView.Adapter<Pl
         val won = NumberFormat.getCurrencyInstance(Locale.KOREA).format(item.plantPrice)
 
         holder.plantName.text= item.plantName
-        holder.plantImage.setImageResource(R.drawable.alocasia_3)
+        holder.plantImage.setImageResource(initImage[position])
+
 
        if(item.isOwn==false){ //미보유 아이템
            holder.layout.setBackgroundResource(R.drawable.profile_shop_bg)

@@ -22,10 +22,10 @@
         <!--    위 value값은 샘플 ID값임 -->
 
         <activity
-            android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true"
 
+            android:name=".ui.splash.LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,9 +33,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.splash.LoginActivity"
-            android:exported="true"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
+            android:exported="true"
+
              >
         </activity>
 
