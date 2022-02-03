@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.view
+package com.likefirst.btos.data.remote.users.view
 
 import com.likefirst.btos.data.remote.response.Login
 

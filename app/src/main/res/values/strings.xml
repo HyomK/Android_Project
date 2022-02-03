@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BTOS</string>
 
-
+   <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
 
 
     <string-array name="onboarding_agelist">

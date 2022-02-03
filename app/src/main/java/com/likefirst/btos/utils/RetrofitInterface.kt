@@ -2,6 +2,10 @@ package com.likefirst.btos.utils
 
 
 import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.remote.*
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.posting.response.LetterResponse
 import com.likefirst.btos.data.remote.response.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -65,9 +69,10 @@ interface RetrofitInterface {
         @Body PlantBuyRequest : PlantRequest
     ): Call<PlantResponse>
 
+
     @POST("/plants/{userId}/initialize")
     fun initPlant(
-        @Body userIdx : Int
+        @Path ("userId") userIdx : String
     ): Call<PlantResponse>
 
 }

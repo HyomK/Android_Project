@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.view.mailbox
+package com.likefirst.btos.data.remote.posting.view
 
 import com.likefirst.btos.data.remote.response.Diary
 

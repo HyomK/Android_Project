@@ -8,11 +8,9 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
@@ -22,20 +20,19 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.Constants.TAG
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
-import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
-import com.likefirst.btos.data.remote.service.AuthService
-import com.likefirst.btos.data.remote.service.PlantService
-import com.likefirst.btos.data.remote.view.AutoLoginView
-import com.likefirst.btos.data.remote.view.GetProfileView
-import com.likefirst.btos.data.remote.view.LoginView
-import com.likefirst.btos.data.remote.view.plant.PlantListView
+import com.likefirst.btos.data.remote.users.service.AuthService
+import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.users.view.AutoLoginView
+import com.likefirst.btos.data.remote.users.view.GetProfileView
+import com.likefirst.btos.data.remote.users.view.LoginView
+import com.likefirst.btos.data.remote.plant.view.PlantInitView
+import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
@@ -44,7 +41,9 @@ import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
 class LoginActivity
-    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener, LoginView, AutoLoginView, GetProfileView,PlantListView {
+    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
+    LoginView, AutoLoginView, GetProfileView,
+    PlantListView, PlantInitView {
 
     val G_SIGN_IN : Int = 1
     private var GOOGLE_LOGIN_CODE = 9001
@@ -52,7 +51,7 @@ class LoginActivity
     lateinit var email : String
     private var auth : FirebaseAuth? = null
     val authService = AuthService()
-    val plantService=PlantService()
+    val plantService= PlantService()
 
     val fireStore = Firebase.firestore
 
@@ -129,7 +128,7 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        //   signIn(email,"btos1234")
+        signIn(email,"btos1234")
         // TODO: Firebase 로그인
         val intent = Intent(this, MainActivity::class.java)
         finish()
@@ -311,12 +310,18 @@ class LoginActivity
 
     override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
         val plantDB = PlantDatabase.getInstance(this)
-        Log.d("Plant/API",plantList.toString())
+        Log.d("PlantList/API",plantList.toString())
         plantList.forEach { i ->
             run {
                 if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
                     plantDB?.plantDao()?.insert(i)
                 } else {
+                    if(i.plantIdx==1 && i.plantStatus=="inactive"){
+                        val userDB= UserDatabase.getInstance(this)!!
+                        val USERIDX=userDB.userDao().getUser().userIdx!!
+                        plantService.setPlantInitView(this)
+                        plantService.initPlant(USERIDX.toString())
+                    }
                     plantDB?.plantDao()?.update(i)
                 }
             }
@@ -329,6 +334,13 @@ class LoginActivity
         Log.d("Plant/API",code.toString()+"fail to load...")
     }
 
+    override fun onPlantInitSuccess(userId: Int) {
+        Log.e("PlantINIT/API","Success")
+    }
+
+    override fun onPlantInitFailure(code: Int, message: String) {
+        Log.e("PlantINIT/API","FAIL ...")
+    }
 
 
 }

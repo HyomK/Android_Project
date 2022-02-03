@@ -1,13 +1,13 @@
-package com.likefirst.btos.data.remote.service
+package com.likefirst.btos.data.remote.posting.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.data.remote.response.MailboxResponse
-import com.likefirst.btos.data.remote.view.mailbox.MailboxView
+import com.likefirst.btos.data.remote.posting.view.MailboxView
 import com.likefirst.btos.utils.RetrofitInterface
-import com.likefirst.btos.data.remote.view.mailbox.DiaryView
-import com.likefirst.btos.data.remote.view.mailbox.LetterView
-import com.likefirst.btos.data.remote.view.mailbox.ReplyView
+import com.likefirst.btos.data.remote.posting.view.DiaryView
+import com.likefirst.btos.data.remote.posting.view.LetterView
+import com.likefirst.btos.data.remote.posting.view.ReplyView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -18,13 +18,20 @@
         android:theme="@style/Theme.BTOS">
 
         <service
-            android:name=".data.remote.service.MyFirebaseMessagingService"
+            android:name=".data.remote.notify.service.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+
             </intent-filter>
         </service>
+>
+
+
+
+
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

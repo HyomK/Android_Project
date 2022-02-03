@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
@@ -18,19 +17,21 @@ import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
-import com.likefirst.btos.data.remote.service.AuthService
-import com.likefirst.btos.data.remote.service.PlantService
-import com.likefirst.btos.data.remote.view.GetProfileView
-import com.likefirst.btos.data.remote.view.LoginView
-import com.likefirst.btos.data.remote.view.SignUpView
-import com.likefirst.btos.data.remote.view.plant.PlantInitView
-import com.likefirst.btos.data.remote.view.plant.PlantListView
+import com.likefirst.btos.data.remote.users.service.AuthService
+import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.users.view.GetProfileView
+import com.likefirst.btos.data.remote.users.view.LoginView
+import com.likefirst.btos.data.remote.users.view.SignUpView
+import com.likefirst.btos.data.remote.plant.view.PlantInitView
+import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
-class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate), SignUpView, GetProfileView, LoginView,PlantInitView, PlantListView {
+class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
+    SignUpView, GetProfileView, LoginView,
+    PlantInitView, PlantListView {
 
     val authService = AuthService()
     val plantService= PlantService()
@@ -81,7 +82,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         //createAccount(email,"btos1234")
         // TODO: Firebase 로그인
         // TODO: initPlant 확인 필요
-        plantService.initPlant(login.userIdx)
+
+        Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(email)
 
@@ -131,7 +133,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-
+        plantService.setPlantInitView(this)
+        plantService.initPlant(login.userIdx.toString())
         val intent = Intent(this, TutorialActivity::class.java)
         finish()
         startActivity(intent)
@@ -181,7 +184,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     fun updatePlantDB(){
         val userDB= UserDatabase.getInstance(this)!!
         val USERIDX=userDB.userDao().getUser().userIdx!!
-        val plantService =PlantService()
+        val plantService = PlantService()
         plantService.setPlantListView(this)
         plantService.loadPlantList( USERIDX.toString())
 

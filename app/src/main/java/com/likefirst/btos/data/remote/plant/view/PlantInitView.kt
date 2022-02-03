@@ -1,6 +1,6 @@
-package com.likefirst.btos.data.remote.view.plant
+package com.likefirst.btos.data.remote.plant.view
 
-import com.likefirst.btos.data.remote.response.PlantResponse
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
 
 interface PlantInitView {
     fun onPlantInitSuccess(userId: Int)

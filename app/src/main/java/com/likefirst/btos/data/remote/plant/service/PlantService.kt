@@ -1,15 +1,14 @@
-package com.likefirst.btos.data.remote.service
+package com.likefirst.btos.data.remote.plant.service
 
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.remote.response.PlantRequest
-import com.likefirst.btos.data.remote.response.PlantResponse
-import com.likefirst.btos.data.remote.view.plant.PlantBuyView
-import com.likefirst.btos.data.remote.view.plant.PlantInitView
-import com.likefirst.btos.data.remote.view.plant.PlantListView
-import com.likefirst.btos.data.remote.view.plant.PlantSelectView
-import com.likefirst.btos.ui.splash.OnboardingActivity
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.plant.view.PlantBuyView
+import com.likefirst.btos.data.remote.plant.view.PlantInitView
+import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.plant.view.PlantSelectView
 import com.likefirst.btos.utils.RetrofitInterface
 import com.likefirst.btos.utils.errorDialog
 import retrofit2.Call
@@ -38,6 +37,9 @@ class PlantService {
         this.plantBuyView=plantBuyView
     }
 
+    fun setPlantInitView(plantInitView: PlantInitView){
+        this.plantInitView=plantInitView
+    }
 
     fun loadPlantList(userId:String){
         plantView.onPlantListLoading()
@@ -109,13 +111,13 @@ class PlantService {
         })
     }
 
-    fun initPlant(userId: Int){
+    fun initPlant(userId: String){
         PlantService.initPlant(userId).enqueue(object:Callback<PlantResponse>{
             override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
                 val plantResponse =response.body()!!
 
                 if(response.isSuccessful){
-                    plantInitView.onPlantInitSuccess(userId)
+                    plantInitView.onPlantInitSuccess(1)
                 }else{
                     plantInitView.onPlantInitFailure( plantResponse.code,plantResponse.message)
                 }

@@ -4,20 +4,22 @@ package com.likefirst.btos.ui.main
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.Toast
-import androidx.activity.viewModels
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.commit
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
-import com.likefirst.btos.data.remote.service.MyFirebaseMessagingService
+import com.likefirst.btos.data.entities.firebase.NoticeDTO
+import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
@@ -32,7 +34,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     var USERIDX=-1
     private var auth : FirebaseAuth? = null
-    val fireStore = Firebase.firestore
+    private var fireStore = Firebase.firestore
+    private var uid : String? = null
+
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
@@ -48,7 +52,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
+        auth = FirebaseAuth.getInstance()
+        uid = auth?.currentUser?.uid
+        fireStore = FirebaseFirestore.getInstance()
     }
 
 
@@ -111,10 +117,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 }
 
                 R.id.historyFragment ->{
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.fr_layout, historyFragment)
-//                        .setReorderingAllowed(true)
-//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=false
                     val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
                     editor.clear()
@@ -225,8 +227,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 binding.mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
-
     }
+
+
 
 
     override fun onBackPressed() {
@@ -264,7 +267,38 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     override fun onStart() {
         super.onStart()
 
+
     }
 
 
+    //TODO NoticeAdapter
+    inner class NoticeViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        var noticeDTOs: ArrayList<NoticeDTO> = arrayListOf()
+
+        init {
+            fireStore?.collection(uid!!)?.orderBy("timestamp", Query.Direction.DESCENDING)
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    noticeDTOs.clear()
+                    if (querySnapshot == null) return@addSnapshotListener
+                    // 데이터 받아오기
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(NoticeDTO::class.java)
+                        noticeDTOs.add(item!!)
+                    }
+                    notifyDataSetChanged()
+                }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            TODO("Not yet implemented")
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override fun getItemCount(): Int {
+            return noticeDTOs.size
+        }
+    }
 }

@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryInfo
 import com.likefirst.btos.data.remote.response.Diary
-import com.likefirst.btos.data.remote.response.Letter
+import com.likefirst.btos.data.remote.posting.response.Letter
 import com.likefirst.btos.data.remote.response.Mailbox
-import com.likefirst.btos.data.remote.service.DiaryService
-import com.likefirst.btos.data.remote.service.LetterService
-import com.likefirst.btos.data.remote.service.MailboxService
-import com.likefirst.btos.data.remote.view.mailbox.DiaryView
-import com.likefirst.btos.data.remote.view.mailbox.LetterView
-import com.likefirst.btos.data.remote.view.mailbox.MailboxView
+import com.likefirst.btos.data.remote.posting.service.DiaryService
+import com.likefirst.btos.data.remote.posting.service.LetterService
+import com.likefirst.btos.data.remote.posting.service.MailboxService
+import com.likefirst.btos.data.remote.posting.view.DiaryView
+import com.likefirst.btos.data.remote.posting.view.LetterView
+import com.likefirst.btos.data.remote.posting.view.MailboxView
 import com.likefirst.btos.databinding.FragmentMailboxBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
@@ -33,7 +33,7 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
 
     override fun initAfterBinding() {
         val presFragment  = this
-        val mailboxService=MailboxService()
+        val mailboxService= MailboxService()
         mailboxService.setMailboxView(this)
         mailboxService.loadMailbox("2")
         setClickListener(presFragment)

@@ -1,13 +1,9 @@
 package com.likefirst.btos.ui.profile.plant
 
-import android.content.Context
-import android.media.Image
 import android.os.Bundle
-import android.os.FileUtils
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
@@ -16,18 +12,18 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.response.PlantRequest
-import com.likefirst.btos.data.remote.response.PlantResponse
-import com.likefirst.btos.data.remote.service.PlantService
-import com.likefirst.btos.data.remote.view.plant.PlantBuyView
-import com.likefirst.btos.data.remote.view.plant.PlantSelectView
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.plant.view.PlantBuyView
+import com.likefirst.btos.data.remote.plant.view.PlantSelectView
 import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.utils.toArrayList
 import java.util.Comparator
 import kotlin.collections.ArrayList
 
-class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  , PlantSelectView, PlantBuyView{
+class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  ,
+    PlantSelectView, PlantBuyView {
 
     var USERIDX=-1
     lateinit var  sharedViewModel : SharedViewModel
@@ -41,8 +37,8 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
         val Plants =loadData()
         val adapter = PlantRVAdapter(getPlantProfile(Plants))
-        val plantSelectView :PlantSelectView =this
-        val plantBuyView:PlantBuyView =this
+        val plantSelectView : PlantSelectView =this
+        val plantBuyView: PlantBuyView =this
         val userDB= UserDatabase.getInstance(requireContext())!!
         USERIDX=userDB.userDao().getUser().userIdx!!
 
