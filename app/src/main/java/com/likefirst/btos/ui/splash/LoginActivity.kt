@@ -129,8 +129,8 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        signIn(email,"btos1234")
-
+        //   signIn(email,"btos1234")
+        // TODO: Firebase 로그인
         val intent = Intent(this, MainActivity::class.java)
         finish()
         startActivity(intent)
@@ -167,10 +167,6 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        if(auth?.currentUser==null) {
-            val userDB = UserDatabase.getInstance(this)?.userDao()!!
-            signIn(userDB.getEmail()!!,"btos1234")
-        }
 
         val intent = Intent(this, MainActivity::class.java)
         finish()
@@ -248,7 +244,7 @@ class LoginActivity
 //         }
 //    }
 
-
+    // TODO: Firebase 로그인
     private fun signIn(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             auth?.signInWithEmailAndPassword(email, password)
@@ -280,6 +276,7 @@ class LoginActivity
         }
     }
 
+    // TODO: Firebase 로그인
     private fun createAccount(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             auth?.createUserWithEmailAndPassword(email, password)

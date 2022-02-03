@@ -115,7 +115,7 @@ class PlantService {
                 val plantResponse =response.body()!!
 
                 if(response.isSuccessful){
-                    plantInitView.onPlantInitSuccess()
+                    plantInitView.onPlantInitSuccess(userId)
                 }else{
                     plantInitView.onPlantInitFailure( plantResponse.code,plantResponse.message)
                 }

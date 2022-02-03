@@ -78,10 +78,13 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-        createAccount(email,"btos1234")
+        //createAccount(email,"btos1234")
+        // TODO: Firebase 로그인
+        // TODO: initPlant 확인 필요
+        plantService.initPlant(login.userIdx)
         authService.setLoginView(this)
         authService.login(email)
-        plantService.initPlant(login.userIdx)
+
     }
 
     override fun onSignUpFailure(code: Int, message: String) {
@@ -144,7 +147,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
     }
 
-
+    // TODO: Firebase 로그인
     private fun createAccount(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             auth?.createUserWithEmailAndPassword(email, password)
@@ -166,7 +169,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
 
 
-    override fun onPlantInitSuccess() {
+    override fun onPlantInitSuccess(userId: Int) {
+        Log.e("PlantInit/Success",userId.toString()+ " : USERID SUCCESS TO INIT PLANT")
     }
 
     override fun onPlantInitFailure(code: Int, message: String) {
