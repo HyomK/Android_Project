@@ -103,6 +103,7 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
+        Log.d("onLoginSuccess", "onLogind 1")
 
         val intent = Intent(this, MainActivity::class.java)
         finish()
@@ -161,7 +162,7 @@ class LoginActivity
         } else {
             userDB.update(user)
         }
-        Log.e("PROFILE/API",userDB?.getUser().toString())
+        Log.e("PROFILE/API-LOGIN",userDB?.getUser().toString())
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {

@@ -103,6 +103,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val lastMillis = mCalendar.timeInMillis
         val diffPostingDate = (currentMillis - lastMillis) / 1000 / (24*60*60)
         if (userDB!!.getIsSad() || diffPostingDate >= 5){
+            // 시무룩이 상태로 RoomDB, 서버의 유저정보 업데이트
+            val updateUserService = UpdateUserService()
+            updateUserService.setUpdateIsSadView(this)
+            updateUserService.updateIsSad(getUserIdx(), UserIsSad(true))
             userDB.updateIsSad(true)
             initSadPot(animationView)
         } else {
@@ -152,7 +156,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
     fun loadInterstitialAd(mRewardedVideoAd : RewardedAd){
         if (mRewardedVideoAd.isLoaded) {
-            val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
             val activityContext = context as MainActivity
             val adCallback = object: RewardedAdCallback() {
                 override fun onRewardedAdOpened() {
@@ -165,7 +168,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                     // User earned reward.
                     val updateUserService = UpdateUserService()
                     updateUserService.setUpdateIsSadView(this@HomeFragment)
-                    updateUserService.updateIsSad(userDB.getUser().userIdx!!, UserIsSad(false))
+                    updateUserService.updateIsSad(getUserIdx(), UserIsSad(false))
                 }
                 override fun onRewardedAdFailedToShow(adError: AdError) {
                     // Ad failed to display.
@@ -245,6 +248,11 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         dialog.show(this.parentFragmentManager, "showAdLoadFailedDialog")
     }
 
+    fun getUserIdx() : Int{
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        return userDB!!.getUser().userIdx!!
+    }
+
     override fun onUpdateLoading() {
         // TODO: 로딩애니메이션 구현
     }
@@ -252,8 +260,13 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     override fun onUpdateSuccess(isSad : UserIsSad) {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         userDB!!.updateIsSad(isSad.isSad!!)
-        saveLastPostingDate(Date())
-        initFlowerPot()
+        // 시무룩이 상태로 전환 시에만 lastPostingDate 초기화
+        if (isSad.isSad!!){
+            return
+        } else {
+            saveLastPostingDate(Date())
+            initFlowerPot()
+        }
     }
 
     override fun onUpdateFailure(code: Int, message: String) {

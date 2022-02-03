@@ -90,7 +90,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             userDB.deleteAll()
             userDB.insert(user)
         }
-        Log.e("PROFILE/API",userDB?.getUser().toString())
+        Log.e("PROFILE/API-ONBOARDING",userDB?.getUser().toString())
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {

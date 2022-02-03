@@ -115,6 +115,7 @@ class AuthService {
         AuthService.getProfile(useridx).enqueue(object : Callback<GetProfileResponse>{
             override fun onResponse(call: Call<GetProfileResponse>, response: Response<GetProfileResponse>) {
                 val getProfileResponse : GetProfileResponse = response.body()!!
+                Log.d("onLoginSuccess", getProfileResponse.toString())
 
                 when(getProfileResponse.code){
                     1000 -> getprofileView.onGetProfileViewSuccess(getProfileResponse.result)
