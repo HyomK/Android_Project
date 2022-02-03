@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.users.service
+package com.likefirst.btos.data.remote.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit

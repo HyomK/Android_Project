@@ -1,25 +1,52 @@
 package com.likefirst.btos.ui.profile
 
-import android.system.Os.remove
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.commit
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.likefirst.btos.R
+import com.likefirst.btos.data.local.PlantDatabase
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.databinding.FragmentProfileBinding
 import com.likefirst.btos.ui.BaseFragment
-import com.likefirst.btos.ui.home.MailboxFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.ui.profile.plant.PlantRVAdapter
+import com.likefirst.btos.ui.profile.plant.SharedViewModel
+import com.likefirst.btos.ui.profile.setting.NoticeFragment
 import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
 
 class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     var isSettingOpen = false
+    var isFetch=true
+    lateinit var  sharedViewModel : SharedViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedViewModel= ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        sharedViewModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
+            val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
+
+            binding.profileIv.setImageResource(requireContext()!!.resources.getIdentifier(
+                plantName[it.getInt("Id")-1]
+                        +"_"+it.getInt("level").toString()
+                        +"_circle","drawable",
+                requireActivity().packageName))
+            binding.profileLevelTv.text=it.getString("name")+" "+it.getInt("level").toString()+"단계"
+        })
+    }
+
+
     override fun initAfterBinding() {
+        initProfile()
+        initClickListener()
 
+    }
+
+    fun initClickListener(){
         val mActivity = activity as MainActivity
-
         binding.profileCd.setOnClickListener {
             mActivity.supportFragmentManager.beginTransaction()
                 .add(R.id.fr_layout,  PlantFragment(), "plantrv")
@@ -35,7 +62,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 .commit()
         }
         binding.profileSettingTv.setOnClickListener {
-           isSettingOpen=true
+            isSettingOpen=true
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fr_layout, SettingFragment(),"setting")
@@ -57,7 +84,22 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 .addToBackStack("profile-save")
                 .commit()
         }
+    }
 
+    fun initProfile(){
+        val plantDB = PlantDatabase.getInstance(requireContext())!!
+        val userDatabase = UserDatabase.getInstance(requireContext())!!
+        val plant =plantDB.plantDao().getSelectedPlant("selected")!!
+        val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
+        val profile = requireContext()!!.resources.getIdentifier(
+            plantName[plant.plantIdx-1]
+                    +"_"+plant.currentLevel.toString()
+                    +"_circle","drawable",
+            requireActivity().packageName)
+        binding.profileIv.setImageResource( profile)
+        binding.profileNicknameTv.text=userDatabase.userDao().getNickName()!!
+        binding.profileLevelTv.text=plant.plantName+" "+plant.currentLevel+"단계"
+        if(plant.maxLevel!=plant.currentLevel)binding.profileMaxTv.visibility= View.GONE
     }
 
     fun cleanUpFragment(  fragments: Array<String>){
@@ -73,11 +115,11 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         super.onHiddenChanged(hidden)
         if (isHidden && isAdded) {
             val fragments = arrayOf("premium", "plantrv","plantItem","notice")
-
             cleanUpFragment(fragments)
             if (isSettingOpen) {
                 val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo", "setNotify")
                 cleanUpFragment(fragments)
+                isSettingOpen=false
             }
             requireActivity().supportFragmentManager.commit {
                 requireActivity().supportFragmentManager
@@ -85,6 +127,10 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
             }
 
         }
+    }
+
+  fun updateProfile() {
+        initProfile()
     }
 
 

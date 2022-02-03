@@ -3,6 +3,10 @@
     <string name="google_Admob_ID_test">"ca-app-pub-3940256099942544~3347511713"</string>
     <string name="google_Admob_ID_prod">"ca-app-pub-3439488559531418~5946591557"</string>
 
+
+   <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
+
+
     <string-array name="onboarding_agelist">
         <item>2021</item>
         <item>2020</item>
@@ -151,9 +155,10 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string name="none_selected">선택안함</string>
 
     <string-array name="suggest_item">
-        <item>카테고리1</item>
-        <item>카테고리2</item>
-        <item>카테고리3</item>
+        <item>버그 제보</item>
+        <item>악성 유저 신고</item>
+        <item>추가되었으면 하는 기능</item>
+        <item>기타</item>
     </string-array>
 
     <string name="profile_notice">안녕하세요. 저편너머입니다 공지공지공지공지 공지공지공지공지 공지공지공지공지

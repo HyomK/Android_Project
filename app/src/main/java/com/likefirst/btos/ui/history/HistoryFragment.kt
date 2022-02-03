@@ -72,7 +72,6 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
     }
 
     fun setDisplay(){
-
         val spf= requireActivity().getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE)
         val backPos= spf.getString("backPos","historysender")
         Log.e("historyTag","backPos -> ${ backPos}")
@@ -109,6 +108,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         }
     }
 
+
 //    override fun onHiddenChanged(hidden: Boolean) {
 //        super.onHiddenChanged(hidden)
 //        if(isAdded){
@@ -119,6 +119,17 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 //            setDisplay()
 //        }
 //    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(isAdded){
+            val editor= requireActivity().getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
+            editor.putString("backPos","historysender")
+            editor.commit()
+            setDisplay()
+        }
+    }
+
 
 
     override fun onStart() {
