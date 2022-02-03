@@ -12,7 +12,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.utils.resourceFilter
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList

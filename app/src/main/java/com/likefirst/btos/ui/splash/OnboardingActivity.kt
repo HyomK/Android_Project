@@ -1,11 +1,16 @@
 package com.likefirst.btos.ui.splash
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
@@ -30,6 +35,12 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     val authService = AuthService()
     val plantService= PlantService()
     lateinit var email: String
+    private var auth : FirebaseAuth? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        auth = Firebase.auth
+    }
 
     override fun initAfterBinding() {
 
@@ -67,6 +78,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+        createAccount(email,"btos1234")
         authService.setLoginView(this)
         authService.login(email)
         plantService.initPlant(login.userIdx)
@@ -95,8 +107,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             userDB.insert(user)
         }
         Log.e("PROFILE/API", userDB?.getUser().toString())
-
         updatePlantDB()
+
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -133,8 +145,29 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
     }
 
-    override fun onPlantInitSuccess() {
 
+    private fun createAccount(email: String, password: String) {
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            auth?.createUserWithEmailAndPassword(email, password)
+                ?.addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(
+                            this, "계정 생성 완료.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this, "계정 생성 실패",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        }
+    }
+
+
+
+    override fun onPlantInitSuccess() {
     }
 
     override fun onPlantInitFailure(code: Int, message: String) {

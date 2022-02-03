@@ -1,8 +1,10 @@
 package com.likefirst.btos.ui.main
 
 
+import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -10,14 +12,12 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.commit
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.data.local.PlantDatabase
-import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.service.PlantService
-import com.likefirst.btos.data.remote.view.plant.PlantBuyView
-import com.likefirst.btos.data.remote.view.plant.PlantListView
-import com.likefirst.btos.data.remote.view.plant.PlantSelectView
+import com.likefirst.btos.data.remote.service.MyFirebaseMessagingService
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
@@ -31,6 +31,9 @@ import com.likefirst.btos.ui.profile.ProfileFragment
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
 
     var USERIDX=-1
+    private var auth : FirebaseAuth? = null
+    val fireStore = Firebase.firestore
+
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
@@ -39,14 +42,17 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     var isDrawerOpen =true
     var isMailOpen=false
 
-
-
-    public interface onBackPressedListener {
+    interface onBackPressedListener {
         fun onBackPressed();
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        auth = Firebase.auth
+    }
 
-    override fun initAfterBinding() {
+
+   override fun initAfterBinding() {
 
         binding.mainBnv.itemIconTintList = null
 
@@ -62,6 +68,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
             override fun onClickItem() {
                 binding.mainLayout.closeDrawers()
+                MyFirebaseMessagingService().sendNotification("test","body 내용 테스트 입니다")
 
                 supportFragmentManager.commit {
                     replace(R.id.fr_layout, MailViewFragment()).setReorderingAllowed(true)
@@ -198,9 +205,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     fun mailOpenStatus():Boolean{
         return isMailOpen
-
     }
-
 
     fun notifyDrawerHandler(Option : String){
 
