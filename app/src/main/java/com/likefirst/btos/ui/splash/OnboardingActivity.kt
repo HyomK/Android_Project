@@ -36,7 +36,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         binding.onboardingAgelist.dropDownHeight = 400
 
         //나이 선택 시 키보드 내리기
-        binding.onboardingAgelist.setOnClickListener {
+        binding.onboardingAgeTil.setOnClickListener {
             imm.hideSoftInputFromWindow(binding.onboardingNameEt.getWindowToken(), 0);
         }
 
@@ -115,7 +115,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-        val intent = Intent(this, OnboardingActivity::class.java)
+        val intent = Intent(this, TutorialActivity::class.java)
         finish()
         startActivity(intent)
     }
@@ -125,7 +125,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
         when(code){
             4000 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
             }
         }
