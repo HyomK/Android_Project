@@ -18,11 +18,11 @@ import com.google.android.gms.tasks.Task
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.response.Login
-import com.likefirst.btos.data.remote.service.AuthService
-import com.likefirst.btos.data.remote.view.AutoLoginView
-import com.likefirst.btos.data.remote.view.GetProfileView
-import com.likefirst.btos.data.remote.view.LoginView
+import com.likefirst.btos.data.remote.users.response.Login
+import com.likefirst.btos.data.remote.users.service.AuthService
+import com.likefirst.btos.data.remote.users.view.AutoLoginView
+import com.likefirst.btos.data.remote.users.view.GetProfileView
+import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
@@ -31,7 +31,8 @@ import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
 class LoginActivity
-    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener, LoginView, AutoLoginView, GetProfileView {
+    : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
+    LoginView, AutoLoginView, GetProfileView {
     val G_SIGN_IN : Int = 1
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var email : String
@@ -155,7 +156,7 @@ class LoginActivity
     override fun onGetProfileViewSuccess(user: User) {
         //UserDB에 프로필 정보 저장
         val userDB = UserDatabase.getInstance(this)?.userDao()
-        if(userDB == null){
+        if(userDB?.getUser() == null){
             userDB?.insert(user)
         } else {
             userDB.update(user)

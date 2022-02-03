@@ -72,6 +72,7 @@ dependencies {
 
     //RoomDB
     implementation "androidx.room:room-runtime:$roomdb_version"
+    implementation "androidx.room:room-ktx:$roomdb_version"
     kapt "androidx.room:room-compiler:$roomdb_version"
     // optional - RxJava2 support for Room
     implementation "androidx.room:room-rxjava2:2.4.0"
@@ -87,7 +88,7 @@ dependencies {
     //lottie
     implementation "com.airbnb.android:lottie:4.2.2"
 
-    //spiner custom
+    //spinner custom
     implementation 'com.google.android.material:material:1.4.0'
 
 
@@ -101,5 +102,8 @@ dependencies {
 
     //Google Login
     implementation 'com.google.android.gms:play-services-auth:20.0.1'
+
+    //Google Admob
+    implementation 'com.google.android.gms:play-services-ads:19.6.0'
 
 }

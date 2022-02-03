@@ -13,12 +13,9 @@ import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
 import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.view.GetProfileView
-import com.likefirst.btos.data.remote.view.LoginView
 import com.likefirst.btos.data.remote.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.utils.getJwt
-import com.likefirst.btos.utils.saveJwt
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate), SignUpView, GetProfileView, LoginView {
 
@@ -60,15 +57,21 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
-        Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-        authService.setLoginView(this)
-        authService.login(email)
+
+        //프로필 정보 가져와서 userdb에 저장
+        authService.setGetProfileView(this)
+        authService.getProfile(login.userIdx)
+
+        Toast.makeText(this,"회원가입에 성공하였습니다.\n로그인화면으로 돌아갑니다.", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, LoginActivity::class.java)
+        finish()
+        startActivity(intent)
     }
 
     override fun onSignUpFailure(code: Int, message: String) {
         binding.onboardingLoadingPb.visibility = View.GONE
         Log.e("SIGNUP/FAIL", message)
-        when (code) {
+        when(code){
             4000 -> {
                 Log.e("SIGNUP/FAIL", message)
             }
@@ -81,7 +84,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onGetProfileViewSuccess(user: User) {
         //UserDB에 프로필 정보 저장
         val userDB = UserDatabase.getInstance(this)?.userDao()
-        if (userDB == null) {
+        if(userDB?.getUser() == null){
             userDB?.insert(user)
         } else {
             userDB.deleteAll()
