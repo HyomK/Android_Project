@@ -13,6 +13,9 @@ import com.likefirst.btos.data.remote.response.Mailbox
 import com.likefirst.btos.data.remote.service.DiaryService
 import com.likefirst.btos.data.remote.service.LetterService
 import com.likefirst.btos.data.remote.service.MailboxService
+import com.likefirst.btos.data.remote.users.response.Mailbox
+import com.likefirst.btos.data.remote.users.service.LetterService
+import com.likefirst.btos.data.remote.users.service.MailboxService
 import com.likefirst.btos.data.remote.view.mailbox.DiaryView
 import com.likefirst.btos.data.remote.view.mailbox.LetterView
 import com.likefirst.btos.data.remote.view.mailbox.MailboxView
@@ -29,11 +32,9 @@ class MailboxFragment : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBind
     MailboxView, LetterView,
     DiaryView {
 
-
-
     override fun initAfterBinding() {
         val presFragment  = this
-        val mailboxService=MailboxService()
+        val mailboxService= MailboxService()
         mailboxService.setMailboxView(this)
         mailboxService.loadMailbox("2")
         setClickListener(presFragment)

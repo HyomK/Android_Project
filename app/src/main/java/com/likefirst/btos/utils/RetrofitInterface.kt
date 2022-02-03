@@ -12,6 +12,7 @@ import retrofit2.http.*
 
 interface RetrofitInterface {
 
+    // --------------User----------------- //
     @POST("/auth/google")
     fun login(@Body email: String) : Call<LoginResponse>
 
@@ -23,6 +24,12 @@ interface RetrofitInterface {
 
     @GET("/users/{useridx}")
     fun getProfile(@Path("useridx") useridx: Int): Call<GetProfileResponse>
+
+    @PATCH("/users/{userIdx}/sad")
+    fun updateIsSad(
+        @Path("userIdx") userIdx: Int,
+        @Body isSad : UserIsSad
+    ) : Call<BaseResponse>
 
 
     // -------------------Mailbox -------------------------- //
@@ -73,10 +80,11 @@ interface RetrofitInterface {
         @Body userIdx : Int
     ): Call<PlantResponse>
 
-
-    @PATCH("/users/{userIdx}/sad")
-    fun updateIsSad(
+    // ---------------- Archive Calendar ------------------ //
+    @GET("/archives/calendar/{userIdx}/{date}")
+    fun getCalendar(
         @Path("userIdx") userIdx: Int,
-        @Body isSad : UserIsSad
-    ) : Call<BaseResponse>
+        @Path("date") date : String,
+        @Query("type") type : String
+    )
 }

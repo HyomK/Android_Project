@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.response
+package com.likefirst.btos.data.remote.users.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

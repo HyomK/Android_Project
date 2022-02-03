@@ -3,7 +3,6 @@ package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.os.Build
-import android.service.autofill.UserData
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -31,7 +30,6 @@ import com.likefirst.btos.utils.getLastPostingDate
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.time.LocalTime
 import java.util.*
-import kotlin.collections.HashMap
 
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
@@ -116,7 +114,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initHappyPot(animationView: LottieAnimationView){
-        animationView.setAnimation("alocasia_3.json")
+        animationView.setAnimation("alocasia/alocasia_3.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
@@ -126,7 +124,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initSadPot(animationView: LottieAnimationView){
-        animationView.setAnimation("alocasia_sad_3.json")
+        animationView.setAnimation("alocasia/alocasia_sad_3.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
         // 테스트 기기 추가

@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.response
+package com.likefirst.btos.data.remote.users.response
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -186,7 +186,6 @@ class LoginActivity
         val plantService =PlantService()
         plantService.setPlantListView(this)
         plantService.loadPlantList(USERIDX.toString())
-
     }
 
     override fun onPlantListLoading() {
