@@ -4,18 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.remote.response.Mailbox
 
-class MailRVAdapter (private val dataSet: Array<String>) : RecyclerView.Adapter<MailRVAdapter.ViewHolder>() {
+class MailRVAdapter (private val dataSet:  ArrayList<Mailbox>) : RecyclerView.Adapter<MailRVAdapter.ViewHolder>() {
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder).
-     */
     private lateinit var mItemClickLister: MailItemClickListener
     interface MailItemClickListener{
-        fun onClickItem()
+        fun onClickItem(data:Mailbox)
     }
 
     fun setMyItemCLickLister(itemClickLister: MailItemClickListener){
@@ -25,6 +23,12 @@ class MailRVAdapter (private val dataSet: Array<String>) : RecyclerView.Adapter<
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mailView:ImageView  = view.findViewById(R.id.item_mailbox_iv)
+        val textView: TextView = view.findViewById(R.id.item_mailbox_tv)
+        lateinit var sendAt :String
+        lateinit var type :String
+        var idx : Int = 0
+
+
 
     }
 
@@ -37,8 +41,19 @@ class MailRVAdapter (private val dataSet: Array<String>) : RecyclerView.Adapter<
     }
 
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.mailView.setOnClickListener { mItemClickLister.onClickItem() }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if(dataSet[position].hasSealing){
+            holder.mailView.setImageResource(R.drawable.envelope_locked)
+        }else{
+            holder.mailView.setImageResource(R.drawable.envelope)
+        }
+        holder.textView.text=dataSet[position].senderNickName
+        holder.sendAt=dataSet[position].sendAt
+        holder.idx=dataSet[position].idx
+        holder.type=dataSet[position].type
+
+
+        holder.mailView.setOnClickListener { mItemClickLister.onClickItem(dataSet[position]) }
     }
 
     override fun getItemCount() = dataSet.size

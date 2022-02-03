@@ -20,6 +20,9 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
         val mActivity = activity as MainActivity
         val presFragment= this
         binding.mailViewBodyTv.text=arguments?.getString("body")
+        binding.mailViewDateTv.text=arguments?.getString("date")
+        binding.mailViewSenderTv.text=arguments?.getString("sendder")
+
         val menuItem = resources.getStringArray(R.array.report_items)
         val adapter=ArrayAdapter( requireContext()!! ,R.layout.menu_dropdown_item, menuItem)
 
@@ -104,9 +107,7 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                     })
                     dialog.show(mActivity.supportFragmentManager, "CustomDialog")
                 }
-
             }
-
         }
 
 

@@ -10,6 +10,13 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.commit
 import com.google.android.material.navigation.NavigationBarView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.Plant
+import com.likefirst.btos.data.local.PlantDatabase
+import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.service.PlantService
+import com.likefirst.btos.data.remote.view.plant.PlantBuyView
+import com.likefirst.btos.data.remote.view.plant.PlantListView
+import com.likefirst.btos.data.remote.view.plant.PlantSelectView
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
@@ -20,10 +27,9 @@ import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 
 
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
 
-
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
-
+    var USERIDX=-1
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
@@ -70,10 +76,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             when (it.itemId) {
                 R.id.homeFragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.fr_layout, homeFragment)
-//                        .setReorderingAllowed(true)
-//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=true
                     if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
@@ -250,4 +252,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             binding.mainBnv.menu.findItem(R.id.homeFragment).isChecked = true
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+
+    }
+
+
 }

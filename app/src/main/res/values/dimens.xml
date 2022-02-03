@@ -22,7 +22,7 @@
     <dimen name="mail_view_marginHorizontal">45dp</dimen>
 
     <!-- Profile View -->
-    <dimen name="profile_view_marginHorizontal">20dp</dimen>
+    <dimen name="profile_view_marginHorizontal">30dp</dimen>
     <dimen name="profile_view_marginVertical">50dp</dimen>
     <dimen name="profile_layout_height">290dp </dimen>
     <dimen name="profile_layout_width">320dp </dimen>
