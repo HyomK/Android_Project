@@ -248,6 +248,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
     fun getUserIdx() : Int{
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        Log.d("User", userDB?.getUser().toString())
         return userDB!!.getUser().userIdx!!
     }
 

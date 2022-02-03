@@ -2,17 +2,21 @@ package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.entities.UserSign
-import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
-import com.likefirst.btos.data.remote.response.*
+import com.likefirst.btos.data.remote.*
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.posting.response.DiaryResponse
+import com.likefirst.btos.data.remote.posting.response.LetterResponse
+import com.likefirst.btos.data.remote.posting.response.MailboxResponse
+import com.likefirst.btos.data.remote.posting.response.ReplyResponse
 import retrofit2.Call
 import retrofit2.http.*
 
 
 interface RetrofitInterface {
 
-    // --------------User----------------- //
     @POST("/auth/google")
     fun login(@Body email: String) : Call<LoginResponse>
 
@@ -75,9 +79,10 @@ interface RetrofitInterface {
         @Body PlantBuyRequest : PlantRequest
     ): Call<PlantResponse>
 
+
     @POST("/plants/{userId}/initialize")
     fun initPlant(
-        @Body userIdx : Int
+        @Path ("userId") userIdx : String
     ): Call<PlantResponse>
 
     // ---------------- Archive Calendar ------------------ //

@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.data.remote.response.Mailbox
+import com.likefirst.btos.data.remote.posting.response.Mailbox
 
 class MailRVAdapter (private val dataSet:  ArrayList<Mailbox>) : RecyclerView.Adapter<MailRVAdapter.ViewHolder>() {
 
