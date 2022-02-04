@@ -8,21 +8,34 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.annotation.NonNull
+import com.google.android.gms.auth.GoogleAuthUtil.getToken
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.zzl.getToken
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.messaging.FirebaseMessaging
+import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
@@ -39,6 +52,19 @@ import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
+
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.database.DatabaseError
+
+import com.google.firebase.database.DataSnapshot
+
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DatabaseReference
+
+import com.likefirst.btos.data.entities.firebase.MessageDTO
+
+
 class LoginActivity
     : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
     LoginView, AutoLoginView, GetProfileView,
@@ -46,18 +72,23 @@ class LoginActivity
 
     val G_SIGN_IN : Int = 1
     private var GOOGLE_LOGIN_CODE = 9001
+    val RC_SIGN_IN =1111
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var email : String
-    private var auth : FirebaseAuth? = null
+
     val authService = AuthService()
     val plantService= PlantService()
-
+ ////////////////////////////////////////////////////////
     val fireStore = Firebase.firestore
+    lateinit var mAuth: FirebaseAuth
+    private var mAuthListener: AuthStateListener? = null
+    lateinit var mGoogleApiClient: GoogleApiClient
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-    }
+    private var mFirebaseDatabase: FirebaseDatabase? = null
+    private var mDatabaseReference: DatabaseReference? = null
+    private var mChildEventListener: ChildEventListener? = null
+    private var userName: String? = null
+
 
     override fun initAfterBinding() {
 
@@ -84,15 +115,17 @@ class LoginActivity
 
         },3000)
 
+
         val gso = getGSO()
-
-
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
         binding.loginGoogleLoginTv.setOnClickListener{
             var signInIntent : Intent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, G_SIGN_IN)
         }
+
     }
+
 
     override fun onConnectionFailed(p0: ConnectionResult) {
 
@@ -100,7 +133,6 @@ class LoginActivity
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == G_SIGN_IN){
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 
@@ -128,8 +160,7 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-        // TODO: Firebase 로그인
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, FirebaseSignupActivity::class.java)
         finish()
         startActivity(intent)
     }
@@ -166,7 +197,7 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, FirebaseSignupActivity::class.java)
         finish()
         startActivity(intent)
     }
@@ -195,22 +226,6 @@ class LoginActivity
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
     }
-
-    private fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
-        var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        auth?.signInWithCredential(credential)
-            ?.addOnCompleteListener{
-                    task ->
-                if(task.isSuccessful){
-                    // 아이디, 비밀번호 맞을 때
-                    Toast.makeText(this,"FIREBASE LOGIN SUCCESS",Toast.LENGTH_LONG).show()
-                }else{
-                    // 틀렸을 때
-                    Toast.makeText(this,task.exception?.message,Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
 
 
 

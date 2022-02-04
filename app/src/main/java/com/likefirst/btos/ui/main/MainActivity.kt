@@ -68,18 +68,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         uid = auth?.currentUser?.uid
         fireStore = FirebaseFirestore.getInstance()
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
-            task-> if(!task.isSuccessful){
-                Log.w(TAG,"FetchingFCM registration token failed", task.exception)
-                    return@OnCompleteListener
-                }
-            val token = task.result
 
-            // Log and toast
-            val msg = getString(R.string.msg_token_fmt, token)
-            Log.e("FIREBASE", msg)
-            //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
     }
 
 

@@ -53,10 +53,10 @@
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true"
-
              >
         </activity>
-
+        <activity android:name=".ui.splash.FirebaseSignupActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.posting.DiaryActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.posting.DiaryViewerActivity"

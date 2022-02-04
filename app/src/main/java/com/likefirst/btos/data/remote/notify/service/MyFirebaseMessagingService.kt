@@ -98,6 +98,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentTitle(title) // 제목
             .setContentText(body) // 내용
             .setAutoCancel(true)
+            .setSmallIcon(R.drawable.emotion1) // d알림영역에 노출될 아이콘
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 

@@ -73,7 +73,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             }
 
             override fun onClickBuyItem(plant : Pair<Plant,Int>):Pair<Plant,Int> {
-                lateinit var buyPlant : Pair<Plant,Int>
+               var buyPlant : Pair<Plant,Int>? = plant
 
                 val buyDialog = CustomDialogFragment()
                 val btn =arrayOf("취소","구매")
@@ -104,9 +104,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                     }
                 })
                 buyDialog.show(requireActivity().supportFragmentManager, "CustomDialog")
-
-                if(buyPlant == null)  return plant //구매 취소
-                else return buyPlant
+               return buyPlant!!
             }
 
         })
