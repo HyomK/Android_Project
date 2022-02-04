@@ -1,5 +1,7 @@
 package com.likefirst.btos.utils
 
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.entities.PostDiary
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
@@ -7,10 +9,7 @@ import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.data.remote.*
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.data.remote.posting.response.DiaryResponse
-import com.likefirst.btos.data.remote.posting.response.LetterResponse
-import com.likefirst.btos.data.remote.posting.response.MailboxResponse
-import com.likefirst.btos.data.remote.posting.response.ReplyResponse
+import com.likefirst.btos.data.remote.posting.response.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -92,4 +91,9 @@ interface RetrofitInterface {
         @Path("date") date : String,
         @Query("type") type : String
     )
+
+    @POST("/diaries")
+    fun postDiary(
+        @Body postDiaryRequest : PostDiary
+    ) : Call<PostDiaryResponse>
 }

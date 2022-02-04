@@ -11,8 +11,9 @@ data class Diary(
     @SerializedName("diaryDate") val diaryDate : String,
     @SerializedName("isPublic") val isPublic: Int,
     @SerializedName("content") val content :String,
-    @SerializedName("doneList") val doneList :ArrayList<DoneList>
-
+    @SerializedName("doneList") val doneList :ArrayList<DoneList>,
+    @SerializedName("senderNickName") val senderNickName :String,
+    @SerializedName("senderFontIdx") val senderFontIdx :Int
 ):Parcelable
 
 @Parcelize
@@ -31,4 +32,10 @@ data class DiaryResponse(
 data class ResultDiary(
     @SerializedName("type") val type : String,
     @SerializedName("content") val content : Diary,
+)
+
+data class PostDiaryResponse(
+    @SerializedName("type") val type : String,
+    @SerializedName("status") val status : String,
+    @SerializedName("levelChanged") val levelChanged : Boolean
 )

@@ -39,6 +39,7 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
+import com.likefirst.btos.utils.saveUserIdx
 
 class LoginActivity
     : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
@@ -128,6 +129,7 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
+        saveUserIdx(login.userIdx)
         signIn(email,"btos1234")
         // TODO: Firebase 로그인
         val intent = Intent(this, MainActivity::class.java)
@@ -166,6 +168,7 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
+        saveUserIdx(login.userIdx)
 
         val intent = Intent(this, MainActivity::class.java)
         finish()

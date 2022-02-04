@@ -5,22 +5,20 @@ import android.content.Intent
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.DiaryInfo
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.local.UserDatabase
 
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.util.*
 import kotlin.collections.ArrayList
@@ -190,8 +188,10 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
     fun goToDiaryViewer(){
         contents = binding.diaryContentsEt.text.toString()
+        val diaryDate = binding.diaryDateTv.text.toString()
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
         val intent = Intent(this, DiaryViewerActivity::class.java)
-        intent.putExtra("diaryInfo", DiaryInfo(binding.diaryDateTv.text.toString(), doneLists, emotionIdx, contents, "유저 더미데이터"))
+        intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
         startActivity(intent)
     }
 
