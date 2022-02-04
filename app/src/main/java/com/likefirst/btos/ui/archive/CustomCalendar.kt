@@ -1,11 +1,11 @@
 package com.likefirst.btos.ui.archive
 
-import com.likefirst.btos.data.entities.CalendarInfo
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import com.likefirst.btos.utils.stringToDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CustomCalendar(date : Date, val inputDataList : ArrayList<CalendarInfo>) {
+class CustomCalendar(date : Date, val inputDataList : ArrayList<ArchiveCalendar>) {
 
     companion object {
         const val DAYS_OF_WEEK = 7
@@ -18,7 +18,7 @@ class CustomCalendar(date : Date, val inputDataList : ArrayList<CalendarInfo>) {
     var nextHead = 0
     var currentMaxDate = 0
 
-    var dateList = arrayListOf<CalendarInfo>()
+    var dateList = arrayListOf<ArchiveCalendar>()
 
     init {
         calendar.time = date
@@ -55,26 +55,26 @@ class CustomCalendar(date : Date, val inputDataList : ArrayList<CalendarInfo>) {
         var maxOffsetDate = maxDate - prevTail
 
 //        for (i in 1..prevTail) dateList.add(++maxOffsetDate)
-        for (i in 1..prevTail) dateList.add(CalendarInfo(null, 0, null, null))
+        for (i in 1..prevTail) dateList.add(ArchiveCalendar(null, 0, null, null))
     }
 
     private fun makeCurrentMonth(calendar: Calendar) {
-        for (i in 1..calendar.getActualMaximum(Calendar.DATE)) dateList.add(CalendarInfo(null, i, null, null))
+        for (i in 1..calendar.getActualMaximum(Calendar.DATE)) dateList.add(ArchiveCalendar(null, i, null, null))
     }
 
     private fun makeNextHead() {
         var date = 1
 
 //        for (i in 1..nextHead) dateList.add(date++)
-        for (i in 1..nextHead) dateList.add(CalendarInfo(null, 0, null, null))    }
+        for (i in 1..nextHead) dateList.add(ArchiveCalendar(null, 0, null, null))    }
 
     private fun insertDiaryInfo(){
         for (inputData in inputDataList){
             val dateString = inputData.diaryDate!!
             val date = stringToDate(dateString)
             calendar.time = date
-            val position = dateList.indexOf(CalendarInfo(null, calendar.get(Calendar.DAY_OF_MONTH), null, null))
-            dateList[position] = CalendarInfo(inputData.diaryDate, calendar.get(Calendar.DAY_OF_MONTH), inputData.doneListNum, inputData.emotionIdx)
+            val position = dateList.indexOf(ArchiveCalendar(null, calendar.get(Calendar.DAY_OF_MONTH), null, null))
+            dateList[position] = ArchiveCalendar(inputData.diaryDate, calendar.get(Calendar.DAY_OF_MONTH), inputData.doneListNum, inputData.emotionIdx)
         }
     }
 }

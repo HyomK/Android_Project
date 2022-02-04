@@ -9,6 +9,7 @@ import com.likefirst.btos.data.remote.*
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.posting.response.*
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -89,7 +90,7 @@ interface RetrofitInterface {
         @Path("userIdx") userIdx: Int,
         @Path("date") date : String,
         @Query("type") type : String
-    )
+    ) : Call<BaseResponse<ArrayList<ArchiveCalendar>>>
 
     @POST("/diaries")
     fun postDiary(
