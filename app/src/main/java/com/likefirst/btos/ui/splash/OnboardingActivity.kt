@@ -22,7 +22,6 @@ import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -30,8 +29,7 @@ import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
-    SignUpView, GetProfileView, LoginView,
-    PlantInitView, PlantListView {
+    SignUpView, GetProfileView, LoginView, PlantListView {
 
     val authService = AuthService()
     val plantService= PlantService()
@@ -133,8 +131,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        plantService.setPlantInitView(this)
-        plantService.initPlant(login.userIdx.toString())
+
         val intent = Intent(this, TutorialActivity::class.java)
         finish()
         startActivity(intent)
@@ -170,16 +167,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
     }
 
-
-
-    override fun onPlantInitSuccess(userId: Int) {
-        Log.e("PlantInit/Success",userId.toString()+ " : USERID SUCCESS TO INIT PLANT")
-    }
-
-    override fun onPlantInitFailure(code: Int, message: String) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
-        Log.e("PlantInit/FAIL",code.toString()+ message)
-    }
 
     fun updatePlantDB(){
         val userDB= UserDatabase.getInstance(this)!!

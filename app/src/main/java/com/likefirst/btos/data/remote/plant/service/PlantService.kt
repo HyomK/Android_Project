@@ -6,7 +6,6 @@ import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.plant.view.PlantBuyView
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.plant.view.PlantSelectView
 import com.likefirst.btos.utils.RetrofitInterface
@@ -20,7 +19,6 @@ class PlantService {
     private lateinit var plantView : PlantListView
     private lateinit var plantSelectView: PlantSelectView
     private lateinit var plantBuyView: PlantBuyView
-    private lateinit var plantInitView: PlantInitView
 
     private val PlantService = ApplicationClass.retrofit.create(RetrofitInterface::class.java)
 
@@ -35,10 +33,6 @@ class PlantService {
 
     fun setPlantBuyView(plantBuyView: PlantBuyView){
         this.plantBuyView=plantBuyView
-    }
-
-    fun setPlantInitView(plantInitView: PlantInitView){
-        this.plantInitView=plantInitView
     }
 
     fun loadPlantList(userId:String){
@@ -104,34 +98,12 @@ class PlantService {
 
             }
 
-
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
                 plantBuyView.onPlantBuyFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
             }
         })
     }
 
-    fun initPlant(userId: String){
-        PlantService.initPlant(userId).enqueue(object:Callback<PlantResponse>{
-            override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
-                val plantResponse =response.body()!!
-
-                if(response.isSuccessful){
-                    plantInitView.onPlantInitSuccess(1)
-                }else{
-                    plantInitView.onPlantInitFailure( plantResponse.code,plantResponse.message)
-                }
-                Log.e("PlantInit/API", plantResponse.toString())
-
-            }
-
-
-            override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
-                plantInitView.onPlantInitFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
-                plantInitView.onPlantInitFailure( 7000,"해당 유저의 화분 초기화에 실패하였습니다.")
-            }
-        })
-    }
 
 
 

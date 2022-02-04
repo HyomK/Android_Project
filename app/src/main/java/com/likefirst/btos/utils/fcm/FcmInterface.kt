@@ -1,4 +1,4 @@
-package com.likefirst.btos.utils
+package com.likefirst.btos.utils.fcm
 
 import com.likefirst.btos.data.entities.firebase.NotificationBody
 import okhttp3.ResponseBody

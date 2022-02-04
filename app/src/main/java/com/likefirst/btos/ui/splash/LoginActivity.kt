@@ -31,7 +31,6 @@ import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -43,7 +42,7 @@ import com.likefirst.btos.utils.saveJwt
 class LoginActivity
     : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
     LoginView, AutoLoginView, GetProfileView,
-    PlantListView, PlantInitView {
+    PlantListView{
 
     val G_SIGN_IN : Int = 1
     private var GOOGLE_LOGIN_CODE = 9001
@@ -128,7 +127,7 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        signIn(email,"btos1234")
+
         // TODO: Firebase 로그인
         val intent = Intent(this, MainActivity::class.java)
         finish()
@@ -213,87 +212,8 @@ class LoginActivity
     }
 
 
-//    fun saveToken(){
-//        //프로필 불러오기
-//
-//        fireStore.collection("users").document(uid)
-//            .addSnapshotListener { documentSnapshot, _ ->
-//                if (documentSnapshot == null) return@addSnapshotListener
-//
-//                val userDTO = documentSnapshot.toObject(UserDTO::class.java)
-//                if (userDTO?.userId != null) {
-//
-//                    // 토큰이 변경되었을 경우 갱신
-//                    if(userDTO.token != token){
-//                        Log.d(TAG, "profileLoad: 토큰 변경되었음.")
-//                        val newUserDTO = UserDTO(userDTO.uId,userDTO.userId,
-//                            userDTO.imageUri,userDTO.score,userDTO.sharing,userDTO.area,token)
-//                        fireStore.collection("users").document(uid).set(newUserDTO)
-//
-//                        // 유저정보 라이브데이터 변경하기
-//                        this.userDTO.value = newUserDTO
-//                    }
-//
-//                    // 아니면 그냥 불러옴
-//                    else {
-//                        Log.d(TAG, "profileLoad: 이미 동일한 토큰이 존재함.")
-//                        this.userDTO.value = userDTO!!
-//                    }
-//                }
-//         }
-//    }
 
-    // TODO: Firebase 로그인
-    private fun signIn(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.signInWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            baseContext, "로그인에 성공 하였습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        createAccount(email, password)
-                        auth?.signInWithEmailAndPassword(email, password)
-                            ?.addOnCompleteListener(this) { task ->
-                                if (task.isSuccessful) {
-                                    Toast.makeText(
-                                        baseContext, "로그인에 성공 하였습니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    Toast.makeText(
-                                        baseContext, "로그인에 실패 하였습니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
 
-                                }
-                            }
-                    }
-                }
-        }
-    }
-
-    // TODO: Firebase 로그인
-    private fun createAccount(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.createUserWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            this, "계정 생성 완료.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this, "계정 생성 실패",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-        }
-    }
 
 
     fun updatePlantDB(){
@@ -316,12 +236,6 @@ class LoginActivity
                 if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
                     plantDB?.plantDao()?.insert(i)
                 } else {
-                    if(i.plantIdx==1 && i.plantStatus=="inactive"){
-                        val userDB= UserDatabase.getInstance(this)!!
-                        val USERIDX=userDB.userDao().getUser().userIdx!!
-                        plantService.setPlantInitView(this)
-                        plantService.initPlant(USERIDX.toString())
-                    }
                     plantDB?.plantDao()?.update(i)
                 }
             }
@@ -332,14 +246,6 @@ class LoginActivity
 
     override fun onPlantListFailure(code: Int, message: String) {
         Log.d("Plant/API",code.toString()+"fail to load...")
-    }
-
-    override fun onPlantInitSuccess(userId: Int) {
-        Log.e("PlantINIT/API","Success")
-    }
-
-    override fun onPlantInitFailure(code: Int, message: String) {
-        Log.e("PlantINIT/API","FAIL ...")
     }
 
 

@@ -2,6 +2,7 @@
     <string name="app_name">BTOS</string>
 
    <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
+    <string name ="default_token"> f13nmqYQTeaDeu9AuPAg9f:APA91bHdXvR1fNtMEsdVhN9d1brn1MmpabPx9DLKS5zM2-4NixbRHkSMfuCOoXiLluU22SFnYUzPvyJ8qDs309LGguCnRr0pNb0zvJp0qxPky-ncwD6aYT7UKvKPlUlQAyypQ97jcukc</string>
 
 
     <string-array name="onboarding_agelist">

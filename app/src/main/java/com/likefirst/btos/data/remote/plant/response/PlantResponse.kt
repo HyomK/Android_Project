@@ -12,9 +12,6 @@ class PlantRequest(val userId : Int, val plantId:Int){
     @SerializedName("plantIdx") val plantIdx :Int =plantId
 }
 
-class PlantInitRequest(val userId : Int){
-    @SerializedName("userIdx") val userIdx : Int = userId
-}
 
 data class PlantResponse(
     @SerializedName("isSuccess") val isSuccess: Boolean,

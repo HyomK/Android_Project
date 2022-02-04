@@ -1,10 +1,9 @@
-package com.likefirst.btos.utils
+package com.likefirst.btos.utils.fcm
 
 import com.likefirst.btos.utils.Constants.Companion.FCM_URL
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okio.IOException
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

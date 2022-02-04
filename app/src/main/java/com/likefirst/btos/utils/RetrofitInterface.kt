@@ -3,9 +3,10 @@ package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.remote.*
+import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.data.remote.posting.response.LetterResponse
+import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.data.remote.response.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -36,20 +37,20 @@ interface RetrofitInterface {
     fun loadDiary(
         @Query("type") type: String,
         @Query("idx")idx: String
-    ): Call<DiaryResponse>
+    ): Call<MailDiaryResponse>
 
     @GET("/mailboxes/mail")
     fun loadLetter(
         @Query("type") type: String,
         @Query("idx")idx: String
-    ): Call<LetterResponse>
+    ): Call<MailLetterResponse>
 
 
     @GET("/mailboxes/mail")
     fun loadReply(
         @Query("type") type: String,
         @Query("idx")idx: String
-    ): Call<ReplyResponse>
+    ): Call<MailReplyResponse>
 
     // -------------------PlantList-------------------------- //
 
@@ -69,10 +70,10 @@ interface RetrofitInterface {
         @Body PlantBuyRequest : PlantRequest
     ): Call<PlantResponse>
 
+    // -------------------Notice-------------------------- //
+    @GET("/notices")
+    fun loadNotice(): Call<NoticeAPIResponse>
 
-    @POST("/plants/{userId}/initialize")
-    fun initPlant(
-        @Path ("userId") userIdx : String
-    ): Call<PlantResponse>
+
 
 }

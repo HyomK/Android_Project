@@ -10,7 +10,7 @@ import com.likefirst.btos.utils.toArrayList
 
 
 import com.likefirst.btos.data.entities.DiaryInfo
-import com.likefirst.btos.data.remote.response.Diary
+import com.likefirst.btos.data.remote.response.MailDiaryDetailResponse
 import com.likefirst.btos.databinding.ActivityDiaryViewerBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity

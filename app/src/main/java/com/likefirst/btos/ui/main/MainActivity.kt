@@ -5,21 +5,31 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.OnCanceledListener
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.NoticeDTO
+import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
+import com.likefirst.btos.data.remote.notify.service.NoticeService
+import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
@@ -30,7 +40,7 @@ import com.likefirst.btos.ui.profile.ProfileFragment
 
 
 
-class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
+class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),NoticeAPIView{
 
     var USERIDX=-1
     private var auth : FirebaseAuth? = null
@@ -46,6 +56,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     var isDrawerOpen =true
     var isMailOpen=false
 
+    lateinit var noticeList :ArrayList<NoticeDetailResponse>
+
     interface onBackPressedListener {
         fun onBackPressed();
     }
@@ -55,12 +67,27 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         auth = FirebaseAuth.getInstance()
         uid = auth?.currentUser?.uid
         fireStore = FirebaseFirestore.getInstance()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
+            task-> if(!task.isSuccessful){
+                Log.w(TAG,"FetchingFCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.e("FIREBASE", msg)
+            //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
     }
 
 
    override fun initAfterBinding() {
 
         binding.mainBnv.itemIconTintList = null
+        initNotice()
+
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
@@ -68,24 +95,18 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             .commitNowAllowingStateLoss()
 
 
-        val dataset = Array(30) { i -> "Number of index: $i" }
-        val adapter = NotifyRVAdapter(dataset)
-
-        adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
-            override fun onClickItem() {
-                binding.mainLayout.closeDrawers()
-                MyFirebaseMessagingService().sendNotification("test","body 내용 테스트 입니다")
-
-                supportFragmentManager.commit {
-                    replace(R.id.fr_layout, MailViewFragment()).setReorderingAllowed(true)
-                    addToBackStack("")
-                }
-            }
-        })
-
-        binding.sidebarNotifyRv.adapter = adapter
         binding.mainBnv.setOnItemSelectedListener { it ->BottomNavView().onNavigationItemSelected(it) }
     }
+
+    fun initNotice(){
+
+        val NoticeService= NoticeService()
+        NoticeService.setNoticeView(this)
+        NoticeService.loadNotice()
+
+    }
+
+
 
     inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
         override fun onNavigationItemSelected(it: MenuItem): Boolean {
@@ -230,8 +251,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
 
-
-
     override fun onBackPressed() {
         if(homeFragment.isVisible){
             finish()
@@ -267,11 +286,18 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     override fun onStart() {
         super.onStart()
 
-
     }
 
 
-    //TODO NoticeAdapter
+    /*TODO NoticeAdapter 우편함에는 공지와 편지.일기 알림이 쌓여야 한다
+       공지는 API에서 받아오고 편지와 우편은 파이어베이스에서 받아야 한다
+       1.데이터 클래스 통합해서 정리하기
+       편지와 일기 같은 경우는 데이터의 상대방 UID로 USERTABLE에 접근해서 USER 정보와 일기 내용을 받아온다
+       공지는 API를 호출한다
+       새로운 공지가 있는지 조회하고 각각 viewholder에 매칭해준다
+       데이터를 모두 받은 후 시간 순서대로 정렬한다
+       */
+
     inner class NoticeViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var noticeDTOs: ArrayList<NoticeDTO> = arrayListOf()
 
@@ -300,5 +326,32 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         override fun getItemCount(): Int {
             return noticeDTOs.size
         }
+    }
+
+    override fun onNoticeAPIError(Dialog: CustomDialogFragment) {
+        Dialog.show(supportFragmentManager,"noticeErrorDialog")
+    }
+
+    override fun onNoticeAPISuccess(noticeData: ArrayList<NoticeDetailResponse>) {
+        noticeList=noticeData
+        if(noticeList == null) return
+        Log.e("NOTICE/API", "SUCCESS: ${noticeData.toString()}")
+
+        val adapter = NotifyRVAdapter(noticeList)
+        adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
+            override fun onClickItem() {
+                binding.mainLayout.closeDrawers()
+                supportFragmentManager.commit {
+                    addToBackStack("")
+                }
+            }
+        })
+
+        binding.sidebarNotifyRv.adapter = adapter
+
+    }
+
+    override fun onNoticeAPIFailure(code: Int, message: String) {
+        Log.e("NOTICE/API", "Fail... ${message.toString()}")
     }
 }

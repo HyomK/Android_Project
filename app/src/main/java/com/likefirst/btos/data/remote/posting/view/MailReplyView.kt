@@ -1,10 +1,10 @@
 package com.likefirst.btos.data.remote.posting.view
 
 import com.likefirst.btos.data.remote.response.Mailbox
-import com.likefirst.btos.data.remote.response.Reply
+import com.likefirst.btos.data.remote.response.MailReplyDetailResponse
 
-interface ReplyView {
+interface MailReplyView {
     fun onReplyLoading()
-    fun onReplySuccess(replyList : ArrayList<Reply>)
+    fun onReplySuccess(replyList : ArrayList<MailReplyDetailResponse>)
     fun onReplyFailure(code : Int, message : String)
 }

@@ -14,12 +14,26 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.likefirst.btos.R
 import com.likefirst.btos.ui.main.MainActivity
+import android.os.Looper
+import android.util.Log
+
+import android.widget.Toast
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import com.likefirst.btos.utils.fcm.MyWorker
+
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     val TAG = "FirebaseTest"
 
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.i("### msg : ", remoteMessage.toString());
+        if (remoteMessage.data.isEmpty()) {
+            showNotificationMessage(remoteMessage.notification?.title, remoteMessage.notification?.body);  // Notification으로 받을 때
+        } else {
+            showDataMessage(remoteMessage.data.get("title"), remoteMessage.data.get("content"));  // Data로 받을 때
+        }
 
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){
@@ -61,7 +75,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // 새로운 토큰이 생성 될 때 호출
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        Log.d(TAG,"Refreshed token : $token")
         sendRegistrationToServer(token)
+    }
+
+    private fun scheduleJob(){
+        //[START dispatch job]
+        val work = OneTimeWorkRequest.Builder(MyWorker::class.java).build()
+        WorkManager.getInstance(this).beginWith(work).enqueue()
+        //[END dispatch)job]
     }
 
     fun sendNotification(title: String?, body: String) {
@@ -142,5 +164,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // 받은 토큰을 서버로 전송
     fun sendRegistrationToServer(token: String) {
 
+    }
+
+
+    fun showDataMessage(msgTitle: String?, msgContent: String?) {
+        Log.i("### data msgTitle : ", msgTitle.toString())
+        Log.i("### data msgContent : ", msgContent.toString())
+        val toastText = String.format("[Data 메시지] title: %s => content: %s", msgTitle, msgContent)
+        Looper.prepare()
+        Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
+        Looper.loop()
+    }
+
+    /**
+     * 수신받은 메시지를 Toast로 보여줌
+     * @param msgTitle
+     * @param msgContent
+     */
+    fun showNotificationMessage(msgTitle: String?, msgContent: String?) {
+        Log.i("### noti msgTitle : ", msgTitle.toString())
+        Log.i("### noti msgContent : ", msgContent.toString())
+        val toastText =
+            String.format("[Notification 메시지] title: %s => content: %s", msgTitle, msgContent)
+        Looper.prepare()
+        Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
+        Looper.loop()
     }
 }

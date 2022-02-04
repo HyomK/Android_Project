@@ -1,7 +1,6 @@
 package com.likefirst.btos.ui.home
 
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.util.Log
@@ -20,13 +19,10 @@ import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
-import com.likefirst.btos.ui.profile.plant.PlantFragment
-import com.likefirst.btos.ui.profile.plant.PlantItemFragment
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
 import java.time.LocalTime
 import java.util.*
-import kotlin.time.Duration.Companion.milliseconds
 
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -50,9 +46,9 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
             requireActivity().supportFragmentManager
                 .beginTransaction()
-                .add(R.id.home_mailbox_layout, MailboxFragment(), "mailbox")
+                .add(R.id.home_mailbox_layout, MailViewActivity(), "mailbox")
                 .addToBackStack(null)
-                .show(MailboxFragment())
+                .show(MailViewActivity())
                 .commit()
             val item =  requireActivity().supportFragmentManager.fragments
             Log.d("homeSTACK","homeitem  ${item.toString()} }")

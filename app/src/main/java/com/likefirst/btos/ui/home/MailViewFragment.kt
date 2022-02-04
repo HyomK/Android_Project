@@ -1,10 +1,12 @@
 package com.likefirst.btos.ui.home
 
+import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentMailViewBinding
+import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
@@ -14,24 +16,24 @@ import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 
 
-class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBinding::inflate) {
+class MailViewFragment: BaseActivity<FragmentMailViewBinding>(FragmentMailViewBinding::inflate) {
 
     override fun initAfterBinding() {
-        val mActivity = activity as MainActivity
-        val presFragment= this
-        binding.mailViewBodyTv.text=arguments?.getString("body")
-        binding.mailViewDateTv.text=arguments?.getString("date")
-        binding.mailViewSenderTv.text=arguments?.getString("sendder")
+        val bundle : Bundle = intent.getBundleExtra("MailView")!!
+
+        binding.mailViewBodyTv.text= bundle.getString("body")
+        binding.mailViewDateTv.text=bundle.getString("date")
+        binding.mailViewSenderTv.text=bundle.getString("sender")
 
         val menuItem = resources.getStringArray(R.array.report_items)
-        val adapter=ArrayAdapter( requireContext()!! ,R.layout.menu_dropdown_item, menuItem)
+        val adapter=ArrayAdapter( this ,R.layout.menu_dropdown_item, menuItem)
 
         binding.reportMenuList?.setAdapter(adapter)
         binding.reportMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
 
 
         binding.letterViewSendBtn.setOnClickListener{
-            val mActivity = activity as MainActivity
+
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")
             dialog.arguments= bundleOf(
@@ -43,10 +45,10 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
-                    mActivity.startNextActivity(MailReplyActivity::class.java)
+                    startNextActivity(MailReplyActivity::class.java)
                 }
             })
-            dialog.show(mActivity.supportFragmentManager, "CustomDialog")
+            dialog.show(supportFragmentManager, "CustomDialog")
 
         }
 
@@ -66,11 +68,11 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                         override fun onButton1Clicked() {}
                         override fun onButton2Clicked() {}
                     })
-                    dialog.show(mActivity.supportFragmentManager, "CustomDialog")
+                    dialog.show(supportFragmentManager, "CustomDialog")
                 }
                 //신고
                 1 -> {
-                    requireActivity().supportFragmentManager.commit {
+                   supportFragmentManager.commit {
                         add(R.id.home_main_layout, ReportFragment())
                         addToBackStack("")
                     }
@@ -102,19 +104,17 @@ class MailViewFragment:BaseFragment<FragmentMailViewBinding>(FragmentMailViewBin
                                 override fun onButton2Clicked() {
                                 }
                             })
-                            checkDialog.show(mActivity.supportFragmentManager, "CustomDialog")
+                            checkDialog.show(supportFragmentManager, "CustomDialog")
                         }
                     })
-                    dialog.show(mActivity.supportFragmentManager, "CustomDialog")
+                    dialog.show(supportFragmentManager, "CustomDialog")
                 }
             }
         }
 
 
         binding.letterViewToolbar.toolbarBackIc.setOnClickListener{
-            val mActivity =activity as MainActivity
-            mActivity.supportFragmentManager.popBackStack()
-            onDestroyView()
+           supportFragmentManager.popBackStack()
         }
     }
 

@@ -1,24 +1,25 @@
-package com.likefirst.btos.data.remote.response
+package com.likefirst.btos.data.remote.posting.response
 
 import com.google.gson.annotations.SerializedName
 
-data class Reply(
-    @SerializedName("replyIdx") val replyIdx : Int,
+data class MailLetterDetailResponse(
+
+    @SerializedName("letterIdx") val letterIdx : Int,
     @SerializedName("replierIdx") val replierIdx : Int,
     @SerializedName("receiverIdx") val receiverIdx : Int,
     @SerializedName("content") val content :String
 )
 
 
-data class ReplyResponse(
+data class MailLetterResponse(
     @SerializedName("isSuccess") val isSuccess: Boolean,
     @SerializedName("code") val code : Int,
     @SerializedName("message") val message : String,
-    @SerializedName("result") val result : ResultReply
+    @SerializedName("result") val result : ResultLetter
 )
 
-data class ResultReply(
+data class  ResultLetter(
     @SerializedName("type") val type : String,
-    @SerializedName("content") val content : ArrayList<Reply>,
-    @SerializedName("senderFontIdx") val senderFontIdx : Int,
+    @SerializedName("content") val content : MailLetterDetailResponse,
+    @SerializedName("senderFontIdx") val senderFontIdx : Int
 )
