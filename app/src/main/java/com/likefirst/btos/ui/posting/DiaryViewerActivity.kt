@@ -24,8 +24,8 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
         val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
         val emotionNames = resources.getStringArray(R.array.emotionNames)
         val emotionIdx = intentDataset.emotionIdx
-        if(emotionIdx != null){
-            val emotionImgRes = resources.getIdentifier("emotion"+(emotionIdx+1).toString(), "drawable", this.packageName)
+        if(emotionIdx != 0){
+            val emotionImgRes = resources.getIdentifier("emotion"+(emotionIdx).toString(), "drawable", this.packageName)
             binding.diaryViewerEmotionIv.apply {
                 visibility = View.VISIBLE
                 setImageResource(emotionImgRes)

@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.entities.PostDiaryRequest
 import com.likefirst.btos.data.local.UserDatabase
-
+import com.likefirst.btos.data.remote.posting.service.DiaryService
+import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
@@ -23,10 +25,10 @@ import com.likefirst.btos.utils.saveLastPostingDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
+class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate), PostDiaryView {
 
     companion object{
-        var emotionIdx : Int? = null
+        var emotionIdx = 0
         var doneLists = ArrayList<String>()
         var contents = ""
     }
@@ -34,7 +36,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     override fun initAfterBinding() {
 
         // companion object 초기화
-        emotionIdx = null
+        emotionIdx = 0
         doneLists = arrayListOf()
         contents = ""
 
@@ -87,6 +89,8 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         }
 
         binding.diaryToolbar.diaryCheckIv.setOnClickListener {
+            val diaryDate = binding.diaryDateTv.text.toString()
+            val diaryRequest = PostDiaryRequest(getUserIdx(), emotionIdx, diaryDate, contents, isPublic(), doneLists)
             if(isPublic()){
                 val dialog = CustomDialogFragment()
                 val data = arrayOf("취소", "확인")
@@ -99,15 +103,16 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
                     }
                     override fun onButton2Clicked() {
-                        goToDiaryViewer()
-                        saveLastPostingDate(Date())
-
+                        val diaryService = DiaryService()
+                        diaryService.setPostDiaryView(this@DiaryActivity)
+                        diaryService.postDiary(diaryRequest)
                     }
                 })
                 dialog.show(this.supportFragmentManager, "PublicAlertDialog")
             } else {
-                goToDiaryViewer()
-                saveLastPostingDate(Date())
+                val diaryService = DiaryService()
+                diaryService.setPostDiaryView(this@DiaryActivity)
+                diaryService.postDiary(diaryRequest)
             }
         }
     }
@@ -208,6 +213,31 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             binding.diaryToolbar.diaryToggleIv.setImageResource(R.drawable.ic_toggle_true)
             binding.diaryToolbar.diaryToggleTv.text = "공개"
             binding.diaryToolbar.diaryToggleSelector.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onDiaryPostLoading() {
+        //TODO: 로딩화면 처리
+
+    }
+
+    override fun onDiaryPostSuccess() {
+        goToDiaryViewer()
+        saveLastPostingDate(Date())
+    }
+
+    override fun onDiaryPostFailure(code: Int) {
+        when (code){
+            4000, 7012, 7013 -> {
+                showOneBtnDialog("데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", "onDiaryPostFailure Code:4000")
+            }
+            6000 ->{
+                showOneBtnDialog("일기는 하루에 하나만 작성 가능합니다.", "onDiaryPostFailure Code:6000")
+            }
+            6001 -> {
+                showOneBtnDialog("오늘 작성한 일기만 공개설정하여 타인에게 전송할 수 있습니다.", "onDiaryPostFailure Code:6001")
+            }
+
         }
     }
 }

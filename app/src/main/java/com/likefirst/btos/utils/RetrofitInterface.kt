@@ -1,7 +1,6 @@
 package com.likefirst.btos.utils
 
-import com.likefirst.btos.data.entities.DiaryViewerInfo
-import com.likefirst.btos.data.entities.PostDiary
+import com.likefirst.btos.data.entities.PostDiaryRequest
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
@@ -32,7 +31,7 @@ interface RetrofitInterface {
     fun updateIsSad(
         @Path("userIdx") userIdx: Int,
         @Body isSad : UserIsSad
-    ) : Call<BaseResponse>
+    ) : Call<BaseResponse<String>>
 
 
     // -------------------Mailbox -------------------------- //
@@ -94,6 +93,6 @@ interface RetrofitInterface {
 
     @POST("/diaries")
     fun postDiary(
-        @Body postDiaryRequest : PostDiary
-    ) : Call<PostDiaryResponse>
+        @Body postDiaryRequest : PostDiaryRequest
+    ) : Call<BaseResponse<PostDiaryResponse>>
 }
