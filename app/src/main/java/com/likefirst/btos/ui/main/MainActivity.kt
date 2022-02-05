@@ -30,6 +30,7 @@ import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 import com.likefirst.btos.data.remote.notify.service.FCMService
+import com.likefirst.btos.data.remote.notify.service.FcmSendService
 import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
 import com.likefirst.btos.data.remote.notify.service.NoticeService
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
@@ -277,14 +278,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     override fun onStart() {
         super.onStart()
-        val fcmDatabase = FCMDatabase.getInstance(this)!!
-        val userData = fcmDatabase.fcmDao().getData()
-        val FirebaseService = FCMService()
-        if(userData.fcmToken == ""){
-            Log.e("Firebase", "트큰이 비었습니다")
-            return
-        }
-        FirebaseService.sendPostToFCM(userData, "btos test!!!!")
 
     }
 
@@ -340,10 +333,22 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         val adapter = NotifyRVAdapter(noticeList)
         adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
             override fun onClickItem() {
-                binding.mainLayout.closeDrawers()
-                supportFragmentManager.commit {
-                    addToBackStack("")
+//                binding.mainLayout.closeDrawers()
+//                supportFragmentManager.commit {
+//                    addToBackStack("")
+//                }
+                val fcmDatabase = FCMDatabase.getInstance(this@MainActivity)!!
+                val userData = fcmDatabase.fcmDao().getData()
+
+                if(userData.fcmToken == ""){
+                    Log.e("Firebase", "트큰이 비었습니다")
+                    return
                 }
+                val token2="cLQVYZu-Skew3KlHiSCQNK:APA91bFqduCx1j9eTws7ZvHgFOpFxc-Kiibjz8rRBDqZ7UG3ad1VNRvx_JphmlDHNaOD4ocrGBbsf2yJKDgjWBfyLRS7r8B60WPvcfFaiWZ5MRwIgmiPYAnx9EG8Czc15EKh-LUBRqls"
+                val token ="fMKVE9gvTqWjj1id1B2l4v:APA91bEiL7ClBYpszqsvP7qF6zYRtqv4QBDp0T34y3EjJZq4qYiuduGAHLp1Zxb9rxzQR0EMk1OoLxEg9WzXzT4k4WAuG0A2GrVjKvP5fmyz_71sybzUmclnSQzpbVaoRFSb70ye_GwE"
+                FCMService().sendPostToFCM(token, userData,userData.email+"에서 편지가 도착햇습니다")
+
+
             }
         })
 
