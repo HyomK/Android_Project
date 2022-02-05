@@ -50,7 +50,6 @@ class PlantService {
             }
 
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
-                plantView.onPlantListFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
             }
 
         })
@@ -69,12 +68,12 @@ class PlantService {
                 if(response.isSuccessful){
                     plantSelectView.onPlantSelectSuccess(request.plantIdx,response.body()!!)
                 }else{
-                    plantSelectView.onPlantSelectFailure( plantResponse.code,plantResponse.message)
+                    plantSelectView.onPlantSelectFailure(plantResponse.code, plantResponse.message)
                 }
             }
 
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
-                plantSelectView.onPlantSelectFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
+
             }
         })
 

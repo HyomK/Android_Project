@@ -162,10 +162,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun updatePlantDB(){
         val userDB= UserDatabase.getInstance(this)!!
-        val USERIDX=userDB.userDao().getUser().userIdx!!
+        val userIdx=userDB.userDao().getUser().userIdx!!
         val plantService = PlantService()
         plantService.setPlantListView(this)
-        plantService.loadPlantList( USERIDX.toString())
+        plantService.loadPlantList( userIdx.toString())
 
     }
 
@@ -190,7 +190,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
 
     override fun onPlantListFailure(code: Int, message: String) {
-        Log.d("Plant/API",code.toString()+"fail to load...")
+        when(code){
+            4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
+
+        }
     }
 
 }

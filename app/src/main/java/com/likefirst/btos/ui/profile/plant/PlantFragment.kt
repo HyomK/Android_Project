@@ -157,14 +157,17 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
     override fun onPlantBuySuccess(plantIdx: Int, response : PlantResponse) {
-        Log.d("Plantbuy/API","succes")
         val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
         plantDB.plantDao().setPlantInit(plantIdx,"active",0,true)
 
     }
 
     override fun onPlantBuyFailure(code: Int, message: String) {
-        Log.d("Plantbuy/API",message.toString())
+        when(code){
+            1000-> Log.e( code.toString(),"화분 상태 변경에 실패하였습니다.")
+            7011-> Log.e( code.toString(),"화분 선택에 실패하였습니다.")
+            else ->Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다")
+        }
     }
 
 
@@ -175,18 +178,22 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     override fun onPlantSelectSuccess(plantIdx: Int, request: PlantResponse) {
         Log.d("Plantselect/API",request.isSuccess.toString())
-
         val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
         val selected = plantDB.plantDao().getSelectedPlant("selected")!!
         plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
         plantDB.plantDao().setPlantStatus(plantIdx,"selected")
-        Log.d("Plantselect/DB",plantDB.plantDao().getPlants().toString())
+
 
     }
 
     override fun onPlantSelectFailure(code: Int, message: String) {
-
+        when(code){
+            4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
+            7010-> Log.e( code.toString(),"화분 상태 변경에 실패하였습니다.")
+            else ->Log.e( code.toString(),"이미 선택된 화분입니다.")
+        }
     }
+
     class ComparePlant {
         companion object : Comparator<Plant> {
             override fun compare(a:Plant, b:Plant): Int {

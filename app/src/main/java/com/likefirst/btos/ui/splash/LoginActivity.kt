@@ -237,6 +237,7 @@ class LoginActivity
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
+
     }
 
 
@@ -272,7 +273,9 @@ class LoginActivity
 
 
     override fun onPlantListFailure(code: Int, message: String) {
-        Log.d("Plant/API",code.toString()+"fail to load...")
+        when(code){
+            4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
+        }
     }
 
 
