@@ -2,8 +2,9 @@
     <string name="app_name">BTOS</string>
 
     <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
-    <string name ="default_token"> f13nmqYQTeaDeu9AuPAg9f:APA91bHdXvR1fNtMEsdVhN9d1brn1MmpabPx9DLKS5zM2-4NixbRHkSMfuCOoXiLluU22SFnYUzPvyJ8qDs309LGguCnRr0pNb0zvJp0qxPky-ncwD6aYT7UKvKPlUlQAyypQ97jcukc</string>
     <string name="btos_default_web_client_id" translatable="false">969188195320-ne8ipt9t7o9lgvp403r2afkn2sfvfc1n.apps.googleusercontent.com</string>
+    <string name ="firebase_server_key">AAAA4ageO_g:APA91bGMNBpRuyibDVwa9RptTRXZb5wFmMXk1Z9VE_tVyb0zl5re63CGQUgudTuXBaJnXTQzP__2m-YwSQ7Mefca20Fo_OWaRK23NMGKUQhGtwtP3kblibvqHapWqlYaptwhYXIqqhBw</string>
+
     <string-array name="onboarding_agelist">
         <item>2021</item>
         <item>2020</item>

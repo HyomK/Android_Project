@@ -88,6 +88,7 @@ class LoginActivity
     private var mDatabaseReference: DatabaseReference? = null
     private var mChildEventListener: ChildEventListener? = null
     private var userName: String? = null
+    private var movePose : String? = null
 
 
     override fun initAfterBinding() {
@@ -160,9 +161,12 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-        val intent = Intent(this, FirebaseSignupActivity::class.java)
-        finish()
-        startActivity(intent)
+//
+//        val intent = Intent(this, FirebaseSignupActivity::class.java)
+//        intent.putExtra("movePos","main")
+//        intent.putExtra("email",email)
+//        finish()
+//        startActivity(intent)
     }
 
     override fun onLoginFailure(code: Int, message: String) {
@@ -197,10 +201,17 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
+
+    }
+
+    fun gotoFirebaseSignUp(user: User){
+
         val intent = Intent(this, FirebaseSignupActivity::class.java)
-        finish()
+        intent.putExtra("movePos","main")
+        intent.putExtra("email",user.email)
         startActivity(intent)
     }
+
 
     override fun onAutoLoginFailure(code: Int, message: String) {
         binding.loginLoadingPb.visibility = View.GONE
@@ -222,6 +233,7 @@ class LoginActivity
         Log.e("PROFILE/API",userDB?.getUser().toString())
 
         updatePlantDB()
+        gotoFirebaseSignUp(user)
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {

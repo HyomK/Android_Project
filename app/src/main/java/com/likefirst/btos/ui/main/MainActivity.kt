@@ -26,7 +26,10 @@ import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.NoticeDTO
+import com.likefirst.btos.data.entities.firebase.UserDTO
+import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
+import com.likefirst.btos.data.remote.notify.service.FCMService
 import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
 import com.likefirst.btos.data.remote.notify.service.NoticeService
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
@@ -274,6 +277,14 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     override fun onStart() {
         super.onStart()
+        val fcmDatabase = FCMDatabase.getInstance(this)!!
+        val userData = fcmDatabase.fcmDao().getData()
+        val FirebaseService = FCMService()
+        if(userData.fcmToken == ""){
+            Log.e("Firebase", "트큰이 비었습니다")
+            return
+        }
+        FirebaseService.sendPostToFCM(userData, "btos test!!!!")
 
     }
 

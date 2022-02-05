@@ -34,12 +34,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     val authService = AuthService()
     val plantService= PlantService()
     lateinit var email: String
-    private var auth : FirebaseAuth? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-    }
+
 
     override fun initAfterBinding() {
 
@@ -77,7 +73,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-        //createAccount(email,"btos1234")
+
         // TODO: Firebase 로그인
         // TODO: initPlant 확인 필요
 
@@ -111,6 +107,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
         Log.e("PROFILE/API", userDB?.getUser().toString())
         updatePlantDB()
+        gotoFirebaseSignUp(user)
 
     }
 
@@ -132,10 +129,23 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-        val intent = Intent(this, TutorialActivity::class.java)
-        finish()
+      //  val intent = Intent(this, TutorialActivity::class.java)
+
+//        val intent = Intent(this, FirebaseSignupActivity::class.java)
+//        intent.putExtra("movePos","tutorial")
+//        intent.putExtra("email",email)
+//        finish()
+//        startActivity(intent)
+    }
+
+    fun gotoFirebaseSignUp(user: User){
+
+        val intent = Intent(this, FirebaseSignupActivity::class.java)
+        intent.putExtra("movePos","tutorial")
+        intent.putExtra("email",user.email)
         startActivity(intent)
     }
+
 
     override fun onLoginFailure(code: Int, message: String) {
         binding.onboardingLoadingPb.visibility = View.GONE
@@ -147,25 +157,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
     }
 
-    // TODO: Firebase 로그인
-    private fun createAccount(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.createUserWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            this, "계정 생성 완료.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this, "계정 생성 실패",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-        }
-    }
+
 
 
     fun updatePlantDB(){
