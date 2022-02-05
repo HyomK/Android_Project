@@ -2,6 +2,7 @@ package com.likefirst.btos.data.remote.users.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
+import com.likefirst.btos.data.entities.UserBirth
 import com.likefirst.btos.data.entities.UserName
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.users.view.SetSettingUserView
@@ -42,7 +43,7 @@ class SettingUserService {
         })
     }
 
-    fun setBirth(userIdx : Int, birth : Int){
+    fun setBirth(userIdx : Int, birth : UserBirth){
 
         setSettingUserView.onSetSettingUserViewLoading()
 

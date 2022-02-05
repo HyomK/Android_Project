@@ -21,7 +21,6 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
     override fun initAfterBinding() {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         val settingService = SettingUserService()
-        val mActivity = activity as MainActivity
 
         binding.nicknameToolbar.toolbarTitleTv.text="닉네임 변경"
         binding.nicknameToolbar.toolbarBackIc.setOnClickListener{
@@ -39,47 +38,25 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 //TODO : 한글만 가능, 비속어 처리
-                if(binding.nicknameEdit.text.length >10)  {
-                    binding.nameError.visibility= View.VISIBLE
-                    binding.nameError.text="10자 이내로 작성해주세요"
-                }
-                else {
-                    binding.nameError.visibility= View.INVISIBLE
-                }
+
             }
         })
 
         binding.nicknameDoneBtn.setOnClickListener {
-            if(binding.nicknameEdit.text.length <= 10){
-                //유효성 검사 api
-                var isSuccess =true
-
-                if(isSuccess){
+//            if(binding.nicknameEdit.text.length <= 10){
+//                //유효성 검사 api
+//                var isSuccess =true
+//
+//                if(isSuccess){
                     settingService.setSettingUserView(this)
                     settingService.setName(userDB!!.getUserIdx(), UserName(binding.nicknameEdit.text.toString()))
-                    val dialog = CustomDialogFragment()
-                    val data = arrayOf("확인")
-                    dialog.arguments= bundleOf(
-                        "bodyContext" to "닉네임이 성공적으로 변경되었습니다.",
-                        "btnData" to data
-                    )
-                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
-                        override fun onButton1Clicked() {
-                            mActivity.supportFragmentManager.popBackStack()
-                        }
-                        override fun onButton2Clicked() {
-
-                        }
-                    })
-                    dialog.show(this.parentFragmentManager, "setNameSuccess")
-                }else{
-                    binding.nameError.text="중복된 닉네임 입니다"
-                    binding.nameError.visibility= View.VISIBLE
-                }
-            }else{
-                binding.nameError.text="10자 이내로 작성해주세요"
-                binding.nameError.visibility= View.VISIBLE
-            }
+//                }else{
+//
+//                }
+//            }else{
+//                binding.nameError.text="10자 이내로 작성해주세요"
+//                binding.nameError.visibility= View.VISIBLE
+//            }
         }
     }
     override fun onBackPressed() {
@@ -95,10 +72,27 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
         binding.nicknameLoadingPb.visibility = View.GONE
         userDB!!.updateNickName(binding.nicknameEdit.text.toString())
         Log.e("SETNAME",userDB.getUser().toString())
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to "닉네임이 성공적으로 변경되었습니다.",
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+            override fun onButton1Clicked() {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+            override fun onButton2Clicked() {
+
+            }
+        })
+        dialog.show(this.parentFragmentManager, "setNameSuccess")
     }
 
     override fun onSetSettingUserViewFailure(code: Int, message: String) {
         binding.nicknameLoadingPb.visibility = View.GONE
+        binding.nameError.text=message
+        binding.nameError.visibility= View.VISIBLE
     }
 
 }

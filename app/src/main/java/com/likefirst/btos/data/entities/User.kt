@@ -36,3 +36,7 @@ data class UserIsSad(
 data class UserName(
     @ColumnInfo(name = "nickName") var nickName: String
 )
+
+data class UserBirth(
+    @ColumnInfo(name = "birth") var birth: Int
+)

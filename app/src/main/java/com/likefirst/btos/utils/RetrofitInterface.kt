@@ -1,5 +1,6 @@
 package com.likefirst.btos.utils
 
+import com.likefirst.btos.data.entities.UserBirth
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.entities.UserName
 import com.likefirst.btos.data.entities.UserSign
@@ -93,10 +94,10 @@ interface RetrofitInterface {
         @Body nickName : UserName
     ) : Call<BaseResponse>
 
-    @PATCH("/users/{userIdx}")
+    @PATCH("/users/{userIdx}/birth")
     fun setBirth(
         @Path("userIdx") userIdx : Int,
-        @Body birth : Int
+        @Body birth : UserBirth
     ): Call<BaseResponse>
 
     @PATCH("/users/{userIdx}/receive/others")

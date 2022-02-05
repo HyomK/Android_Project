@@ -43,8 +43,7 @@
         <activity
             android:name=".ui.splash.LoginActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-           >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -53,9 +52,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
-            android:exported="true"
-
-             >
+            android:exported="true">
         </activity>
 
         <activity android:name=".ui.posting.DiaryActivity"
@@ -73,8 +70,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.splash.TutorialActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.history.HistoryDetailActivity"
-            android:screenOrientation="portrait"/>
+<!--        <activity android:name=".ui.history.HistoryDetailActivity"-->
+<!--            android:screenOrientation="portrait"/>-->
     </application>
 
 

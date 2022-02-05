@@ -42,4 +42,7 @@ interface UserDao {
 
     @Query("UPDATE UserTable SET nickName = :nickName")
     fun updateNickName(nickName : String)
+
+    @Query("UPDATE UserTable SET birth = :birth")
+    fun updateBirth(birth : Int)
 }
