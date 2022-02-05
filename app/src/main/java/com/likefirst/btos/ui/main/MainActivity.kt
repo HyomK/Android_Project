@@ -352,6 +352,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onNoticeAPIFailure(code: Int, message: String) {
-        Log.e("NOTICE/API", "Fail... ${message.toString()}")
+        when(code){
+            4000->Log.e(code.toString(), "데이터베이스 연결에 실패하였습니다.")
+            else -> Log.e(code.toString(), "공지 조회 실패.")
+        }
     }
 }
