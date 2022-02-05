@@ -8,34 +8,22 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.annotation.NonNull
-import com.google.android.gms.auth.GoogleAuthUtil.getToken
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.zzl.getToken
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
-import com.google.firebase.messaging.FirebaseMessaging
-import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
-import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.response.Login
@@ -47,22 +35,13 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
 
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.database.DatabaseError
-
-import com.google.firebase.database.DataSnapshot
-
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
-
-import com.likefirst.btos.data.entities.firebase.MessageDTO
 
 
 class LoginActivity
@@ -206,7 +185,7 @@ class LoginActivity
 
     fun gotoFirebaseSignUp(user: User){
 
-        val intent = Intent(this, FirebaseSignupActivity::class.java)
+        val intent = Intent(this, FirebaseActivity::class.java)
         intent.putExtra("movePos","main")
         intent.putExtra("email",user.email)
         startActivity(intent)
@@ -231,8 +210,8 @@ class LoginActivity
             userDB.update(user)
         }
         Log.e("PROFILE/API",userDB?.getUser().toString())
-
         updatePlantDB()
+
         gotoFirebaseSignUp(user)
     }
 

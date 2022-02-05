@@ -1,15 +1,11 @@
 package com.likefirst.btos.ui.splash
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
@@ -108,7 +104,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.e("PROFILE/API", userDB?.getUser().toString())
         updatePlantDB()
         gotoFirebaseSignUp(user)
-
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -140,7 +135,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun gotoFirebaseSignUp(user: User){
 
-        val intent = Intent(this, FirebaseSignupActivity::class.java)
+        val intent = Intent(this, FirebaseActivity::class.java)
         intent.putExtra("movePos","tutorial")
         intent.putExtra("email",user.email)
         startActivity(intent)
@@ -156,8 +151,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             }
         }
     }
-
-
 
 
     fun updatePlantDB(){

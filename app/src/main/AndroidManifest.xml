@@ -73,7 +73,7 @@
             android:exported="true"
              >
         </activity>
-        <activity android:name=".ui.splash.FirebaseSignupActivity"
+        <activity android:name=".ui.splash.FirebaseActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.posting.DiaryActivity"
             android:screenOrientation="portrait"/>

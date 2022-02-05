@@ -74,36 +74,39 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
             override fun onClickBuyItem(plant : Pair<Plant,Int>):Pair<Plant,Int> {
                var buyPlant : Pair<Plant,Int>? = plant
+                val plantService = PlantService()
+                plantService.setPlantBuyView(plantBuyView)
+                val request :PlantRequest = PlantRequest(USERIDX,plant.first.plantIdx)
+                plantService.buyPlant(request)
 
-                val buyDialog = CustomDialogFragment()
-                val btn =arrayOf("취소","구매")
-                val bundle = bundleOf(
-                    "bodyContext" to "${plant.first.plantName} 화분을 구매하시겠습니까?",
-                    "btnData" to btn
-                )
-                buyDialog.arguments=bundle
-                buyDialog.setButtonClickListener(object:CustomDialogFragment.OnButtonClickListener{
-                    override fun onButton1Clicked() {}
-                    override fun onButton2Clicked() {
-                        val plantService = PlantService()
-                        plantService.setPlantBuyView(plantBuyView)
-                        val request :PlantRequest = PlantRequest(USERIDX,plant.first.plantIdx)
-                        plantService.buyPlant(request)
+                 val img= requireContext()!!.resources.getIdentifier(
+                  plantName[plant.first.plantIdx-1]
+                            +"_0"
+                           +"_circle","drawable",
+                 requireActivity().packageName)
+                 var newPlant = plant.first
+                  newPlant.plantStatus="active"
+                  newPlant.isOwn=true
+                  newPlant.currentLevel=0
 
-                        val img= requireContext()!!.resources.getIdentifier(
-                            plantName[plant.first.plantIdx-1]
-                                    +"_0"
-                                    +"_circle","drawable",
-                            requireActivity().packageName)
-                        var newPlant = plant.first
-                        newPlant.plantStatus="active"
-                        newPlant.isOwn=true
-                        newPlant.currentLevel=0
+                  buyPlant= Pair(newPlant,img)
 
-                        buyPlant= Pair(newPlant,img)
-                    }
-                })
-                buyDialog.show(requireActivity().supportFragmentManager, "CustomDialog")
+                //TODO 화분 선택 Dialog 구현
+
+//                val buyDialog = CustomDialogFragment()
+//                val btn =arrayOf("취소","구매")
+//                val bundle = bundleOf(
+//                    "bodyContext" to "${plant.first.plantName} 화분을 구매하시겠습니까?",
+//                    "btnData" to btn
+//                )
+//                buyDialog.arguments=bundle
+//                buyDialog.setButtonClickListener(object:CustomDialogFragment.OnButtonClickListener{
+//                    override fun onButton1Clicked() {}
+//                    override fun onButton2Clicked() {
+
+//                    }
+//                })
+//                buyDialog.show(requireActivity().supportFragmentManager, "CustomDialog")
                return buyPlant!!
             }
 

@@ -5,33 +5,22 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
-import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCanceledListener
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.firebase.MessageDTO
-import com.likefirst.btos.data.entities.firebase.NoticeDTO
-import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 import com.likefirst.btos.data.remote.notify.service.FCMService
-import com.likefirst.btos.data.remote.notify.service.FcmSendService
-import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
 import com.likefirst.btos.data.remote.notify.service.NoticeService
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import com.likefirst.btos.databinding.ActivityMainBinding
@@ -39,7 +28,6 @@ import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
-import com.likefirst.btos.ui.home.MailViewFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
 
 
@@ -80,7 +68,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
         binding.mainBnv.itemIconTintList = null
         initNotice()
-
+     //   loadData()
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
@@ -291,8 +279,25 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
        데이터를 모두 받은 후 시간 순서대로 정렬한다
        */
 
+    fun loadData(){
+        var noticeDTOs: ArrayList<MessageDTO> = arrayListOf()
+        fireStore?.collection(uid!!)?.orderBy("timestamp", Query.Direction.DESCENDING)
+            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                noticeDTOs.clear()
+                if (querySnapshot == null) return@addSnapshotListener
+                // 데이터 받아오기
+                for (snapshot in querySnapshot!!.documents) {
+                    var item = snapshot.toObject(MessageDTO::class.java)
+                    noticeDTOs.add(item!!)
+                }
+
+            }
+        Log.e("firebase/DATA", noticeDTOs.toString())
+
+    }
+
     inner class NoticeViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var noticeDTOs: ArrayList<NoticeDTO> = arrayListOf()
+        var noticeDTOs: ArrayList<MessageDTO> = arrayListOf()
 
         init {
             fireStore?.collection(uid!!)?.orderBy("timestamp", Query.Direction.DESCENDING)
@@ -301,7 +306,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (querySnapshot == null) return@addSnapshotListener
                     // 데이터 받아오기
                     for (snapshot in querySnapshot!!.documents) {
-                        var item = snapshot.toObject(NoticeDTO::class.java)
+                        var item = snapshot.toObject(MessageDTO::class.java)
                         noticeDTOs.add(item!!)
                     }
                     notifyDataSetChanged()
