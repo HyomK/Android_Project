@@ -16,14 +16,14 @@ import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.response.Login
-import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.plant.view.PlantInitView
+import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
-import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.getJwt
@@ -54,7 +54,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
         //나이 선택 시 키보드 내리기
         binding.onboardingAgeTil.setOnClickListener {
-            imm.hideSoftInputFromWindow(binding.onboardingNameEt.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(binding.onboardingNameEt.windowToken, 0);
         }
 
         binding.onboardingOkayTv.setOnClickListener {

@@ -49,6 +49,7 @@ class AuthService {
 
                 val LoginResponse: LoginResponse = response.body()!!
 
+                //TODO : retorofit response 가 null이라서 튕기는걸수도 (알아보기)
                 Log.e("LOGIN/API",LoginResponse.toString())
 
                 when(LoginResponse.code){

@@ -16,6 +16,9 @@ interface UserDao {
     @Delete
     fun delete(user: User)
 
+    @Query("SELECT userIdx FROM UserTable")
+    fun getUserIdx(): Int
+
     @Query("SELECT email FROM UserTable")
     fun getEmail(): String?
 
@@ -36,4 +39,7 @@ interface UserDao {
 
     @Query("UPDATE UserTable SET isSad = :isSad")
     fun updateIsSad(isSad : Boolean)
+
+    @Query("UPDATE UserTable SET nickName = :nickName")
+    fun updateNickName(nickName : String)
 }

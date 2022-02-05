@@ -4,7 +4,6 @@ import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.remote.BaseResponse
-import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
