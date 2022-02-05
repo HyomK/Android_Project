@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">BTOS</string>
+    <string name="google_Admob_ID_test">"ca-app-pub-3940256099942544~3347511713"</string>
+    <string name="google_Admob_ID_prod">"ca-app-pub-3439488559531418~5946591557"</string>
+
 
     <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
     <string name="btos_default_web_client_id" translatable="false">969188195320-ne8ipt9t7o9lgvp403r2afkn2sfvfc1n.apps.googleusercontent.com</string>

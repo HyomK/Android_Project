@@ -3,12 +3,12 @@ package com.likefirst.btos.data.remote.users.service
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.entities.UserSign
-import com.likefirst.btos.data.remote.response.GetProfileResponse
-import com.likefirst.btos.data.remote.response.LoginResponse
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
+import com.likefirst.btos.data.remote.users.response.GetProfileResponse
+import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
@@ -115,6 +115,7 @@ class AuthService {
         AuthService.getProfile(useridx).enqueue(object : Callback<GetProfileResponse>{
             override fun onResponse(call: Call<GetProfileResponse>, response: Response<GetProfileResponse>) {
                 val getProfileResponse : GetProfileResponse = response.body()!!
+                Log.d("onLoginSuccess", getProfileResponse.toString())
 
                 when(getProfileResponse.code){
                     1000 -> getprofileView.onGetProfileViewSuccess(getProfileResponse.result)

@@ -2,19 +2,19 @@ package com.likefirst.btos.data.remote.posting.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.remote.response.MailReplyResponse
+import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ReplyService {
+class MailReplyService {
     private lateinit var mailReplyView: MailReplyView
 
     private val ReplyService = ApplicationClass.retrofit.create(RetrofitInterface::class.java)
 
-    fun setDiaryView(mailReplyView: MailReplyView){
+    fun setReplyView(mailReplyView: MailReplyView){
         this.mailReplyView=mailReplyView
     }
 
@@ -22,9 +22,9 @@ class ReplyService {
 
         mailReplyView.onReplyLoading()
 
-        ReplyService. loadReply(type,userId).enqueue(object: Callback<MailReplyResponse> {
+        ReplyService. loadReply(type,userId).enqueue(object: Callback<MailReplyResponse>{
             override fun onResponse(call: Call<MailReplyResponse>, response: Response<MailReplyResponse>) {
-                val replyResponse: MailReplyResponse =response.body()!!
+                val replyResponse :MailReplyResponse =response.body()!!
                 Log.e("Reply/API", replyResponse.toString())
 
                 when(replyResponse.code){

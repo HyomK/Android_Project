@@ -1,6 +1,6 @@
 package com.likefirst.btos.data.remote.users.view
 
-import com.likefirst.btos.data.remote.response.Login
+import com.likefirst.btos.data.remote.users.response.Login
 
 interface AutoLoginView {
     fun onAutoLoginLoading()

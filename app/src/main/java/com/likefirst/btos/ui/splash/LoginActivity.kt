@@ -26,7 +26,6 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.response.Login
 import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
@@ -42,6 +41,8 @@ import com.likefirst.btos.utils.saveJwt
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
+import com.likefirst.btos.data.remote.users.response.Login
+import com.likefirst.btos.ui.main.MainActivity
 
 
 class LoginActivity
@@ -57,7 +58,7 @@ class LoginActivity
 
     val authService = AuthService()
     val plantService= PlantService()
- ////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
     val fireStore = Firebase.firestore
     lateinit var mAuth: FirebaseAuth
     private var mAuthListener: AuthStateListener? = null
@@ -117,7 +118,7 @@ class LoginActivity
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 
             val account = task.getResult(ApiException::class.java)
-           // firebaseAuthWithGoogle(account)
+            // firebaseAuthWithGoogle(account)
             email = account?.email.toString()
             Log.e("account", email)
 
@@ -182,7 +183,7 @@ class LoginActivity
 
 
     }
-
+/*
     fun gotoFirebaseSignUp(user: User){
 
         val intent = Intent(this, FirebaseActivity::class.java)
@@ -190,7 +191,7 @@ class LoginActivity
         intent.putExtra("email",user.email)
         startActivity(intent)
     }
-
+*/
 
     override fun onAutoLoginFailure(code: Int, message: String) {
         binding.loginLoadingPb.visibility = View.GONE
@@ -211,8 +212,10 @@ class LoginActivity
         }
         Log.e("PROFILE/API",userDB?.getUser().toString())
         updatePlantDB()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
 
-        gotoFirebaseSignUp(user)
+       // gotoFirebaseSignUp(user)
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {

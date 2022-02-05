@@ -1,7 +1,8 @@
 package com.likefirst.btos.data.remote.posting.view
 
-import com.likefirst.btos.data.remote.response.Mailbox
-import com.likefirst.btos.data.remote.response.MailReplyDetailResponse
+
+
+import com.likefirst.btos.data.remote.posting.response.MailReplyDetailResponse
 
 interface MailReplyView {
     fun onReplyLoading()

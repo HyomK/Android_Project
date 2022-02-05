@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.DiaryInfo
-import com.likefirst.btos.data.remote.response.MailDiaryDetailResponse
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.remote.posting.response.Diary
 import com.likefirst.btos.data.remote.posting.response.MailLetterDetailResponse
-import com.likefirst.btos.data.remote.response.Mailbox
+import com.likefirst.btos.data.remote.posting.response.Mailbox
 import com.likefirst.btos.data.remote.posting.service.MailDiaryService
 import com.likefirst.btos.data.remote.posting.service.MailLetterService
 import com.likefirst.btos.data.remote.posting.service.MailboxService
@@ -22,14 +22,13 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
+import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.toArrayList
 
 
 class MailViewActivity : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),
     MailboxView, MailLetterView,
     MailDiaryView {
-
-
 
     override fun initAfterBinding() {
         val presFragment  = this
@@ -95,7 +94,7 @@ class MailViewActivity : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBin
         editor.commit()
     }
 
-    fun getDiary(diary: MailDiaryDetailResponse){
+    fun getDiary(diary: Diary){
         val spf= requireActivity().getSharedPreferences("MailBox",
             AppCompatActivity.MODE_PRIVATE)
         val id=spf.getInt("Idx",-1)
@@ -110,8 +109,8 @@ class MailViewActivity : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBin
                 .commit()
 
             val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
-            val Diary =DiaryInfo(diaryDate = sendAt, doneLists =doneList.toArrayList(),emotionIdx = diary.emotionIdx,contents = diary.content,userName=senderName!!)
-            val  intent: Intent = Intent(requireContext()!!,DiaryViewerActivity::class.java)
+            val Diary =DiaryViewerInfo(diary.senderNickName, diary.emotionIdx, sendAt!!, diary.content, true, doneList.toArrayList())
+            val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
             intent.putExtra("diaryInfo",Diary)
             requireActivity().startActivity(intent)
         }
@@ -209,7 +208,7 @@ class MailViewActivity : BaseFragment<FragmentMailboxBinding>(FragmentMailboxBin
     override fun onDiaryLoading() {
     }
 
-    override fun onDiarySuccess(diary: MailDiaryDetailResponse) {
+    override fun onDiarySuccess(diary: Diary) {
         Log.d("Diary/API : Success",diary.toString())
         getDiary(diary)
     }

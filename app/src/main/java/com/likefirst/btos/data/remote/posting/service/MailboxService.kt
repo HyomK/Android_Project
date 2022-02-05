@@ -2,7 +2,7 @@ package com.likefirst.btos.data.remote.posting.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.remote.response.MailboxResponse
+import com.likefirst.btos.data.remote.posting.response.MailboxResponse
 import com.likefirst.btos.data.remote.posting.view.MailboxView
 import com.likefirst.btos.utils.RetrofitInterface
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
