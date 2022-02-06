@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -21,6 +21,9 @@
         style="@style/settingListStyle"
         android:text="닉네임 변경"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        app:layout_constraintTop_toBottomOf="@id/setting_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView
@@ -30,6 +33,9 @@
         style="@style/settingListStyle"
         android:text="생년 변경"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        app:layout_constraintTop_toBottomOf="@id/setting_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView
@@ -39,11 +45,18 @@
         style="@style/settingListStyle"
         android:text="수신 설정"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        app:layout_constraintTop_toBottomOf="@id/setting_birth"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/setting_push_cl"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/setting_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
         <TextView
             android:id="@+id/setting_push"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -86,6 +99,9 @@
         style="@style/settingListStyle"
         android:text="폰트"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        app:layout_constraintTop_toBottomOf="@id/setting_push_cl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
     <TextView
         android:id="@+id/setting_appinfo"
@@ -94,6 +110,9 @@
         style="@style/settingListStyle"
         android:text="앱 정보"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        app:layout_constraintTop_toBottomOf="@id/setting_font"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
     <TextView
         android:id="@+id/setting_logout"
@@ -102,7 +121,9 @@
         style="@style/settingListStyle"
         android:text="로그아웃"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
-
+        app:layout_constraintTop_toBottomOf="@id/setting_appinfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
     <TextView
         android:id="@+id/setting_secession"
@@ -111,7 +132,20 @@
         style="@style/settingListStyle"
         android:text="탈퇴"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+        app:layout_constraintTop_toBottomOf="@id/setting_logout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <ProgressBar
+        android:id="@+id/set_loading_pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

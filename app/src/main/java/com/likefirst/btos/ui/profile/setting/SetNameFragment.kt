@@ -43,20 +43,20 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
         })
 
         binding.nicknameDoneBtn.setOnClickListener {
-//            if(binding.nicknameEdit.text.length <= 10){
-//                //유효성 검사 api
-//                var isSuccess =true
-//
-//                if(isSuccess){
+            if(binding.nicknameEdit.text.length <= 10){
+                //유효성 검사 api
+                var isSuccess =true
+
+                if(isSuccess){
                     settingService.setSettingUserView(this)
                     settingService.setName(userDB!!.getUserIdx(), UserName(binding.nicknameEdit.text.toString()))
-//                }else{
-//
-//                }
-//            }else{
-//                binding.nameError.text="10자 이내로 작성해주세요"
-//                binding.nameError.visibility= View.VISIBLE
-//            }
+                }else{
+
+                }
+            }else{
+                binding.nameError.text="10자 이내로 작성해주세요"
+                binding.nameError.visibility= View.VISIBLE
+            }
         }
     }
     override fun onBackPressed() {
@@ -72,10 +72,11 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
         binding.nicknameLoadingPb.visibility = View.GONE
         userDB!!.updateNickName(binding.nicknameEdit.text.toString())
         Log.e("SETNAME",userDB.getUser().toString())
+
         val dialog = CustomDialogFragment()
         val data = arrayOf("확인")
         dialog.arguments= bundleOf(
-            "bodyContext" to "닉네임이 성공적으로 변경되었습니다.",
+            "bodyContext" to "성공적으로 변경되었습니다.",
             "btnData" to data
         )
         dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
@@ -86,7 +87,7 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
 
             }
         })
-        dialog.show(this.parentFragmentManager, "setNameSuccess")
+        dialog.show(this.parentFragmentManager, "settingSuccess")
     }
 
     override fun onSetSettingUserViewFailure(code: Int, message: String) {

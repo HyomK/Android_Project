@@ -25,8 +25,17 @@ interface UserDao {
     @Query("SELECT nickName FROM UserTable")
     fun getNickName(): String?
 
-    @Query("SELECT birth FROM UserTable")
-    fun getBirth(): Int?
+    @Query("SELECT recOthers FROM UserTable")
+    fun getRecOthers(): Boolean?
+
+    @Query("SELECT recSimilarAge FROM UserTable")
+    fun getRecSimilarAge(): Boolean?
+
+    @Query("SELECT fontIdx FROM UserTable")
+    fun getFontIdx(): Int?
+
+    @Query("SELECT pushAlarm FROM UserTable")
+    fun getPushAlarm(): Boolean?
 
     @Query("SELECT * FROM UserTable")
     fun getUser(): User
@@ -45,4 +54,17 @@ interface UserDao {
 
     @Query("UPDATE UserTable SET birth = :birth")
     fun updateBirth(birth : Int)
+
+    @Query("UPDATE UserTable SET recOthers = :recOthers")
+    fun updateRecOthers(recOthers: Boolean)
+
+    @Query("UPDATE UserTable SET recSimilarAge = :recSimilarAge")
+    fun updateRecSimilarAge(recSimilarAge: Boolean)
+
+    @Query("UPDATE UserTable SET fontIdx = :fontIdx")
+    fun updateFontIdx(fontIdx: Int)
+
+    @Query("UPDATE UserTable SET pushAlarm = :pushAlarm")
+    fun updatePushAlarm(pushAlarm: Boolean)
+
 }
