@@ -1,12 +1,13 @@
 package com.likefirst.btos.data.local
 
 import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import com.likefirst.btos.data.entities.User
 
 
 @Dao
 interface UserDao {
-    @Insert
+    @Insert (onConflict = REPLACE)
     fun insert(user: User)
 
     @Update
@@ -29,4 +30,10 @@ interface UserDao {
 
     @Query("DELETE FROM UserTable")
     fun deleteAll()
+
+    @Query("SELECT isSad FROM UserTable")
+    fun getIsSad() : Boolean
+
+    @Query("UPDATE UserTable SET isSad = :isSad")
+    fun updateIsSad(isSad : Boolean)
 }

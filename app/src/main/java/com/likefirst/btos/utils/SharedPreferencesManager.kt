@@ -1,7 +1,9 @@
 package com.likefirst.btos.utils
 
+import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.likefirst.btos.ApplicationClass.Companion.mSharedPreferences
+import com.likefirst.btos.data.local.UserDatabase
 import java.util.*
 
 fun saveJwt(jwtToken: String) {
@@ -28,6 +30,18 @@ fun saveLastPostingDate(date : Date){
 }
 
 fun getLastPostingDate() : Date {
-    val dateLong = mSharedPreferences.getLong("lastPostingDate", Date().time)
+    // TODO: 앱 배포시에는 dateLong 기본값을 오늘날짜로 해주어야함 Date().time
+    val dateDefault = GregorianCalendar(1999, 0,6)
+    val date = dateDefault.time
+//    val dateLong = mSharedPreferences.getLong("lastPostingDate", Date().time)
+    val dateLong = mSharedPreferences.getLong("lastPostingDate", date.time)
     return Date(dateLong)
 }
+
+fun saveUserIdx(userIdx : Int) {
+    val editor = mSharedPreferences.edit()
+    editor.putInt("userIdx", userIdx)
+    editor.apply()
+}
+
+fun getUserIdx() : Int = mSharedPreferences.getInt("userIdx", 0)

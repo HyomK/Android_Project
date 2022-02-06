@@ -53,9 +53,10 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="@string/google_Admob_ID_test"/>
         <!-- TODO: 실제 앱 배포 시에 위 구글 애드몹 아이디 (value) 값을 "ca-app-pub-3439488559531418~5946591557" 로 변경 -->
         <!--    위 value값은 샘플 ID값임 -->
+<!--     test Id : "ca-app-pub-3940256099942544~3347511713"-->
 
         <activity
             android:name=".ui.splash.LoginActivity"

@@ -12,13 +12,13 @@ import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.response.Login
-import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.getJwt
@@ -77,6 +77,15 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         authService.setLoginView(this)
         authService.login(email)
 
+
+        //프로필 정보 가져와서 userdb에 저장
+        authService.setGetProfileView(this)
+        authService.getProfile(login.userIdx)
+
+        Toast.makeText(this,"회원가입에 성공하였습니다.\n로그인화면으로 돌아갑니다.", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, LoginActivity::class.java)
+        finish()
+        startActivity(intent)
     }
 
     override fun onSignUpFailure(code: Int, message: String) {
@@ -95,7 +104,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onGetProfileViewSuccess(user: User) {
         //UserDB에 프로필 정보 저장
         val userDB = UserDatabase.getInstance(this)?.userDao()
-        if (userDB == null) {
+        if(userDB?.getUser() == null){
             userDB?.insert(user)
         } else {
             userDB.deleteAll()
@@ -124,13 +133,11 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-      //  val intent = Intent(this, TutorialActivity::class.java)
+  val intent = Intent(this, TutorialActivity::class.java)
 
-//        val intent = Intent(this, FirebaseSignupActivity::class.java)
-//        intent.putExtra("movePos","tutorial")
-//        intent.putExtra("email",email)
-//        finish()
-//        startActivity(intent)
+
+      finish()
+       startActivity(intent)
     }
 
     fun gotoFirebaseSignUp(user: User){

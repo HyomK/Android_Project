@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.response
+package com.likefirst.btos.data.remote.posting.response
 
 import com.google.gson.annotations.SerializedName
 

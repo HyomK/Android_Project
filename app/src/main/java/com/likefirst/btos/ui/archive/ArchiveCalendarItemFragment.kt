@@ -4,55 +4,37 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import com.likefirst.btos.data.entities.CalendarInfo
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.service.ArchiveCalendarService
+import com.likefirst.btos.data.remote.viewer.view.ArchiveCalendarView
 import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.dateToStringMonth
+import com.likefirst.btos.utils.getUserIdx
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate) {
+class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate)
+, ArchiveCalendarView{
 
     override fun initAfterBinding() {
-        val dummyData = ArrayList<CalendarInfo>()
-        dummyData.add(CalendarInfo("2022.01.01", 0,1, 3))
-        dummyData.add(CalendarInfo("2022.01.05", 0,5, 1))
-        dummyData.add(CalendarInfo("2022.01.06", 0,10, 7))
-        dummyData.add(CalendarInfo("2022.01.07", 0,1, 8))
-        dummyData.add(CalendarInfo("2022.01.16", 0,3, 4))
-        dummyData.add(CalendarInfo("2022.01.18", 0,2, 8))
-        dummyData.add(CalendarInfo("2022.01.22", 0,6, 3))
-        dummyData.add(CalendarInfo("2022.01.26", 0,7, 2))
-        dummyData.add(CalendarInfo("2022.01.27", 0,7, 1))
 
-        val calendarAdapter = ArchiveCalendarRVAdapter(createCalendarList(dummyData), requireContext(), viewMode)
+        createDiaryList()
+    }
 
-        binding.archiveCalendarRv.apply {
-            adapter = calendarAdapter
-            layoutManager = GridLayoutManager(requireContext(), 7)
-            calendarAdapter.setDate(getCalendar())
-            calendarAdapter.setOnDateSelectedListener(object : ArchiveCalendarRVAdapter.CalendarDateSelectedListener {
-                override fun onDateSelectedListener(date: Date, dayInt : Int) {
-                    val calendar = GregorianCalendar.getInstance()
-                    calendar.time = date
-                    calendar.set(Calendar.DAY_OF_MONTH, dayInt)
-
-                    // 오늘 날짜랑 비교 (1. calendar = GregorianCalendar.getInstance() : 0
-                    //                   2. calendar > GregorianCalendar.getInstance() : 1
-                    //                   3. calendar < GregorianCalendar.getInstance() : -1)
-                    if(calendar.compareTo(GregorianCalendar.getInstance()) == 1){
-                        // TODO: Toast는 커스텀이 deprecated 되었기 때문에 SnackBar를 이용해서 커스텀 진행
-                        Toast.makeText(requireContext(), "미래의 일기는 작성할 수 없어요!!!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val dateString = dateToString(calendar.time)
-                        val intent = Intent(requireContext(), DiaryActivity::class.java)
-                        intent.putExtra("diaryDate", dateString)
-                        startActivity(intent)
-                    }
-                }
-            })
+    fun createDiaryList(){
+        var type = ""
+        when (viewMode){
+            0 -> type = "doneList"
+            1 -> type = "emotion"
         }
+        Log.d("viewMode", viewMode.toString())
+        val date = dateToStringMonth(getCalendar())
+        val archiveCalendarService = ArchiveCalendarService()
+        archiveCalendarService.setArchiveCalendarView(this)
+        archiveCalendarService.getCalendar(getUserIdx(), date, type)
     }
 
     fun getCalendar() : Date{
@@ -80,10 +62,54 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
         }
     }
 
-    fun createCalendarList(calendarInputList : ArrayList<CalendarInfo>) : ArrayList<CalendarInfo> {
+    fun createCalendarList(calendarInputList : ArrayList<ArchiveCalendar>) : ArrayList<ArchiveCalendar> {
         val customCalendar = CustomCalendar(getCalendar(), calendarInputList)
         customCalendar.initBaseCalendar()
         Log.d("calendarList", customCalendar.dateList.toString())
         return customCalendar.dateList
+    }
+
+    override fun onArchiveCalendarLoading() {
+        //TODO : 로딩화면 처리
+    }
+
+    override fun onArchiveCalendarSuccess(result: ArrayList<ArchiveCalendar>) {
+
+        val calendarAdapter = ArchiveCalendarRVAdapter(createCalendarList(result), requireContext(), viewMode)
+
+        binding.archiveCalendarRv.apply {
+            adapter = calendarAdapter
+            layoutManager = GridLayoutManager(requireContext(), 7)
+            calendarAdapter.setDate(getCalendar())
+            calendarAdapter.setOnDateSelectedListener(object : ArchiveCalendarRVAdapter.CalendarDateSelectedListener {
+                override fun onDateSelectedListener(date: Date, dayInt : Int) {
+                    val calendar = GregorianCalendar.getInstance()
+                    calendar.time = date
+                    calendar.set(Calendar.DAY_OF_MONTH, dayInt)
+
+                    // 오늘 날짜랑 비교 (1. calendar = GregorianCalendar.getInstance() : 0
+                    //                   2. calendar > GregorianCalendar.getInstance() : 1
+                    //                   3. calendar < GregorianCalendar.getInstance() : -1)
+                    if(calendar.compareTo(GregorianCalendar.getInstance()) == 1){
+                        // TODO: Toast는 커스텀이 deprecated 되었기 때문에 SnackBar를 이용해서 커스텀 진행
+                        Toast.makeText(requireContext(), "미래의 일기는 작성할 수 없어요!!!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val dateString = dateToString(calendar.time)
+                        val intent = Intent(requireContext(), DiaryActivity::class.java)
+                        intent.putExtra("diaryDate", dateString)
+                        startActivity(intent)
+                    }
+                }
+
+                override fun onDiarySelectedListener() {
+                    // TODO: 일기조회 API연결
+                }
+            })
+        }
+    }
+
+    override fun onArchiveCalendarFailure(code : Int) {
+        //TODO : API 33 에러처리
+        Log.d("code", code.toString())
     }
 }

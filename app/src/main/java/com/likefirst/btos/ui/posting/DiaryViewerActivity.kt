@@ -1,16 +1,11 @@
 package com.likefirst.btos.ui.posting
 
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.utils.toArrayList
-
-
-import com.likefirst.btos.data.entities.DiaryInfo
-import com.likefirst.btos.data.remote.response.MailDiaryDetailResponse
+import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.databinding.ActivityDiaryViewerBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
@@ -26,11 +21,11 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
     }
 
     fun initView(){
-        val intentDataset = intent.getParcelableExtra<DiaryInfo>("diaryInfo")!!
+        val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
         val emotionNames = resources.getStringArray(R.array.emotionNames)
         val emotionIdx = intentDataset.emotionIdx
-        if(emotionIdx != null){
-            val emotionImgRes = resources.getIdentifier("emotion"+(emotionIdx+1).toString(), "drawable", this.packageName)
+        if(emotionIdx != 0){
+            val emotionImgRes = resources.getIdentifier("emotion"+(emotionIdx).toString(), "drawable", this.packageName)
             binding.diaryViewerEmotionIv.apply {
                 visibility = View.VISIBLE
                 setImageResource(emotionImgRes)
@@ -43,6 +38,7 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
         setDoneListRv(intentDataset.doneLists)
         binding.diaryViewerContentsTv.text = intentDataset.contents
         binding.diaryViewerDateTv.text = intentDataset.diaryDate
+        binding.diaryViewerNameTv.text = intentDataset.userName
     }
 
     fun initToolbar(){

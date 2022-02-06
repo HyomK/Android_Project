@@ -1,11 +1,10 @@
-package com.likefirst.btos.data.remote.response
+package com.likefirst.btos.data.remote
 
 import com.google.gson.annotations.SerializedName
-import com.likefirst.btos.data.entities.User
 
-data class GetProfileResponse(
+data class BaseResponse<T>(
     @SerializedName("isSuccess") val isSuccess: Boolean,
     @SerializedName("code") val code : Int,
     @SerializedName("message") val message : String,
-    @SerializedName("result") val result : User
+    @SerializedName("result") val result : T
 )
