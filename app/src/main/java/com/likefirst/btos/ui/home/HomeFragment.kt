@@ -3,7 +3,6 @@ package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.os.Build
-import android.service.autofill.UserData
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -31,7 +30,6 @@ import com.likefirst.btos.utils.getLastPostingDate
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.time.LocalTime
 import java.util.*
-import kotlin.collections.HashMap
 
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
@@ -251,7 +249,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
     override fun onUpdateSuccess(isSad : UserIsSad) {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
-        userDB!!.updateIsSad(isSad.isSad!!)
+        userDB!!.updateIsSad(isSad.sad!!)
         saveLastPostingDate(Date())
         initFlowerPot()
     }

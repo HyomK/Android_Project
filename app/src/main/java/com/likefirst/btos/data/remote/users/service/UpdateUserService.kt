@@ -23,8 +23,8 @@ class UpdateUserService {
         updateIsSadView.onUpdateLoading()
         Log.d("isSad", isSad.toString())
         // API 호출
-        updateUserService.updateIsSad(userIdx, isSad).enqueue(object : Callback<BaseResponse> {
-            override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
+        updateUserService.updateIsSad(userIdx, isSad).enqueue(object : Callback<BaseResponse<String>> {
+            override fun onResponse(call: Call<BaseResponse<String>>, response: Response<BaseResponse<String>>) {
                 Log.d("Response", response.toString())
 
                 val resp = response.body()!!
@@ -36,7 +36,7 @@ class UpdateUserService {
                     else -> updateIsSadView.onUpdateFailure(resp.code, resp.message)
                 }
             }
-            override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<String>>, t: Throwable) {
                 Log.d("UpdateIsSad/FAILURE", t.toString())
 
                 updateIsSadView.onUpdateFailure(400, "네트워크 오류가 발생했습니다.")

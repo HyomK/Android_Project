@@ -25,14 +25,14 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.response.Login
-import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.plant.view.PlantInitView
+import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
-import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
@@ -185,7 +185,7 @@ class LoginActivity
         } else {
             userDB.update(user)
         }
-        Log.e("PROFILE/API",userDB?.getUser().toString())
+        Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
 
         updatePlantDB()
     }

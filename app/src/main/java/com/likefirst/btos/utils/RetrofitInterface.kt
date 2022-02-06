@@ -1,9 +1,6 @@
 package com.likefirst.btos.utils
 
-import com.likefirst.btos.data.entities.UserBirth
-import com.likefirst.btos.data.entities.UserIsSad
-import com.likefirst.btos.data.entities.UserName
-import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.entities.*
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
@@ -35,7 +32,7 @@ interface RetrofitInterface {
     fun updateIsSad(
         @Path("userIdx") userIdx: Int,
         @Body isSad : UserIsSad
-    ) : Call<BaseResponse>
+    ) : Call<BaseResponse<String>>
 
 
     // -------------------Mailbox -------------------------- //
@@ -92,35 +89,60 @@ interface RetrofitInterface {
     fun setName(
         @Path("userIdx") userIdx : Int,
         @Body nickName : UserName
-    ) : Call<BaseResponse>
+    ) : Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/birth")
     fun setBirth(
         @Path("userIdx") userIdx : Int,
         @Body birth : UserBirth
-    ): Call<BaseResponse>
+    ): Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/receive/others")
     fun setNotificationOther(
         @Path("userIdx") userIdx : Int,
         @Body recOthers : Boolean
-    ): Call<BaseResponse>
+    ): Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/receive/age")
     fun setNotificationAge(
         @Path("userIdx") userIdx : Int,
         @Body recSimilarAge : Boolean
-    ): Call<BaseResponse>
+    ): Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/push-alarm")
     fun setPushAlarm(
         @Path("userIdx") userIdx : Int,
         @Body pushAlarm : Boolean
-    ): Call<BaseResponse>
+    ): Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/font")
     fun setFont(
         @Path("userIdx") userIdx : Int,
         @Body fontIdx : Int
-    ): Call<BaseResponse>
+    ): Call<BaseResponse<String>>
+
+    // ------------------- History -------------------------- //
+    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+    fun historyListSender(
+        @Path("userIdx") userIdx : Int,
+        @Path("pageNum") pageNum : Int,
+        @Query("filtering") filtering : String,
+        @Query("search") search : String?
+    ) : Call<BaseResponse<SenderHistory>>
+
+    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+    fun historyListDiary(
+        @Path("userIdx") userIdx : Int,
+        @Path("pageNum") pageNum : Int,
+        @Query("filtering") filtering : String,
+        @Query("search") search : String?
+    ) : Call<BaseResponse<DiaryHistory>>
+
+    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+    fun historyListLetter(
+        @Path("userIdx") userIdx : Int,
+        @Path("pageNum") pageNum : Int,
+        @Query("filtering") filtering : String,
+        @Query("search") search : String?
+    ) : Call<BaseResponse<LetterHistory>>
 }
