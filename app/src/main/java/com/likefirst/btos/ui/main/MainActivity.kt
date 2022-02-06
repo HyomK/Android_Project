@@ -351,7 +351,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 }
                 val token2="cLQVYZu-Skew3KlHiSCQNK:APA91bFqduCx1j9eTws7ZvHgFOpFxc-Kiibjz8rRBDqZ7UG3ad1VNRvx_JphmlDHNaOD4ocrGBbsf2yJKDgjWBfyLRS7r8B60WPvcfFaiWZ5MRwIgmiPYAnx9EG8Czc15EKh-LUBRqls"
                 val token ="fMKVE9gvTqWjj1id1B2l4v:APA91bEiL7ClBYpszqsvP7qF6zYRtqv4QBDp0T34y3EjJZq4qYiuduGAHLp1Zxb9rxzQR0EMk1OoLxEg9WzXzT4k4WAuG0A2GrVjKvP5fmyz_71sybzUmclnSQzpbVaoRFSb70ye_GwE"
-                FCMService().sendPostToFCM(token, userData,userData.email+"에서 편지가 도착햇습니다")
+                FCMSfervice().sendPostToFCM(token, userData,userData.email+"에서 편지가 도착햇습니다")
 
 
             }
