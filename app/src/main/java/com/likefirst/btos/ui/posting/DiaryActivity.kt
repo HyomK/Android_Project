@@ -5,6 +5,7 @@ import android.content.Intent
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -34,6 +35,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
+        //TODO: 프리미엄 회원 확인해서 뷰 다르게 보여주기
 
         // companion object 초기화
         emotionIdx = 0
@@ -89,30 +91,34 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         }
 
         binding.diaryToolbar.diaryCheckIv.setOnClickListener {
-            val diaryDate = binding.diaryDateTv.text.toString()
-            val diaryRequest = PostDiaryRequest(getUserIdx(), emotionIdx, diaryDate, contents, isPublic(), doneLists)
-            if(isPublic()){
-                val dialog = CustomDialogFragment()
-                val data = arrayOf("취소", "확인")
-                dialog.arguments= bundleOf(
-                    "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 수정, 삭제할 수 있습니다.",
-                    "btnData" to data
-                )
-                dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
-                    override fun onButton1Clicked() {
+            contents = binding.diaryContentsEt.text.toString()
+            diaryValidationCheck()
+            if (diaryValidationCheck()){
+                val diaryDate = binding.diaryDateTv.text.toString()
+                val diaryRequest = PostDiaryRequest(getUserIdx(), emotionIdx, diaryDate, contents, isPublic(), doneLists)
+                if(isPublic()){
+                    val dialog = CustomDialogFragment()
+                    val data = arrayOf("취소", "확인")
+                    dialog.arguments= bundleOf(
+                        "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 수정, 삭제할 수 있습니다.",
+                        "btnData" to data
+                    )
+                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                        override fun onButton1Clicked() {
 
-                    }
-                    override fun onButton2Clicked() {
-                        val diaryService = DiaryService()
-                        diaryService.setPostDiaryView(this@DiaryActivity)
-                        diaryService.postDiary(diaryRequest)
-                    }
-                })
-                dialog.show(this.supportFragmentManager, "PublicAlertDialog")
-            } else {
-                val diaryService = DiaryService()
-                diaryService.setPostDiaryView(this@DiaryActivity)
-                diaryService.postDiary(diaryRequest)
+                        }
+                        override fun onButton2Clicked() {
+                            val diaryService = DiaryService()
+                            diaryService.setPostDiaryView(this@DiaryActivity)
+                            diaryService.postDiary(diaryRequest)
+                        }
+                    })
+                    dialog.show(this.supportFragmentManager, "PublicAlertDialog")
+                } else {
+                    val diaryService = DiaryService()
+                    diaryService.setPostDiaryView(this@DiaryActivity)
+                    diaryService.postDiary(diaryRequest)
+                }
             }
         }
     }
@@ -192,12 +198,26 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun goToDiaryViewer(){
-        contents = binding.diaryContentsEt.text.toString()
         val diaryDate = binding.diaryDateTv.text.toString()
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         val intent = Intent(this, DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
         startActivity(intent)
+    }
+
+    fun diaryValidationCheck() : Boolean{
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        if (userDB.getUser().premium == "premium"){
+            if (emotionIdx == 0) {
+                showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
+                return false
+            }
+        }
+        if (contents == "") {
+            showOneBtnDialog("일기를 한 글자라도 작성해 주세요!!", "No Contents Check")
+            return false
+        }
+        return true
     }
 
     fun isPublic() : Boolean{

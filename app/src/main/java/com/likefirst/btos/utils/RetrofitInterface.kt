@@ -10,6 +10,7 @@ import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -33,7 +34,6 @@ interface RetrofitInterface {
         @Path("userIdx") userIdx: Int,
         @Body isSad : UserIsSad
     ) : Call<BaseResponse<String>>
-
 
     // -------------------Mailbox -------------------------- //
     @GET("/mailboxes/{userId}")
@@ -72,12 +72,10 @@ interface RetrofitInterface {
         @Body PlantSelectRequest : PlantRequest
     ): Call<PlantResponse>
 
-
     @POST("/plants/buy")
     fun buyPlant(
         @Body PlantBuyRequest : PlantRequest
     ): Call<PlantResponse>
-
 
     @POST("/plants/{userId}/initialize")
     fun initPlant(
@@ -96,4 +94,14 @@ interface RetrofitInterface {
     fun postDiary(
         @Body postDiaryRequest : PostDiaryRequest
     ) : Call<BaseResponse<PostDiaryResponse>>
+
+    // ---------------- Archive List ----------------- //
+    @GET("/archives/diaryList/{userIdx}/{pageNum}")
+    fun getArchiveList(
+        @Path("userIdx") userIdx : Int,
+        @Path("pageNum") pageNum : Int,
+        @Query("search") search : String?,
+        @Query("startDate") startDate : String?,
+        @Query("endDate") endDate : String?
+    ) : Call<ArchiveList>
 }

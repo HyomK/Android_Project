@@ -131,6 +131,7 @@ class LoginActivity
         authService.getProfile(login.userIdx)
         saveUserIdx(login.userIdx)
         signIn(email,"btos1234")
+        Log.d("UserDB", login.toString())
         // TODO: Firebase 로그인
         val intent = Intent(this, MainActivity::class.java)
         finish()
@@ -188,14 +189,12 @@ class LoginActivity
         binding.loginLoadingPb.visibility = View.GONE
 
         //UserDB에 프로필 정보 저장
-
         val userDB = UserDatabase.getInstance(this)?.userDao()
         if(userDB?.getUser() == null){
             userDB?.insert(user)
         } else {
             userDB.update(user)
         }
-        Log.e("PROFILE/API-LOGIN",userDB?.getUser().toString())
 
         updatePlantDB()
     }
@@ -282,7 +281,7 @@ class LoginActivity
     }
 
     // TODO: Firebase 로그인
-    private fun createAccount(email: String, password: String) {
+    private fun createAccount(email:     String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             auth?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(this) { task ->

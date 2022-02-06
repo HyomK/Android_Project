@@ -60,6 +60,7 @@ class AuthService {
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 loginView.onLoginFailure(4000, "데이터베이스 연결에 실패하였습니다.")
                 loginView.onLoginFailure(5003, "회원가입이 필요합니다.")
+                Log.d("LogInFailure", t.toString())
             }
 
         })

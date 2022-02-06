@@ -27,6 +27,7 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
+import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.time.LocalTime
 import java.util.*
@@ -119,7 +120,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
         animationView.setOnClickListener {
-
         }
     }
 
@@ -246,11 +246,11 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         dialog.show(this.parentFragmentManager, "showAdLoadFailedDialog")
     }
 
-    fun getUserIdx() : Int{
-        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
-        Log.d("User", userDB?.getUser().toString())
-        return userDB!!.getUser().userIdx!!
-    }
+//    fun getUserIdx() : Int{
+////        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+////        Log.d("User", userDB?.getUser().toString())
+//        return getUserIdx()
+//    }
 
     override fun onUpdateLoading() {
         // TODO: 로딩애니메이션 구현

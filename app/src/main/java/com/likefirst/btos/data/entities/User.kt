@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -15,7 +16,7 @@ data class User (
     @ColumnInfo(name = "nickName") var nickName: String="",
     @ColumnInfo(name = "birth") var birth: Int = 0,
     @ColumnInfo(name = "selectedPlantIdx") var selectedPlantIdx: Int? = 1,
-    var isSad: Boolean? = false,
+    @ColumnInfo(name = "isSad")var isSad: Boolean? = false,
     @ColumnInfo(name = "isPremium") var premium: String? = "free",
     @ColumnInfo(name = "recOthers") var recOthers: Boolean? = true,
     @ColumnInfo(name = "recSimilarAge") var recSimilarAge: Boolean? = true,

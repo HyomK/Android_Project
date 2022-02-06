@@ -35,7 +35,8 @@ class ArchiveCalendarService {
             }
 
             override fun onFailure(call: Call<BaseResponse<ArrayList<ArchiveCalendar>>>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("ArchiveCalendarService / getCalendar Failure", t.toString())
+                archiveCalendarView.onArchiveCalendarFailure(400)
             }
 
         })

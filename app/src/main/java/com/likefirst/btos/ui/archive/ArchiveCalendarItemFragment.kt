@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import com.likefirst.btos.data.remote.viewer.service.ArchiveCalendarService
 import com.likefirst.btos.data.remote.viewer.view.ArchiveCalendarView
@@ -92,7 +93,7 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
                     //                   3. calendar < GregorianCalendar.getInstance() : -1)
                     if(calendar.compareTo(GregorianCalendar.getInstance()) == 1){
                         // TODO: Toast는 커스텀이 deprecated 되었기 때문에 SnackBar를 이용해서 커스텀 진행
-                        Toast.makeText(requireContext(), "미래의 일기는 작성할 수 없어요!!!", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(view!!, "미래의 일기는 작성할 수 없어요!!!", Snackbar.LENGTH_SHORT).show()
                     } else {
                         val dateString = dateToString(calendar.time)
                         val intent = Intent(requireContext(), DiaryActivity::class.java)
@@ -109,7 +110,10 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
     }
 
     override fun onArchiveCalendarFailure(code : Int) {
-        //TODO : API 33 에러처리
-        Log.d("code", code.toString())
+        when (code){
+            // TODO: 4000번 에러 뜨는 이유 물어보기
+            4000 -> Snackbar.make(requireView(), "일기를 불러오는데 실패하였습니다. 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
+            6004 -> Snackbar.make(requireView(), "프리미엄 계정 가입이 필요합니다.", Snackbar.LENGTH_SHORT).show()
+        }
     }
 }
