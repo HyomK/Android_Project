@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.archive
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +53,7 @@ class ArchiveListRVAdapter(val diaryList : ArrayList<Any>, val context : Context
     inner class MonthViewHolder(val binding : ItemArchiveListRvMonthBinding): RecyclerView.ViewHolder(binding.root) {
         fun initView(month: String){
             binding.itemArchiveListMonthTv.text = month
+            Log.d("month", month)
         }
     }
 
@@ -111,6 +113,6 @@ class ArchiveListRVAdapter(val diaryList : ArrayList<Any>, val context : Context
     }
 
     override fun getItemCount(): Int {
-        return 0
+        return diaryList.size
     }
 }

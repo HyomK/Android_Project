@@ -26,13 +26,13 @@ import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.plant.view.PlantInitView
+import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
-import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
-import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
@@ -43,8 +43,7 @@ import com.likefirst.btos.utils.saveUserIdx
 
 class LoginActivity
     : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
-    LoginView, AutoLoginView, GetProfileView,
-    PlantListView, PlantInitView {
+    LoginView, AutoLoginView, GetProfileView,PlantListView, PlantInitView {
 
     val G_SIGN_IN : Int = 1
     private var GOOGLE_LOGIN_CODE = 9001
@@ -87,8 +86,6 @@ class LoginActivity
         },3000)
 
         val gso = getGSO()
-
-
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         binding.loginGoogleLoginTv.setOnClickListener{
             var signInIntent : Intent = googleSignInClient.signInIntent
@@ -107,7 +104,6 @@ class LoginActivity
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 
             val account = task.getResult(ApiException::class.java)
-           // firebaseAuthWithGoogle(account)
             email = account?.email.toString()
             Log.e("account", email)
 
@@ -195,6 +191,7 @@ class LoginActivity
         } else {
             userDB.update(user)
         }
+        Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
 
         updatePlantDB()
     }

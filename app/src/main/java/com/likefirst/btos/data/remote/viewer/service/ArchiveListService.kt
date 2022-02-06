@@ -20,9 +20,10 @@ class ArchiveListService {
         this.archiveListView = archiveListView
     }
 
-    fun getList(userIdx : Int, pageNum : Int, search : String?, startDate : String?, endDate : String?){
+    fun getList(userIdx : Int, pageNum : Int, query : HashMap<String, String>){
         archiveListView.onArchiveListLoading()
-        archiveListService.getArchiveList(userIdx, pageNum, search, startDate, endDate).enqueue(object : Callback<ArchiveList>{
+
+        archiveListService.getArchiveList(userIdx, pageNum, query).enqueue(object : Callback<ArchiveList>{
             override fun onResponse(call: Call<ArchiveList>, response: Response<ArchiveList>) {
                 val resp = response.body()!!
                 when (resp.code){

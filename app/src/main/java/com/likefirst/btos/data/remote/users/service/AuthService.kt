@@ -1,14 +1,14 @@
-package com.likefirst.btos.data.remote.users.service
+package com.likefirst.btos.data.remote.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.remote.users.response.GetProfileResponse
+import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
-import com.likefirst.btos.data.remote.users.response.GetProfileResponse
-import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,6 +49,7 @@ class AuthService {
 
                 val LoginResponse: LoginResponse = response.body()!!
 
+                //TODO : retorofit response 가 null이라서 튕기는걸수도 (알아보기)
                 Log.e("LOGIN/API",LoginResponse.toString())
 
                 when(LoginResponse.code){
@@ -58,11 +59,8 @@ class AuthService {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                loginView.onLoginFailure(4000, "데이터베이스 연결에 실패하였습니다.")
-                loginView.onLoginFailure(5003, "회원가입이 필요합니다.")
-                Log.d("LogInFailure", t.toString())
+                loginView.onLoginFailure(400,"네트워크 오류가 발생했습니다.")
             }
-
         })
     }
 
@@ -116,7 +114,6 @@ class AuthService {
         AuthService.getProfile(useridx).enqueue(object : Callback<GetProfileResponse>{
             override fun onResponse(call: Call<GetProfileResponse>, response: Response<GetProfileResponse>) {
                 val getProfileResponse : GetProfileResponse = response.body()!!
-                Log.d("onLoginSuccess", getProfileResponse.toString())
 
                 when(getProfileResponse.code){
                     1000 -> getprofileView.onGetProfileViewSuccess(getProfileResponse.result)

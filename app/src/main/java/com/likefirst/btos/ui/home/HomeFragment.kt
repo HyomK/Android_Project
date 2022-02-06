@@ -246,21 +246,15 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         dialog.show(this.parentFragmentManager, "showAdLoadFailedDialog")
     }
 
-//    fun getUserIdx() : Int{
-////        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
-////        Log.d("User", userDB?.getUser().toString())
-//        return getUserIdx()
-//    }
-
     override fun onUpdateLoading() {
         // TODO: 로딩애니메이션 구현
     }
 
     override fun onUpdateSuccess(isSad : UserIsSad) {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
-        userDB!!.updateIsSad(isSad.isSad!!)
+        userDB!!.updateIsSad(isSad.sad!!)
         // 시무룩이 상태로 전환 시에만 lastPostingDate 초기화
-        if (isSad.isSad!!){
+        if (isSad.sad!!){
             return
         } else {
             saveLastPostingDate(Date())

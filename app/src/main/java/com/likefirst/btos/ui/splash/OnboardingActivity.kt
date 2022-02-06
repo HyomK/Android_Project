@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -17,15 +18,16 @@ import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
-import com.likefirst.btos.data.remote.users.service.AuthService
+import com.likefirst.btos.data.remote.plant.view.PlantInitView
+import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
-import com.likefirst.btos.data.remote.plant.view.PlantListView
-import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
@@ -54,7 +56,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
         //나이 선택 시 키보드 내리기
         binding.onboardingAgeTil.setOnClickListener {
-            imm.hideSoftInputFromWindow(binding.onboardingNameEt.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(binding.onboardingNameEt.windowToken, 0);
         }
 
         binding.onboardingOkayTv.setOnClickListener {
@@ -101,7 +103,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onSignUpFailure(code: Int, message: String) {
         binding.onboardingLoadingPb.visibility = View.GONE
         Log.e("SIGNUP/FAIL", message)
-        when (code) {
+        when(code){
             4000 -> {
                 Log.e("SIGNUP/FAIL", message)
             }
@@ -223,4 +225,13 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.d("Plant/API",code.toString()+"fail to load...")
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val gso = getGSO()
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
+        val intent = Intent(this,LoginActivity::class.java)
+        finish()
+        startActivity(intent)
+    }
 }

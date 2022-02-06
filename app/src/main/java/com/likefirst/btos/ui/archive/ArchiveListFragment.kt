@@ -17,6 +17,7 @@ import com.likefirst.btos.utils.getUserIdx
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArchiveListBinding::inflate), ArchiveListView{
 
@@ -31,13 +32,15 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
     }
 
     fun loadDiaryList(pageNum : Int){
+        val query = HashMap<String,String>()
+        query["startDate"] = "2022.01.01"
+        query["endDate"] = "2022.02.01"
         val archiveListService = ArchiveListService()
         archiveListService.setArchiveListView(this)
-        archiveListService.getList(getUserIdx(), pageNum, null, null, null)
+        archiveListService.getList(getUserIdx(), pageNum, query)
     }
 
     override fun onArchiveListLoading() {
-        TODO("Not yet implemented")
     }
 
     override fun onArchiveListSuccess(
@@ -54,14 +57,16 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         }
 
         val mAdapter = ArchiveListRVAdapter(diaryList, requireContext())
+        val mDecoration = ArchiveListItemDecoration()
+        mDecoration.setSize(requireContext())
         binding.archiveListRv.apply {
             adapter = mAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(mDecoration)
         }
     }
 
     override fun onArchiveListFailure(code: Int) {
-        TODO("Not yet implemented")
     }
 }
