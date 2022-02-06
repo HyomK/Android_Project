@@ -6,15 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
 import com.likefirst.btos.databinding.ItemArchiveListRvDiaryBinding
 import com.likefirst.btos.databinding.ItemArchiveListRvMonthBinding
 import java.lang.RuntimeException
 
-class ArchiveListRVAdapter(val diaryList : ArrayList<Any>, val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val DIARY_TYPE = 0
     private val MONTH_TYPE = 1
     private val LOADING_TYPE = 2
+    private var diaryList = arrayListOf<Any>()
 
     inner class DiaryViewHolder(val binding : ItemArchiveListRvDiaryBinding): RecyclerView.ViewHolder(binding.root) {
         fun initView(diaryInfo : ArchiveListDiaryList){
@@ -51,9 +53,13 @@ class ArchiveListRVAdapter(val diaryList : ArrayList<Any>, val context : Context
     }
 
     inner class MonthViewHolder(val binding : ItemArchiveListRvMonthBinding): RecyclerView.ViewHolder(binding.root) {
-        fun initView(month: String){
+        fun initView(date: String){
+            val year = date.slice(IntRange(0,3))
+            val monthInt = date.slice(IntRange(5,6)).toInt() - 1
+            val monthArray = context.resources.getStringArray(R.array.month)
+            val month = monthArray[monthInt]
+            binding.itemArchiveListYearTv.text = year
             binding.itemArchiveListMonthTv.text = month
-            Log.d("month", month)
         }
     }
 
@@ -61,6 +67,7 @@ class ArchiveListRVAdapter(val diaryList : ArrayList<Any>, val context : Context
         fun initView(){
             binding.itemArchiveListLoadingPb.visibility = View.VISIBLE
             binding.itemArchiveListMonthTv.visibility = View.GONE
+            binding.itemArchiveListYearTv.visibility = View.GONE
         }
     }
 
@@ -90,7 +97,7 @@ class ArchiveListRVAdapter(val diaryList : ArrayList<Any>, val context : Context
             }
             LOADING_TYPE -> {
                 val binding = ItemArchiveListRvMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                MonthViewHolder(binding)
+                LoadingViewHolder(binding)
             }
             else -> {
                 throw RuntimeException("Unknown ViewType Error in ArchiveListRVAdapter")
@@ -114,5 +121,14 @@ class ArchiveListRVAdapter(val diaryList : ArrayList<Any>, val context : Context
 
     override fun getItemCount(): Int {
         return diaryList.size
+    }
+
+    fun addDiaryList(dataList : ArrayList<Any>){
+        diaryList.addAll(dataList)
+    }
+
+    fun deleteLoading(){
+        diaryList.removeAt(itemCount - 1)
+        Log.d("itemcount", itemCount.toString())
     }
 }

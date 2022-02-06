@@ -96,7 +96,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                     +"_"+plant.currentLevel.toString()
                     +"_circle","drawable",
             requireActivity().packageName)
-        binding.profileIv.setImageResource( profile)
+        binding.profileIv.setImageResource(profile)
         binding.profileNicknameTv.text=userDatabase.userDao().getNickName()!!
         binding.profileLevelTv.text=plant.plantName+" "+plant.currentLevel+"단계"
         if(plant.maxLevel!=plant.currentLevel)binding.profileMaxTv.visibility= View.GONE

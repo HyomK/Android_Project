@@ -64,6 +64,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             Log.d("homeSTACK","homeitem  ${item.toString()} }")
         }
 
+        binding.homeWriteBtn.bringToFront()
         binding.homeWriteBtn.setOnClickListener {
             val date = dateToString(Date())
             val intent = Intent(requireContext(), DiaryActivity::class.java)

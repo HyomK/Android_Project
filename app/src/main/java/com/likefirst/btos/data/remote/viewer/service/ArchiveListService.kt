@@ -6,6 +6,7 @@ import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import com.likefirst.btos.data.remote.viewer.view.ArchiveCalendarView
 import com.likefirst.btos.data.remote.viewer.view.ArchiveListView
+import com.likefirst.btos.ui.archive.ArchiveListRVAdapter
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Response
@@ -20,14 +21,14 @@ class ArchiveListService {
         this.archiveListView = archiveListView
     }
 
-    fun getList(userIdx : Int, pageNum : Int, query : HashMap<String, String>){
+    fun getList(userIdx : Int, pageNum : Int, query : HashMap<String, String>, adapter : ArchiveListRVAdapter){
         archiveListView.onArchiveListLoading()
 
         archiveListService.getArchiveList(userIdx, pageNum, query).enqueue(object : Callback<ArchiveList>{
             override fun onResponse(call: Call<ArchiveList>, response: Response<ArchiveList>) {
                 val resp = response.body()!!
                 when (resp.code){
-                    1000 -> archiveListView.onArchiveListSuccess(resp.result, resp.pageInfo)
+                    1000 -> archiveListView.onArchiveListSuccess(resp.result, resp.pageInfo, adapter)
                     else -> archiveListView.onArchiveListFailure(resp.code)
                 }
             }
