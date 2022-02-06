@@ -12,11 +12,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MailboxService {
+class MailboxService() {
     private lateinit var mailboxView: MailboxView
     private lateinit var mailDiaryView: MailDiaryView
     private lateinit var mailLetterView: MailLetterView
     private lateinit var mailReplyView: MailReplyView
+
 
 
     private val mailboxService= ApplicationClass.retrofit.create(RetrofitInterface::class.java)
@@ -45,7 +46,7 @@ class MailboxService {
             }
 
             override fun onFailure(call: Call<MailboxResponse>, t: Throwable) {
-                mailboxView.onMailboxFailure(4000,"데이터베이스 연결에 실패하였습니다.")
+
             }
         })
 

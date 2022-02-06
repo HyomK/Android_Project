@@ -46,14 +46,14 @@ interface RetrofitInterface {
 
     @GET("/mailboxes/mail/{userIdx}")
     fun loadDiary(
-        @Path("userId") userIdx: String,
+        @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
         @Query("idx")idx: String
     ): Call<MailDiaryResponse>
 
     @GET("/mailboxes/mail/{userIdx}")
     fun loadLetter(
-        @Path("userId") userIdx: String,
+        @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
         @Query("idx")idx: String
     ): Call<MailLetterResponse>
@@ -61,7 +61,7 @@ interface RetrofitInterface {
 
     @GET("/mailboxes/mail/{userIdx}")
     fun loadReply(
-        @Path("userId") userIdx: String,
+        @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
         @Query("idx")idx: String
     ): Call<MailReplyResponse>

@@ -10,7 +10,7 @@ import com.likefirst.btos.ui.BaseFragment
 class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding::inflate) {
 
     override fun initAfterBinding() {
-        val mActivity = activity as MainActivity
+
 
         binding.reportToolbar.toolbarBackIc.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
@@ -64,11 +64,11 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
             )
             dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
                 override fun onButton1Clicked() {
-                    mActivity.supportFragmentManager.popBackStack()
+                    requireActivity().supportFragmentManager.popBackStack()
                 }
                 override fun onButton2Clicked() {}
             })
-            dialog.show(mActivity.supportFragmentManager, "CustomDialog")
+            dialog.show(requireActivity().supportFragmentManager, "CustomDialog")
         }
 
     }

@@ -87,6 +87,9 @@
 
         <activity android:name=".ui.posting.MailWriteActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.home.MailViewActivity"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".ui.posting.MailReplyActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.splash.TutorialActivity"

@@ -81,7 +81,7 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                 //신고
                 1 -> {
                     supportFragmentManager.commit {
-                        add(R.id.home_main_layout, ReportFragment())
+                        add(R.id.fr_layout, ReportFragment())
                         addToBackStack("")
                     }
                 }
@@ -122,7 +122,7 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
 
         binding.letterViewToolbar.toolbarBackIc.setOnClickListener{
-            supportFragmentManager.popBackStack()
+            finish()
         }
     }
 

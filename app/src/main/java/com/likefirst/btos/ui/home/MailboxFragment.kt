@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.service.autofill.UserData
 import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.Diary
 import com.likefirst.btos.data.remote.posting.response.MailLetterDetailResponse
 import com.likefirst.btos.data.remote.posting.response.Mailbox
-import com.likefirst.btos.data.remote.posting.service.MailDiaryService
+import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.service.MailLetterService
 import com.likefirst.btos.data.remote.posting.service.MailboxService
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
@@ -37,9 +39,12 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     override fun initAfterBinding() {
         val presFragment  = this
+        val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
+        //val userID= userDao.getUser()!!.userIdx.toString()
+        val userID= 39.toString()
         val mailboxService= MailboxService()
         mailboxService.setMailboxView(this)
-        mailboxService.loadMailbox("29")
+        mailboxService.loadMailbox(userID)
         setClickListener(presFragment)
 
     }
@@ -64,7 +69,9 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     fun setMailView(mailboxList: ArrayList<Mailbox>){
         val adapter = MailRVAdapter(mailboxList)
         binding.mailboxRv.adapter= adapter
-
+        val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
+   //     val userID= userDao.getUser()!!.userIdx.toString()
+        val userID= 39
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
             override fun onClickItem(mail:Mailbox) {
 
@@ -73,14 +80,14 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
                         saveMail(mail)
                         val letterService= MailLetterService()
                         letterService.setLetterView(this@MailboxFragment)
-                        letterService.loadLetter("letter","29")
+                        letterService.loadLetter(userID,"letter",mail.idx.toString())
 
                     }
                     "diary"->{
                         saveMail(mail)
-                        val diaryService= MailDiaryService()
+                        val diaryService= DiaryService()
                         diaryService.setDiaryView(this@MailboxFragment)
-                        diaryService.loadDiary("diary","29")
+                        diaryService.loadDiary(userID,"diary",mail.idx.toString())
                     }
                 }
 

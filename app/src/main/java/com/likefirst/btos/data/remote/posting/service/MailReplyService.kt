@@ -9,20 +9,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MailReplyService {
+class MailReplyService() {
     private lateinit var mailReplyView: MailReplyView
-
     private val ReplyService = ApplicationClass.retrofit.create(RetrofitInterface::class.java)
+
 
     fun setReplyView(mailReplyView: MailReplyView){
         this.mailReplyView=mailReplyView
     }
 
-    fun loadReply(type:String,userId:String){
+    fun loadReply(userId:Int, type:String, Idx:String){
 
         mailReplyView.onReplyLoading()
 
-        ReplyService. loadReply(type,userId).enqueue(object: Callback<MailReplyResponse>{
+        ReplyService. loadReply(userId, type,Idx).enqueue(object: Callback<MailReplyResponse>{
             override fun onResponse(call: Call<MailReplyResponse>, response: Response<MailReplyResponse>) {
                 val replyResponse :MailReplyResponse =response.body()!!
                 Log.e("Reply/API", replyResponse.toString())

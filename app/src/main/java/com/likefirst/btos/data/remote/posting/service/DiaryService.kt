@@ -6,20 +6,22 @@ import com.likefirst.btos.data.entities.PostDiaryRequest
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
 import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
-import com.likefirst.btos.data.remote.posting.view.DiaryView
+import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DiaryService {
-    private lateinit var diaryView: DiaryView
+class DiaryService (){
+
+
+    private lateinit var diaryView: MailDiaryView
     private lateinit var postDiaryView: PostDiaryView
 
     private val DiaryService = retrofit.create(RetrofitInterface::class.java)
 
-    fun setDiaryView(diaryView: DiaryView){
+    fun setDiaryView(diaryView: MailDiaryView){
         this.diaryView=diaryView
     }
 
@@ -48,11 +50,11 @@ class DiaryService {
         })
     }
 
-    fun loadDiary(type:String, userId:String){
+    fun loadDiary( userId:Int, type:String, Idx:String){
 
         diaryView.onDiaryLoading()
 
-        DiaryService.loadDiary(type,userId).enqueue(object:Callback<MailDiaryResponse>{
+        DiaryService.loadDiary(userId,type,Idx).enqueue(object:Callback<MailDiaryResponse>{
             override fun onResponse(call: Call<MailDiaryResponse>, response: Response<MailDiaryResponse>) {
                 val diaryResponse=response.body()!!
                 Log.e("Diary/API",  diaryResponse.toString())

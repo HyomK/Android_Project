@@ -12,23 +12,23 @@ import retrofit2.Response
 
 
 
-class MailLetterService{
+class MailLetterService(){
 
     private lateinit var mailLetterView: MailLetterView
-
     private val LetterService =retrofit.create(RetrofitInterface::class.java)
+
 
     fun setLetterView(mailLetterView: MailLetterView){
         this.mailLetterView=mailLetterView
     }
 
-    fun loadLetter(type:String,userId:String){
+    fun loadLetter(userId:Int,type:String, idx: String){
         mailLetterView.onLetterLoading()
 
-        LetterService.loadLetter(type,userId).enqueue(object:Callback<MailLetterResponse> {
+        LetterService.loadLetter(userId,type,idx).enqueue(object:Callback<MailLetterResponse> {
             override fun onResponse(call: Call<MailLetterResponse>, response: Response<MailLetterResponse>) {
                 val letterResponse: MailLetterResponse =response.body()!!
-                Log.d("Letter/APIcode",  letterResponse.toString())
+                Log.d("Letter/APIe",  letterResponse.toString())
                 Log.d("Letter/API",letterResponse.code.toString())
                 when( letterResponse.code){
                     1000->{
@@ -42,8 +42,6 @@ class MailLetterService{
 
             override fun onFailure(call: Call<MailLetterResponse>, t: Throwable) {
 
-                mailLetterView.onLetterFailure(4000,"데이터베이스 연결에 실패하였습니다.")
-                mailLetterView.onLetterFailure(6006,"일기 복호화에 실패하였습니다.")
             }
 
         })
