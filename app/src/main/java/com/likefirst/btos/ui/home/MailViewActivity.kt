@@ -1,27 +1,14 @@
 package com.likefirst.btos.ui.home
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ActivityMailViewBinding
 
-import com.likefirst.btos.databinding.FragmentMailboxBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.main.ReportFragment
-import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
-import com.likefirst.btos.ui.posting.MailWriteActivity
-import com.likefirst.btos.utils.getUserIdx
-import com.likefirst.btos.utils.toArrayList
 
 
 class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewBinding::inflate) {
@@ -80,10 +67,7 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                 }
                 //신고
                 1 -> {
-                    supportFragmentManager.commit {
-                        add(R.id.fr_layout, ReportFragment())
-                        addToBackStack("")
-                    }
+                    startNextActivity(ReportActivity::class.java)
                 }
                 //차단
                 2 -> {

@@ -85,8 +85,6 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ui.posting.MailWriteActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".ui.home.MailViewActivity"
             android:screenOrientation="portrait"/>
 
@@ -95,6 +93,11 @@
         <activity android:name=".ui.splash.TutorialActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.history.HistoryDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.home.MailViewActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.home.ReportActivity"
             android:screenOrientation="portrait"/>
     </application>
 

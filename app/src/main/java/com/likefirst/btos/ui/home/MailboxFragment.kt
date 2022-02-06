@@ -1,15 +1,11 @@
 package com.likefirst.btos.ui.home
 
 import android.content.Intent
-import android.os.Bundle
-import android.service.autofill.UserData
 import android.util.Log
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import com.likefirst.btos.R
+import androidx.room.ColumnInfo
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.Diary
@@ -22,13 +18,10 @@ import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailboxView
 import com.likefirst.btos.databinding.FragmentMailboxBinding
-import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.main.ReportFragment
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
-import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.utils.toArrayList
 
@@ -40,8 +33,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun initAfterBinding() {
         val presFragment  = this
         val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
-        //val userID= userDao.getUser()!!.userIdx.toString()
-        val userID= 39.toString()
+        val userID= userDao.getUser()!!.userIdx!!
+
         val mailboxService= MailboxService()
         mailboxService.setMailboxView(this)
         mailboxService.loadMailbox(userID)
@@ -70,8 +63,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val adapter = MailRVAdapter(mailboxList)
         binding.mailboxRv.adapter= adapter
         val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
-   //     val userID= userDao.getUser()!!.userIdx.toString()
-        val userID= 39
+        val userID= userDao.getUser()!!.userIdx!!
+
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
             override fun onClickItem(mail:Mailbox) {
 
@@ -107,25 +100,18 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     fun getDiary(diary: Diary){
-        val spf= requireActivity().getSharedPreferences("MailBox",
-            AppCompatActivity.MODE_PRIVATE)
-        val id=spf.getInt("Idx",-1)
-        val senderName=spf.getString("senderName","")
-        val sendAt=spf.getString("sendAt","")
+        var name : String="알 수 없음"
+        if(diary.senderNickName !=null)
+            name=diary.senderNickName
+        else name="알 수 없음"
 
-        Log.d("Letter/API-DIARY",id.toString())
-        if(id!=-1){
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .addToBackStack("mailbox")
-                .commit()
+        val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
 
-            val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
-            val Diary = DiaryViewerInfo(diary.senderNickName, diary.emotionIdx, sendAt!!, diary.content, true, doneList.toArrayList())
-            val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
-            intent.putExtra("diaryInfo",Diary)
-            requireActivity().startActivity(intent)
-        }
+        val Diary = DiaryViewerInfo( name, 1, diary.diaryDate, diary.content, true, doneList.toArrayList())
+        Log.e("Diary/API-DIARY",Diary.toString())
+        val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
+        intent.putExtra("diaryInfo",Diary)
+        requireActivity().startActivity(intent)
     }
 
 

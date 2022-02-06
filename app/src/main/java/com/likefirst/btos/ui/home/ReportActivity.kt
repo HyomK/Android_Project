@@ -1,19 +1,20 @@
-package com.likefirst.btos.ui.main
+package com.likefirst.btos.ui.home
 
 
 
 import androidx.core.os.bundleOf
 import com.likefirst.btos.R
-import com.likefirst.btos.databinding.FragmentReportBinding
-import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.databinding.ActivityReportBinding
+import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.CustomDialogFragment
 
-class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding::inflate) {
+class ReportActivity: BaseActivity<ActivityReportBinding>(ActivityReportBinding::inflate) {
 
     override fun initAfterBinding() {
 
 
         binding.reportToolbar.toolbarBackIc.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            finish()
         }
         binding.reportToolbar.toolbarTitleTv.text="신고하기"
 
@@ -49,32 +50,29 @@ class ReportFragment: BaseFragment<FragmentReportBinding>(FragmentReportBinding:
             binding.reportItem5.itemReportIv.setImageResource(R.drawable.ic_check_true)
         }
 
-        binding.reportToolbar.toolbarBackIc.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
 
 
 
        binding.reportDoneBtn.setOnClickListener{
-            val dialog =CustomDialogFragment()
+            val dialog = CustomDialogFragment()
             val data = arrayOf("확인")
             dialog.arguments= bundleOf(
                 "bodyContext" to "신고 접수가 완료되었습니다. 쾌적한 컨텐츠를 위해 항상 노력하겠습니다.",
                 "btnData" to data
             )
-            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                 override fun onButton1Clicked() {
-                    requireActivity().supportFragmentManager.popBackStack()
+                    finish()
                 }
                 override fun onButton2Clicked() {}
             })
-            dialog.show(requireActivity().supportFragmentManager, "CustomDialog")
+            dialog.show(supportFragmentManager, "CustomDialog")
         }
 
     }
 
 
-    fun checkBoxHandler( binding: FragmentReportBinding) {
+    fun checkBoxHandler( binding:ActivityReportBinding) {
         binding.reportItem1.itemReportIv.setImageResource(R.drawable.ic_check_false)
         binding.reportItem2.itemReportIv.setImageResource(R.drawable.ic_check_false)
         binding.reportItem3.itemReportIv.setImageResource(R.drawable.ic_check_false)

@@ -41,7 +41,7 @@ interface RetrofitInterface {
     // -------------------Mailbox -------------------------- //
     @GET("/mailboxes/{userId}")
     fun loadMailbox(
-        @Path("userId") id: String
+        @Path("userId") id: Int
     ): Call<MailboxResponse>
 
     @GET("/mailboxes/mail/{userIdx}")

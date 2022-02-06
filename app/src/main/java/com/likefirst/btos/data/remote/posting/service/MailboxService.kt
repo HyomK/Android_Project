@@ -26,7 +26,7 @@ class MailboxService() {
         this.mailboxView=mailboxView
     }
 
-    fun loadMailbox(userId: String){
+    fun loadMailbox(userId: Int){
 
         mailboxView.onMailboxLoading()
 
