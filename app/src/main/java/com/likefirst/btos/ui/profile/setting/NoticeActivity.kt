@@ -1,20 +1,20 @@
 package com.likefirst.btos.ui.profile.setting
 
 import com.likefirst.btos.R
-import com.likefirst.btos.databinding.FragmentNoticeBinding
+import com.likefirst.btos.databinding.ActivityNoticeBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.profile.setting.NoticeRVAdapter
 
-class NoticeActivity: BaseActivity<FragmentNoticeBinding>(FragmentNoticeBinding::inflate),
+class NoticeActivity: BaseActivity<ActivityNoticeBinding>(ActivityNoticeBinding::inflate),
     MainActivity.onBackPressedListener  {
     override fun initAfterBinding() {
         binding.profileNoticeToolbar.toolbarTitleTv.text="공지사항"
 
 
         binding.profileNoticeToolbar.toolbarBackIc.setOnClickListener {
-            supportFragmentManager.popBackStack()
+            finish()
         }
 
 
