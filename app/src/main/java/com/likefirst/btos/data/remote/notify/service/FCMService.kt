@@ -34,7 +34,7 @@ class FCMService {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var userData = dataSnapshot.getValue(UserDTO::class.java)
                     val toTimeStamp = Date()
-                    val datef =  SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault())
+                    val datef =  SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS", Locale.getDefault())
                     val createAt= datef.format(toTimeStamp)
                     Log.e("firebase create: ", createAt)
 
@@ -51,6 +51,8 @@ class FCMService {
                                     notification.put("type","letter")
                                     notification.put("timestamp", createAt)
                                     notification.put("fromToken", userData?.fcmToken)
+                                    notification.put("fromUser", userData?.email)
+                                    //TODO USER 이름으로 수정
 
                                     Log.e("Firebase"," from : ${userData?.fcmToken.toString()}")
                                     root.put("data", notification);

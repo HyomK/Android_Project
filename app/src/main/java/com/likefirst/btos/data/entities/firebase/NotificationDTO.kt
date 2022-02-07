@@ -11,12 +11,12 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "NotificationTable")
 data class NotificationDTO (
     @PrimaryKey(autoGenerate = false)
-
-    @ColumnInfo val Idx: Int,
+    @ColumnInfo var timestamp : String = "",
+    @ColumnInfo var fromToken : String?=null,
     @ColumnInfo var type :  String? =null,
     @ColumnInfo var detailIdx : Int?=null,
     @ColumnInfo var title : String? = null,
-    @ColumnInfo  var content: String?=null,
-    @ColumnInfo var timestamp : String? = null,
-    @ColumnInfo var fromToken : String? = null,
+    @ColumnInfo var content: String?=null,
+    @ColumnInfo var fromUser: String?=null
+
 ): Parcelable

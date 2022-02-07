@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import com.likefirst.btos.R
+import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.remote.notify.service.FCMService
 import com.likefirst.btos.databinding.ActivityMailWriteBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
@@ -61,6 +63,9 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     binding.MailWriteWriteBtn.visibility=View.VISIBLE
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
+
+                    //TODO 임시 테스트 위치
+                    sendNotification()
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -81,6 +86,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     dialog.setButtonClickListener(object:
                         CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {
+
                         }
                         override fun onButton2Clicked() {
                         }
@@ -95,6 +101,8 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
             binding.MailWriteMenuBtn.visibility= View.INVISIBLE
             binding.MailWriteWriteBtn.visibility=View.INVISIBLE
             binding.MailWriteCheckBtn.visibility=View.VISIBLE
+
+
             //   binding.MailReplyHideView.visibility=View.VISIBLE
         }
 
@@ -113,6 +121,22 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                 }
             }
         })
+    }
+
+    fun sendNotification(){
+
+        val fcmDatabase = FCMDatabase.getInstance(this)!!
+        val userData = fcmDatabase.fcmDao().getData()
+        if(userData.fcmToken == ""){
+            Log.e("Firebase", "토큰이 비었습니다")
+            return
+        }
+        //TODO : token에 상대방의 token을 넣고 message는 알림에서 보여질 세부 내용 ... 이외 custom은 service에서 가능 ->MessageDTO CUSTOM
+        // smaple token
+        val token ="cf5kD7akQ4aVTihva8k-et:APA91bEAv7NMgM4OTWVmQfVWZxKSR1KTXEmIYzPzebeerTGmreBVLSwdOIvAUot7ONE0lE-S1rzF8MHOIdLCzy1OBrbSPjHi-ojBFAaakF4gCeov-zIuLBKe0GKCUs2Okdi7ihZ1IkBy"
+        val toMe = userData.fcmToken
+        FCMService().sendPostToFCM(token, userData,userData.email+"님 편지가 도착했습니다")
+
     }
 
 

@@ -1,6 +1,7 @@
 package com.likefirst.btos.data.local
 
 import androidx.room.*
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.firebase.NotificationDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 
@@ -15,4 +16,6 @@ interface NotificationDao {
     @Delete
     fun delete (notification: NotificationDTO)
 
+    @Query("SELECT * FROM NotificationTable")
+    fun getNotifications(): List<NotificationDTO>
 }

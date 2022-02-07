@@ -7,12 +7,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.firebase.NotificationDTO
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 
-class NotifyRVAdapter(private val dataSet: ArrayList<NoticeDetailResponse>) : RecyclerView.Adapter< NotifyRVAdapter.ViewHolder>() {
+class NotifyRVAdapter(private val dataSet: ArrayList<NotificationDTO>) : RecyclerView.Adapter< NotifyRVAdapter.ViewHolder>() {
 
     interface NotifyItemClickListener{
-        fun onClickItem()
+        fun onClickItem(notification : NotificationDTO)
     }
     private lateinit var mItemClickLister:NotifyRVAdapter.NotifyItemClickListener
 
@@ -38,7 +39,7 @@ class NotifyRVAdapter(private val dataSet: ArrayList<NoticeDetailResponse>) : Re
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.layout.setOnClickListener { mItemClickLister.onClickItem() }
+        viewHolder.layout.setOnClickListener { mItemClickLister.onClickItem(dataSet[position]) }
         viewHolder.textView.text=dataSet[position].title
     }
 

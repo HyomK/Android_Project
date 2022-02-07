@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.commit
@@ -13,9 +14,8 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.profile.plant.PlantRVAdapter
 import com.likefirst.btos.ui.profile.plant.SharedViewModel
-import com.likefirst.btos.ui.profile.setting.NoticeFragment
+import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
 
@@ -71,11 +71,12 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 .commit()
         }
         binding.profileNoticeTv.setOnClickListener {
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fr_layout, NoticeFragment(),"notice")
-                .addToBackStack("profile-save")
-                .commit()
+//            requireActivity().supportFragmentManager
+//                .beginTransaction()
+//                .addToBackStack("profile-save")
+//                .commit()
+            val intent = Intent(requireActivity(),NoticeActivity::class.java)
+            startActivity(intent)
         }
         binding.profileSuggestTv.setOnClickListener {
             requireActivity().supportFragmentManager

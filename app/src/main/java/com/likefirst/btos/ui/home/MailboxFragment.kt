@@ -100,13 +100,13 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     fun getDiary(diary: Diary){
-        var name : String="알 수 없음"
+        var name : String="(알 수 없음)"
         if(diary.senderNickName !=null)
             name=diary.senderNickName
-        else name="알 수 없음"
 
         val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
 
+        //TODO : Emotion 임의 값 넣음 -> 수정해서 이용
         val Diary = DiaryViewerInfo( name, 1, diary.diaryDate, diary.content, true, doneList.toArrayList())
         Log.e("Diary/API-DIARY",Diary.toString())
         val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)

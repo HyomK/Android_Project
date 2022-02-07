@@ -1,24 +1,31 @@
 package com.likefirst.btos.ui.main
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationBarView
+import com.google.common.reflect.TypeToken
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.gson.GsonBuilder
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.firebase.MessageDTO
+import com.likefirst.btos.data.entities.firebase.NotificationDTO
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.local.NotificationDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 import com.likefirst.btos.data.remote.notify.service.FCMService
 import com.likefirst.btos.data.remote.notify.service.NoticeService
@@ -28,8 +35,10 @@ import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
+import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
-
+import com.likefirst.btos.ui.profile.setting.NoticeActivity
+import java.lang.reflect.Type
 
 
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),NoticeAPIView{
@@ -264,95 +273,41 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
-
-
-    /*TODO NoticeAdapter 우편함에는 공지와 편지.일기 알림이 쌓여야 한다
-       공지는 API에서 받아오고 편지와 우편은 파이어베이스에서 받아야 한다
-       1.데이터 클래스 통합해서 정리하기
-       편지와 일기 같은 경우는 데이터의 상대방 UID로 USERTABLE에 접근해서 USER 정보와 일기 내용을 받아온다
-       공지는 API를 호출한다
-       새로운 공지가 있는지 조회하고 각각 viewholder에 매칭해준다
-       데이터를 모두 받은 후 시간 순서대로 정렬한다
-       */
-
-    fun loadData(){
-        var noticeDTOs: ArrayList<MessageDTO> = arrayListOf()
-        fireStore?.collection(uid!!)?.orderBy("timestamp", Query.Direction.DESCENDING)
-            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                noticeDTOs.clear()
-                if (querySnapshot == null) return@addSnapshotListener
-                // 데이터 받아오기
-                for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(MessageDTO::class.java)
-                    noticeDTOs.add(item!!)
-                }
-
-            }
-        Log.e("firebase/DATA", noticeDTOs.toString())
-
-    }
-
-    inner class NoticeViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var noticeDTOs: ArrayList<MessageDTO> = arrayListOf()
-
-        init {
-            fireStore?.collection(uid!!)?.orderBy("timestamp", Query.Direction.DESCENDING)
-                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    noticeDTOs.clear()
-                    if (querySnapshot == null) return@addSnapshotListener
-                    // 데이터 받아오기
-                    for (snapshot in querySnapshot!!.documents) {
-                        var item = snapshot.toObject(MessageDTO::class.java)
-                        noticeDTOs.add(item!!)
-                    }
-                    notifyDataSetChanged()
-                }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            TODO("Not yet implemented")
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun getItemCount(): Int {
-            return noticeDTOs.size
-        }
-    }
 
     override fun onNoticeAPIError(Dialog: CustomDialogFragment) {
         Dialog.show(supportFragmentManager,"noticeErrorDialog")
     }
 
     override fun onNoticeAPISuccess(noticeData: ArrayList<NoticeDetailResponse>) {
-        noticeList=noticeData
-        if(noticeList == null) return
         Log.e("NOTICE/API", "SUCCESS: ${noticeData.toString()}")
 
-        val adapter = NotifyRVAdapter(noticeList)
+        noticeList=noticeData
+        var notificationList =ArrayList<NotificationDTO>()
+        noticeData.map{
+                notice ->notificationList.add(NotificationDTO(notice.createdAt,
+            "BTOS_SERVER","notice",notice.noticeIdx,notice.title,notice.content,"BTOS_SERVER")
+        )}
+        notificationList=loadFromFirebase(notificationList)
+
+        val adapter = NotifyRVAdapter(notificationList)
         adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
-            override fun onClickItem() {
-//                binding.mainLayout.closeDrawers()
-//                supportFragmentManager.commit {
-//                    addToBackStack("")
-//                }
-                val fcmDatabase = FCMDatabase.getInstance(this@MainActivity)!!
-                val userData = fcmDatabase.fcmDao().getData()
-
-                if(userData.fcmToken == ""){
-                    Log.e("Firebase", "트큰이 비었습니다")
-                    return
+            override fun onClickItem(item : NotificationDTO) {
+                binding.mainLayout.closeDrawers()
+                when(item.type){
+                    "notice"-> {
+                        startNextActivity(NoticeActivity::class.java)
+                    }
+                    "letter"->{
+                        //body date sender 구현 필수
+                        val bundle = bundleOf("body" to item.content, "date" to item.timestamp , "sender" to "sample")
+                        val intent = Intent(this@MainActivity,MailViewActivity::class.java)
+                        intent.putExtra("MailView",bundle)
+                        startActivity(intent)
+                    }
+                    "diary"->{
+                        //TODO 구현
+                    }
                 }
-                val token2="cLQVYZu-Skew3KlHiSCQNK:APA91bFqduCx1j9eTws7ZvHgFOpFxc-Kiibjz8rRBDqZ7UG3ad1VNRvx_JphmlDHNaOD4ocrGBbsf2yJKDgjWBfyLRS7r8B60WPvcfFaiWZ5MRwIgmiPYAnx9EG8Czc15EKh-LUBRqls"
-                val token ="fMKVE9gvTqWjj1id1B2l4v:APA91bEiL7ClBYpszqsvP7qF6zYRtqv4QBDp0T34y3EjJZq4qYiuduGAHLp1Zxb9rxzQR0EMk1OoLxEg9WzXzT4k4WAuG0A2GrVjKvP5fmyz_71sybzUmclnSQzpbVaoRFSb70ye_GwE"
-                FCMService().sendPostToFCM(token, userData,userData.email+"에서 편지가 도착햇습니다")
-
 
             }
         })
@@ -366,5 +321,40 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             4000->Log.e(code.toString(), "데이터베이스 연결에 실패하였습니다.")
             else -> Log.e(code.toString(), "공지 조회 실패.")
         }
+    }
+
+    fun loadFromFirebase(notifications : ArrayList<NotificationDTO>):ArrayList<NotificationDTO> {
+        val gson = GsonBuilder().create()
+        var notifications  =notifications
+        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
+        val notification = spf.getString("messageList", "")
+        val groupListType: Type = object : TypeToken<ArrayList<MessageDTO?>?>() {}.type
+
+        if (notification == "") {
+            Toast.makeText(this, "메세지 로드에 실패했습니다", Toast.LENGTH_SHORT)
+            return notifications
+        }
+        Log.e("Firebase/notification", notification.toString())
+        val list: ArrayList<MessageDTO> = gson.fromJson(notification, groupListType)
+        Log.e("Firebase/list", list.toString())
+        list.map{
+            i->notifications.add(NotificationDTO(i.timestamp!!,i.fromToken!!,i.type , 0,i.title,i.body,i.fromUser))
+        }
+
+        val notificationDatabase= NotificationDatabase.getInstance(this)!!
+        if(notificationDatabase.NotificationDao().getNotifications() ==null){
+            notifications.forEach {
+                notificationDatabase.NotificationDao().insert(it)
+            }
+        }else{
+            notifications.forEach {
+                notificationDatabase.NotificationDao().update(it)
+            }
+        }
+        val editor = spf.edit()
+        editor.remove("messageList")
+        editor.apply()  //저장된 건 삭제하기
+
+        return notifications
     }
 }

@@ -93,13 +93,12 @@ class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Ad
     }
     fun buyItem(position :Int){
         val result = mItemClickLister.onClickBuyItem(dataSet[position])
-        dataSet[position]=result
-        reset(dataSet)
+        dataSet[position]=result  // 기존에 선택했던 구매 식물의 상태를 변경하고
+        reset(dataSet)  // 재정렬한다
     }
 
 
     fun selectItem(position: Int){
-
         mItemClickLister.onClickSelectItem(dataSet[position].first)
         dataSet.forEachIndexed { index, plant ->
             run {
@@ -121,6 +120,7 @@ class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Ad
         val newData =origin.sortedWith(ComparePlant)
         dataSet.clear()
         dataSet.addAll(newData)
+        Log.e("Plant/RV - Soreted :  ", newData.toString())
         notifyDataSetChanged()
     }
 

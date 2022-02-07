@@ -24,14 +24,14 @@ import com.likefirst.btos.R
 import com.likefirst.btos.utils.fcm.MyWorker
 import android.os.PowerManager
 import android.media.AudioAttributes
+import com.google.common.reflect.TypeToken
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.GsonBuilder
+import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
-
-
-
-
-
+import org.json.JSONArray
+import java.lang.reflect.Type
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -59,7 +59,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val title = remoteMessage.data["title"]!!
             val message = remoteMessage.data["body"]!!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                sendMessageNotification(title,message)
+                sendMessageNotification(remoteMessage.data )
             }
             else{
                 sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body!!)
@@ -106,7 +106,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG,"Refreshed token : $token")
         val FirebaseDB =FCMDatabase.getInstance(this)!!.fcmDao()
         val prev = FirebaseDB.getData()
-        FirebaseDB.update(UserDTO(prev.email, token))
+        if(prev!= null )FirebaseDB.update(UserDTO(prev.email, token))
 
         sendRegistrationToServer(token)
     }
@@ -145,9 +145,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         showDataMessage(title,body)
     }
 
-    private fun sendMessageNotification(title: String, body: String){
+    private fun sendMessageNotification( Message : Map<String, String>){
        // val uniId: Int = (System.currentTimeMillis() / 7).toInt()
-
+        val title = Message["title"]!!
+        val body = Message["body"]!!
         // PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Activity Stack을 경로만 남김, A-B-C-D-B => A-B
@@ -177,7 +178,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
         }
-
+        saveData(Message)
         // 알림 생성
         notificationManager.notify(0, notificationBuilder.build())
 
@@ -211,6 +212,44 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Looper.prepare()
         Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
         Looper.loop()
+    }
+
+    fun saveData(Message:Map<String,String>){
+
+        val title = Message["title"]!!
+        val body = Message["body"]!!
+        val emailID= Message["emailID"]!!
+        val type= Message["type"]!!
+        val timestamp= Message["timestamp"]!!
+        val fromToken = Message["fromToken"]!!
+        val fromUser = Message["fromUser"]!!
+
+
+        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
+        val editor =spf.edit()
+        val gson = GsonBuilder().create()
+        val data = MessageDTO(title, body,emailID,type,timestamp,fromToken,fromUser)
+        val tempArray =ArrayList<MessageDTO>()
+        val groupListType: Type = object : TypeToken<ArrayList<MessageDTO?>?>() {}.type
+
+        val prev =spf.getString("messageList","none") // json list 가져오기
+        val convertedData = gson.toJson(prev)
+
+        Log.e(TAG, data.toString())
+        if(prev!="none"){
+            Log.e(TAG, "prev Json=> "+convertedData.toString())
+            if(prev!="[]" || prev!="")tempArray.addAll(gson.fromJson(prev,groupListType))
+            tempArray.add(data)
+            val strList = gson.toJson(tempArray,groupListType)
+            Log.e(TAG, "saved1:"+ strList)
+            editor.putString("messageList",strList)
+        }else{
+            tempArray.add(data)
+            val strList = gson.toJson(tempArray,groupListType)
+            editor.putString("messageList",strList)
+        }
+
+        editor.apply()
     }
 
 

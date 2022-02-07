@@ -63,6 +63,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 val request = PlantRequest(USERIDX,plant.plantIdx)
                 plantService.selectPlant( request )
 
+
                 val bundle =Bundle()
                 bundle.putString("name",plant.plantName)
                 bundle.putInt("level",plant.currentLevel)
@@ -73,9 +74,10 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             }
 
             override fun onClickBuyItem(plant : Pair<Plant,Int>):Pair<Plant,Int> {
-               var buyPlant : Pair<Plant,Int>? = plant
+               var buyPlant : Pair<Plant,Int> = plant
                 val plantService = PlantService()
                 plantService.setPlantBuyView(plantBuyView)
+                //구매할 식물 전달
                 val request :PlantRequest = PlantRequest(USERIDX,plant.first.plantIdx)
                 plantService.buyPlant(request)
 
@@ -84,12 +86,12 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                             +"_0"
                            +"_circle","drawable",
                  requireActivity().packageName)
-                 var newPlant = plant.first
-                  newPlant.plantStatus="active"
-                  newPlant.isOwn=true
+                 var newPlant = plant.first  // 구매선택한 식물
+                  newPlant.plantStatus="active" //active로 수정
+                  newPlant.isOwn=true  //소유로 수정
                   newPlant.currentLevel=0
 
-                  buyPlant= Pair(newPlant,img)
+                  buyPlant= Pair(newPlant,img) //바뀐 내용 return
 
                 //TODO 화분 선택 Dialog 구현
 
@@ -161,7 +163,9 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     override fun onPlantBuySuccess(plantIdx: Int, response : PlantResponse) {
         val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
+        Log.e("PlantAPI"," / Before : Buy api success ${plantDB.plantDao().getPlants()}")
         plantDB.plantDao().setPlantInit(plantIdx,"active",0,true)
+        Log.e("PlantAPI"," / After : Buy api success ${plantDB.plantDao().getPlants()}")
 
     }
 
@@ -180,11 +184,17 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
     override fun onPlantSelectSuccess(plantIdx: Int, request: PlantResponse) {
-        Log.d("Plantselect/API",request.isSuccess.toString())
+        Log.d("Plantselect/API",request.isSuccess.toString()) // acitve -> selected 변경
         val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
+        Log.e("PlantselectAPI"," / Before : Select api success ${plantDB.plantDao().getPlants()}")
         val selected = plantDB.plantDao().getSelectedPlant("selected")!!
+        //DB에서 기존 selected 값 가져옴
         plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
+        //DB에서 기존 selected 식물을 active로 바꿔주고
         plantDB.plantDao().setPlantStatus(plantIdx,"selected")
+        //API 성공한  식물을 selected 로 바꿔준다
+
+        Log.e("PlantselectAPI"," / AFTER : Select api success ${plantDB.plantDao().getPlants()}")
 
 
     }
@@ -195,6 +205,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             7010-> Log.e( code.toString(),"화분 상태 변경에 실패하였습니다.")
             else ->Log.e( code.toString(),"이미 선택된 화분입니다.")
         }
+
     }
 
     class ComparePlant {

@@ -141,12 +141,9 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-//
-//        val intent = Intent(this, FirebaseSignupActivity::class.java)
-//        intent.putExtra("movePos","main")
-//        intent.putExtra("email",email)
-//        finish()
-//        startActivity(intent)
+        //TODO -> 파이어베이스 로그인으로 수정
+        gotoFirebaseSignUp()
+
     }
 
     override fun onLoginFailure(code: Int, message: String) {
@@ -181,17 +178,15 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
-
+        gotoFirebaseSignUp()
     }
-/*
-    fun gotoFirebaseSignUp(user: User){
 
+    fun gotoFirebaseSignUp(){
         val intent = Intent(this, FirebaseActivity::class.java)
         intent.putExtra("movePos","main")
-        intent.putExtra("email",user.email)
         startActivity(intent)
     }
-*/
+
 
     override fun onAutoLoginFailure(code: Int, message: String) {
         binding.loginLoadingPb.visibility = View.GONE
@@ -212,10 +207,8 @@ class LoginActivity
         }
         Log.e("PROFILE/API",userDB?.getUser().toString())
         updatePlantDB()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
 
-       // gotoFirebaseSignUp(user)
+
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
