@@ -12,19 +12,26 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
+import com.likefirst.btos.data.remote.plant.view.SharedBuyModel
+import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
+import kotlinx.coroutines.*
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
+
+class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel : SharedSelectModel,val buyModel : SharedBuyModel) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: PlantItemClickListener
+    val sharedBuyModel = buyModel
+    val sharedSelectModel =selectModel
+
 
 
     interface PlantItemClickListener{
         fun onClickInfoItem(plant : Plant)
-        fun onClickSelectItem(plant : Plant)
-        fun onClickBuyItem(plant : Pair<Plant,Int>):Pair<Plant, Int>
+        fun onClickSelectItem(plant : Plant,position:Int)
+        fun onClickBuyItem(plant : Pair<Plant,Int>):Boolean
     }
 
     fun setMyItemCLickLister(itemClickLister: PlantItemClickListener){
@@ -81,7 +88,8 @@ class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Ad
                holder.selectBtn.visibility=View.VISIBLE
                holder.selectBtn.text="선택"
                holder.selectBtn.setOnClickListener{
-                   selectItem(position)
+                   mItemClickLister.onClickSelectItem(dataSet[position].first ,position)
+
                }
            }
        }
@@ -92,27 +100,48 @@ class PlantRVAdapter( val dataSet :ArrayList<Pair<Plant,Int>>) : RecyclerView.Ad
        return dataSet.size
     }
     fun buyItem(position :Int){
+        val select =dataSet[position]
         val result = mItemClickLister.onClickBuyItem(dataSet[position])
-        dataSet[position]=result  // 기존에 선택했던 구매 식물의 상태를 변경하고
-        reset(dataSet)  // 재정렬한다
+        val handler = android.os.Handler()
+        handler.postDelayed({
+            Log.e("PLANT BUY ITEM : ", "rv clean up start")
+            if(sharedBuyModel.isSuccess().value==true ) {
+                val buyItem = sharedBuyModel.getLiveData().value!!
+                Log.e("PLANT BUY ITEM : ", buyItem.toString())
+                if (select.first.plantIdx != buyItem.getInt("plantIdx") || select.first.plantName != buyItem.getString("plantName")) {
+                    Log.e("PLANT BUY ITEM 선택된 화분이 다름 : ",
+                        select.first.toString() + " / " + buyItem.toString())
+                } else {
+                    select.first.plantStatus = buyItem.getString("status")!!
+                    select.first.currentLevel = 0
+                    select.first.isOwn = true
+                    val newItem = Pair(select.first, buyItem.getInt("resId"))
+                    dataSet[position] = newItem
+                    sharedBuyModel.setResult(false)
+                    reset(dataSet)  // 재정렬한다
+                }
+            }
+        }, 2000)
+
     }
 
 
     fun selectItem(position: Int){
-        mItemClickLister.onClickSelectItem(dataSet[position].first)
-        dataSet.forEachIndexed { index, plant ->
-            run {
+        if(sharedSelectModel.isSuccess().value==true ) {
+            Log.e("Plant/ select for"," rv handler start")
+            for ((index, plant) in  dataSet.withIndex()) {
                 if (plant.first.plantStatus == "selected") {
                     dataSet[index].first.plantStatus = "active"
                     dataSet[position].first.plantStatus="selected"
                     if( dataSet[position].first.currentLevel==-1)  dataSet[position].first.currentLevel=0
-                   // notifyItemChanged(position)
-                    //notifyItemChanged(index)
-                    reset(dataSet)
-                    return
+
+                    break
                 }
             }
         }
+
+       Log.e("Plant/ select ","end =>> ${dataSet}")
+        reset(dataSet)
     }
 
     @SuppressLint("NotifyDataSetChanged")

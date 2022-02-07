@@ -92,7 +92,7 @@ class PlantService {
                     plantBuyView.onPlantBuyFailure( plantResponse.code,plantResponse.message)
                 }
 
-                Log.e("PlantBUY/API", plantResponse.toString())
+                Log.e("PlantBUY/API-service", plantResponse.toString())
 
             }
 
