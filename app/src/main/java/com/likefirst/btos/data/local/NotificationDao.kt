@@ -18,4 +18,7 @@ interface NotificationDao {
 
     @Query("SELECT * FROM NotificationTable")
     fun getNotifications(): List<NotificationDTO>
+
+    @Query("SELECT * FROM NotificationTable WHERE type= :type")
+    fun getNotificationsByType(type: String): List<NotificationDTO>
 }

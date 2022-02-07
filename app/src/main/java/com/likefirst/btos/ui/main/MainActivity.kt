@@ -37,6 +37,7 @@ import com.likefirst.btos.ui.archive.ArchiveFragment
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewActivity
+import com.likefirst.btos.ui.home.MailboxFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.utils.toArrayList
@@ -251,7 +252,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
 
     override fun onBackPressed() {
-        if(homeFragment.isVisible){
+        if(homeFragment.isVisible && !isMailOpen){
             finish()
         } else {
 
@@ -367,5 +368,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         editor.apply()  //저장된 건 삭제하기
 
         return notificationDatabase.NotificationDao().getNotifications().toArrayList()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
     }
 }

@@ -79,15 +79,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         if(isHidden || mActivity.isMailOpen ){
             requireActivity().supportFragmentManager.commit {
                 requireActivity().supportFragmentManager.findFragmentByTag("mailbox")?.let { remove(it) }
-                requireActivity().supportFragmentManager.findFragmentByTag("writemail")?.let { remove(it) }
-                requireActivity().supportFragmentManager.findFragmentByTag("viewmail")?.let { remove(it) }
             }
             mActivity.isMailOpen=false
             mActivity.notifyDrawerHandler("lock")
         }else{
             mActivity.notifyDrawerHandler("unlock")
             binding.homeNotificationBtn.isClickable =true
-
         }
     }
 
