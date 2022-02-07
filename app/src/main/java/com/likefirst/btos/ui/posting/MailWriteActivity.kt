@@ -35,7 +35,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.MailWriteMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailWriteMenuList.setAdapter(adapter)
-        binding.MailWriteHideView.visibility=View.VISIBLE
+        binding.MailWriteCheckBtn.visibility=View.GONE
 
         binding.MailWriteToolbar.toolbarBackIc.setOnClickListener {
             onBackPressed()
@@ -86,7 +86,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     dialog.setButtonClickListener(object:
                         CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {
-
                         }
                         override fun onButton2Clicked() {
                         }
@@ -101,8 +100,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
             binding.MailWriteMenuBtn.visibility= View.INVISIBLE
             binding.MailWriteWriteBtn.visibility=View.INVISIBLE
             binding.MailWriteCheckBtn.visibility=View.VISIBLE
-
-
             //   binding.MailReplyHideView.visibility=View.VISIBLE
         }
 
@@ -133,7 +130,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         }
         //TODO : token에 상대방의 token을 넣고 message는 알림에서 보여질 세부 내용 ... 이외 custom은 service에서 가능 ->MessageDTO CUSTOM
         // smaple token
-        val token ="cf5kD7akQ4aVTihva8k-et:APA91bEAv7NMgM4OTWVmQfVWZxKSR1KTXEmIYzPzebeerTGmreBVLSwdOIvAUot7ONE0lE-S1rzF8MHOIdLCzy1OBrbSPjHi-ojBFAaakF4gCeov-zIuLBKe0GKCUs2Okdi7ihZ1IkBy"
+        val token ="db56HoAEQCKDOncgUbYlaj:APA91bHg1N1kaKQve37uMOwBzma076XqYxzKMQI352Kshno4f9dKqjIPPO8NHB_ktm0wHW-gw8155ap57hL_7b-Fkv55At_xivn-kXRE97_FvEhzb-8VavP_k9pLspbXOcELMHXZnwlO"
         val toMe = userData.fcmToken
         FCMService().sendPostToFCM(token, userData,userData.email+"님 편지가 도착했습니다")
 

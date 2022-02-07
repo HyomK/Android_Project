@@ -146,13 +146,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendMessageNotification( Message : Map<String, String>){
-       // val uniId: Int = (System.currentTimeMillis() / 7).toInt()
+        val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         val title = Message["title"]!!
         val body = Message["body"]!!
         // PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Activity Stack을 경로만 남김, A-B-C-D-B => A-B
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(this, uniId, intent, PendingIntent.FLAG_ONE_SHOT)
 
         // 알림 채널 이름
         val channelId = getString(R.string.default_notification_channel_id)
@@ -180,7 +180,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         saveData(Message)
         // 알림 생성
-        notificationManager.notify(0, notificationBuilder.build())
+        notificationManager.notify(uniId, notificationBuilder.build())
 
     }
 

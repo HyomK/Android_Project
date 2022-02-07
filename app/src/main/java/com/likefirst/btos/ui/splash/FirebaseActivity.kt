@@ -209,31 +209,6 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
     }
 
 
-    private fun signUp (email :String,  password :String){
-        mAuth?.createUserWithEmailAndPassword(email, password) //비밀번호 이메일 복호화
-            ?.addOnCompleteListener {  //통신 완료가 된 후 무슨일을 할지
-                    task ->
-                if(task.isSuccessful){
-                    //정상적으로 이메일과 비번이 전달되어
-                    //새 유저 계정을 생성과 서버db 저장 완료 및 로그인
-                    //즉, 기존에 있는 계정이 아니다!
-                    Toast.makeText(
-                        this, "계정 생성 완료.",
-                        Toast.LENGTH_SHORT).show()
-
-                }
-                else if (task.exception?.message.isNullOrEmpty()==false){
-                    //예외메세지가 있다면 출력
-                    //에러가 났다거나 서버가 연결이 실패했다거나
-                    Toast.makeText(this,task.exception?.message,Toast.LENGTH_LONG).show()
-                }
-                else{
-                    //여기가 실행되는 경우는 이미 db에 해당 이메일과 패스워드가 있는 경우
-                    //그래서 계정 생성이 아닌 로그인 함수로 이동
-                    signIn()
-                }
-            }
-    }
 
 
     override fun initAfterBinding() {

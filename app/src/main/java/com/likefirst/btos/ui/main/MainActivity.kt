@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +39,7 @@ import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
+import com.likefirst.btos.utils.toArrayList
 import java.lang.reflect.Type
 
 
@@ -45,8 +47,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     var USERIDX=-1
     private var auth : FirebaseAuth? = null
-    private var fireStore = Firebase.firestore
-    private var uid : String? = null
 
 
     private val homeFragment = HomeFragment()
@@ -66,18 +66,33 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-        uid = auth?.currentUser?.uid
-        fireStore = FirebaseFirestore.getInstance()
-
 
     }
 
 
    override fun initAfterBinding() {
-
+        val notificationDatabase= NotificationDatabase.getInstance(this)!!
         binding.mainBnv.itemIconTintList = null
         initNotice()
-     //   loadData()
+
+        binding.mainLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerOpened(drawerView: View) {
+
+            }
+            override fun onDrawerClosed(drawerView: View) {}
+            override fun onDrawerStateChanged(newState: Int) {
+                val notifications =notificationDatabase.NotificationDao().getNotifications()
+
+                if(notifications.isEmpty()){
+                    initNotice()
+                }else{
+                    val loadData = loadFromFirebase(notifications.toArrayList())
+                    initNotifyAdapter(loadData)
+                    //메세지만 업데이트 한다
+                }
+            }
+        })
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
@@ -89,7 +104,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     fun initNotice(){
-
         val NoticeService= NoticeService()
         NoticeService.setNoticeView(this)
         NoticeService.loadNotice()
@@ -184,10 +198,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     return true
                 }
                 R.id.profileFragment -> {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.fr_layout, profileFragment)
-//                        .setReorderingAllowed(true)
-//                        .commitNowAllowingStateLoss()
                     isDrawerOpen=false
                     if (profileFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
@@ -221,7 +231,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     fun notifyDrawerHandler(Option : String){
-
         when(Option){
             "open"->{
                 Log.d("Draw","open")
@@ -273,24 +282,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         }
     }
 
-
-    override fun onNoticeAPIError(Dialog: CustomDialogFragment) {
-        Dialog.show(supportFragmentManager,"noticeErrorDialog")
-    }
-
-    override fun onNoticeAPISuccess(noticeData: ArrayList<NoticeDetailResponse>) {
-        Log.e("NOTICE/API", "SUCCESS: ${noticeData.toString()}")
-
-        noticeList=noticeData
-        var notificationList =ArrayList<NotificationDTO>()
-        noticeData.map{
-                notice ->notificationList.add(NotificationDTO(notice.createdAt,
-            "BTOS_SERVER","notice",notice.noticeIdx,notice.title,notice.content,"BTOS_SERVER")
-        )}
-        notificationList=loadFromFirebase(notificationList)
-
+    fun initNotifyAdapter(notificationList:  ArrayList<NotificationDTO>){
+        Log.e("Firebase -> Adapter ", "Result: ${notificationList}")
         val adapter = NotifyRVAdapter(notificationList)
-        adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
+         adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
             override fun onClickItem(item : NotificationDTO) {
                 binding.mainLayout.closeDrawers()
                 when(item.type){
@@ -311,9 +306,24 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
             }
         })
-
         binding.sidebarNotifyRv.adapter = adapter
+    }
 
+    override fun onNoticeAPIError(Dialog: CustomDialogFragment) {
+        Dialog.show(supportFragmentManager,"noticeErrorDialog")
+    }
+
+    override fun onNoticeAPISuccess(noticeData: ArrayList<NoticeDetailResponse>) {
+        Log.e("NOTICE/API", "SUCCESS: ${noticeData.toString()}")
+        noticeList=noticeData
+        var notificationList =ArrayList<NotificationDTO>()
+        noticeData.map{
+                notice ->notificationList.add(NotificationDTO(notice.createdAt + notice.noticeIdx,
+            "BTOS_SERVER","notice",notice.noticeIdx,notice.title,notice.content,"BTOS_SERVER")
+        )}
+        val result = loadFromFirebase(notificationList)
+        Log.e("NOTICE/API -> Firebase", "Result: ${result}")
+        initNotifyAdapter( result )
     }
 
     override fun onNoticeAPIFailure(code: Int, message: String) {
@@ -338,11 +348,11 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         val list: ArrayList<MessageDTO> = gson.fromJson(notification, groupListType)
         Log.e("Firebase/list", list.toString())
         list.map{
-            i->notifications.add(NotificationDTO(i.timestamp!!,i.fromToken!!,i.type , 0,i.title,i.body,i.fromUser))
+            i->notifications.add(NotificationDTO(i.timestamp!!,i.fromToken, i.type!! , 0,i.title,i.body,i.fromUser))
         }
 
         val notificationDatabase= NotificationDatabase.getInstance(this)!!
-        if(notificationDatabase.NotificationDao().getNotifications() ==null){
+        if(notificationDatabase.NotificationDao().getNotifications().isEmpty()){
             notifications.forEach {
                 notificationDatabase.NotificationDao().insert(it)
             }
@@ -351,10 +361,11 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 notificationDatabase.NotificationDao().update(it)
             }
         }
+        Log.e("Firebaese/DB",notificationDatabase.NotificationDao().getNotifications().toString() )
         val editor = spf.edit()
         editor.remove("messageList")
         editor.apply()  //저장된 건 삭제하기
 
-        return notifications
+        return notificationDatabase.NotificationDao().getNotifications().toArrayList()
     }
 }

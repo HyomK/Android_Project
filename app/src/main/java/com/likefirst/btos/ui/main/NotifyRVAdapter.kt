@@ -40,7 +40,7 @@ class NotifyRVAdapter(private val dataSet: ArrayList<NotificationDTO>) : Recycle
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.layout.setOnClickListener { mItemClickLister.onClickItem(dataSet[position]) }
-        viewHolder.textView.text=dataSet[position].title
+        viewHolder.textView.text=dataSet[position].content
     }
 
 

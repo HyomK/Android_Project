@@ -28,7 +28,7 @@ import com.likefirst.btos.utils.toArrayList
 
 class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),
     MailboxView, MailLetterView,
-    MailDiaryView {
+    MailDiaryView ,MainActivity.onBackPressedListener {
 
     override fun initAfterBinding() {
         val presFragment  = this
@@ -213,4 +213,10 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         Log.d("Diary/API : Fail", message.toString())
 
     }
+
+    override fun onBackPressed() {
+        val mActivity = activity as MainActivity
+        mActivity.supportFragmentManager.popBackStack()
+    }
+
 }

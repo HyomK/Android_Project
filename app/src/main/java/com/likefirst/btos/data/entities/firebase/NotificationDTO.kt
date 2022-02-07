@@ -8,13 +8,13 @@ import kotlinx.android.parcel.Parcelize
 
 
 @Parcelize
-@Entity(tableName = "NotificationTable")
+@Entity(tableName = "NotificationTable" ,primaryKeys = arrayOf("timestamp", "type","detailIdx"))
 data class NotificationDTO (
-    @PrimaryKey(autoGenerate = false)
+
     @ColumnInfo var timestamp : String = "",
     @ColumnInfo var fromToken : String?=null,
-    @ColumnInfo var type :  String? =null,
-    @ColumnInfo var detailIdx : Int?=null,
+    @ColumnInfo var type :  String ="",
+    @ColumnInfo var detailIdx : Int,
     @ColumnInfo var title : String? = null,
     @ColumnInfo var content: String?=null,
     @ColumnInfo var fromUser: String?=null
