@@ -34,6 +34,9 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<ArchiveCalendar>, va
             if (position % 7 == 0){
                 val calendarRed = ContextCompat.getColor(context, R.color.notice_red)
                 binding.itemArchiveCalendarTv.setTextColor(calendarRed)
+            } else if (position % 7 == 6){
+                val calendarGray = ContextCompat.getColor(context, R.color.gray)
+                binding.itemArchiveCalendarTv.setTextColor(calendarGray)
             }
         }
     }

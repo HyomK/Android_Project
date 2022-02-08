@@ -40,11 +40,13 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/item_archive_list_loading_pb"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/item_archive_list_loading"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
