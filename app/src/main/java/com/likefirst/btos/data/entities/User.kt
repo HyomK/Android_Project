@@ -58,3 +58,7 @@ data class UserPush(
 data class UserFont(
     @ColumnInfo(name = "fontIdx") var fontIdx: Int? = 1
 )
+
+data class UserLeave(
+    @ColumnInfo(name = "status") var status: String? = ""
+)

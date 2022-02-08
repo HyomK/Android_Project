@@ -312,12 +312,6 @@ class LoginActivity
                 if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
                     plantDB?.plantDao()?.insert(i)
                 } else {
-                    if(i.plantIdx==1 && i.plantStatus=="inactive"){
-                        val userDB= UserDatabase.getInstance(this)!!
-                        val USERIDX=userDB.userDao().getUser().userIdx!!
-                        plantService.setPlantInitView(this)
-                        plantService.initPlant(USERIDX.toString())
-                    }
                     plantDB?.plantDao()?.update(i)
                 }
             }

@@ -136,7 +136,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
         plantService.setPlantInitView(this)
-        plantService.initPlant(login.userIdx.toString())
         val intent = Intent(this, TutorialActivity::class.java)
         finish()
         startActivity(intent)

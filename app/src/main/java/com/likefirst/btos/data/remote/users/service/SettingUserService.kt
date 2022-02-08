@@ -94,6 +94,18 @@ class SettingUserService {
         })
     }
 
+    fun leave(userIdx : Int, status : UserLeave){
+        setSettingUserView.onSetSettingUserViewLoading()
+        SettingUserService.leave(userIdx, status).enqueue(object: Callback<BaseResponse<String>> {
+            override fun onResponse(call: Call<BaseResponse<String>>, response: Response<BaseResponse<String>>) {
+                baseResponseSuccess(response)
+            }
+            override fun onFailure(call: Call<BaseResponse<String>>, t: Throwable) {
+                setSettingUserView.onSetSettingUserViewFailure(4000, "데이터베이스 연결에 실패하였습니다.")
+            }
+        })
+    }
+
     fun baseResponseSuccess(response : Response<BaseResponse<String>>){
         val baseResponse: BaseResponse<String> = response.body()!!
         Log.e("setting/API",baseResponse.toString())

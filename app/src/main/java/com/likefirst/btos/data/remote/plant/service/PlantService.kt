@@ -111,29 +111,5 @@ class PlantService {
         })
     }
 
-    fun initPlant(userId: String){
-        PlantService.initPlant(userId).enqueue(object:Callback<PlantResponse>{
-            override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
-                val plantResponse =response.body()!!
-
-                if(response.isSuccessful){
-                    plantInitView.onPlantInitSuccess(1)
-                }else{
-                    plantInitView.onPlantInitFailure( plantResponse.code,plantResponse.message)
-                }
-                Log.e("PlantInit/API", plantResponse.toString())
-
-            }
-
-
-            override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
-                plantInitView.onPlantInitFailure( 4000,"데이터베이스 연결에 실패하였습니다.")
-                plantInitView.onPlantInitFailure( 7000,"해당 유저의 화분 초기화에 실패하였습니다.")
-            }
-        })
-    }
-
-
-
 }
 
