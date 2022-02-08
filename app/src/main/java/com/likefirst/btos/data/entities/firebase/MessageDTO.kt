@@ -1,8 +1,25 @@
 package com.likefirst.btos.data.entities.firebase
 
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class MessageDTO(
-    var fromUid : String? = null,
-    var toUid : String? = null,
-    var content : String? = null,
-    var timestamp : Long? = null,
-)
+    @SerializedName("title")
+    var title : String? = null,
+    @SerializedName("body")
+    var body: String?=null ,
+    @SerializedName("emailID")
+    var emailID : String?=null,
+    @SerializedName("type")
+    var type : String?=null,
+    @SerializedName("timestamp")
+    var timestamp : String? = null,
+    @SerializedName("fromToken")
+    var fromToken : String? = null,
+    @SerializedName("fromUser")
+    var fromUser : String? = null
+
+):Parcelable
+

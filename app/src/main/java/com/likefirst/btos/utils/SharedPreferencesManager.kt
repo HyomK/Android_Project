@@ -1,7 +1,9 @@
 package com.likefirst.btos.utils
 
+import android.content.Context
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.likefirst.btos.ApplicationClass.Companion.mSharedPreferences
+import com.likefirst.btos.data.local.UserDatabase
 import java.util.*
 
 fun saveJwt(jwtToken: String) {
@@ -35,3 +37,11 @@ fun getLastPostingDate() : Date {
     val dateLong = mSharedPreferences.getLong("lastPostingDate", date.time)
     return Date(dateLong)
 }
+
+fun saveUserIdx(userIdx : Int) {
+    val editor = mSharedPreferences.edit()
+    editor.putInt("userIdx", userIdx)
+    editor.apply()
+}
+
+fun getUserIdx() : Int = mSharedPreferences.getInt("userIdx", 0)

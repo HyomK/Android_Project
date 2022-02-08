@@ -3,11 +3,15 @@ package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.gms.ads.*
@@ -18,6 +22,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -27,6 +32,7 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
+import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.time.LocalTime
 import java.util.*
@@ -34,7 +40,20 @@ import java.util.*
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
     var isMailboxOpen =false
+    lateinit var  sharedNotifyModel : SharedNotifyModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedNotifyModel= ViewModelProvider(requireActivity()).get(SharedNotifyModel::class.java)
+        sharedNotifyModel.getMsgLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
+            if(it) binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox_new)
+            else binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
+        })
+        sharedNotifyModel.getNoticeLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
+            if(it) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
+            else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
+        })
 
+    }
     override fun initAfterBinding() {
 
         val mActivity = activity as MainActivity
@@ -49,7 +68,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
 
         binding.homeMailBtn.setOnClickListener {
-
+            sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
 
@@ -63,6 +82,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             Log.d("homeSTACK","homeitem  ${item.toString()} }")
         }
 
+        binding.homeWriteBtn.bringToFront()
         binding.homeWriteBtn.setOnClickListener {
             val date = dateToString(Date())
             val intent = Intent(requireContext(), DiaryActivity::class.java)
@@ -79,8 +99,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         if(isHidden || mActivity.isMailOpen ){
             requireActivity().supportFragmentManager.commit {
                 requireActivity().supportFragmentManager.findFragmentByTag("mailbox")?.let { remove(it) }
-                requireActivity().supportFragmentManager.findFragmentByTag("writemail")?.let { remove(it) }
-                requireActivity().supportFragmentManager.findFragmentByTag("viewmail")?.let { remove(it) }
             }
             mActivity.isMailOpen=false
             mActivity.notifyDrawerHandler("lock")
@@ -101,6 +119,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val lastMillis = mCalendar.timeInMillis
         val diffPostingDate = (currentMillis - lastMillis) / 1000 / (24*60*60)
         if (userDB!!.getIsSad() || diffPostingDate >= 5){
+            // 시무룩이 상태로 RoomDB, 서버의 유저정보 업데이트
+            val updateUserService = UpdateUserService()
+            updateUserService.setUpdateIsSadView(this)
+            updateUserService.updateIsSad(getUserIdx(), UserIsSad(true))
             userDB.updateIsSad(true)
             initSadPot(animationView)
         } else {
@@ -110,7 +132,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initHappyPot(animationView: LottieAnimationView){
-        animationView.setAnimation("alocasia_3.json")
+        animationView.setAnimation("alocasia/alocasia_3.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
@@ -120,7 +142,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initSadPot(animationView: LottieAnimationView){
-        animationView.setAnimation("alocasia_sad_3.json")
+        animationView.setAnimation("alocasia/alocasia_sad_3.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
         // 테스트 기기 추가
@@ -150,7 +172,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
     fun loadInterstitialAd(mRewardedVideoAd : RewardedAd){
         if (mRewardedVideoAd.isLoaded) {
-            val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
             val activityContext = context as MainActivity
             val adCallback = object: RewardedAdCallback() {
                 override fun onRewardedAdOpened() {
@@ -163,7 +184,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                     // User earned reward.
                     val updateUserService = UpdateUserService()
                     updateUserService.setUpdateIsSadView(this@HomeFragment)
-                    updateUserService.updateIsSad(userDB.getUser().userIdx!!, UserIsSad(false))
+                    updateUserService.updateIsSad(getUserIdx(), UserIsSad(false))
                 }
                 override fun onRewardedAdFailedToShow(adError: AdError) {
                     // Ad failed to display.
@@ -243,6 +264,14 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         dialog.show(this.parentFragmentManager, "showAdLoadFailedDialog")
     }
 
+    fun getUserIdx() : Int{
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        UserDatabase.getInstance(requireContext())!!.userDao()
+        Log.d("User", userDB?.getUser().toString())
+        val userIdx = userDB!!.getUser().userIdx!!
+        return userIdx
+    }
+
     override fun onUpdateLoading() {
         // TODO: 로딩애니메이션 구현
     }
@@ -250,8 +279,13 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     override fun onUpdateSuccess(isSad : UserIsSad) {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         userDB!!.updateIsSad(isSad.sad!!)
-        saveLastPostingDate(Date())
-        initFlowerPot()
+        // 시무룩이 상태로 전환 시에만 lastPostingDate 초기화
+        if (isSad.sad!!){
+            return
+        } else {
+            saveLastPostingDate(Date())
+            initFlowerPot()
+        }
     }
 
     override fun onUpdateFailure(code: Int, message: String) {

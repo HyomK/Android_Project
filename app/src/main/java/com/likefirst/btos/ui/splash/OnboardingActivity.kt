@@ -18,7 +18,6 @@ import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
@@ -32,8 +31,7 @@ import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
-    SignUpView, GetProfileView, LoginView,
-    PlantInitView, PlantListView {
+    SignUpView, GetProfileView, LoginView, PlantListView {
 
     val authService = AuthService()
     val plantService= PlantService()
@@ -81,10 +79,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-        //createAccount(email,"btos1234")
-        // TODO: Firebase 로그인
-        // TODO: initPlant 확인 필요
-
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(email)
@@ -135,11 +129,9 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        plantService.setPlantInitView(this)
-        plantService.initPlant(login.userIdx.toString())
-        val intent = Intent(this, TutorialActivity::class.java)
-        finish()
-        startActivity(intent)
+
+        gotoFirebaseSignUp()
+
     }
 
     override fun onLoginFailure(code: Int, message: String) {
@@ -172,16 +164,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
     }
 
-
-
-    override fun onPlantInitSuccess(userId: Int) {
-        Log.e("PlantInit/Success",userId.toString()+ " : USERID SUCCESS TO INIT PLANT")
-    }
-
-    override fun onPlantInitFailure(code: Int, message: String) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
-        Log.e("PlantInit/FAIL",code.toString()+ message)
-    }
 
     fun updatePlantDB(){
         val userDB= UserDatabase.getInstance(this)!!
@@ -216,6 +198,13 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.d("Plant/API",code.toString()+"fail to load...")
     }
 
+
+
+    fun gotoFirebaseSignUp(){
+        val intent = Intent(this, FirebaseActivity::class.java)
+        intent.putExtra("movePos","tutorial")
+        startActivity(intent)
+    }
     override fun onBackPressed() {
         super.onBackPressed()
         val gso = getGSO()

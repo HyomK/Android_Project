@@ -9,34 +9,36 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.DiaryInfo
-
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.entities.PostDiaryRequest
+import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.posting.service.DiaryService
+import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate) {
+class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate), PostDiaryView {
 
     companion object{
-        var emotionIdx : Int? = null
+        var emotionIdx = 0
         var doneLists = ArrayList<String>()
         var contents = ""
     }
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
+        //TODO: 프리미엄 회원 확인해서 뷰 다르게 보여주기
 
         // companion object 초기화
-        emotionIdx = null
+        emotionIdx = 0
         doneLists = arrayListOf()
         contents = ""
 
@@ -89,27 +91,34 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         }
 
         binding.diaryToolbar.diaryCheckIv.setOnClickListener {
-            if(isPublic()){
-                val dialog = CustomDialogFragment()
-                val data = arrayOf("취소", "확인")
-                dialog.arguments= bundleOf(
-                    "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 수정, 삭제할 수 있습니다.",
-                    "btnData" to data
-                )
-                dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
-                    override fun onButton1Clicked() {
+            contents = binding.diaryContentsEt.text.toString()
+            diaryValidationCheck()
+            if (diaryValidationCheck()){
+                val diaryDate = binding.diaryDateTv.text.toString()
+                val diaryRequest = PostDiaryRequest(getUserIdx(), emotionIdx, diaryDate, contents, isPublic(), doneLists)
+                if(isPublic()){
+                    val dialog = CustomDialogFragment()
+                    val data = arrayOf("취소", "확인")
+                    dialog.arguments= bundleOf(
+                        "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 수정, 삭제할 수 있습니다.",
+                        "btnData" to data
+                    )
+                    dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                        override fun onButton1Clicked() {
 
-                    }
-                    override fun onButton2Clicked() {
-                        goToDiaryViewer()
-                        saveLastPostingDate(Date())
-
-                    }
-                })
-                dialog.show(this.supportFragmentManager, "PublicAlertDialog")
-            } else {
-                goToDiaryViewer()
-                saveLastPostingDate(Date())
+                        }
+                        override fun onButton2Clicked() {
+                            val diaryService = DiaryService()
+                            diaryService.setPostDiaryView(this@DiaryActivity)
+                            diaryService.postDiary(diaryRequest)
+                        }
+                    })
+                    dialog.show(this.supportFragmentManager, "PublicAlertDialog")
+                } else {
+                    val diaryService = DiaryService()
+                    diaryService.setPostDiaryView(this@DiaryActivity)
+                    diaryService.postDiary(diaryRequest)
+                }
             }
         }
     }
@@ -189,10 +198,26 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun goToDiaryViewer(){
-        contents = binding.diaryContentsEt.text.toString()
+        val diaryDate = binding.diaryDateTv.text.toString()
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
         val intent = Intent(this, DiaryViewerActivity::class.java)
-        intent.putExtra("diaryInfo", DiaryInfo(binding.diaryDateTv.text.toString(), doneLists, emotionIdx, contents, "유저 더미데이터"))
+        intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
         startActivity(intent)
+    }
+
+    fun diaryValidationCheck() : Boolean{
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        if (userDB.getUser().premium == "premium"){
+            if (emotionIdx == 0) {
+                showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
+                return false
+            }
+        }
+        if (contents == "") {
+            showOneBtnDialog("일기를 한 글자라도 작성해 주세요!!", "No Contents Check")
+            return false
+        }
+        return true
     }
 
     fun isPublic() : Boolean{
@@ -208,6 +233,31 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             binding.diaryToolbar.diaryToggleIv.setImageResource(R.drawable.ic_toggle_true)
             binding.diaryToolbar.diaryToggleTv.text = "공개"
             binding.diaryToolbar.diaryToggleSelector.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onDiaryPostLoading() {
+        //TODO: 로딩화면 처리
+
+    }
+
+    override fun onDiaryPostSuccess() {
+        goToDiaryViewer()
+        saveLastPostingDate(Date())
+    }
+
+    override fun onDiaryPostFailure(code: Int) {
+        when (code){
+            4000, 7012, 7013 -> {
+                showOneBtnDialog("데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", "onDiaryPostFailure Code:4000")
+            }
+            6000 ->{
+                showOneBtnDialog("일기는 하루에 하나만 작성 가능합니다.", "onDiaryPostFailure Code:6000")
+            }
+            6001 -> {
+                showOneBtnDialog("오늘 작성한 일기만 공개설정하여 타인에게 전송할 수 있습니다.", "onDiaryPostFailure Code:6001")
+            }
+
         }
     }
 }

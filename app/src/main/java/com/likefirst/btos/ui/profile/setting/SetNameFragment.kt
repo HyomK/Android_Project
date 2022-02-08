@@ -64,12 +64,10 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
     }
 
     override fun onSetSettingUserViewLoading() {
-        binding.nicknameLoadingPb.visibility = View.VISIBLE
     }
 
     override fun onSetSettingUserViewSuccess(result: String) {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
-        binding.nicknameLoadingPb.visibility = View.GONE
         userDB!!.updateNickName(binding.nicknameEdit.text.toString())
         Log.e("SETNAME",userDB.getUser().toString())
 
@@ -91,7 +89,6 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
     }
 
     override fun onSetSettingUserViewFailure(code: Int, message: String) {
-        binding.nicknameLoadingPb.visibility = View.GONE
         binding.nameError.text=message
         binding.nameError.visibility= View.VISIBLE
     }
