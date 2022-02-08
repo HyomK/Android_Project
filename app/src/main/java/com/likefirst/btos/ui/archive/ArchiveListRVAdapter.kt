@@ -129,7 +129,9 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
     }
 
     fun deleteLoading(){
-        diaryList.removeAt(itemCount - 1)
+        if (diaryList[itemCount-1] == 0){
+            diaryList.removeAt(itemCount - 1)
+        }
         Log.d("itemcount", itemCount.toString())
     }
 

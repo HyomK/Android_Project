@@ -76,6 +76,10 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun initContents(){
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        if(userDB.getUser().premium == "free"){
+            binding.diaryEmotionsRv.visibility = View.GONE
+        }
         binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
     }
 

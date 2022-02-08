@@ -43,7 +43,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         updateUserService.setUpdateIsSadView(this)
 
         initFlowerPot()
-      
+
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
 
@@ -89,7 +89,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }else{
             mActivity.notifyDrawerHandler("unlock")
             binding.homeNotificationBtn.isClickable =true
-
         }
     }
 
