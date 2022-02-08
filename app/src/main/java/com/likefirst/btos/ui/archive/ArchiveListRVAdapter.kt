@@ -65,7 +65,8 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
 
     inner class LoadingViewHolder(val binding : ItemArchiveListRvMonthBinding) : RecyclerView.ViewHolder(binding.root){
         fun initView(){
-            binding.itemArchiveListLoadingPb.visibility = View.VISIBLE
+            binding.itemArchiveListLoading.visibility = View.VISIBLE
+            binding.itemArchiveListLoading.setAnimation("sprout_loading.json")
             binding.itemArchiveListMonthTv.visibility = View.GONE
             binding.itemArchiveListYearTv.visibility = View.GONE
         }
@@ -130,5 +131,14 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
     fun deleteLoading(){
         diaryList.removeAt(itemCount - 1)
         Log.d("itemcount", itemCount.toString())
+    }
+
+    fun clearList(){
+        diaryList = arrayListOf()
+        notifyDataSetChanged()
+    }
+
+    fun isDiaryEmpty() : Boolean{
+        return diaryList == ArrayList<String>()
     }
 }

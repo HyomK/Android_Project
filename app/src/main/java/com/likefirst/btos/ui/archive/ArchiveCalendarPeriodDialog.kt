@@ -27,7 +27,7 @@ class ArchiveCalendarPeriodDialog(val year: Int, val month: Int): BottomSheetDia
 
     private lateinit var mDatePickerClickListener : DatePickerClickListener
 
-    fun setDatePickerClickListener(datePickerclickListener: ArchiveCalendarPeriodDialog.DatePickerClickListener){
+    fun setDatePickerClickListener(datePickerclickListener: DatePickerClickListener){
         mDatePickerClickListener = datePickerclickListener
     }
 
@@ -92,7 +92,6 @@ class ArchiveCalendarPeriodDialog(val year: Int, val month: Int): BottomSheetDia
 
     override fun onDismiss(dialog: DialogInterface) {
         ArchiveCalendarFragment.datePickerFlag = true
-        Log.d("dataPickerFlag", ArchiveCalendarFragment.datePickerFlag.toString())
         super.onDismiss(dialog)
     }
 }

@@ -27,6 +27,9 @@ class ArchiveListService {
         archiveListService.getArchiveList(userIdx, pageNum, query).enqueue(object : Callback<ArchiveList>{
             override fun onResponse(call: Call<ArchiveList>, response: Response<ArchiveList>) {
                 val resp = response.body()!!
+                Log.d("resp", resp.toString())
+                Log.d("query", query.toString())
+                Log.d("pageNum", pageNum.toString())
                 when (resp.code){
                     1000 -> archiveListView.onArchiveListSuccess(resp.result, resp.pageInfo, adapter)
                     else -> archiveListView.onArchiveListFailure(resp.code)
@@ -37,7 +40,6 @@ class ArchiveListService {
                 Log.d("ArchiveListService / getList Failure", t.toString())
                 archiveListView.onArchiveListFailure(400)
             }
-
         })
     }
 }

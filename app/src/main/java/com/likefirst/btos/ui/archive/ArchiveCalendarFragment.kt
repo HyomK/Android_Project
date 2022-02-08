@@ -110,7 +110,6 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
                 datePickerDialog.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.ArchiveDatePickerStyle)
                 datePickerDialog.show(childFragmentManager, datePickerDialog.tag)
                 datePickerFlag = false
-                Log.d("dataPickerFlag", ArchiveCalendarFragment.datePickerFlag.toString())
             }
         }
     }

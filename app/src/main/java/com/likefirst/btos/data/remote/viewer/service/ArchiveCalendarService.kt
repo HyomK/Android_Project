@@ -38,7 +38,6 @@ class ArchiveCalendarService {
                 Log.d("ArchiveCalendarService / getCalendar Failure", t.toString())
                 archiveCalendarView.onArchiveCalendarFailure(400)
             }
-
         })
     }
 }
