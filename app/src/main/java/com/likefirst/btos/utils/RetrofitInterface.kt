@@ -2,6 +2,8 @@ package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.*
 import com.likefirst.btos.data.remote.BaseResponse
+import com.likefirst.btos.data.remote.HistoryBaseResponse
+import com.likefirst.btos.data.remote.HistorySenderDetailResponse
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.posting.response.LetterResponse
@@ -121,28 +123,41 @@ interface RetrofitInterface {
         @Body fontIdx : UserFont
     ): Call<BaseResponse<String>>
 
+    @PATCH("/users/{userIdx}/status")
+    fun leave(
+        @Path("userIdx") userIdx : Int,
+        @Body status : UserLeave
+    ) : Call<BaseResponse<String>>
+
     // ------------------- History -------------------------- //
-    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+    @GET("/histories/list/{userIdx}/{pageNum}")
     fun historyListSender(
         @Path("userIdx") userIdx : Int,
         @Path("pageNum") pageNum : Int,
-        @Query("filtering") filtering : String,
-        @Query("search") search : String?
-    ) : Call<BaseResponse<SenderHistory>>
+        @Query("filtering") filtering: String,
+        @Query("search") search: String?
+    ) : Call<HistoryBaseResponse<BasicHistory<SenderList>>>
 
-    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-    fun historyListDiary(
+    @GET("/histories/list/{userIdx}/{pageNum}")
+    fun historyListDiaryLetter(
         @Path("userIdx") userIdx : Int,
         @Path("pageNum") pageNum : Int,
         @Query("filtering") filtering : String,
         @Query("search") search : String?
-    ) : Call<BaseResponse<DiaryHistory>>
+    ) : Call<HistoryBaseResponse<BasicHistory<Content>>>
 
-    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-    fun historyListLetter(
+    @GET("/histories/sender/{userIdx}/{senderNickName}/{pageNum}")
+    fun historyListSenderDetail(
         @Path("userIdx") userIdx : Int,
+        @Path("senderNickName") senderNickName : String,
         @Path("pageNum") pageNum : Int,
-        @Query("filtering") filtering : String,
         @Query("search") search : String?
-    ) : Call<BaseResponse<LetterHistory>>
+    ) : Call<HistorySenderDetailResponse<Content>>
+
+    @GET("/histories{userIdx}/{type}/{typeIdx}")
+    fun historyDetailList(
+        @Path("userIdx") userIdx : Int,
+        @Path("type") type : String,
+        @Path("typeIdx") typeIdx : Int,
+    ) : Call<HistorySenderDetailResponse<HistoryList>>
 }
