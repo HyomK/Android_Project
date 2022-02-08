@@ -10,3 +10,7 @@ interface NoticeAPIView {
     fun onNoticeAPISuccess(noticeList : ArrayList<NoticeDetailResponse>)
     fun onNoticeAPIFailure(code : Int, message : String)
 }
+
+interface NotificationListener{
+    fun onPushNow()
+}

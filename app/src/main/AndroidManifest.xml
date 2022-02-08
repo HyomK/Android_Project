@@ -24,7 +24,17 @@
     <uses-permission android:name = "android.permission.VIBRATE"/>
     <uses-permission android:name = "android.permission.USE_FULL_SCRENN_INTENT"/>
 
-    <application
+    <meta-data
+        android:name="firebase_messaging_auto_init_enabled"
+        android:value="false" />
+    <meta-data
+        android:name="firebase_analytics_collection_enabled"
+        android:value="false" />
+
+
+
+<application
+        android:noHistory="true"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:name=".ApplicationClass"

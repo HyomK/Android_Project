@@ -26,6 +26,8 @@ import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
 import android.R.attr.data
+import android.accounts.AccountManager
+import android.os.Handler
 import com.google.android.gms.auth.api.signin.*
 
 import com.likefirst.btos.data.local.FCMDatabase
@@ -106,11 +108,16 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
         }
     }
 
+    fun onError(){
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("Firebase","#########onActivityResult##############")
         if(requestCode ==RC_SIGN_IN){
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)!!
+
             Log.e("Firebase","#########onActivityResult RC_SIGN IN : "+result?.toString())
             if( result.isSuccess) {
                 email =result.signInAccount?.email!!
@@ -126,11 +133,13 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
+        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
+                    Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)

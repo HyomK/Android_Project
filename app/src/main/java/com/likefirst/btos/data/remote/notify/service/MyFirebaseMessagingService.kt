@@ -30,12 +30,18 @@ import com.google.gson.GsonBuilder
 import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import org.json.JSONArray
 import java.lang.reflect.Type
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     val TAG = "Firebase"
+    lateinit var listener : NoticeAPIView
+    override fun onCreate() {
+        super.onCreate()
+
+    }
 
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
