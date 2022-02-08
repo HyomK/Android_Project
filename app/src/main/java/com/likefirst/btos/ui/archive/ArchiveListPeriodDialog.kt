@@ -1,7 +1,9 @@
 package com.likefirst.btos.ui.archive
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,16 @@ class ArchiveListPeriodDialog(): BottomSheetDialogFragment() {
         fun newInstance() : ArchiveListPeriodDialog{
             return ArchiveListPeriodDialog()
         }
+    }
+
+    interface DatePickerClickListener{
+        fun onDatePicked(dateFrom : String, dateTo: String)
+    }
+
+    private lateinit var mDatePickerClickListener : DatePickerClickListener
+
+    fun setDatePickerClickListener(datePickerclickListener: DatePickerClickListener){
+        mDatePickerClickListener = datePickerclickListener
     }
 
     override fun onCreateView(
@@ -91,10 +103,10 @@ class ArchiveListPeriodDialog(): BottomSheetDialogFragment() {
 
         // 오늘 날짜로 표시
         yearFrom.value = calendar.get(Calendar.YEAR)
-        monthFrom.value = calendar.get(Calendar.MONTH)
+        monthFrom.value = calendar.get(Calendar.MONTH) + 1
         dayFrom.value = calendar.get(Calendar.DAY_OF_MONTH)
         yearTo.value = calendar.get(Calendar.YEAR)
-        monthTo.value = calendar.get(Calendar.MONTH)
+        monthTo.value = calendar.get(Calendar.MONTH) + 1
         dayTo.value = calendar.get(Calendar.DAY_OF_MONTH)
 
         binding.archiveListPeriodStartYearNp.setOnValueChangedListener{picker, oldVal, newVal ->
@@ -123,12 +135,23 @@ class ArchiveListPeriodDialog(): BottomSheetDialogFragment() {
             dismiss()
         }
         binding.archiveListPeriodSubmitTv.setOnClickListener {
-            val year = binding.archiveListPeriodStartYearNp.value
-            val month = binding.archiveListPeriodStartMonthNp.value
-            val day = binding.archiveListPeriodStartDayNp.value
+            val yearFrom = binding.archiveListPeriodStartYearNp.value
+            val monthFrom = binding.archiveListPeriodStartMonthNp.value
+            val dayFrom = binding.archiveListPeriodStartDayNp.value
+            val yearTo = binding.archiveListPeriodEndYearNp.value
+            val monthTo = binding.archiveListPeriodEndMonthNp.value
+            val dayTo = binding.archiveListPeriodEndDayNp.value
 
-            // TODO : 날짜 변수를 사용하여 String타입으로 날짜를 변환(YYYY.MM.dd)시킨 다음 API 호출
+            val dateFrom = "$yearFrom.${String.format("%02d", monthFrom)}.${String.format("%02d", dayFrom)}"
+            val dateTo = "$yearTo.${String.format("%02d", monthTo)}.${String.format("%02d", dayTo)}"
+            mDatePickerClickListener.onDatePicked(dateFrom, dateTo)
+            dismiss()
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        ArchiveListFragment.datePickerFlag = true
+        super.onDismiss(dialog)
     }
 
 }

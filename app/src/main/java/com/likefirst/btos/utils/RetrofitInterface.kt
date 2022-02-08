@@ -1,21 +1,22 @@
 package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.*
-import com.likefirst.btos.data.remote.BaseResponse
-import com.likefirst.btos.data.remote.plant.response.PlantRequest
-import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.data.remote.posting.response.LetterResponse
-import com.likefirst.btos.data.remote.response.DiaryResponse
-import com.likefirst.btos.data.remote.response.MailboxResponse
-import com.likefirst.btos.data.remote.response.ReplyResponse
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
+import com.likefirst.btos.data.remote.*
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.notify.response.*
+import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
+import com.likefirst.btos.data.remote.posting.response.*
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import retrofit2.Call
 import retrofit2.http.*
 
+
 interface RetrofitInterface {
 
-    // ------------------- UserAuth -------------------------- //
     @POST("/auth/google")
     fun login(@Body email: String) : Call<LoginResponse>
 
@@ -38,27 +39,30 @@ interface RetrofitInterface {
     // -------------------Mailbox -------------------------- //
     @GET("/mailboxes/{userId}")
     fun loadMailbox(
-        @Path("userId") id: String
+        @Path("userId") id: Int
     ): Call<MailboxResponse>
 
-    @GET("/mailboxes/mail")
+    @GET("/mailboxes/mail/{userIdx}")
     fun loadDiary(
+        @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
         @Query("idx")idx: String
-    ): Call<DiaryResponse>
+    ): Call<MailDiaryResponse>
 
     @GET("/mailboxes/mail")
     fun loadLetter(
+        @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
         @Query("idx")idx: String
-    ): Call<LetterResponse>
+    ): Call<MailLetterResponse>
 
 
-    @GET("/mailboxes/mail")
+    @GET("/mailboxes/mail/{userIdx}")
     fun loadReply(
+        @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
         @Query("idx")idx: String
-    ): Call<ReplyResponse>
+    ): Call<MailReplyResponse>
 
     // -------------------PlantList-------------------------- //
 
@@ -78,12 +82,34 @@ interface RetrofitInterface {
         @Body PlantBuyRequest : PlantRequest
     ): Call<PlantResponse>
 
+    // -------------------Notice-------------------------- //
+    @GET("/notices")
+    fun loadNotice(): Call<NoticeAPIResponse>
 
-    @POST("/plants/{userId}/initialize")
-    fun initPlant(
-        @Path ("userId") userIdx : String
-    ): Call<PlantResponse>
 
+
+    // ---------------- Archive Calendar ------------------ //
+    @GET("/archives/calendar/{userIdx}/{date}")
+    fun getCalendar(
+        @Path("userIdx") userIdx: Int,
+        @Path("date") date : String,
+        @Query("type") type : String
+    ) : Call<BaseResponse<ArrayList<ArchiveCalendar>>>
+
+    @POST("/diaries")
+    fun postDiary(
+        @Body postDiaryRequest : PostDiaryRequest
+    ) : Call<BaseResponse<PostDiaryResponse>>
+
+    // ---------------- Archive List ----------------- //
+    @GET("/archives/diaryList/{userIdx}/{pageNum}")
+    fun getArchiveList(
+        @Path("userIdx") userIdx : Int,
+        @Path("pageNum") pageNum : Int,
+        @QueryMap search : Map<String, String>?
+//        @QueryMap startDate : Map<String, String>?,
+//        @QueryMap endDate : Map<String, String>?
+    ) : Call<ArchiveList>
     // ------------------- SettingUser -------------------------- //
     @PATCH("/users/{userIdx}/nickname")
     fun setName(
@@ -122,27 +148,27 @@ interface RetrofitInterface {
     ): Call<BaseResponse<String>>
 
     // ------------------- History -------------------------- //
-    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-    fun historyListSender(
-        @Path("userIdx") userIdx : Int,
-        @Path("pageNum") pageNum : Int,
-        @Query("filtering") filtering : String,
-        @Query("search") search : String?
-    ) : Call<BaseResponse<SenderHistory>>
-
-    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-    fun historyListDiary(
-        @Path("userIdx") userIdx : Int,
-        @Path("pageNum") pageNum : Int,
-        @Query("filtering") filtering : String,
-        @Query("search") search : String?
-    ) : Call<BaseResponse<DiaryHistory>>
-
-    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-    fun historyListLetter(
-        @Path("userIdx") userIdx : Int,
-        @Path("pageNum") pageNum : Int,
-        @Query("filtering") filtering : String,
-        @Query("search") search : String?
-    ) : Call<BaseResponse<LetterHistory>>
+//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+//    fun historyListSender(
+//        @Path("userIdx") userIdx : Int,
+//        @Path("pageNum") pageNum : Int,
+//        @Query("filtering") filtering : String,
+//        @Query("search") search : String?
+//    ) : Call<BaseResponse<SenderHistory>>
+//
+//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+//    fun historyListDiary(
+//        @Path("userIdx") userIdx : Int,
+//        @Path("pageNum") pageNum : Int,
+//        @Query("filtering") filtering : String,
+//        @Query("search") search : String?
+//    ) : Call<BaseResponse<DiaryHistory>>
+//
+//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+//    fun historyListLetter(
+//        @Path("userIdx") userIdx : Int,
+//        @Path("pageNum") pageNum : Int,
+//        @Query("filtering") filtering : String,
+//        @Query("search") search : String?
+//    ) : Call<BaseResponse<LetterHistory>>
 }
