@@ -19,8 +19,8 @@ import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
-import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
@@ -132,9 +132,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
         gotoFirebaseSignUp()
 
-//        val intent = Intent(this, TutorialActivity::class.java)
-//        finish()
-//        startActivity(intent)
     }
 
     override fun onLoginFailure(code: Int, message: String) {

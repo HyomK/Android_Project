@@ -6,7 +6,7 @@ import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.data.remote.*
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
-
+import com.likefirst.btos.data.remote.notify.response.*
 import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar

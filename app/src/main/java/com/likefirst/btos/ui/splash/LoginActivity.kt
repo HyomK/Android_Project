@@ -26,7 +26,6 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.users.service.AuthService
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
@@ -41,6 +40,7 @@ import com.likefirst.btos.utils.saveJwt
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
+import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
 
 
