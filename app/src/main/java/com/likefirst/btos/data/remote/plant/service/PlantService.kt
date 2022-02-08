@@ -102,8 +102,5 @@ class PlantService {
         })
     }
 
-
-
-
 }
 

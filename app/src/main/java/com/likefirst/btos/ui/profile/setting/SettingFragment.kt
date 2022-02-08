@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.UserLeave
 import com.likefirst.btos.data.entities.UserPush
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.users.service.SettingUserService
@@ -24,10 +25,13 @@ import kotlin.system.exitProcess
 class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)
     , MainActivity.onBackPressedListener, SetSettingUserView {
 
+    val settingService = SettingUserService()
+    var isDeleted : Boolean = false
+    var isPush : Boolean = false
+
     override fun initAfterBinding() {
         val userDatabase = UserDatabase.getInstance(requireContext())!!
-        var btn = userDatabase.userDao().getPushAlarm()!!
-        val settingService = SettingUserService()
+        var btnPush = userDatabase.userDao().getPushAlarm()!!
 
         binding.settingToolbar.toolbarBackIc.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
@@ -95,12 +99,13 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
         }
 
         //initPushButton
-        initToggle(btn, binding.settingToggleIv,  binding.settingToggleSelector)
-
+        initToggle(btnPush, binding.settingToggleIv,  binding.settingToggleSelector)
+        isPush = btnPush
         binding.settingPush.setOnClickListener {
-            btn=pushToggleSwitcher(btn)
+            btnPush=pushToggleSwitcher(btnPush)
+            isPush = btnPush
             settingService.setSettingUserView(this)
-            settingService.setPushAlarm(userDatabase.userDao().getUserIdx(), UserPush(btn))
+            settingService.setPushAlarm(userDatabase.userDao().getUserIdx(), UserPush(btnPush))
         }
         binding.settingSecession.setOnClickListener {
             checkSecession()
@@ -129,16 +134,20 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                 dialog.setButtonClickListener(object: EditDialogFragment.OnButtonClickListener {
                     override fun onButton1Clicked(){}
 
-                    override fun onButton2Clicked(){}
-
+                    override fun onButton2Clicked(){
+                    }
                     override fun onEditHandler(name:String) {
                         val dialog = CustomDialogFragment()
                         val btn= arrayOf("확인")
-                        if(name == "username"){  // username dummy
+                        val userDatabase = UserDatabase.getInstance(requireContext())!!
+                        if(name == userDatabase.userDao().getNickName()){ // username dummy
                             dialog.arguments= bundleOf(
                                 "bodyContext" to "탈퇴 되었습니다",
                                 "btnData" to btn
                             )
+                            isDeleted = true
+                            settingService.setSettingUserView(this@SettingFragment)
+                            settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{
                             dialog.arguments= bundleOf(
                                 "bodyContext" to "닉네임이 일치하지 않습니다",
@@ -147,6 +156,8 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                         }
                         dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                             override fun onButton1Clicked(){
+                                val mactivity = activity as MainActivity
+                                mactivity.finish()
                             }
                             override fun onButton2Clicked() {
                             }
@@ -192,24 +203,32 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     }
 
     override fun onSetSettingUserViewSuccess(result: String) {
-        val userDatabase = UserDatabase.getInstance(requireContext())!!
-        var btn = userDatabase.userDao().getPushAlarm()!!
-        binding.setLoadingPb.visibility = View.GONE
-        userDatabase.userDao().updatePushAlarm(btn)
 
-        val dialog = CustomDialogFragment()
-        val data = arrayOf("확인")
-        dialog.arguments= bundleOf(
-            "bodyContext" to "성공적으로 변경되었습니다.",
-            "btnData" to data
-        )
-        dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
-            override fun onButton1Clicked() {
-            }
-            override fun onButton2Clicked() {
-            }
-        })
-        dialog.show(this.parentFragmentManager, "settingSuccess")
+        if(isDeleted){
+            val gso = getGSO()
+            val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+            googleSignInClient.signOut()
+            removeJwt()
+        }else{
+            val userDatabase = UserDatabase.getInstance(requireContext())!!
+            binding.setLoadingPb.visibility = View.GONE
+            userDatabase.userDao().updatePushAlarm(isPush)
+
+            val dialog = CustomDialogFragment()
+            val data = arrayOf("확인")
+            dialog.arguments= bundleOf(
+                "bodyContext" to "성공적으로 변경되었습니다.",
+                "btnData" to data
+            )
+            dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+                override fun onButton1Clicked() {
+                }
+                override fun onButton2Clicked() {
+                }
+            })
+            dialog.show(this.parentFragmentManager, "settingSuccess")
+
+        }
     }
 
     override fun onSetSettingUserViewFailure(code: Int, message: String) {
