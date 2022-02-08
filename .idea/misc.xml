@@ -9,11 +9,14 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/bottom_nav_menu_archive_selector.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/bottom_nav_menu_history_selector.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/btn_rectangle.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/date_picker_selected_layer_list.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/date_picker_selector.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/history_radiobutton_selector.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_calendar.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_calendar_selector.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_check.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/radio_selected_layer_list.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/radio_selected_layer_list_short.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/selector_indicator.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/tutorial_image_box.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/tutorial_indicator.xml" value="0.25729166666666664" />
@@ -32,7 +35,9 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_font.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_history.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_home.xml" value="0.23743589743589744" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_mail_view.xml" value="0.20277777777777778" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/fragment_nickname.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_calendar__rv_icon.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_calendar_rv_date.xml" value="0.23333333333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_calendar_rv_empty.xml" value="0.23743589743589744" />

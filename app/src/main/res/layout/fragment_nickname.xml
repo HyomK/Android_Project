@@ -76,9 +76,8 @@
             android:textSize="11dp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/nickname_edit"
-            app:layout_constraintStart_toStartOf="@id/nickname_edit"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="@id/nickname_edit" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

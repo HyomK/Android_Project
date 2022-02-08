@@ -4,14 +4,47 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/item_archive_list_month_layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/archive_calendar_month"
-        android:text="DECEMBER"
-        android:fontFamily="@font/notosanskr_bold"
-        android:textColor="@color/black"
-        android:layout_marginVertical="20dp"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/item_archive_list_year_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/archive_list_year"
+            android:text="2022"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/item_archive_list_month_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/archive_calendar_month"
+            android:text="DECEMBER"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/item_archive_list_loading_pb"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

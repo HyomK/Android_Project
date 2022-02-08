@@ -32,6 +32,7 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
+import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.time.LocalTime
 import java.util.*
@@ -60,7 +61,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         updateUserService.setUpdateIsSadView(this)
 
         initFlowerPot()
-
+      
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
 
@@ -81,6 +82,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             Log.d("homeSTACK","homeitem  ${item.toString()} }")
         }
 
+        binding.homeWriteBtn.bringToFront()
         binding.homeWriteBtn.setOnClickListener {
             val date = dateToString(Date())
             val intent = Intent(requireContext(), DiaryActivity::class.java)
@@ -103,6 +105,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }else{
             mActivity.notifyDrawerHandler("unlock")
             binding.homeNotificationBtn.isClickable =true
+
         }
     }
 
@@ -274,11 +277,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     override fun onUpdateSuccess(isSad : UserIsSad) {
-
-        val userDB = UserDatabase.getInstance(requireContext()!!)?.userDao()
-        userDB!!.updateIsSad(isSad.isSad!!)
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        userDB!!.updateIsSad(isSad.sad!!)
         // 시무룩이 상태로 전환 시에만 lastPostingDate 초기화
-        if (isSad.isSad!!){
+        if (isSad.sad!!){
             return
         } else {
             saveLastPostingDate(Date())

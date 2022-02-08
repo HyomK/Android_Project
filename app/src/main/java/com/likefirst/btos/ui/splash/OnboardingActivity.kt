@@ -201,6 +201,13 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.d("Plant/API",code.toString()+"fail to load...")
     }
 
+
+
+    fun gotoFirebaseSignUp(){
+        val intent = Intent(this, FirebaseActivity::class.java)
+        intent.putExtra("movePos","tutorial")
+        startActivity(intent)
+    }
     override fun onBackPressed() {
         super.onBackPressed()
         val gso = getGSO()
@@ -210,12 +217,4 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         finish()
         startActivity(intent)
     }
-
-
-    fun gotoFirebaseSignUp(){
-        val intent = Intent(this, FirebaseActivity::class.java)
-        intent.putExtra("movePos","tutorial")
-        startActivity(intent)
-    }
 }
-

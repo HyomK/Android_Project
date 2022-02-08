@@ -34,15 +34,15 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 
-
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import com.likefirst.btos.data.remote.users.response.Login
-import com.likefirst.btos.ui.main.MainActivity
+
 
 
 class LoginActivity
@@ -58,7 +58,7 @@ class LoginActivity
 
     val authService = AuthService()
     val plantService= PlantService()
-    ////////////////////////////////////////////////////////
+
     val fireStore = Firebase.firestore
     lateinit var mAuth: FirebaseAuth
     private var mAuthListener: AuthStateListener? = null
@@ -111,14 +111,12 @@ class LoginActivity
     override fun onConnectionFailed(p0: ConnectionResult) {
 
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == G_SIGN_IN){
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 
             val account = task.getResult(ApiException::class.java)
-            // firebaseAuthWithGoogle(account)
             email = account?.email.toString()
             Log.e("account", email)
 
@@ -193,9 +191,13 @@ class LoginActivity
     }
 
     override fun onGetProfileViewLoading() {
+        binding.loginLoadingPb.visibility = View.VISIBLE
+
     }
 
     override fun onGetProfileViewSuccess(user: User) {
+        binding.loginLoadingPb.visibility = View.GONE
+
         //UserDB에 프로필 정보 저장
 
         Log.e("PROFILE/API",user.toString())
@@ -205,17 +207,16 @@ class LoginActivity
         } else {
             userDB.update(user)
         }
-        Log.e("PROFILE/API",userDB?.getUser().toString())
-        updatePlantDB()
 
+        Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
+
+        updatePlantDB()
 
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
 
     }
-
-
 
 
 
@@ -252,6 +253,5 @@ class LoginActivity
             4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
         }
     }
-
 
 }
