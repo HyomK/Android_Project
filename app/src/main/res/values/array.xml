@@ -25,4 +25,31 @@
         <item>NOVEMBER</item>
         <item>DECEMBER</item>
     </string-array>
+
+    <string-array name="plantKor">
+        <item>알로카시아</item>
+        <item>산세베리아</item>
+        <item>금낭화</item>
+        <item>선인장</item>
+        <item>안스리움</item>
+        <item>비모란</item>
+    </string-array>
+
+    <string-array name="plantEng">
+        <item>alocasia</item>
+        <item>sansevieria</item>
+        <item>dicentra</item>
+        <item>cactus</item>
+        <item>anthurium</item>
+        <item>rubyball</item>
+    </string-array>
+
+    <string-array name="font">
+        <item>기본</item>
+        <item>어린이 하늘맑은체</item>
+        <item>코트라 손글씨</item>
+        <item>고양체</item>
+        <item>꽃내음</item>
+        <item>어비 퀸제이체</item>
+    </string-array>
 </resources>

@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">BTOS</string>
+    <string name="google_Admob_ID_test">"ca-app-pub-3940256099942544~3347511713"</string>
+    <string name="google_Admob_ID_prod">"ca-app-pub-3439488559531418~5946591557"</string>
+
+
+   <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
+
+
     <string-array name="onboarding_agelist">
         <item>2021</item>
         <item>2020</item>
@@ -141,9 +148,11 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
 
     <string name="premium">저편너머 프리미엄 회원이 되시면 일기와 편지를 여러가지 정렬방식으로 필터링해 볼 수 있어요.</string>
 
-    <string name="history_radio1">발신인</string>
-    <string name="history_radio2">일기만</string>
-    <string name="history_radio3">편지만</string>
+    <string-array name="history_radio">
+        <item>발신인</item>
+        <item>일기만</item>
+        <item>편지만</item>
+    </string-array>
 
     <string name="none_selected">선택안함</string>
 

@@ -8,30 +8,21 @@
     android:gravity="center_vertical"
     android:layout_marginBottom="30dp"
     android:background="@drawable/profile_bg">
-    <androidx.cardview.widget.CardView
-        android:id="@+id/flowerpot_cd"
+    <ImageView
+        android:id="@+id/flowerpot_iv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="15dp"
-        app:cardCornerRadius="@dimen/flowerpot_view_radius"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        >
-        
-        <ImageView
-            android:id="@+id/flowerpot_iv"
-            android:layout_width="@dimen/flowerpot_circle_size"
-            android:layout_height="@dimen/flowerpot_circle_size"
-            android:src="@drawable/alocasia_3"
-            android:scaleType="centerCrop"
-            android:paddingBottom="20dp"
-            />
-    </androidx.cardview.widget.CardView>
+        android:layout_marginStart="10dp"
+        android:layout_width="@dimen/flowerpot_circle_size"
+        android:layout_height="@dimen/flowerpot_circle_size"
+        android:src="@drawable/alocasia_3_circle"
+        android:scaleType="centerCrop"
+        />
 
     <LinearLayout
         android:id="@+id/flowerpot_info_layout"
-        app:layout_constraintStart_toEndOf="@+id/flowerpot_cd"
+        app:layout_constraintStart_toEndOf="@+id/flowerpot_iv"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="80dp"

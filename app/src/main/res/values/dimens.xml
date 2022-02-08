@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Toolbar layout. -->
-    <dimen name="toolbar_layout_height">70dp </dimen>
+    <dimen name="toolbar_layout_height">60dp </dimen>
     <dimen name="toolbar_layout_title_size">18dp</dimen>
 
     <!-- Toolbar layout. -->
@@ -22,7 +22,7 @@
     <dimen name="mail_view_marginHorizontal">45dp</dimen>
 
     <!-- Profile View -->
-    <dimen name="profile_view_marginHorizontal">20dp</dimen>
+    <dimen name="profile_view_marginHorizontal">30dp</dimen>
     <dimen name="profile_view_marginVertical">50dp</dimen>
     <dimen name="profile_layout_height">290dp </dimen>
     <dimen name="profile_layout_width">320dp </dimen>
@@ -57,7 +57,7 @@
 
     <!-- flowerpot -->
     <dimen name="plant_margin_Horizontal">20dp</dimen>
-    <dimen name="plant_margin_Top">15dp</dimen>
+    <dimen name="plant_margin_Top">10dp</dimen>
 
 
     <!--- plant info -->

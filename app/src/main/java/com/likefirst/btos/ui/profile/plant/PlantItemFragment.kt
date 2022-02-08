@@ -8,6 +8,8 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View.GONE
+import com.likefirst.btos.R
 
 
 class PlantItemFragment:BaseFragment<FragmentPlantinfoBinding>(FragmentPlantinfoBinding::inflate) {
@@ -15,12 +17,24 @@ class PlantItemFragment:BaseFragment<FragmentPlantinfoBinding>(FragmentPlantinfo
 
     override fun initAfterBinding() {
         val mActivity= activity as MainActivity
+        val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
         val bundle = this.arguments
         if (bundle != null) {
-           var plant = bundle.getParcelable<Plant>("plantItem")
-            binding.plantinfoNameTv.text=plant?.plantName
-            binding.plantinfoDetailTv.text=plant?.plantInfo
-            binding.plantinfoSelectBtn.text=plant?.plantPrice.toString()
+           var plant = bundle.getParcelable<Plant>("plantItem")!!
+            binding.plantinfoNameTv.text=plant.plantName
+            binding.plantinfoDetailTv.text=plant.plantInfo
+            binding.plantinfoIv.setImageResource( requireContext()!!.resources.getIdentifier(
+                plantName[plant.plantIdx-1]
+                        +"_"+plant.maxLevel.toString()
+                        +"_full","drawable",
+                requireActivity().packageName))
+            if(!plant.isOwn){
+                binding.plantinfoSelectBtn.text=plant.plantPrice.toString()
+            }else{
+                binding.plantinfoSelectBtn.visibility=GONE;
+            }
+
+
         }
         binding.plantinfoRtLayout.isClickable=true
 

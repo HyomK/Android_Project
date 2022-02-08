@@ -2,9 +2,15 @@ package com.likefirst.btos.ui.profile.setting
 
 import android.content.Intent
 import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.UserPush
+import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.users.service.SettingUserService
+import com.likefirst.btos.data.remote.users.view.SetSettingUserView
 import com.likefirst.btos.databinding.FragmentSettingBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
@@ -15,10 +21,13 @@ import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.removeJwt
 import kotlin.system.exitProcess
 
-class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate), MainActivity.onBackPressedListener  {
-    private var status =true
+class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)
+    , MainActivity.onBackPressedListener, SetSettingUserView {
 
     override fun initAfterBinding() {
+        val userDatabase = UserDatabase.getInstance(requireContext())!!
+        var btn = userDatabase.userDao().getPushAlarm()!!
+        val settingService = SettingUserService()
 
         binding.settingToolbar.toolbarBackIc.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
@@ -84,10 +93,14 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                 .addToBackStack(null)
                 .commit()
         }
-        binding.settingPush.setOnClickListener {
-            // push 설정 roomdb 에서 불러오기
-            status=pushToggleSwitcher(status)
 
+        //initPushButton
+        initToggle(btn, binding.settingToggleIv,  binding.settingToggleSelector)
+
+        binding.settingPush.setOnClickListener {
+            btn=pushToggleSwitcher(btn)
+            settingService.setSettingUserView(this)
+            settingService.setPushAlarm(userDatabase.userDao().getUserIdx(), UserPush(btn))
         }
         binding.settingSecession.setOnClickListener {
             checkSecession()
@@ -148,7 +161,6 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     }
 
 
-
     fun pushToggleSwitcher(status: Boolean):Boolean {
         if (status) {
             binding.settingToggleIv.setImageResource(R.drawable.ic_toggle_false)
@@ -158,11 +170,51 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             binding.settingToggleSelector.visibility = View.VISIBLE
         }
         return !status
+    }
 
+    fun initToggle(status: Boolean, btn : ImageView, bg: ImageView) {
+        if (status) {
+            bg.visibility= View.VISIBLE
+            // bg.setImageResource(R.drawable.select_toggle)
+            btn.setImageResource(R.drawable.ic_toggle_true)
+        } else {
+            btn.setImageResource(R.drawable.ic_toggle_false)
+            bg.visibility = View.INVISIBLE
+        }
     }
 
     override fun onBackPressed() {
         requireActivity().supportFragmentManager.popBackStack()
     }
 
+    override fun onSetSettingUserViewLoading() {
+        binding.setLoadingPb.visibility = View.VISIBLE
     }
+
+    override fun onSetSettingUserViewSuccess(result: String) {
+        val userDatabase = UserDatabase.getInstance(requireContext())!!
+        var btn = userDatabase.userDao().getPushAlarm()!!
+        binding.setLoadingPb.visibility = View.GONE
+        userDatabase.userDao().updatePushAlarm(btn)
+
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to "성공적으로 변경되었습니다.",
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
+            override fun onButton1Clicked() {
+            }
+            override fun onButton2Clicked() {
+            }
+        })
+        dialog.show(this.parentFragmentManager, "settingSuccess")
+    }
+
+    override fun onSetSettingUserViewFailure(code: Int, message: String) {
+        binding.setLoadingPb.visibility = View.GONE
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+}
