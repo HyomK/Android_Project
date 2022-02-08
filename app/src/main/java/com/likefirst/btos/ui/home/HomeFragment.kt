@@ -43,13 +43,15 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedNotifyModel= ViewModelProvider(requireActivity()).get(SharedNotifyModel::class.java)
-        sharedNotifyModel.getLiveData().observe(viewLifecycleOwner,Observer<Bundle>{
-            if(it.getBoolean("notification")) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
-            else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
-
-            if(it.getBoolean("mail")) binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox_new)
+        sharedNotifyModel.getMsgLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
+            if(it) binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox_new)
             else binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
         })
+        sharedNotifyModel.getNoticeLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
+            if(it) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
+            else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
+        })
+
     }
     override fun initAfterBinding() {
 
@@ -65,7 +67,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
 
         binding.homeMailBtn.setOnClickListener {
-
+            sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
 

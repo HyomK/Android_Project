@@ -43,7 +43,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){
-            Log.e("Firebase","서버에서 바로 보냄")
             sendNotification(remoteMessage.notification?.title,
                 remoteMessage.notification?.body!!)
             if (true) {
@@ -55,7 +54,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 다른 기기에서 서버로 보냈을 때
         else if(remoteMessage.data.isNotEmpty()){
-            Log.e("Firebase","다른 기기에서 서버로 보냄")
             val title = remoteMessage.data["title"]!!
             val message = remoteMessage.data["body"]!!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -118,8 +116,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT) // 일회성
 
-        Log.e("Firebase"," donw ver 메세지 pop up")
-
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
@@ -180,6 +176,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         saveData(Message)
         // 알림 생성
+
         notificationManager.notify(uniId, notificationBuilder.build())
 
     }
@@ -250,6 +247,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         editor.apply()
+
     }
 
 

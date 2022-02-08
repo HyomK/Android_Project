@@ -91,9 +91,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 if(notifications.isEmpty()){
                     initNotice()
                 }else{
-                    val loadData = loadFromFirebase(notifications.toArrayList())
-                    initNotifyAdapter(loadData)
+                    loadFromFirebase()
+                    initNotifyAdapter(  notifications.toArrayList())
                     //메세지만 업데이트 한다
+                    sharedNotifyModel.setNoticeLiveData(false)
                 }
             }
             override fun onDrawerClosed(drawerView: View) {}
@@ -322,16 +323,32 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onNoticeAPISuccess(noticeData: ArrayList<NoticeDetailResponse>) {
-        noticeList=noticeData
+
+        val notificationDatabase= NotificationDatabase.getInstance(this)!!
         var notificationList =ArrayList<NotificationDTO>()
-        noticeData.map{
-                notice ->notificationList.add(NotificationDTO(notice.createdAt,
-            "BTOS_SERVER","notice",notice.noticeIdx,notice.title,notice.content,"BTOS_SERVER")
-        )}
-        val result = loadFromFirebase(notificationList)
+        var FLAG =false
+        noticeData.forEach{ notice ->
+            run {
+                if (notificationDatabase.NotificationDao()
+                        .getNotification(notice.createdAt, notice.noticeIdx, "notice") == null
+                ) {
+                    notificationDatabase.NotificationDao().insert(NotificationDTO(notice.createdAt,
+                        "BTOS_SERVER",
+                        "notice",
+                        notice.noticeIdx,
+                        notice.title,
+                        notice.content,
+                        "BTOS_SERVER"))
+                    FLAG = true
+                }
+            }
+        }
+        val result = loadFromFirebase()
         Log.e("NOTICE/API -> Firebase", "Result: ${result}")
-        initNotifyAdapter( result )
-        //TODO 공지 DB 비교해서 아이콘 표시 구현
+        if(FLAG) sharedNotifyModel.setNoticeLiveData(true)
+        val notices = notificationDatabase.NotificationDao().getNotifications().toArrayList()
+        initNotifyAdapter( notices )
+
     }
 
     override fun onNoticeAPIFailure(code: Int, message: String) {
@@ -346,43 +363,44 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         return (0..100000).random(rand)
     }
 
-    fun loadFromFirebase(noticeList : ArrayList<NotificationDTO>):ArrayList<NotificationDTO> {
+    fun loadFromFirebase():ArrayList<NotificationDTO> {
         val gson = GsonBuilder().create()
-        var notifications  = noticeList
+        val messageList =ArrayList<NotificationDTO>()
         val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
         val notification = spf.getString("messageList", "undefine")
         val groupListType: Type = object : TypeToken<ArrayList<MessageDTO?>?>() {}.type
         if (notification =="undefine") {
             Toast.makeText(this, "메세지 로드에 실패했습니다", Toast.LENGTH_SHORT)
-            return notifications
+            return messageList
         }
         val list: ArrayList<MessageDTO> = gson.fromJson(notification, groupListType)
         Log.e("Firebase/list", list.toString())
+
         if(list.size ==0){
-            val bundle = bundleOf("mail" to false)
-            sharedNotifyModel.setLiveData(bundle)
-            return notifications
+            sharedNotifyModel.setMsgLiveData(false)
+            return messageList
         }
-
-
-        list.map{
-            i->notifications.add(NotificationDTO(i.timestamp!!,i.fromToken, i.type!! , rand(),i.title,i.body,i.fromUser))
-        }
-        //TODO rand()-> 각 공지, 편지, 다이어리의 idx 로 수정
         val notificationDatabase= NotificationDatabase.getInstance(this)!!
-        if(notificationDatabase.NotificationDao().getNotifications().isEmpty()){
-            notifications.forEach {
-                notificationDatabase.NotificationDao().insert(it)
-            }
-        }else{
-            notifications.forEach {
-                if(notificationDatabase.NotificationDao().getNotification(it.timestamp, it.detailIdx, it.type) ==null)
+        list.forEach {
+            i->
+            run {
+                val it = NotificationDTO(i.timestamp!!,
+                    i.fromToken,
+                    i.type!!,
+                    rand(),
+                    i.title,
+                    i.body,
+                    i.fromUser)
+                if (notificationDatabase.NotificationDao()
+                        .getNotification(it.timestamp, it.detailIdx, it.type) == null
+                )
                     notificationDatabase.NotificationDao().insert(it)
             }
         }
 
-        val bundle = bundleOf("notification" to true, "mail" to true)
-        sharedNotifyModel.setLiveData(bundle)
+        //TODO rand()-> 각 공지, 편지, 다이어리의 idx 로 수정
+        sharedNotifyModel.setMsgLiveData(true)
+        sharedNotifyModel.setNoticeLiveData(true)
 
         Log.e("Firebaese/DB",notificationDatabase.NotificationDao().getNotifications().toString() )
         val editor = spf.edit()
