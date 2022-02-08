@@ -85,7 +85,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                         errorDialog().show(requireActivity().supportFragmentManager,"")
 
                     adapter.selectItem(position)
-                }, 800)
+                }, 600)
 
                 sharedSelectModel.setResult(false)
             }
@@ -122,7 +122,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                         buyPlant= Pair(newPlant,img) //바뀐 내용 return
                         handler.postDelayed({
                             if(checking) adapter.buyItem(position)
-                        }, 900)
+                        }, 700)
                         Log.e("PlantAPI"," / buyPlant result ${buyPlant}")
                         return buyPlant!! //
                     }

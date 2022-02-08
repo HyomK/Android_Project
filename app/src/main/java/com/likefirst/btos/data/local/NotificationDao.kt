@@ -19,6 +19,12 @@ interface NotificationDao {
     @Query("SELECT * FROM NotificationTable")
     fun getNotifications(): List<NotificationDTO>
 
+    @Query("SELECT COUNT(*) FROM NotificationTable")
+    fun itemCount(): Int
+
+    @Query("SELECT * FROM NotificationTable WHERE timestamp=:time and detailIdx =:detailIdx and type = :type ")
+    fun getNotification(time:String, detailIdx : Int, type: String):NotificationDTO
+
     @Query("SELECT * FROM NotificationTable WHERE type= :type")
     fun getNotificationsByType(type: String): List<NotificationDTO>
 }

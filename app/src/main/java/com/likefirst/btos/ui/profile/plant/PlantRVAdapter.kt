@@ -79,10 +79,11 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
            holder.plantLevel.text=plant.currentLevel.toString()+"단계"
            holder.maxIv.setBackgroundResource(R.drawable.ic_max_bg)
            holder.maxIv.visibility= if(plant.currentLevel == plant.maxLevel) View.VISIBLE else View.GONE
-           holder.status.visibility==View.VISIBLE
+           holder.status.visibility=View.VISIBLE
 
            if(plant.plantStatus=="selected"){
                holder.selectBtn.visibility=View.GONE
+               holder.status.visibility=View.VISIBLE
            }else{ //보유 아이템
                holder.status.visibility==View.GONE
                holder.selectBtn.visibility=View.VISIBLE

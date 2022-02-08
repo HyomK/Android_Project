@@ -3,11 +3,15 @@ package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.gms.ads.*
@@ -18,6 +22,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -34,7 +39,18 @@ import java.util.*
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
     var isMailboxOpen =false
+    lateinit var  sharedNotifyModel : SharedNotifyModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedNotifyModel= ViewModelProvider(requireActivity()).get(SharedNotifyModel::class.java)
+        sharedNotifyModel.getLiveData().observe(viewLifecycleOwner,Observer<Bundle>{
+            if(it.getBoolean("notification")) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
+            else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
 
+            if(it.getBoolean("mail")) binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox_new)
+            else binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
+        })
+    }
     override fun initAfterBinding() {
 
         val mActivity = activity as MainActivity

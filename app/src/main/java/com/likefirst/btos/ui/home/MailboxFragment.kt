@@ -220,4 +220,10 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         mActivity.supportFragmentManager.popBackStack()
     }
 
+    override fun onResume() {
+        super.onResume()
+        val mActivity = activity as MainActivity
+        mActivity.isMailOpen=true
+    }
+
 }
