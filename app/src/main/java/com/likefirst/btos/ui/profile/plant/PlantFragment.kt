@@ -79,18 +79,19 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
                 val handler = android.os.Handler()
                 handler.postDelayed({
+                    if(sharedSelectModel.isSuccess().value==true)
+                        Toast.makeText(requireActivity(),"화분이 변경되었습니다",Toast.LENGTH_SHORT).show()
+                    else
+                        errorDialog().show(requireActivity().supportFragmentManager,"")
+
                     adapter.selectItem(position)
                 }, 800)
-
-                if(sharedSelectModel.isSuccess().value==true)
-                    Toast.makeText(requireActivity(),"화분이 변경되었습니다",Toast.LENGTH_SHORT).show()
-                else
-                    errorDialog().show(requireActivity().supportFragmentManager,"")
 
                 sharedSelectModel.setResult(false)
             }
 
-            override fun onClickBuyItem(plant : Pair<Plant,Int>):Boolean {
+
+            override fun onClickBuyItem(plant : Pair<Plant,Int> , position: Int) {
                 var buyPlant : Pair<Plant,Int> = plant
                 val buyDialog = PlantDialog()
                 var checking = true
@@ -107,11 +108,8 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                         val handler = android.os.Handler()
                         val plantService = PlantService()
                         plantService.setPlantBuyView(plantBuyView)
-                        //구매할 식물 전달
                         val request :PlantRequest = PlantRequest(USERIDX,plant.first.plantIdx)
                         plantService.buyPlant(request)
-                        handler.postDelayed({}, 1000)
-
                         val img= requireContext()!!.resources.getIdentifier(
                             plantName[ origin.plantIdx-1]
                                     +"_0"
@@ -122,16 +120,17 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                         newPlant.isOwn=true  //소유로 수정
                         newPlant.currentLevel=0
                         buyPlant= Pair(newPlant,img) //바뀐 내용 return
+                        handler.postDelayed({
+                            if(checking) adapter.buyItem(position)
+                        }, 900)
                         Log.e("PlantAPI"," / buyPlant result ${buyPlant}")
-
                         return buyPlant!! //
                     }
                 })
                 buyDialog.show(requireActivity().supportFragmentManager, "PlantDialog")
-                return checking
             }
-
         })
+
 
         binding.flowerpotToolbar.toolbarBackIc.setOnClickListener{
             mActivity.supportFragmentManager.popBackStack()
@@ -177,6 +176,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     override fun onPlantBuyError(Dialog: CustomDialogFragment) {
         Dialog.show(requireActivity().supportFragmentManager,"plantError")
+        sharedBuyModel.setResult(false)
     }
 
     override fun onPlantBuySuccess(plantIdx: Int, response : PlantResponse) {

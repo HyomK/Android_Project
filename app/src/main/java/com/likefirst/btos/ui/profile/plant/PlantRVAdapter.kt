@@ -30,8 +30,8 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
 
     interface PlantItemClickListener{
         fun onClickInfoItem(plant : Plant)
-        fun onClickSelectItem(plant : Plant,position:Int)
-        fun onClickBuyItem(plant : Pair<Plant,Int>):Boolean
+        fun onClickSelectItem(plant : Plant, position:Int)
+        fun onClickBuyItem(plant : Pair<Plant,Int>, position : Int)
     }
 
     fun setMyItemCLickLister(itemClickLister: PlantItemClickListener){
@@ -72,7 +72,7 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
            holder.selectBtn.text=won
            holder.maxIv.setBackgroundResource(R.drawable.ic_max_gray_bg)
            holder.selectBtn.setOnClickListener{
-             buyItem(position)
+               mItemClickLister.onClickBuyItem(dataSet[position] ,position)
            }
        }else {
            holder.layout.setBackgroundResource(R.drawable.profile_bg)
@@ -99,30 +99,27 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
     override fun getItemCount(): Int {
        return dataSet.size
     }
-    fun buyItem(position :Int){
-        val select =dataSet[position]
-        val result = mItemClickLister.onClickBuyItem(dataSet[position])
-        val handler = android.os.Handler()
-        handler.postDelayed({
-            Log.e("PLANT BUY ITEM : ", "rv clean up start")
-            if(sharedBuyModel.isSuccess().value==true ) {
-                val buyItem = sharedBuyModel.getLiveData().value!!
-                Log.e("PLANT BUY ITEM : ", buyItem.toString())
-                if (select.first.plantIdx != buyItem.getInt("plantIdx") || select.first.plantName != buyItem.getString("plantName")) {
-                    Log.e("PLANT BUY ITEM 선택된 화분이 다름 : ",
-                        select.first.toString() + " / " + buyItem.toString())
-                } else {
-                    select.first.plantStatus = buyItem.getString("status")!!
-                    select.first.currentLevel = 0
-                    select.first.isOwn = true
-                    val newItem = Pair(select.first, buyItem.getInt("resId"))
-                    dataSet[position] = newItem
-                    sharedBuyModel.setResult(false)
-                    reset(dataSet)  // 재정렬한다
-                }
-            }
-        }, 2000)
 
+
+    fun buyItem(position :Int){
+        Log.e("PLANT BUY ITEM : ", "rv buyitem start")
+        val select =dataSet[position]
+        if(sharedBuyModel.isSuccess().value==true ) {
+            val buyItem = sharedBuyModel.getLiveData().value!!
+            Log.e("PLANT BUY ITEM : ", buyItem.toString())
+            if (select.first.plantIdx != buyItem.getInt("plantIdx") || select.first.plantName != buyItem.getString("plantName")) {
+                Log.e("PLANT BUY ITEM 선택된 화분이 다름 : ",
+                    select.first.toString() + " / " + buyItem.toString())
+            } else {
+                select.first.plantStatus = buyItem.getString("status")!!
+                select.first.currentLevel = 0
+                select.first.isOwn = true
+                val newItem = Pair(select.first, buyItem.getInt("resId"))
+                dataSet[position] = newItem
+                sharedBuyModel.setResult(false)
+                reset(dataSet)  // 재정렬한다
+            }
+        }
     }
 
 
@@ -139,8 +136,7 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
                 }
             }
         }
-
-       Log.e("Plant/ select ","end =>> ${dataSet}")
+        Log.e("Plant/ select ","end =>> ${dataSet}")
         reset(dataSet)
     }
 
