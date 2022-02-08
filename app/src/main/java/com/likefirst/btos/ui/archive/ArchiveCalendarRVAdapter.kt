@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.CalendarInfo
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvDateBinding
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvEmptyBinding
 import com.likefirst.btos.databinding.ItemArchiveCalendarRvIconBinding
@@ -18,7 +18,7 @@ import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val context : Context, val viewMode: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveCalendarRVAdapter(val calendarList : ArrayList<ArchiveCalendar>, val context : Context, val viewMode: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val EMPTY_CELL = 0
     private val DATE_CELL = 1
     private val LEAF_CELL = 2
@@ -34,6 +34,9 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val c
             if (position % 7 == 0){
                 val calendarRed = ContextCompat.getColor(context, R.color.notice_red)
                 binding.itemArchiveCalendarTv.setTextColor(calendarRed)
+            } else if (position % 7 == 6){
+                val calendarGray = ContextCompat.getColor(context, R.color.gray)
+                binding.itemArchiveCalendarTv.setTextColor(calendarGray)
             }
         }
     }
@@ -88,7 +91,10 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<CalendarInfo>, val c
     }
 
     interface CalendarDateSelectedListener{
+        // 빈 날짜칸 선택 리스너 -> DiaryActivity
         fun onDateSelectedListener(date : Date, dayInt: Int)
+        // 이미 일기가 작성된 칸 선택 리스너 -> DiaryViewerActivity
+        fun onDiarySelectedListener()
     }
 
     private lateinit var mCalendarDateSelectedListener: CalendarDateSelectedListener

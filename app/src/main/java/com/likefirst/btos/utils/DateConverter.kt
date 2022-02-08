@@ -13,3 +13,8 @@ fun dateToString(value: Date) : String{
     return fm.format(value)
 }
 
+fun dateToStringMonth(value: Date): String{
+    val fm = SimpleDateFormat("yyyy.MM", Locale.KOREA)
+    return fm.format(value)
+}
+

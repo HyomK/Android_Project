@@ -45,7 +45,7 @@ class SettingUserService {
         })
     }
 
-    fun setNotificationOther(userIdx : Int, recOthers : UserOther){
+        fun setNotificationOther(userIdx : Int, recOthers : UserOther){
         setSettingUserView.onSetSettingUserViewLoading()
         SettingUserService.setNotificationOther(userIdx, recOthers).enqueue(object: Callback<BaseResponse<String>> {
             override fun onResponse(call: Call<BaseResponse<String>>, response: Response<BaseResponse<String>>) {
@@ -114,4 +114,5 @@ class SettingUserService {
             else -> setSettingUserView.onSetSettingUserViewFailure(baseResponse.code, baseResponse.message)
         }
     }
+
 }

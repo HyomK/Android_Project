@@ -1,15 +1,22 @@
 package com.likefirst.btos.data.entities.firebase
 
+
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
+
 
 @Parcelize
+@Entity(tableName = "FCMTable")
 data class UserDTO(
-    var uId : String? = null,
-    var userId : String? = null,
-    var imageUri : String? = null,
-    var score : Int = 0,
-    var sharing : Int = 0,
-    var area : String? = null,
-    var token : String? = null
+    @PrimaryKey(autoGenerate = false)
+
+    @ColumnInfo(name = "email")
+    var email : String="",
+
+    @ColumnInfo(name = "fcmToken")
+    var fcmToken : String = ""
+
 ) : Parcelable

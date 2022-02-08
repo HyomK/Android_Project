@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import com.likefirst.btos.R
+import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.remote.notify.service.FCMService
 import com.likefirst.btos.databinding.ActivityMailWriteBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
@@ -33,7 +35,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.MailWriteMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailWriteMenuList.setAdapter(adapter)
-        binding.MailWriteHideView.visibility=View.VISIBLE
+        binding.MailWriteCheckBtn.visibility=View.GONE
 
         binding.MailWriteToolbar.toolbarBackIc.setOnClickListener {
             onBackPressed()
@@ -61,6 +63,9 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     binding.MailWriteWriteBtn.visibility=View.VISIBLE
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
+
+                    //TODO 임시 테스트 위치
+                    sendNotification()
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -113,6 +118,22 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                 }
             }
         })
+    }
+
+    fun sendNotification(){
+
+        val fcmDatabase = FCMDatabase.getInstance(this)!!
+        val userData = fcmDatabase.fcmDao().getData()
+        if(userData.fcmToken == ""){
+            Log.e("Firebase", "토큰이 비었습니다")
+            return
+        }
+        //TODO : token에 상대방의 token을 넣고 message는 알림에서 보여질 세부 내용 ... 이외 custom은 service에서 가능 ->MessageDTO CUSTOM
+        // smaple token
+        val token ="cJdKzRt5Tf2Qx5EeeWlpRX:APA91bEcn2c3KPN0_tYckYrfXMH73Paz5v7zgpgwISjzMX4AS9FilTOFZe6iXSo1qPbtj6Tes7eht9icULBvfyGp26Vf7U5Ecjg0IFlsdn28ennngva1i0iELdKLL5nDs2qOG5sJnkyR"
+        val toMe = userData.fcmToken
+        FCMService().sendPostToFCM(token, userData,userData.email+"님의 편지가 도착했습니다")
+
     }
 
 

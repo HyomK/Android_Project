@@ -82,7 +82,7 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
         // mCalendar를 newCalendar로 설정
         mCalendar.set(year, month - 1, 1)
 
-        // 옮겨야 할 postion 계산
+        // 옮겨야 할 position 계산
         val yearGap = mCalendar.get(Calendar.YEAR) - oldCalendar.get(Calendar.YEAR)
         val monthGap = mCalendar.get(Calendar.MONTH) - oldCalendar.get(Calendar.MONTH)
         val position = (Int.MAX_VALUE/2 + (yearGap*12) + monthGap)
@@ -110,7 +110,6 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
                 datePickerDialog.setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.ArchiveDatePickerStyle)
                 datePickerDialog.show(childFragmentManager, datePickerDialog.tag)
                 datePickerFlag = false
-                Log.d("dataPickerFlag", ArchiveCalendarFragment.datePickerFlag.toString())
             }
         }
     }
