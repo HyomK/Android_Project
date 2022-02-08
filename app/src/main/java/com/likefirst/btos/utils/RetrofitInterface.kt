@@ -126,25 +126,25 @@ interface RetrofitInterface {
     @PATCH("/users/{userIdx}/receive/others")
     fun setNotificationOther(
         @Path("userIdx") userIdx : Int,
-        @Body recOthers : Boolean
+        @Body recOthers : UserOther
     ): Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/receive/age")
     fun setNotificationAge(
         @Path("userIdx") userIdx : Int,
-        @Body recSimilarAge : Boolean
+        @Body recSimilarAge : UserAge
     ): Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/push-alarm")
     fun setPushAlarm(
         @Path("userIdx") userIdx : Int,
-        @Body pushAlarm : Boolean
+        @Body pushAlarm : UserPush
     ): Call<BaseResponse<String>>
 
     @PATCH("/users/{userIdx}/font")
     fun setFont(
         @Path("userIdx") userIdx : Int,
-        @Body fontIdx : Int
+        @Body fontIdx : UserFont
     ): Call<BaseResponse<String>>
 
     // ------------------- History -------------------------- //
