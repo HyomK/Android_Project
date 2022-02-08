@@ -27,15 +27,7 @@ import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
 import android.R.attr.data
 import com.google.android.gms.auth.api.signin.*
-import com.likefirst.btos.utils.getGSO
-import android.R.attr.data
-import android.os.Handler
-import android.os.Looper
-import android.util.Base64
-import android.view.View
-import android.view.animation.AnimationUtils
 
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.likefirst.btos.data.local.FCMDatabase
 import javax.crypto.Cipher
 import javax.crypto.Cipher.SECRET_KEY
@@ -48,10 +40,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
         const val SECRET_KEY = "BTOS12345678BTOS"
       }
 
-
-
     val RC_SIGN_IN =1111
-    val GOOGLE_SIGN_IN =2222
     val fireStore = Firebase.firestore
     lateinit var mAuth: FirebaseAuth
     lateinit var email : String
@@ -233,6 +222,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
     // 로그아웃하지 않을 시 자동 로그인
     public override fun onStart() {
         super.onStart()
+        Log.d("commit","")
         moveMainPage(mAuth?.currentUser)
     }
 
