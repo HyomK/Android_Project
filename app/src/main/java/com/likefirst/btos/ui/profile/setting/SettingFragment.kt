@@ -147,7 +147,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                             )
                             isDeleted = true
                             settingService.setSettingUserView(this@SettingFragment)
-                            settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
+                           // settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{
                             dialog.arguments= bundleOf(
                                 "bodyContext" to "닉네임이 일치하지 않습니다",

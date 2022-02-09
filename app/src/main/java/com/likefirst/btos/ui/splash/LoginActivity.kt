@@ -118,7 +118,7 @@ class LoginActivity
 
             val account = task.getResult(ApiException::class.java)
             email = account?.email.toString()
-            Log.e("account", email)
+            Log.e("account , Id token", email +" / "+  account.idToken)
 
             authService.setLoginView(this)
             authService.login(email)
@@ -139,8 +139,9 @@ class LoginActivity
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
 
+
         //TODO -> 파이어베이스 로그인으로 수정
-        gotoFirebaseSignUp()
+      //  gotoFirebaseSignUp()
 
     }
 
@@ -175,8 +176,10 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
+//        val intent = Intent(this, MainActivity::class.java)
+//        //  intent.putExtra("movePos","main")
+//        startActivity(intent)
 
-        gotoFirebaseSignUp()
     }
 
     fun gotoFirebaseSignUp(){
@@ -211,6 +214,7 @@ class LoginActivity
         Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
 
         updatePlantDB()
+        gotoFirebaseSignUp()
 
     }
 

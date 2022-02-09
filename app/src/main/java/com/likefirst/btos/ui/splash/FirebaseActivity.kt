@@ -27,10 +27,12 @@ import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
 import android.R.attr.data
 import android.accounts.AccountManager
+import android.app.NotificationManager
 import android.os.Handler
 import com.google.android.gms.auth.api.signin.*
 
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
 import javax.crypto.Cipher
 import javax.crypto.Cipher.SECRET_KEY
 import javax.crypto.spec.SecretKeySpec
@@ -121,6 +123,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
             Log.e("Firebase","#########onActivityResult RC_SIGN IN : "+result?.toString())
             if( result.isSuccess) {
                 email =result.signInAccount?.email!!
+
                 firebaseAuthWithGoogle(result.signInAccount)
                 updateProfile()
             }
@@ -141,6 +144,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
+
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
@@ -161,6 +165,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
 
         }else{
             var userData = UserDTO()
+
 
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
                     task-> if(!task.isSuccessful){
@@ -231,9 +236,13 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
     // 로그아웃하지 않을 시 자동 로그인
     public override fun onStart() {
         super.onStart()
-        Log.d("commit","")
+        val notificationManager:NotificationManager =getSystemService(NOTIFICATION_SERVICE) as  NotificationManager
+        notificationManager.cancelAll();
+
         moveMainPage(mAuth?.currentUser)
     }
+
+
 
 
     override fun onPause() {

@@ -26,6 +26,7 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
@@ -109,6 +110,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
         Log.e("PROFILE/API", userDB?.getUser().toString())
         updatePlantDB()
+        gotoFirebaseSignUp()
 
     }
 
@@ -129,7 +131,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        gotoFirebaseSignUp()
+      //  val intent = Intent(this,TutorialActivity::class.java)
+        //  intent.putExtra("movePos","main")
+        //startActivity(intent)
+
 
     }
 

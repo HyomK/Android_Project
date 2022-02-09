@@ -1,9 +1,6 @@
 package com.likefirst.btos.data.remote.notify.service
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
@@ -33,6 +30,10 @@ import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import org.json.JSONArray
 import java.lang.reflect.Type
+import android.content.pm.ResolveInfo
+
+import android.content.pm.PackageManager
+import com.likefirst.btos.ui.splash.LoginActivity
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -171,6 +172,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSound(soundUri)     // 알림 소리
             .setContentIntent(pendingIntent)       // 알림 실행 시 Intent
             .setDefaults(Notification.DEFAULT_SOUND)
+            .setNumber(0)
+
+
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -179,9 +183,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
+            channel.apply {
+                setShowBadge(false)
+            }
         }
         saveData(Message)
         // 알림 생성
+
+
 
         notificationManager.notify(uniId, notificationBuilder.build())
 
@@ -251,11 +260,44 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val strList = gson.toJson(tempArray,groupListType)
             editor.putString("messageList",strList)
         }
-
         editor.apply()
 
     }
 
+    private fun badgeHandler(){
+
+        val spf = getSharedPreferences("badgeCount", MODE_PRIVATE)
+        val editor = spf.edit()
+        val count = spf.getInt("count",-1)
+        val badgeIntent = Intent("android.intent.action.BADGE_COUNT_UPDATE")
+        when(count){
+            -1 ->{
+                badgeIntent.putExtra("badge_count", 1)
+                editor.putInt("count",count+1)
+            }
+            else->{
+                badgeIntent.putExtra("badge_count", count+1)
+                editor.putInt("count",count+1)
+            }
+        }
+
+
+    }
+
+
+     private fun getLauncherClassName(): String? {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        val pm = applicationContext.packageManager
+        val resolveInfos = pm.queryIntentActivities(intent, 0)
+        for (resolveInfo in resolveInfos) {
+            val pkgName = resolveInfo.activityInfo.applicationInfo.packageName
+            if (pkgName.equals(packageName, ignoreCase = true)) {
+                return resolveInfo.activityInfo.name
+            }
+        }
+        return null
+    }
 
 
 }

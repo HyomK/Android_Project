@@ -99,7 +99,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 if(notifications.isEmpty()){
                     initNotice()
                 }else{
-                    loadFromFirebase()
+                  //  loadFromFirebase()
                     initNotifyAdapter(  notifications.toArrayList())
                     //메세지만 업데이트 한다
                     sharedNotifyModel.setNoticeLiveData(false)
@@ -351,8 +351,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 }
             }
         }
-        val result = loadFromFirebase()
-        Log.e("NOTICE/API -> Firebase", "Result: ${result}")
+        //val result = loadFromFirebase()
+       // Log.e("NOTICE/API -> Firebase", "Result: ${result}")
         if(FLAG) sharedNotifyModel.setNoticeLiveData(true)
         val notices = notificationDatabase.NotificationDao().getNotifications().toArrayList()
         initNotifyAdapter( notices )
