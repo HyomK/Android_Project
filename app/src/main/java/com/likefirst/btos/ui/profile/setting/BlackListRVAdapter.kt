@@ -8,15 +8,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.remote.users.response.BlockUser
 
 
-class BlackListRVAdapter(var items: ArrayList<String> = arrayListOf()) : RecyclerView.Adapter<BlackListRVAdapter.ViewHolder>(){
+class BlackListRVAdapter(var items: ArrayList<BlockUser> = arrayListOf()) : RecyclerView.Adapter<BlackListRVAdapter.ViewHolder>(){
 
     private lateinit var mItemClickLister:BlackListListener
 
     interface BlackListListener{
-        fun onClick(name: String){}
-        fun removeUser(pos :Int)
+        fun removeUser(user :BlockUser,position: Int)
     }
 
     fun setOnListener(itemClickLister:BlackListListener){
@@ -39,11 +39,10 @@ class BlackListRVAdapter(var items: ArrayList<String> = arrayListOf()) : Recycle
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text=items[position]
+        holder.name.text=items[position].userName
         holder.btn.setOnClickListener {
-            mItemClickLister.onClick(holder.name.text.toString())
-            mItemClickLister.removeUser(position)
-            removeItem(position)
+            mItemClickLister.removeUser(items[position],position)
+
         }
     }
 

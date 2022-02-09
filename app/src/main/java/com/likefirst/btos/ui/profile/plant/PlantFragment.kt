@@ -226,14 +226,12 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             errorDialog().show(requireActivity().supportFragmentManager,"selectError")
         }
 
-        Log.e("PlantselectAPI"," / Before : Select api success ${plantDB.plantDao().getPlants()}")
         val selected = plantDB.plantDao().getSelectedPlant("selected")!!
         //DB에서 기존 selected 값 가져옴
         plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
         //DB에서 기존 selected 식물을 active로 바꿔주고
         plantDB.plantDao().setPlantStatus(plantIdx,"selected")
-        //API 성공한  식물을 selected 로 바꿔준다
-        Log.e("PlantselectAPI"," / AFTER : Select api success ${plantDB.plantDao().getPlants()}")
+
 
     }
 
@@ -252,14 +250,14 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 var p1=0
                 var p2=0
                 when(a.plantStatus){
-                    "selected"-> p1= 10
-                    "active"-> p1=3
-                    "inactive"-> p1=2
+                    "selected"->p1=2
+                    "active"-> p1=2
+                    "inactive"-> p1=1
                 }
                 when(b.plantStatus){
-                    "selected"-> p2= 10
-                    "active"-> p2=3
-                    "inactive"-> p2=2
+                    "selected"->p2=2
+                    "active"-> p2=2
+                    "inactive"-> p2=1
                 }
                 return p2-p1
             }

@@ -10,6 +10,7 @@ import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.data.remote.posting.response.MailboxResponse
 import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
 import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
+import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
@@ -175,4 +176,22 @@ interface RetrofitInterface {
 //        @Query("filtering") filtering : String,
 //        @Query("search") search : String?
 //    ) : Call<BaseResponse<LetterHistory>>
+
+
+    // -------------------blacklist-------------------------- //
+    @POST("/blocklists")
+    fun setBlock(
+        @Body blacklist : BlackList
+    ): Call<BaseResponse<Int>>
+
+    @GET("/blocklists")
+    fun getBlackList(
+        @Query("userIdx") userIdx : Int
+    ): Call<BaseResponse<ArrayList<BlackList>>>
+
+    @PATCH("/blocklists/{blockIdx}")
+    fun unBlock(
+        @Path("blockIdx") blockIdx : Int
+    ): Call<BaseResponse<String>>
+
 }

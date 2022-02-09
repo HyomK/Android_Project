@@ -157,14 +157,14 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
                 var p1=0
                 var p2=0
                 when(a.first.plantStatus){
-                    "selected"->p1=3
-                    "active"-> p1=3
-                    "inactive"-> p1=2
+                    "selected"->p1=2
+                    "active"-> p1=2
+                    "inactive"-> p1=1
                 }
                 when(b.first.plantStatus){
-                    "selected"->p2=3
-                    "active"-> p2=3
-                    "inactive"-> p2=2
+                    "selected"->p2=2
+                    "active"-> p2=2
+                    "inactive"-> p2=1
                 }
                 return p2-p1
             }
