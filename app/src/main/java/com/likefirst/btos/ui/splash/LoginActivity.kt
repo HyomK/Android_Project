@@ -215,6 +215,9 @@ class LoginActivity
 
         updatePlantDB()
         gotoFirebaseSignUp()
+//          val intent = Intent(this, MainActivity::class.java)
+////        //  intent.putExtra("movePos","main")
+//       startActivity(intent)
 
     }
 

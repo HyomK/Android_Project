@@ -34,6 +34,10 @@ import android.content.pm.ResolveInfo
 
 import android.content.pm.PackageManager
 import com.likefirst.btos.ui.splash.LoginActivity
+import androidx.core.app.NotificationManagerCompat
+
+
+
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -154,7 +158,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val body = Message["body"]!!
         // PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Activity Stack을 경로만 남김, A-B-C-D-B => A-B
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //\
         val pendingIntent = PendingIntent.getActivity(this, uniId, intent, PendingIntent.FLAG_ONE_SHOT)
 
         // 알림 채널 이름
@@ -174,8 +178,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setDefaults(Notification.DEFAULT_SOUND)
 
 
-
-
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -189,10 +191,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         saveData(Message)
         // 알림 생성
-
-
-
-        notificationManager.notify(uniId, notificationBuilder.build())
+        val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
+        if(spf.getBoolean("state",true)){
+           notificationManager.notify(uniId, notificationBuilder.build())
+        }
 
     }
 

@@ -4,8 +4,10 @@ package com.likefirst.btos.ui.main
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.preference.Preference
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -53,6 +55,10 @@ import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.utils.toArrayList
 import java.lang.reflect.Type
 import kotlin.random.Random
+import android.preference.PreferenceManager
+
+
+
 
 
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),NoticeAPIView{
@@ -81,8 +87,26 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val sharedPreferenceChangeListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                Log.e("Firebasespf", "HANDLE")
+                if (key == "messageList") {
+                    Log.e("Firebase - spf", "1")
+                    sharedNotifyModel.setNoticeLiveData(true)
+                    sharedNotifyModel.setMsgLiveData(true)
+                } else if (key == "notification") {
+                    Log.e("Firebase - spf", "2")
+                    sharedNotifyModel.setNoticeLiveData(true)
+                    sharedNotifyModel.setMsgLiveData(true)
+                }
+            }
+
+         prefs.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
 
     }
+
+
 
 
    override fun initAfterBinding() {
@@ -95,13 +119,15 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         binding.mainLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {
-                val notifications =notificationDatabase.NotificationDao().getNotifications()
+                val notifications =notificationDatabase.NotificationDao().getNotifications().toArrayList()
                 if(notifications.isEmpty()){
                     initNotice()
                 }else{
-                  //  loadFromFirebase()
-                    initNotifyAdapter(  notifications.toArrayList())
+                    val msg=  loadFromFirebase()
+                    notifications.addAll(msg)
+                    initNotifyAdapter(notifications)
                     //메세지만 업데이트 한다
+
                     sharedNotifyModel.setNoticeLiveData(false)
                 }
             }
@@ -118,6 +144,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
 
         binding.mainBnv.setOnItemSelectedListener { it ->BottomNavView().onNavigationItemSelected(it) }
+
+
     }
 
     fun initNotice(){
@@ -351,11 +379,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 }
             }
         }
-        //val result = loadFromFirebase()
+        val result = loadFromFirebase()
        // Log.e("NOTICE/API -> Firebase", "Result: ${result}")
         if(FLAG) sharedNotifyModel.setNoticeLiveData(true)
         val notices = notificationDatabase.NotificationDao().getNotifications().toArrayList()
-        initNotifyAdapter( notices )
+        notices.addAll(result)
+        initNotifyAdapter( notices)
 
     }
 
@@ -400,8 +429,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     i.body,
                     i.fromUser)
                 if (notificationDatabase.NotificationDao()
-                        .getNotification(it.timestamp, it.detailIdx, it.type) == null
-                )
+                        .getNotification(it.timestamp, it.detailIdx, it.type) == null)
                     notificationDatabase.NotificationDao().insert(it)
             }
         }

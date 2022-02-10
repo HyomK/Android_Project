@@ -6,12 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="520003bbb47c1583" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\family\.android\avd\Google_API_29.avd" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2022-02-09T12:12:29.573482900Z" />
+    <timeTargetWasSelectedWithDropDown value="2022-02-10T06:06:27.783182400Z" />
   </component>
 </project>

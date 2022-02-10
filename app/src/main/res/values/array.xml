@@ -45,6 +45,15 @@
         <item>rubyball</item>
     </string-array>
 
+    <string-array name="plantInfo">
+        <item>“저편너머에 온 당신을 가장먼저 반겨준 잎이 큰 친구에요. 햇빛을 받으면 기분이 좋아져요.”</item>
+        <item>산세베리아</item>
+        <item>금낭화</item>
+        <item>선인장</item>
+        <item>안스리움</item>
+        <item>비모란</item>
+    </string-array>
+
     <string-array name="font">
         <item>기본</item>
         <item>어린이 하늘맑은체</item>

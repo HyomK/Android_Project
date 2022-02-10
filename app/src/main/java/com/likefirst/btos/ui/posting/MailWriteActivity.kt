@@ -130,7 +130,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         }
         //TODO : token에 상대방의 token을 넣고 message는 알림에서 보여질 세부 내용 ... 이외 custom은 service에서 가능 ->MessageDTO CUSTOM
         // smaple token
-        val token ="fQrGLlFeSQybXhlY-n6AZg:APA91bH-L6q8_dB3sO69Z2ElU84S0amSl56DRymJJBuamUlZqpr37QoibZIJ_ZiX-FUx0LMkhuxCNYU5TsmXwNsqc_40jZVHHcfXT78Jd3fXUhZxRZIUX27VCT8t7bpuE3k9_i7goyoo"
+        val token ="dCyqv_CwS5Ksgvq-pD6T2x:APA91bGTq7-NWnqszTKL4jjXkoD6fn_SIMX3AmzpB_KuEBnptnmmVVa1RkaZUH7GkQuIc74224P4kaZiDs54mZ2kUR6FUFfAINqWPGRCmy2rK5xu-gbfALqCPGxPzL5VDI8r-0DTV6B2"
         val toMe = userData.fcmToken
         FCMService().sendPostToFCM(token, userData,userData.email+"님의 편지가 도착했습니다")
 

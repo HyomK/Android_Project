@@ -10,6 +10,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View.GONE
 import com.likefirst.btos.R
+import java.text.NumberFormat
+import java.util.*
 
 
 class PlantItemFragment:BaseFragment<FragmentPlantinfoBinding>(FragmentPlantinfoBinding::inflate) {
@@ -29,7 +31,8 @@ class PlantItemFragment:BaseFragment<FragmentPlantinfoBinding>(FragmentPlantinfo
                         +"_full","drawable",
                 requireActivity().packageName))
             if(!plant.isOwn){
-                binding.plantinfoSelectBtn.text=plant.plantPrice.toString()
+                val won = NumberFormat.getCurrencyInstance(Locale.KOREA).format(plant.plantPrice)
+                binding.plantinfoSelectBtn.text=won
             }else{
                 binding.plantinfoSelectBtn.visibility=GONE;
             }
