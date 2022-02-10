@@ -39,7 +39,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/birth_till"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
@@ -53,7 +53,7 @@
         >
         <AutoCompleteTextView
             android:id="@+id/profile_suggest_list"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:gravity="center"
@@ -64,7 +64,7 @@
             android:inputType="none"
             android:maxLines="2"
             android:singleLine="true"
-            android:dropDownWidth="120dp"
+            android:dropDownWidth="wrap_content"
             android:text="카테고리 선택"
             android:textColor="@color/black"
             android:textColorHint="@color/black"

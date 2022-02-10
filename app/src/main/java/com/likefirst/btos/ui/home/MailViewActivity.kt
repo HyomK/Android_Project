@@ -22,7 +22,7 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
         binding.mailViewBodyTv.text= letter?.content?.content
         binding.mailViewDateTv.text=bundle.getString("date")
         binding.mailViewSenderTv.text=letter?.senderNickname
-        setFont(4)
+        setFont(letter?.senderFontIdx!!)
 
         val menuItem = resources.getStringArray(R.array.report_items)
         val adapter= ArrayAdapter( this ,R.layout.menu_dropdown_item, menuItem)

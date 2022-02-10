@@ -87,7 +87,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         auth = FirebaseAuth.getInstance()
         sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
         val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
-        val notification = spf.getString("messageList", "undefine")
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference
             .getString("messageList", "undefine")
