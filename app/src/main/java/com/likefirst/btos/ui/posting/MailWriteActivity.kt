@@ -63,7 +63,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     binding.MailWriteWriteBtn.visibility=View.VISIBLE
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
-
+                    binding.MailWriteMenuSp.visibility= View.VISIBLE
                     //TODO 임시 테스트 위치
                     sendNotification()
                 }
@@ -97,7 +97,8 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
 
 
         binding.MailWriteWriteBtn.setOnClickListener {
-            binding.MailWriteMenuBtn.visibility= View.INVISIBLE
+            binding.MailWriteMenuBtn.visibility= View.GONE
+            binding.MailWriteMenuSp.visibility= View.GONE
             binding.MailWriteWriteBtn.visibility=View.INVISIBLE
             binding.MailWriteCheckBtn.visibility=View.VISIBLE
             //   binding.MailReplyHideView.visibility=View.VISIBLE

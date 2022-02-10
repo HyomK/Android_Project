@@ -2,8 +2,11 @@ package com.likefirst.btos.ui.home
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.likefirst.btos.R
+import com.likefirst.btos.data.remote.posting.response.LetterInfo
+import com.likefirst.btos.data.remote.posting.response.MailLetterDetailResponse
 import com.likefirst.btos.databinding.ActivityMailViewBinding
 
 import com.likefirst.btos.ui.BaseActivity
@@ -15,10 +18,11 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
     override fun initAfterBinding() {
         val bundle : Bundle = intent.getBundleExtra("MailView")!!
-
-        binding.mailViewBodyTv.text= bundle.getString("body")
+        val letter :LetterInfo? =bundle.getParcelable("letter")
+        binding.mailViewBodyTv.text= letter?.content?.content
         binding.mailViewDateTv.text=bundle.getString("date")
-        binding.mailViewSenderTv.text=bundle.getString("sender")
+        binding.mailViewSenderTv.text=letter?.senderNickname
+        setFont(4)
 
         val menuItem = resources.getStringArray(R.array.report_items)
         val adapter= ArrayAdapter( this ,R.layout.menu_dropdown_item, menuItem)
@@ -28,7 +32,6 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
 
         binding.letterViewSendBtn.setOnClickListener{
-
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")
             dialog.arguments= bundleOf(
@@ -109,5 +112,14 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
             finish()
         }
     }
+
+    fun setFont(idx:Int){
+        val fonts= resources.getStringArray(R.array.fontEng)
+        val fontId= resources.getIdentifier(fonts[idx-1],"font", packageName)
+        binding.mailViewBodyTv.typeface = ResourcesCompat.getFont(this,fontId)
+        binding.mailViewDateTv.typeface = ResourcesCompat.getFont(this,fontId)
+        binding.mailViewSenderTv.typeface= ResourcesCompat.getFont(this,fontId)
+    }
+
 
 }

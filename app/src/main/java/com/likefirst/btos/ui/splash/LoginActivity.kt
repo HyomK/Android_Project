@@ -42,7 +42,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
-
+import com.likefirst.btos.utils.saveUserIdx
 
 
 class LoginActivity
@@ -118,7 +118,7 @@ class LoginActivity
 
             val account = task.getResult(ApiException::class.java)
             email = account?.email.toString()
-            Log.e("account , Id token", email +" / "+  account.idToken)
+            Log.e("account ", email )
 
             authService.setLoginView(this)
             authService.login(email)
@@ -138,10 +138,6 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-
-
-        //TODO -> 파이어베이스 로그인으로 수정
-      //  gotoFirebaseSignUp()
 
     }
 
@@ -212,12 +208,9 @@ class LoginActivity
         }
 
         Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
-
+        saveUserIdx(user.userIdx!!)
         updatePlantDB()
         gotoFirebaseSignUp()
-//          val intent = Intent(this, MainActivity::class.java)
-////        //  intent.putExtra("movePos","main")
-//       startActivity(intent)
 
     }
 

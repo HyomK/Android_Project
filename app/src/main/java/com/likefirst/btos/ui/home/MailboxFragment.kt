@@ -9,6 +9,7 @@ import androidx.room.ColumnInfo
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.Diary
+import com.likefirst.btos.data.remote.posting.response.LetterInfo
 import com.likefirst.btos.data.remote.posting.response.MailLetterDetailResponse
 import com.likefirst.btos.data.remote.posting.response.Mailbox
 import com.likefirst.btos.data.remote.posting.service.DiaryService
@@ -115,7 +116,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
 
-    fun getLetter(letter:MailLetterDetailResponse){
+    fun getLetter(letter:LetterInfo){
         val spf= requireActivity().getSharedPreferences("MailBox",
             AppCompatActivity.MODE_PRIVATE)
         val id=spf.getInt("Idx",-1)
@@ -127,12 +128,11 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
             Log.d("Letter", "찾기 실패")
             return
         }
-        // 테이블에 읽은 편지를 표시할 수 있는 isWritten =true
-        //body에 본문 내용을 서버에서 받아 넣음
+
         val bundle =bundleOf(
             "sender" to senderName,
             "date" to sendAt,
-            "body" to Letter?.content.toString()
+            "letter" to Letter
         )
 
         requireActivity().supportFragmentManager
@@ -192,10 +192,11 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     }
 
-    override fun onLetterSuccess(letter:MailLetterDetailResponse) {
+    override fun onLetterSuccess(letter: LetterInfo) {
         Log.d("Letter/API : Success",letter.toString())
         getLetter(letter)
     }
+
 
     override fun onLetterFailure(code: Int, message: String) {
         Log.d("Letter/API : Fail",message.toString())

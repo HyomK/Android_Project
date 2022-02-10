@@ -56,9 +56,8 @@ import com.likefirst.btos.utils.toArrayList
 import java.lang.reflect.Type
 import kotlin.random.Random
 import android.preference.PreferenceManager
-
-
-
+import androidx.lifecycle.Observer
+import com.likefirst.btos.utils.LiveSharedPreferences
 
 
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),NoticeAPIView{
@@ -87,23 +86,19 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val sharedPreferenceChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                Log.e("Firebasespf", "HANDLE")
-                if (key == "messageList") {
-                    Log.e("Firebase - spf", "1")
-                    sharedNotifyModel.setNoticeLiveData(true)
+        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
+        val notification = spf.getString("messageList", "undefine")
+        val liveSharedPreference = LiveSharedPreferences(spf)
+        liveSharedPreference
+            .getString("messageList", "undefine")
+            .observe(this, Observer<String> { result ->
+                if(result!="undefine"){
                     sharedNotifyModel.setMsgLiveData(true)
-                } else if (key == "notification") {
-                    Log.e("Firebase - spf", "2")
                     sharedNotifyModel.setNoticeLiveData(true)
-                    sharedNotifyModel.setMsgLiveData(true)
+                }else{
+                    sharedNotifyModel.setMsgLiveData(false)
                 }
-            }
-
-         prefs.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
-
+            })
     }
 
 
@@ -123,8 +118,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 if(notifications.isEmpty()){
                     initNotice()
                 }else{
-                    val msg=  loadFromFirebase()
-                    notifications.addAll(msg)
+                    loadFromFirebase()
                     initNotifyAdapter(notifications)
                     //메세지만 업데이트 한다
 
@@ -330,9 +324,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     fun initNotifyAdapter(notificationList:  ArrayList<NotificationDTO>){
         Log.e("Firebase -> Adapter ", "Result: ${notificationList}")
         val adapter = NotifyRVAdapter(notificationList)
+        val notifyDAO =NotificationDatabase.getInstance(this)?.NotificationDao()
+
          adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
-            override fun onClickItem(item : NotificationDTO) {
+            override fun onClickItem(item : NotificationDTO , pos :Int) {
                 binding.mainLayout.closeDrawers()
+                notifyDAO?.delete(item)
+                adapter.remove(pos)
                 when(item.type){
                     "notice"-> {
                         startNextActivity(NoticeActivity::class.java)
@@ -347,6 +345,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     "diary"->{
                         //TODO 구현
                     }
+
                 }
 
             }
@@ -379,11 +378,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 }
             }
         }
-        val result = loadFromFirebase()
+
+        loadFromFirebase()
        // Log.e("NOTICE/API -> Firebase", "Result: ${result}")
         if(FLAG) sharedNotifyModel.setNoticeLiveData(true)
         val notices = notificationDatabase.NotificationDao().getNotifications().toArrayList()
-        notices.addAll(result)
+
         initNotifyAdapter( notices)
 
     }
@@ -415,6 +415,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
         if(list.size ==0){
             sharedNotifyModel.setMsgLiveData(false)
+            val editor = spf.edit()
+            editor.remove("messageList")
+            editor.apply()  //저장된 건 삭제하기
             return messageList
         }
         val notificationDatabase= NotificationDatabase.getInstance(this)!!
@@ -433,7 +436,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     notificationDatabase.NotificationDao().insert(it)
             }
         }
-
         //TODO rand()-> 각 공지, 편지, 다이어리의 idx 로 수정
         sharedNotifyModel.setMsgLiveData(true)
         sharedNotifyModel.setNoticeLiveData(true)

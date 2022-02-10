@@ -62,4 +62,14 @@
         <item>꽃내음</item>
         <item>어비 퀸제이체</item>
     </string-array>
+
+    <string-array name="fontEng">
+        <item>notosanskr_regular</item>
+        <item>aac_child_sky_shine</item>
+        <item>kotra_songeulssi</item>
+        <item>goyangchae</item>
+        <item>handwriting_flower_smell</item>
+        <item>uhbee_queen_j</item>
+    </string-array>
+
 </resources>

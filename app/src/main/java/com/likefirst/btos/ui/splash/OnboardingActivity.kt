@@ -148,26 +148,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
     }
 
-    // TODO: Firebase 로그인
-    private fun createAccount(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.createUserWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            this, "계정 생성 완료.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this, "계정 생성 실패",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-        }
-    }
-
 
     fun updatePlantDB(){
         val userDB= UserDatabase.getInstance(this)!!

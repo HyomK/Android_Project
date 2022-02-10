@@ -174,13 +174,9 @@ class SetNotificationFragment:BaseFragment<FragmentSetNotificationBinding>(Fragm
         TODO("Not yet implemented")
     }
 
-    override fun onGetBlockListViewSuccess(result: ArrayList<BlackList>) {
-
-        val BlockUserList :List<BlockUser> = result.map{
-            i->BlockUser(i.blockIdx,i.blockedUserIdx,"user")
-        }
-
-        initBlackList(BlockUserList.toArrayList())
+    override fun onGetBlockListViewSuccess(result: ArrayList<BlockUser>) {
+        Log.e("Blacklsit", result.toString())
+        initBlackList(result)
     }
 
     override fun onGetBlockListViewFailure(code: Int, message: String) {

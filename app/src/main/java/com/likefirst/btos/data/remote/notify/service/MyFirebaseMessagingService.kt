@@ -35,18 +35,13 @@ import android.content.pm.ResolveInfo
 import android.content.pm.PackageManager
 import com.likefirst.btos.ui.splash.LoginActivity
 import androidx.core.app.NotificationManagerCompat
-
-
-
+import androidx.lifecycle.ViewModelProvider
+import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     val TAG = "Firebase"
     lateinit var listener : NoticeAPIView
-    override fun onCreate() {
-        super.onCreate()
-
-    }
 
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -148,8 +143,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0, notificationBuilder.build()) // 알림 생성
         showDataMessage(title,body)
+        val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
+        if(spf.getBoolean("state",true)){
+            notificationManager.notify(0, notificationBuilder.build())
+        }
     }
 
     private fun sendMessageNotification( Message : Map<String, String>){

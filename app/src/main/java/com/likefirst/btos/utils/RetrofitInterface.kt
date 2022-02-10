@@ -3,6 +3,8 @@ package com.likefirst.btos.utils
 import com.likefirst.btos.data.entities.*
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
+import com.likefirst.btos.data.remote.notify.response.Report
+import com.likefirst.btos.data.remote.notify.response.ReportResponse
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
@@ -11,6 +13,7 @@ import com.likefirst.btos.data.remote.posting.response.MailboxResponse
 import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
 import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
 import com.likefirst.btos.data.remote.users.response.BlackList
+import com.likefirst.btos.data.remote.users.response.BlockUser
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
@@ -51,14 +54,14 @@ interface RetrofitInterface {
     fun loadDiary(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("idx")idx: String
+        @Query("typeIdx")idx: String
     ): Call<MailDiaryResponse>
 
-    @GET("/mailboxes/mail")
+    @GET("/mailboxes/mail/{userIdx}")
     fun loadLetter(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("idx")idx: String
+        @Query("typeIdx")idx: String
     ): Call<MailLetterResponse>
 
 
@@ -66,7 +69,7 @@ interface RetrofitInterface {
     fun loadReply(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("idx")idx: String
+        @Query("typeIdx")idx: String
     ): Call<MailReplyResponse>
 
     // -------------------PlantList-------------------------- //
@@ -187,11 +190,18 @@ interface RetrofitInterface {
     @GET("/blocklists")
     fun getBlackList(
         @Query("userIdx") userIdx : Int
-    ): Call<BaseResponse<ArrayList<BlackList>>>
+    ): Call<BaseResponse<ArrayList<BlockUser>>>
 
     @PATCH("/blocklists/{blockIdx}")
     fun unBlock(
         @Path("blockIdx") blockIdx : Int
     ): Call<BaseResponse<String>>
+
+
+    @POST("/report")
+    fun sendReport(
+        @Body ReportRequest: Report
+    ):Call<ReportResponse>
+
 
 }

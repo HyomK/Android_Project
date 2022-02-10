@@ -32,7 +32,7 @@ class MailLetterService(){
                 Log.d("Letter/API",letterResponse.code.toString())
                 when( letterResponse.code){
                     1000->{
-                        mailLetterView.onLetterSuccess( letterResponse.result.content)
+                        mailLetterView.onLetterSuccess( letterResponse.result)
                         return
                     }
                     else->   mailLetterView.onLetterFailure( letterResponse.code,  letterResponse.message)

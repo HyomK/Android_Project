@@ -13,7 +13,7 @@ import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 class NotifyRVAdapter(private val dataSet: ArrayList<NotificationDTO>) : RecyclerView.Adapter< NotifyRVAdapter.ViewHolder>() {
 
     interface NotifyItemClickListener{
-        fun onClickItem(notification : NotificationDTO)
+        fun onClickItem(notification : NotificationDTO , position : Int)
     }
     private lateinit var mItemClickLister:NotifyRVAdapter.NotifyItemClickListener
 
@@ -39,8 +39,15 @@ class NotifyRVAdapter(private val dataSet: ArrayList<NotificationDTO>) : Recycle
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.layout.setOnClickListener { mItemClickLister.onClickItem(dataSet[position]) }
+        viewHolder.layout.setOnClickListener { mItemClickLister.onClickItem(dataSet[position],position) }
         viewHolder.textView.text=dataSet[position].content
+    }
+
+    fun remove(pos: Int){
+        if(pos>=0){
+            dataSet.removeAt(pos)
+            notifyDataSetChanged()
+        }
     }
 
 
