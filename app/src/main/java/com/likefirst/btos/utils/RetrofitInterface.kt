@@ -2,14 +2,17 @@ package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.*
 import com.likefirst.btos.data.remote.BaseResponse
+import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
+import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
+import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
+import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.data.remote.posting.response.LetterResponse
-import com.likefirst.btos.data.remote.response.DiaryResponse
-import com.likefirst.btos.data.remote.response.MailboxResponse
-import com.likefirst.btos.data.remote.response.ReplyResponse
+import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -176,12 +179,12 @@ interface RetrofitInterface {
         @Path("senderNickName") senderNickName : String,
         @Path("pageNum") pageNum : Int,
         @Query("search") search : String?
-    ) : Call<HistorySenderDetailResponse<Content>>
+    ) : Call<HistorySenderDetailResponse>
 
-    @GET("/histories{userIdx}/{type}/{typeIdx}")
+    @GET("/histories/{userIdx}/{type}/{typeIdx}")
     fun historyDetailList(
         @Path("userIdx") userIdx : Int,
         @Path("type") type : String,
         @Path("typeIdx") typeIdx : Int,
-    ) : Call<HistorySenderDetailResponse<HistoryList>>
+    ) : Call<HistoryDetailResponse>
 }

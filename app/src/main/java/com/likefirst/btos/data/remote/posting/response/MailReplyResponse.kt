@@ -1,8 +1,6 @@
 package com.likefirst.btos.data.remote.posting.response
 
 import com.google.gson.annotations.SerializedName
-import com.likefirst.btos.data.remote.response.MailReplyDetailResponse
-import com.likefirst.btos.data.remote.response.MailResultReply
 
 data class MailReplyDetailResponse(
     @SerializedName("replyIdx") val replyIdx : Int,

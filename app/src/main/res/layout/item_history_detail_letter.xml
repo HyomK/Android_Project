@@ -25,15 +25,15 @@
 
                 <TextView
                     android:id="@+id/item_history_detail_content"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:paddingStart="34dp"
-                    android:paddingEnd="34dp"
+                    android:paddingStart="35dp"
+                    android:paddingEnd="35dp"
                     android:lineSpacingExtra="5dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    android:text="@string/historydetail"
+                    android:text="안녕"
                     android:fontFamily="@font/notosanskr_regular"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -41,9 +41,9 @@
 
                 <TextView
                     android:id="@+id/item_history_detail_date"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="34dp"
+                    android:paddingStart="35dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:fontFamily="@font/notosanskr_regular"
@@ -52,9 +52,9 @@
 
                 <TextView
                     android:id="@+id/item_history_detail_sender"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="34dp"
+                    android:paddingStart="35dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:layout_marginBottom="28dp"

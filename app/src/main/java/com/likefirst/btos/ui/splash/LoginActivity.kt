@@ -18,6 +18,8 @@ import com.google.android.gms.common.api.internal.OnConnectionFailedListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -27,22 +29,18 @@ import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
-import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
-
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DatabaseReference
-import com.likefirst.btos.data.remote.service.AuthService
-import com.likefirst.btos.data.remote.users.response.Login
-
+import com.likefirst.btos.utils.saveUserIdx
 
 
 class LoginActivity
@@ -182,6 +180,7 @@ class LoginActivity
     fun gotoFirebaseSignUp(){
         val intent = Intent(this, FirebaseActivity::class.java)
         intent.putExtra("movePos","main")
+        finish()
         startActivity(intent)
     }
 
@@ -209,7 +208,7 @@ class LoginActivity
         }
 
         Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
-
+        saveUserIdx(user.userIdx!!)
         updatePlantDB()
 
     }

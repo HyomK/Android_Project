@@ -82,7 +82,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(email)
-
     }
 
     override fun onSignUpFailure(code: Int, message: String) {
@@ -109,7 +108,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         }
         Log.e("PROFILE/API", userDB?.getUser().toString())
         updatePlantDB()
-
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -196,8 +194,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onPlantListFailure(code: Int, message: String) {
         Log.d("Plant/API",code.toString()+"fail to load...")
     }
-
-
 
     fun gotoFirebaseSignUp(){
         val intent = Intent(this, FirebaseActivity::class.java)
