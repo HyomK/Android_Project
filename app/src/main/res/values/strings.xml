@@ -135,6 +135,7 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string name="archive_list_period_to">까지</string>
     <string name="archive_list_period_cancel">취소</string>
     <string name="archive_list_period_submit">완료</string>
+    <string name="archive_list_no_search_result">검색 결과가 없습니다.</string>
 
     <!--archive calendar-->
     <string name="archive_calendar_radio_done_list">DONE LIST</string>

@@ -2,6 +2,9 @@ package com.likefirst.btos.ui.archive
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,14 +28,18 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         var requiredPageNum = 1
         var lastDate = ""
         var datePickerFlag = true
+        var query = HashMap<String, String>()
     }
 
     override fun initAfterBinding() {
         //companion object 초기화
         requiredPageNum = 1
         lastDate = ""
+        datePickerFlag = true
+        query.clear()
 
         val mAdapter = ArchiveListRVAdapter(requireContext())
+        initToolbar(mAdapter)
         initDatePicker(mAdapter)
         initDiaryList(mAdapter)
     }
@@ -41,7 +48,8 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         //datePicker 기능 설정
         binding.archiveListToolbar.archiveListPeriodIv.setOnClickListener {
             if(it.isSelected){
-                val query = HashMap<String, String>()
+                query.remove("startDate")
+                query.remove("endDate")
                 reLoadDiaryList(mAdapter, query)
                 it.isSelected = !it.isSelected
             } else {
@@ -49,7 +57,6 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
                     val datePickerDialog = ArchiveListPeriodDialog.newInstance()
                     datePickerDialog.setDatePickerClickListener(object : ArchiveListPeriodDialog.DatePickerClickListener{
                         override fun onDatePicked(dateFrom: String, dateTo: String) {
-                            val query = HashMap<String, String>()
                             query["startDate"] = dateFrom
                             query["endDate"] = dateTo
 //                            binding.archiveListRv.clearOnScrollListeners()
@@ -94,7 +101,7 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
     }
 
     fun initDiaryList(mAdapter : ArchiveListRVAdapter){
-        val query = HashMap<String, String>()
+        query.clear()
         val mDecoration = ArchiveListItemDecoration()
         mDecoration.setSize(requireContext())
         binding.archiveListRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -128,13 +135,42 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
 
     fun loadDiaryList(pageNum : Int, adapter : ArchiveListRVAdapter, query : HashMap<String,String>){
         // 검색조건에 따라 쿼리스트링 생성해서 전달
-        Log.d("requiredPageNum", requiredPageNum.toString())
         val archiveListService = ArchiveListService()
         archiveListService.setArchiveListView(this)
         archiveListService.getList(getUserIdx(), pageNum, query, adapter)
     }
 
+    fun initToolbar(mAdapter: ArchiveListRVAdapter){
+        binding.archiveListToolbar.archiveListSearchIv.setOnClickListener {
+            if (binding.archiveListToolbar.archiveListSearchEt.isVisible){
+                query["search"] = binding.archiveListToolbar.archiveListSearchEt.text.toString()
+                reLoadDiaryList(mAdapter, query)
+            } else {
+                binding.archiveListToolbar.archiveListSearchEt.visibility = View.VISIBLE
+                binding.archiveListToolbar.archiveListBackIv.visibility = View.VISIBLE
+            }
+        }
+        binding.archiveListToolbar.archiveListBackIv.setOnClickListener {
+            query.remove("search")
+            reLoadDiaryList(mAdapter, query)
+            binding.archiveListToolbar.archiveListSearchEt.visibility = View.GONE
+            binding.archiveListToolbar.archiveListBackIv.visibility = View.GONE
+        }
+        binding.archiveListToolbar.archiveListSearchEt.setOnEditorActionListener { textView, actionId, keyEvent ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                query["search"] = textView.text.toString()
+                reLoadDiaryList(mAdapter, query)
+                handled = true
+            }
+            return@setOnEditorActionListener handled
+        }
+    }
+
     override fun onArchiveListLoading() {
+        binding.archiveListNoSearchResultLayout.visibility = View.GONE
+        binding.archiveListLoadingView.setAnimation("sprout_loading.json")
+        binding.archiveListLoadingView.visibility = View.VISIBLE
     }
 
     override fun onArchiveListSuccess(
@@ -142,7 +178,8 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         pageInfo: ArchiveListPageInfo,
         adapter: ArchiveListRVAdapter
     ) {
-        Log.d("archiveSuccess", "success!!!!!!")
+        binding.archiveListNoSearchResultLayout.visibility = View.GONE
+        binding.archiveListLoadingView.visibility = View.GONE
         if(pageInfo.currentPage != 1){
             adapter.deleteLoading()
         }
@@ -170,10 +207,14 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         } else {
             requiredPageNum = 0
         }
-        Log.d("requiredPageNum++", requiredPageNum.toString())
+        Log.d("diaryList", diaryList.toString())
     }
 
     override fun onArchiveListFailure(code: Int) {
-
+        binding.archiveListLoadingView.visibility = View.GONE
+        //TODO: 검색결과 없음 화면처리
+        when (code){
+            6018 -> binding.archiveListNoSearchResultLayout.visibility = View.VISIBLE
+        }
     }
 }

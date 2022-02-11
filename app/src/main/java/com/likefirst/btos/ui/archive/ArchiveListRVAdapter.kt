@@ -25,10 +25,12 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
             binding.archiveListPreviewDateTv.text = diaryInfo.diaryDate
             // emotionImg 바인딩
             if (diaryInfo.emotionIdx == 0){
-                binding.archiveListPreviewEmotionIv.visibility = View.INVISIBLE
+                binding.archiveListPreviewEmotionIv.visibility = View.GONE
+                Log.d("diaryGone", diaryInfo.emotionIdx.toString())
             } else {
                 val emotionRes = context.resources.getIdentifier("emotion${diaryInfo.emotionIdx}", "drawable", context.packageName)
                 binding.archiveListPreviewEmotionIv.setImageResource(emotionRes)
+                Log.d("emotionRes", emotionRes.toString())
             }
             // doneListImg 바인딩
             when (diaryInfo.doneListNum) {

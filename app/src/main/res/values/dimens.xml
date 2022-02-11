@@ -76,6 +76,7 @@
     <dimen name="archive_calendar_year">14dp</dimen>
     <dimen name="archive_list_month">14dp</dimen>
     <dimen name="archive_list_year">14dp</dimen>
+    <dimen name="archive_list_no_search_result">12dp</dimen>
 
     <!--archive period-->
     <dimen name="archive_list_period_main">14dp</dimen>

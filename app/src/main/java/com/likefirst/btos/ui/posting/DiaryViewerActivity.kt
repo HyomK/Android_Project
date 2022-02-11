@@ -14,7 +14,7 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
     override fun initAfterBinding() {
 
         binding.diaryViewerToolbar.toolbarBackIc.setOnClickListener {
-            goToHome()
+            onBackPressed()
         }
         initView()
         initToolbar()
@@ -60,13 +60,6 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
     }
 
     override fun onBackPressed() {
-        goToHome()
         super.onBackPressed()
-    }
-
-    fun goToHome(){
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
     }
 }

@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.entities.PostDiaryRequest
@@ -21,10 +22,14 @@ import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.ui.splash.LoginActivity
+import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getUserIdx
+import com.likefirst.btos.utils.removeJwt
 import com.likefirst.btos.utils.saveLastPostingDate
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate), PostDiaryView {
 
@@ -242,7 +247,6 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
     override fun onDiaryPostLoading() {
         //TODO: 로딩화면 처리
-
     }
 
     override fun onDiaryPostSuccess() {
@@ -256,12 +260,21 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                 showOneBtnDialog("데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", "onDiaryPostFailure Code:4000")
             }
             6000 ->{
-                showOneBtnDialog("일기는 하루에 하나만 작성 가능합니다.", "onDiaryPostFailure Code:6000")
+                showOneBtnDialog("유효하지 않은 회원입니다. 다시 로그인 해 주세요", "onDiaryPostFailure Code:6000")
+                val gso = getGSO()
+                val googleSignInClient = GoogleSignIn.getClient(this, gso)
+                googleSignInClient.signOut()
+                removeJwt()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                exitProcess(0)
             }
-            6001 -> {
+            6003 -> {
+                showOneBtnDialog("해당 날짜에 이미 일기를 작성하셨습니다.", "onDiaryPostFailure Code:6003")
+            }
+            6004 -> {
                 showOneBtnDialog("오늘 작성한 일기만 공개설정하여 타인에게 전송할 수 있습니다.", "onDiaryPostFailure Code:6001")
             }
-
         }
     }
 }

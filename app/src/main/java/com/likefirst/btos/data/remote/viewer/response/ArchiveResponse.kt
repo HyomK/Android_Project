@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ArchiveCalendar(
     @SerializedName("diaryDate") val diaryDate : String?,
+    @SerializedName("diaryIdx") val diaryIdx : Int?,
     val dateInt : Int = 0,
     @SerializedName("doneListNum") val doneListNum : Int?,
     @SerializedName("emotionIdx") val emotionIdx : Int?,
@@ -36,4 +37,14 @@ data class ArchiveListPageInfo(
     @SerializedName("startPage") val startPage : Int,
     @SerializedName("endPage") val endPage : Int,
     @SerializedName("dataPerPage") val dataPerPage : Int,
+    )
+
+// 일기 조회
+data class ArchiveDiaryResult(
+    @SerializedName("diaryIdx") val diaryIdx : Int,
+    @SerializedName("emotionIdx") val emotionIdx : Int,
+    @SerializedName("diaryDate") val diaryDate : String,
+    @SerializedName("isPublic") val isPublic : Int,
+    @SerializedName("content") val content : String,
+    @SerializedName("doneList") val doneList : ArrayList<String>
     )

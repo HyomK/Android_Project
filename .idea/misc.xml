@@ -21,6 +21,7 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/selector_indicator.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/tutorial_image_box.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/tutorial_indicator.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/font/font.xml" value="0.2611111111111111" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.20277777777777778" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_diary_viewer.xml" value="0.20277777777777778" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_login.xml" value="0.23333333333333334" />
@@ -50,9 +51,10 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_history_nosender.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_mailbox_rv.xml" value="0.23743589743589744" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_tutorialimage.xml" value="0.24114583333333334" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_archive.xml" value="0.4" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_archive.xml" value="0.2" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_diary.xml" value="0.2361111111111111" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_history.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/menu/report_menu.xml" value="0.24114583333333334" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/black_indicator.xml" value="0.22135416666666666" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/blocklist_bg.xml" value="0.11927083333333334" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/btn_rectangle.xml" value="0.15555555555555556" />

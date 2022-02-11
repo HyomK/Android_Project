@@ -55,26 +55,26 @@ class CustomCalendar(date : Date, val inputDataList : ArrayList<ArchiveCalendar>
         var maxOffsetDate = maxDate - prevTail
 
 //        for (i in 1..prevTail) dateList.add(++maxOffsetDate)
-        for (i in 1..prevTail) dateList.add(ArchiveCalendar(null, 0, null, null))
+        for (i in 1..prevTail) dateList.add(ArchiveCalendar(null, null, 0, null, null))
     }
 
     private fun makeCurrentMonth(calendar: Calendar) {
-        for (i in 1..calendar.getActualMaximum(Calendar.DATE)) dateList.add(ArchiveCalendar(null, i, null, null))
+        for (i in 1..calendar.getActualMaximum(Calendar.DATE)) dateList.add(ArchiveCalendar(null, null, i, null, null))
     }
 
     private fun makeNextHead() {
         var date = 1
 
 //        for (i in 1..nextHead) dateList.add(date++)
-        for (i in 1..nextHead) dateList.add(ArchiveCalendar(null, 0, null, null))    }
+        for (i in 1..nextHead) dateList.add(ArchiveCalendar(null, null, 0, null, null))    }
 
     private fun insertDiaryInfo(){
         for (inputData in inputDataList){
             val dateString = inputData.diaryDate!!
             val date = stringToDate(dateString)
             calendar.time = date
-            val position = dateList.indexOf(ArchiveCalendar(null, calendar.get(Calendar.DAY_OF_MONTH), null, null))
-            dateList[position] = ArchiveCalendar(inputData.diaryDate, calendar.get(Calendar.DAY_OF_MONTH), inputData.doneListNum, inputData.emotionIdx)
+            val position = dateList.indexOf(ArchiveCalendar(null, null, calendar.get(Calendar.DAY_OF_MONTH), null, null))
+            dateList[position] = ArchiveCalendar(inputData.diaryDate, inputData.diaryIdx, calendar.get(Calendar.DAY_OF_MONTH), inputData.doneListNum, inputData.emotionIdx)
         }
     }
 }

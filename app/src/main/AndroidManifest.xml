@@ -51,6 +51,7 @@
         </activity>
 
         <activity android:name=".ui.posting.DiaryActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.posting.DiaryViewerActivity"
             android:screenOrientation="portrait"/>
