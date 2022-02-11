@@ -67,8 +67,11 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
 
     inner class LoadingViewHolder(val binding : ItemArchiveListRvMonthBinding) : RecyclerView.ViewHolder(binding.root){
         fun initView(){
-            binding.itemArchiveListLoading.visibility = View.VISIBLE
-            binding.itemArchiveListLoading.setAnimation("sprout_loading.json")
+            binding.itemArchiveListLoading.apply {
+                setAnimation("sprout_loading.json")
+                visibility = View.VISIBLE
+                playAnimation()
+            }
             binding.itemArchiveListMonthTv.visibility = View.GONE
             binding.itemArchiveListYearTv.visibility = View.GONE
         }
@@ -86,6 +89,16 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
                 LOADING_TYPE
             }
         }
+    }
+
+    interface DiarySelectedListener {
+        fun onDiarySelect(diaryIdx : Int)
+    }
+
+    lateinit var mDiarySelectedListener : DiarySelectedListener
+
+    fun setDiarySelectedListener(diarySelectedListener: DiarySelectedListener){
+        this.mDiarySelectedListener = diarySelectedListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -112,6 +125,9 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
         when (holder){
             is DiaryViewHolder -> {
                 holder.initView(diaryList[position] as ArchiveListDiaryList)
+                holder.itemView.setOnClickListener {
+                    mDiarySelectedListener.onDiarySelect((diaryList[position] as ArchiveListDiaryList).diaryIdx)
+                }
             }
             is MonthViewHolder -> {
                 holder.initView(diaryList[position] as String)

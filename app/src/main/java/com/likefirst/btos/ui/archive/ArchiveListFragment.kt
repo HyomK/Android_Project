@@ -1,28 +1,44 @@
 package com.likefirst.btos.ui.archive
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
 import com.likefirst.btos.data.remote.viewer.response.ArchiveListPageInfo
 import com.likefirst.btos.data.remote.viewer.response.ArchiveListResult
+import com.likefirst.btos.data.remote.viewer.service.ArchiveDiaryService
 import com.likefirst.btos.data.remote.viewer.service.ArchiveListService
+import com.likefirst.btos.data.remote.viewer.view.ArchiveDiaryView
 import com.likefirst.btos.data.remote.viewer.view.ArchiveListView
 import com.likefirst.btos.databinding.FragmentArchiveListBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.ui.posting.DiaryViewerActivity
+import com.likefirst.btos.ui.splash.LoginActivity
+import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getUserIdx
+import com.likefirst.btos.utils.removeJwt
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.system.exitProcess
 
-class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArchiveListBinding::inflate), ArchiveListView{
+class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArchiveListBinding::inflate),
+    ArchiveDiaryView, ArchiveListView{
 
     companion object{
         var requiredPageNum = 1
@@ -126,6 +142,13 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
             adapter = mAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            mAdapter.setDiarySelectedListener(object : ArchiveListRVAdapter.DiarySelectedListener{
+                override fun onDiarySelect(diaryIdx : Int) {
+                    val archiveDiaryService = ArchiveDiaryService()
+                    archiveDiaryService.setArchiveCalendarView(this@ArchiveListFragment)
+                    archiveDiaryService.getDiary(diaryIdx)
+                }
+            })
             if (itemDecorationCount == 0){
                 addItemDecoration(mDecoration)
             }
@@ -167,10 +190,38 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         }
     }
 
+    fun showLogoutDialog(message : String, tag : String){
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to  message,
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked() {
+                val gso = getGSO()
+                val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+                googleSignInClient.signOut()
+                removeJwt()
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                startActivity(intent)
+                exitProcess(0)
+            }
+
+            override fun onButton2Clicked() {
+
+            }
+        })
+        dialog.show(this.parentFragmentManager, tag)
+    }
+
     override fun onArchiveListLoading() {
         binding.archiveListNoSearchResultLayout.visibility = View.GONE
-        binding.archiveListLoadingView.setAnimation("sprout_loading.json")
-        binding.archiveListLoadingView.visibility = View.VISIBLE
+        binding.archiveListLoadingView.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 
     override fun onArchiveListSuccess(
@@ -199,7 +250,7 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
             diaryList.add(0)
         }
         adapter.apply{
-            addDiaryList(diaryList)
+            addDiaryList(diaryList)    //가공된 diaryList 어댑터에 추가
             notifyItemRangeInserted((pageInfo.currentPage-1)*(result.size), result.size + 1)
         }
         if (pageInfo.hasNext){
@@ -207,14 +258,48 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         } else {
             requiredPageNum = 0
         }
-        Log.d("diaryList", diaryList.toString())
     }
 
     override fun onArchiveListFailure(code: Int) {
         binding.archiveListLoadingView.visibility = View.GONE
-        //TODO: 검색결과 없음 화면처리
         when (code){
+            4000 -> {
+                Snackbar.make(requireView(), "데이터베이스 연결에 실패했습니다.", Snackbar.LENGTH_SHORT).show()
+            }
+            6000 -> {
+                showLogoutDialog("유효하지 않은 회원입니다. 다시 로그인 해 주세요", "onDiaryGetFailure Code:6000")
+            }
+            6008 -> Snackbar.make(requireView(), "일기 복호화에 실패했습니다. 개발자에게 문의해 주세요.", Snackbar.LENGTH_SHORT).show()
+            6016 -> Snackbar.make(requireView(), "페이지 번호는 1부터 시작해야 합니다.", Snackbar.LENGTH_SHORT).show()
+            6017 -> Snackbar.make(requireView(), "잘못된 페이지 요청입니다. 개발자에게 문의해 주세요.", Snackbar.LENGTH_SHORT).show()
             6018 -> binding.archiveListNoSearchResultLayout.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onArchiveDiaryLoading() {
+        binding.archiveListLoadingView.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+    }
+
+    override fun onArchiveDiarySuccess(result: ArchiveDiaryResult) {
+        var isPublic = false
+        if (result.isPublic == 1){
+            isPublic = true
+        }
+        val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
+        val intent = Intent(requireContext(), DiaryViewerActivity::class.java)
+        intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, result.emotionIdx, result.diaryDate, result.content, isPublic, result.doneList))
+        startActivity(intent)
+    }
+
+    override fun onArchiveDiaryFailure(code: Int) {
+        when (code){
+            4000 -> Snackbar.make(requireView(), "데이터베이스 연결에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
+            6002 -> Snackbar.make(requireView(), "존재하지 않는 일기입니다. 개발자에게 문의해 주세요.", Snackbar.LENGTH_SHORT).show()
+            6008 -> Snackbar.make(requireView(), "일기 복호화에 실패했습니다. 개발자에게 문의해 주세요.", Snackbar.LENGTH_SHORT).show()
         }
     }
 }

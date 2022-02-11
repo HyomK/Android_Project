@@ -36,7 +36,9 @@ data class ArchiveListPageInfo(
     @SerializedName("currentPage") val currentPage : Int,
     @SerializedName("startPage") val startPage : Int,
     @SerializedName("endPage") val endPage : Int,
-    @SerializedName("dataPerPage") val dataPerPage : Int,
+    @SerializedName("dataNumPerPage") val dataNumPerPage : Int,
+    @SerializedName("dataNum_currentPage") val dataNum_currentPage : Int,
+    @SerializedName("dataNum_total") val dataNum_total : Int
     )
 
 // 일기 조회

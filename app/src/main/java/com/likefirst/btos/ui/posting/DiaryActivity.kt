@@ -260,14 +260,28 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                 showOneBtnDialog("데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", "onDiaryPostFailure Code:4000")
             }
             6000 ->{
-                showOneBtnDialog("유효하지 않은 회원입니다. 다시 로그인 해 주세요", "onDiaryPostFailure Code:6000")
-                val gso = getGSO()
-                val googleSignInClient = GoogleSignIn.getClient(this, gso)
-                googleSignInClient.signOut()
-                removeJwt()
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                exitProcess(0)
+                val dialog = CustomDialogFragment()
+                val data = arrayOf("확인")
+                dialog.arguments= bundleOf(
+                    "bodyContext" to  "유효하지 않은 회원정보입니다. 다시 로그인 해주세요",
+                    "btnData" to data
+                )
+                dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+                    override fun onButton1Clicked() {
+                        val gso = getGSO()
+                        val googleSignInClient = GoogleSignIn.getClient(this@DiaryActivity, gso)
+                        googleSignInClient.signOut()
+                        removeJwt()
+                        val intent = Intent(this@DiaryActivity, LoginActivity::class.java)
+                        startActivity(intent)
+                        exitProcess(0)
+                    }
+
+                    override fun onButton2Clicked() {
+
+                    }
+                })
+                dialog.show(this.supportFragmentManager, "onDiaryPostFailure Code:6000")
             }
             6003 -> {
                 showOneBtnDialog("해당 날짜에 이미 일기를 작성하셨습니다.", "onDiaryPostFailure Code:6003")
