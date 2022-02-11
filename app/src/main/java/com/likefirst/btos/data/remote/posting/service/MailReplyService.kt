@@ -18,17 +18,16 @@ class MailReplyService() {
         this.mailReplyView=mailReplyView
     }
 
-    fun loadReply(userId:Int, type:String, Idx:String){
+    fun loadReply(userId:Int, type:String, idx:Int){
 
-        mailReplyView.onReplyLoading()
 
-        ReplyService. loadReply(userId, type,Idx).enqueue(object: Callback<MailReplyResponse>{
+        ReplyService. loadReply(userId, type, idx).enqueue(object: Callback<MailReplyResponse>{
             override fun onResponse(call: Call<MailReplyResponse>, response: Response<MailReplyResponse>) {
                 val replyResponse :MailReplyResponse =response.body()!!
                 Log.e("Reply/API", replyResponse.toString())
 
                 when(replyResponse.code){
-                    1000->mailReplyView.onReplySuccess( replyResponse.result.content)
+                    1000->mailReplyView.onReplySuccess( replyResponse.result)
                     else->mailReplyView.onReplyFailure( replyResponse.code, replyResponse.message)
                 }
             }

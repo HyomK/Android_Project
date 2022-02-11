@@ -22,7 +22,7 @@ class MailLetterService(){
         this.mailLetterView=mailLetterView
     }
 
-    fun loadLetter(userId:Int,type:String, idx: String){
+    fun loadLetter(userId:Int,type:String, idx:Int){
         mailLetterView.onLetterLoading()
 
         LetterService.loadLetter(userId,type,idx).enqueue(object:Callback<MailLetterResponse> {

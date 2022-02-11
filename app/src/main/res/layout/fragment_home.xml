@@ -83,10 +83,28 @@
                 android:layout_marginEnd="35dp"
                 android:src="@drawable/window_night"  />
 
-
-
-
             <com.airbnb.lottie.LottieAnimationView
+
+                android:id="@+id/lottie_animation"
+                android:layout_width="255dp"
+                android:layout_height="415dp"
+                app:lottie_fileName="alocasia_splash.json"
+                app:lottie_loop="true"
+                app:lottie_autoPlay="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="200dp"
+                android:layout_marginRight="52dp"
+                android:layout_marginLeft="52dp"
+                android:layout_marginBottom="90dp"
+                android:scaleType="fitStart"
+                />
+
+
+
+        <!--    <com.airbnb.lottie.LottieAnimationView
 
                 android:id="@+id/lottie_animation"
                 android:layout_width="00dp"
@@ -103,7 +121,7 @@
                 android:layout_marginLeft="52dp"
                 android:layout_marginBottom="90dp"
                 />
-
+-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout

@@ -72,4 +72,20 @@
         <item>uhbee_queen_j</item>
     </string-array>
 
+    <string-array name="report_options">
+        <item>스팸</item>
+        <item>성적 컨텐츠</item>
+        <item>혐오 발언 또는 괴롭힘</item>
+        <item>마음에 들지 않습니다</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="report_api_options">
+        <item>spam</item>
+        <item>sex</item>
+        <item>hate</item>
+        <item>dislike</item>
+        <item>etc</item>
+    </string-array>
+
 </resources>

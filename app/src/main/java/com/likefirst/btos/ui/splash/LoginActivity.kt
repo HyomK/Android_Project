@@ -206,7 +206,8 @@ class LoginActivity
         } else {
             userDB.update(user)
         }
-
+        //TODO 로그아웃하고 다시 다른 아이디로 로그인하려고 할때 DB가 이미 쌓여 있어서 UPDATE 안됨
+        //로그아웃시 데이터 비우기 필요할 듯!
         Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
         saveUserIdx(user.userIdx!!)
         updatePlantDB()

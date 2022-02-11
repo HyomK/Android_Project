@@ -7,11 +7,7 @@ import com.likefirst.btos.data.remote.notify.response.Report
 import com.likefirst.btos.data.remote.notify.response.ReportResponse
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
-import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
-import com.likefirst.btos.data.remote.posting.response.MailboxResponse
-import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
-import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
+import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.response.BlockUser
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
@@ -54,14 +50,14 @@ interface RetrofitInterface {
     fun loadDiary(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("typeIdx")idx: String
+        @Query("typeIdx")idx:Int
     ): Call<MailDiaryResponse>
 
     @GET("/mailboxes/mail/{userIdx}")
     fun loadLetter(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("typeIdx")idx: String
+        @Query("typeIdx")idx:Int
     ): Call<MailLetterResponse>
 
 
@@ -69,7 +65,7 @@ interface RetrofitInterface {
     fun loadReply(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("typeIdx")idx: String
+        @Query("typeIdx")idx:Int
     ): Call<MailReplyResponse>
 
     // -------------------PlantList-------------------------- //
@@ -198,10 +194,10 @@ interface RetrofitInterface {
     ): Call<BaseResponse<String>>
 
 
-    @POST("/report")
+    @POST("/reports")
     fun sendReport(
         @Body ReportRequest: Report
-    ):Call<ReportResponse>
+    ):Call<BaseResponse<ReportResponse>>
 
 
 }

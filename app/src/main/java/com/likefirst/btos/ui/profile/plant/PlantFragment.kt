@@ -225,11 +225,8 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         }else{
             errorDialog().show(requireActivity().supportFragmentManager,"selectError")
         }
-
         val selected = plantDB.plantDao().getSelectedPlant("selected")!!
-        //DB에서 기존 selected 값 가져옴
         plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
-        //DB에서 기존 selected 식물을 active로 바꿔주고
         plantDB.plantDao().setPlantStatus(plantIdx,"selected")
 
 

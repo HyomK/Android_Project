@@ -16,7 +16,7 @@ data class Diary(
     @SerializedName("diaryIdx") val diaryIdx : Int,
     @SerializedName("emotionIdx") val emotionIdx : Int,
     @SerializedName("diaryDate") val diaryDate : String,
-    @SerializedName("isPublic") val isPublic: Int,
+    @SerializedName("isPublic") val isPublic: Boolean,
     @SerializedName("content") val content :String,
     @SerializedName("doneList") val doneList :ArrayList<DoneList>,
     @SerializedName("senderNickName") val senderNickName :String,

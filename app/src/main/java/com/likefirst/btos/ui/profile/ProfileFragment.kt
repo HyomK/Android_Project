@@ -31,7 +31,6 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
         sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
             val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
-
             binding.profileIv.setImageResource(requireContext()!!.resources.getIdentifier(
                 plantName[it.getInt("plantIdx")-1]
                         +"_"+it.getInt("level").toString()

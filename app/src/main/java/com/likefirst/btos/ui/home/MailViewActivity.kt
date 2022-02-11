@@ -1,6 +1,8 @@
 package com.likefirst.btos.ui.home
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -70,7 +72,11 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                 }
                 //신고
                 1 -> {
-                    startNextActivity(ReportActivity::class.java)
+                    val intent = Intent(this,ReportActivity::class.java)
+                    intent.putExtra("type","letter") //TODO 이후 REPLY랑 구분 필요
+                    intent.putExtra("typeIdx",letter.content.letterIdx)
+                    Log.e("ReportIntent",intent.toString())
+                    startActivity(intent)
                 }
                 //차단
                 2 -> {
