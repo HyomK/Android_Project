@@ -16,7 +16,6 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                             val emotionNames : Array<String>, val emotionSelectedIdx : Int?) : RecyclerView.Adapter<DiaryEmotionRVAdapter.ViewHolder>(){
 
     var itemList = emotionColorIds
-    private var mHolder : ViewHolder? = null
 
     inner class ViewHolder(val binding:ItemDiaryEmotionRvBinding) : RecyclerView.ViewHolder(binding.root) {
         // 아무것도 선택하지 않았을 때
@@ -31,7 +30,6 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                 binding.itemDiaryEmotionIv.visibility = View.VISIBLE
                 binding.itemDiaryEmotionTv.visibility = View.VISIBLE
                 binding.itemDiaryEmotionTv.text = emotionName
-                DiaryActivity.emotionIdx = emotionSelectedIdx + 1
             } else {
                 binding.itemDiaryEmotionIv.setImageResource(emotionGrayId)
                 binding.itemDiaryEmotionTv.visibility = View.INVISIBLE
@@ -55,9 +53,7 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        mHolder = holder
         Log.d("onBindViewHolder", "bind!!!")
-//        holder.initView(itemList[position])
         if(emotionSelectedIdx != null){
             holder.initSelectedView(emotionColorIds[position], emotionGrayIds[position], position, emotionSelectedIdx, emotionNames[position + 1])
         } else {
@@ -98,9 +94,4 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
         return emotionColorIds.size
     }
 
-//    fun setEmotion(position : Int){
-//        itemList = emotionGrayIds
-//        mHolder!!.setEmotionSelected(emotionColorIds[position], emotionNames[position + 1])
-//        notifyItemChanged(position)
-//    }
 }

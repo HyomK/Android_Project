@@ -137,6 +137,7 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
         val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
         val intent = Intent(requireContext(), DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, result.emotionIdx, result.diaryDate, result.content, isPublic, result.doneList))
+        intent.putExtra("diaryIdx", result.diaryIdx)
         startActivity(intent)
         ArchiveCalendarFragment.pageIndexFlag = true
     }
