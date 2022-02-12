@@ -3,11 +3,15 @@ package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.gms.ads.*
@@ -18,6 +22,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -35,7 +40,20 @@ import java.util.*
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
     var isMailboxOpen =false
+    lateinit var  sharedNotifyModel : SharedNotifyModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedNotifyModel= ViewModelProvider(requireActivity()).get(SharedNotifyModel::class.java)
+        sharedNotifyModel.getMsgLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
+            if(it) binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox_new)
+            else binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
+        })
+        sharedNotifyModel.getNoticeLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
+            if(it) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
+            else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
+        })
 
+    }
     override fun initAfterBinding() {
 
         val mActivity = activity as MainActivity
@@ -50,7 +68,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
 
         binding.homeMailBtn.setOnClickListener {
-
+            sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
 
@@ -81,8 +99,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         if(isHidden || mActivity.isMailOpen ){
             requireActivity().supportFragmentManager.commit {
                 requireActivity().supportFragmentManager.findFragmentByTag("mailbox")?.let { remove(it) }
-                requireActivity().supportFragmentManager.findFragmentByTag("writemail")?.let { remove(it) }
-                requireActivity().supportFragmentManager.findFragmentByTag("viewmail")?.let { remove(it) }
             }
             mActivity.isMailOpen=false
             mActivity.notifyDrawerHandler("lock")
@@ -120,6 +136,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
         animationView.setOnClickListener {
+
         }
     }
 
@@ -244,6 +261,14 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             }
         })
         dialog.show(this.parentFragmentManager, "showAdLoadFailedDialog")
+    }
+
+    fun getUserIdx() : Int{
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        UserDatabase.getInstance(requireContext())!!.userDao()
+        Log.d("User", userDB?.getUser().toString())
+        val userIdx = userDB!!.getUser().userIdx!!
+        return userIdx
     }
 
     override fun onUpdateLoading() {

@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.commit
@@ -13,28 +14,27 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.profile.plant.PlantRVAdapter
-import com.likefirst.btos.ui.profile.plant.SharedViewModel
-import com.likefirst.btos.ui.profile.setting.NoticeFragment
+import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
+import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
 
 class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     var isSettingOpen = false
     var isFetch=true
-    lateinit var  sharedViewModel : SharedViewModel
+    lateinit var  sharedSelectModel : SharedSelectModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedViewModel= ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-        sharedViewModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
+        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
+        sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
             val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
 
             binding.profileIv.setImageResource(requireContext()!!.resources.getIdentifier(
-                plantName[it.getInt("Id")-1]
+                plantName[it.getInt("plantIdx")-1]
                         +"_"+it.getInt("level").toString()
                         +"_circle","drawable",
                 requireActivity().packageName))
-            binding.profileLevelTv.text=it.getString("name")+" "+it.getInt("level").toString()+"단계"
+            binding.profileLevelTv.text=it.getString("plantName")+" "+it.getInt("level").toString()+"단계"
         })
     }
 
@@ -71,11 +71,12 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 .commit()
         }
         binding.profileNoticeTv.setOnClickListener {
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fr_layout, NoticeFragment(),"notice")
-                .addToBackStack("profile-save")
-                .commit()
+//            requireActivity().supportFragmentManager
+//                .beginTransaction()
+//                .addToBackStack("profile-save")
+//                .commit()
+            val intent = Intent(requireActivity(),NoticeActivity::class.java)
+            startActivity(intent)
         }
         binding.profileSuggestTv.setOnClickListener {
             requireActivity().supportFragmentManager

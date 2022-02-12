@@ -13,20 +13,23 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
-import com.likefirst.btos.data.remote.plant.view.PlantInitView
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
@@ -35,30 +38,37 @@ import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 import com.likefirst.btos.utils.saveUserIdx
 
+
 class LoginActivity
     : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
-    LoginView, AutoLoginView, GetProfileView,PlantListView, PlantInitView {
+    LoginView, AutoLoginView, GetProfileView,
+    PlantListView{
 
     val G_SIGN_IN : Int = 1
     private var GOOGLE_LOGIN_CODE = 9001
+    val RC_SIGN_IN =1111
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var email : String
-    private var auth : FirebaseAuth? = null
+
     val authService = AuthService()
     val plantService= PlantService()
 
     val fireStore = Firebase.firestore
+    lateinit var mAuth: FirebaseAuth
+    private var mAuthListener: AuthStateListener? = null
+    lateinit var mGoogleApiClient: GoogleApiClient
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-    }
+    private var mFirebaseDatabase: FirebaseDatabase? = null
+    private var mDatabaseReference: DatabaseReference? = null
+    private var mChildEventListener: ChildEventListener? = null
+    private var userName: String? = null
+    private var movePose : String? = null
+
 
     override fun initAfterBinding() {
 
@@ -85,21 +95,23 @@ class LoginActivity
 
         },3000)
 
+
         val gso = getGSO()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
         binding.loginGoogleLoginTv.setOnClickListener{
             var signInIntent : Intent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, G_SIGN_IN)
         }
+
     }
+
 
     override fun onConnectionFailed(p0: ConnectionResult) {
 
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == G_SIGN_IN){
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
 
@@ -108,7 +120,7 @@ class LoginActivity
             Log.e("account", email)
 
             authService.setLoginView(this)
-            authService.login(email)
+            authService.login(UserEmail(email))
         }
     }
 
@@ -125,13 +137,10 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        saveUserIdx(login.userIdx)
-        signIn(email,"btos1234")
-        Log.d("UserDB", login.toString())
-        // TODO: Firebase 로그인
-        val intent = Intent(this, MainActivity::class.java)
-        finish()
-        startActivity(intent)
+
+        //TODO -> 파이어베이스 로그인으로 수정
+        gotoFirebaseSignUp()
+
     }
 
     override fun onLoginFailure(code: Int, message: String) {
@@ -165,12 +174,17 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-        saveUserIdx(login.userIdx)
 
-        val intent = Intent(this, MainActivity::class.java)
+        gotoFirebaseSignUp()
+    }
+
+    fun gotoFirebaseSignUp(){
+        val intent = Intent(this, FirebaseActivity::class.java)
+        intent.putExtra("movePos","main")
         finish()
         startActivity(intent)
     }
+
 
     override fun onAutoLoginFailure(code: Int, message: String) {
         binding.loginLoadingPb.visibility = View.GONE
@@ -185,117 +199,25 @@ class LoginActivity
         binding.loginLoadingPb.visibility = View.GONE
 
         //UserDB에 프로필 정보 저장
+
+        Log.e("PROFILE/API",user.toString())
         val userDB = UserDatabase.getInstance(this)?.userDao()
         if(userDB?.getUser() == null){
             userDB?.insert(user)
         } else {
             userDB.update(user)
         }
-        Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
 
+        Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
+        saveUserIdx(user.userIdx!!)
         updatePlantDB()
+
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
+
     }
 
-    private fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
-        var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        auth?.signInWithCredential(credential)
-            ?.addOnCompleteListener{
-                    task ->
-                if(task.isSuccessful){
-                    // 아이디, 비밀번호 맞을 때
-                    Toast.makeText(this,"FIREBASE LOGIN SUCCESS",Toast.LENGTH_LONG).show()
-                }else{
-                    // 틀렸을 때
-                    Toast.makeText(this,task.exception?.message,Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
-
-//    fun saveToken(){
-//        //프로필 불러오기
-//
-//        fireStore.collection("users").document(uid)
-//            .addSnapshotListener { documentSnapshot, _ ->
-//                if (documentSnapshot == null) return@addSnapshotListener
-//
-//                val userDTO = documentSnapshot.toObject(UserDTO::class.java)
-//                if (userDTO?.userId != null) {
-//
-//                    // 토큰이 변경되었을 경우 갱신
-//                    if(userDTO.token != token){
-//                        Log.d(TAG, "profileLoad: 토큰 변경되었음.")
-//                        val newUserDTO = UserDTO(userDTO.uId,userDTO.userId,
-//                            userDTO.imageUri,userDTO.score,userDTO.sharing,userDTO.area,token)
-//                        fireStore.collection("users").document(uid).set(newUserDTO)
-//
-//                        // 유저정보 라이브데이터 변경하기
-//                        this.userDTO.value = newUserDTO
-//                    }
-//
-//                    // 아니면 그냥 불러옴
-//                    else {
-//                        Log.d(TAG, "profileLoad: 이미 동일한 토큰이 존재함.")
-//                        this.userDTO.value = userDTO!!
-//                    }
-//                }
-//         }
-//    }
-
-    // TODO: Firebase 로그인
-    private fun signIn(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.signInWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            baseContext, "로그인에 성공 하였습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        createAccount(email, password)
-                        auth?.signInWithEmailAndPassword(email, password)
-                            ?.addOnCompleteListener(this) { task ->
-                                if (task.isSuccessful) {
-                                    Toast.makeText(
-                                        baseContext, "로그인에 성공 하였습니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    Toast.makeText(
-                                        baseContext, "로그인에 실패 하였습니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                }
-                            }
-                    }
-                }
-        }
-    }
-
-    // TODO: Firebase 로그인
-    private fun createAccount(email:     String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth?.createUserWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(
-                            this, "계정 생성 완료.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this, "계정 생성 실패",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-        }
-    }
 
 
     fun updatePlantDB(){
@@ -303,6 +225,7 @@ class LoginActivity
         val USERIDX=userDB.userDao().getUser().userIdx!!
         plantService.setPlantListView(this)
         plantService.loadPlantList(USERIDX.toString())
+
     }
 
     override fun onPlantListLoading() {
@@ -317,12 +240,6 @@ class LoginActivity
                 if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
                     plantDB?.plantDao()?.insert(i)
                 } else {
-                    if(i.plantIdx==1 && i.plantStatus=="inactive"){
-                        val userDB= UserDatabase.getInstance(this)!!
-                        val USERIDX=userDB.userDao().getUser().userIdx!!
-                        plantService.setPlantInitView(this)
-                        plantService.initPlant(USERIDX.toString())
-                    }
                     plantDB?.plantDao()?.update(i)
                 }
             }
@@ -332,16 +249,9 @@ class LoginActivity
 
 
     override fun onPlantListFailure(code: Int, message: String) {
-        Log.d("Plant/API",code.toString()+"fail to load...")
+        when(code){
+            4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
+        }
     }
-
-    override fun onPlantInitSuccess(userId: Int) {
-        Log.e("PlantINIT/API","Success")
-    }
-
-    override fun onPlantInitFailure(code: Int, message: String) {
-        Log.e("PlantINIT/API","FAIL ...")
-    }
-
 
 }

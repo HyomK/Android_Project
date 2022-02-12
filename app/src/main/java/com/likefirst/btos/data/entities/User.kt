@@ -20,7 +20,7 @@ data class User (
     @SerializedName(value = "isPremium")@ColumnInfo(name = "isPremium") var premium: String? = "free",
     @ColumnInfo(name = "recOthers") var recOthers: Boolean? = true,
     @ColumnInfo(name = "recSimilarAge") var recSimilarAge: Boolean? = true,
-    @ColumnInfo(name = "fontIdx") var fontIdx: Int? = 1,
+    @ColumnInfo(name = "fontIdx") var fontIdx: Int? = 0,
     @ColumnInfo(name = "pushAlarm") var pushAlarm: Boolean? = true,
     @ColumnInfo(name = "isSad")var sad: Boolean? = true
 ): Parcelable
@@ -29,6 +29,10 @@ data class UserSign(
     @ColumnInfo(name = "email") var email: String="",
     @ColumnInfo(name = "nickName") var nickName: String="",
     @ColumnInfo(name = "birth") var birth: Int = 0,
+)
+
+data class UserEmail(
+    @ColumnInfo(name = "email") var email: String=""
 )
 
 data class UserIsSad(
@@ -41,4 +45,24 @@ data class UserName(
 
 data class UserBirth(
     @ColumnInfo(name = "birth") var birth: Int
+)
+
+data class UserOther(
+    @ColumnInfo(name = "recOthers") var recOthers: Boolean? = true
+)
+
+data class UserAge(
+    @ColumnInfo(name = "recSimilarAge") var recSimilarAge: Boolean? = true
+)
+
+data class UserPush(
+    @ColumnInfo(name = "pushAlarm") var pushAlarm: Boolean? = true
+)
+
+data class UserFont(
+    @ColumnInfo(name = "fontIdx") var fontIdx: Int? = 1
+)
+
+data class UserLeave(
+    @ColumnInfo(name = "status") var status: String? = ""
 )

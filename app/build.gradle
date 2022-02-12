@@ -126,6 +126,8 @@ dependencies {
 
     // Log
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
-    
+
+    //History_search observable
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 
 }
