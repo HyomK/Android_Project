@@ -73,7 +73,25 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
         mAuthListener = FirebaseAuth.AuthStateListener() { updateProfile() }
     }
 
+    private fun initFirebaseDatabase() {
+        mFirebaseDatabase = FirebaseDatabase.getInstance()
+        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mChildEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
+                chatData?.fromToken = dataSnapshot.key
 
+            }
+            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+            }
+            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onCancelled(databaseError: DatabaseError) {}
+        }
+
+
+        mDatabaseReference?.addChildEventListener( mChildEventListener!!)
+    }
     private fun initValues() {
         val user = mAuth!!.currentUser
         if (user == null) {

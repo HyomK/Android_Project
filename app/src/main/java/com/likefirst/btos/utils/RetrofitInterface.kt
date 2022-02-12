@@ -2,30 +2,20 @@ package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.*
 import com.likefirst.btos.data.remote.BaseResponse
-import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
+import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
 import com.likefirst.btos.data.remote.notify.response.Report
 import com.likefirst.btos.data.remote.notify.response.ReportResponse
-import com.likefirst.btos.data.remote.plant.response.PlantRequest
-import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.plant.response.*
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.response.BlockUser
-import com.likefirst.btos.data.remote.users.response.GetProfileResponse
-import com.likefirst.btos.data.remote.users.response.LoginResponse
-import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
-import com.likefirst.btos.data.remote.viewer.response.ArchiveList
-import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
+import com.likefirst.btos.data.remote.viewer.response.*
 import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
 import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
 import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
-import com.likefirst.btos.data.remote.plant.response.PlantRequest
-import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
-import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
-import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import retrofit2.Call
 import retrofit2.http.*
@@ -172,31 +162,11 @@ interface RetrofitInterface {
         @Body fontIdx : UserFont
     ): Call<BaseResponse<String>>
 
-    // ------------------- History -------------------------- //
-//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-//    fun historyListSender(
-//        @Path("userIdx") userIdx : Int,
-//        @Path("pageNum") pageNum : Int,
-//        @Query("filtering") filtering : String,
-//        @Query("search") search : String?
-//    ) : Call<BaseResponse<SenderHistory>>
-//
-//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-//    fun historyListDiary(
-//        @Path("userIdx") userIdx : Int,
-//        @Path("pageNum") pageNum : Int,
-//        @Query("filtering") filtering : String,
-//        @Query("search") search : String?
-//    ) : Call<BaseResponse<DiaryHistory>>
-//
-//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
-//    fun historyListLetter(
-//        @Path("userIdx") userIdx : Int,
-//        @Path("pageNum") pageNum : Int,
-//        @Query("filtering") filtering : String,
-//        @Query("search") search : String?
-//    ) : Call<BaseResponse<LetterHistory>>
-
+    @PATCH("/users/{userIdx}/status")
+    fun leave(
+        @Path("userIdx") userIdx : Int,
+        @Body status : UserLeave
+    ) : Call<BaseResponse<String>>
 
     // -------------------blacklist-------------------------- //
     @POST("/blocklists")
@@ -222,6 +192,20 @@ interface RetrofitInterface {
     ):Call<BaseResponse<ReportResponse>>
 
 
+    @GET("/histories/list/{userIdx}/{pageNum}")
+    fun historyListSender(
+        @Path("userIdx") userIdx : Int,
+        @Path("pageNum") pageNum : Int,
+        @Query("filtering") filtering: String,
+        @Query("search") search: String?
+    ) : Call<HistoryBaseResponse<BasicHistory<SenderList>>>
+    @GET("/histories/list/{userIdx}/{pageNum}")
+    fun historyListDiaryLetter(
+        @Path("userIdx") userIdx : Int,
+        @Path("pageNum") pageNum : Int,
+        @Query("filtering") filtering : String,
+        @Query("search") search : String?
+    ) : Call<HistoryBaseResponse<BasicHistory<Content>>>
     @GET("/histories/sender/{userIdx}/{senderNickName}/{pageNum}")
     fun historyListSenderDetail(
         @Path("userIdx") userIdx : Int,
@@ -229,7 +213,6 @@ interface RetrofitInterface {
         @Path("pageNum") pageNum : Int,
         @Query("search") search : String?
     ) : Call<HistorySenderDetailResponse>
-
     @GET("/histories/{userIdx}/{type}/{typeIdx}")
     fun historyDetailList(
         @Path("userIdx") userIdx : Int,

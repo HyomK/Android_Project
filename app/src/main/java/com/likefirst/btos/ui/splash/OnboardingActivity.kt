@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
@@ -30,6 +30,7 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
+import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
@@ -66,11 +67,20 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     private var userName: String? = null
     private var movePose : String? = null
 
+    private var mFirebaseDatabase: FirebaseDatabase? = null
+    private var mDatabaseReference: DatabaseReference? = null
+    private var mChildEventListener: ChildEventListener? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+        initFirebaseDatabase()
         initFirebaseAuth()
+
     }
+
+
 
     override fun initAfterBinding() {
 
@@ -95,11 +105,16 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             val nickname = binding.onboardingNameEt.text.toString()
             val birth = binding.onboardingAgelist.text.toString().toInt()
             Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
-
             authService.setSignUpView(this)
             authService.signUp(UserSign(email, nickname, birth))
         }
     }
+
+    fun goToTutorial(){
+        startActivity(Intent(this, TutorialActivity::class.java))
+        finish()
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -155,10 +170,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.e("PROFILE/API", userDB?.getUser().toString())
         saveUserIdx(user.userIdx!!)
         updatePlantDB()
-        initValues()
+
+
         firbaseSignIn()
-        startActivity(Intent(this, TutorialActivity::class.java))
-        finish()
+
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -178,10 +193,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-      //  val intent = Intent(this,TutorialActivity::class.java)
-        //  intent.putExtra("movePos","main")
-        //startActivity(intent)
-
 
     }
 
@@ -258,6 +269,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
+                    initValues()
                     updateProfile()
 
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
@@ -293,8 +305,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
 
                 if(fcmDatabase.fcmDao().getData() ==null){
+                    Log.e("Firebase - insert", userData.toString() )
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
+                    Log.e("Firebase - update", userData.toString() )
                     fcmDatabase.fcmDao().update(userData)
                 }
 
@@ -306,16 +320,34 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             })
 
         }
+        goToTutorial()
     }
+
+
     private fun firbaseSignIn() {
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-/*    fun gotoFirebaseSignUp(){
-        val intent = Intent(this, FirebaseActivity::class.java)
-        intent.putExtra("movePos","main")
-        startActivity(intent)
-    }*/
+
+
+    private fun initFirebaseDatabase() {
+        mFirebaseDatabase = FirebaseDatabase.getInstance()
+        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mChildEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
+                chatData?.fromToken = dataSnapshot.key
+
+            }
+            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+            }
+            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onCancelled(databaseError: DatabaseError) {}
+        }
+
+        mDatabaseReference?.addChildEventListener( mChildEventListener!!)
+    }
 
     fun gotoFirebaseSignUp(){
         val intent = Intent(this, FirebaseActivity::class.java)
