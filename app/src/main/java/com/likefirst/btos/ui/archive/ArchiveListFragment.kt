@@ -2,6 +2,8 @@ package com.likefirst.btos.ui.archive
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -55,6 +57,9 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         query.clear()
 
         val mAdapter = ArchiveListRVAdapter(requireContext())
+        // 리사이클러뷰 상태유지
+        mAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
         initToolbar(mAdapter)
         initDatePicker(mAdapter)
         initDiaryList(mAdapter)
