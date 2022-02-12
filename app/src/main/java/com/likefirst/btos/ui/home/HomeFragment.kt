@@ -63,7 +63,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
         sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
             val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
-            updateHappyPot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
+            val check = it.getString("plantName",null)
+            if(check!=null) updateHappyPot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
         })
     }
     override fun initAfterBinding() {

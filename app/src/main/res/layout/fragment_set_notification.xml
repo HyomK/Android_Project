@@ -36,9 +36,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="완료"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/setting_content_fontSize"
             android:layout_marginEnd="25dp"
             android:textStyle="bold"
+            android:visibility="invisible"
 
             />
 

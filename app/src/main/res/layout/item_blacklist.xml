@@ -13,7 +13,7 @@
             android:text="자몽에 이슬"
             android:textSize="17dp"
             android:layout_marginStart="30dp"
-            android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

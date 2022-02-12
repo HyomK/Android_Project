@@ -83,7 +83,7 @@
                 android:layout_marginEnd="35dp"
                 android:src="@drawable/window_night"  />
 
-            <com.airbnb.lottie.LottieAnimationView
+       <!--     <com.airbnb.lottie.LottieAnimationView
 
                 android:id="@+id/lottie_animation"
                 android:layout_width="255dp"
@@ -99,12 +99,12 @@
                 android:layout_marginRight="52dp"
                 android:layout_marginLeft="52dp"
                 android:layout_marginBottom="90dp"
-                android:scaleType="fitStart"
-                />
+                android:scaleType="fitXY"
+                />-->
 
 
 
-        <!--    <com.airbnb.lottie.LottieAnimationView
+            <com.airbnb.lottie.LottieAnimationView
 
                 android:id="@+id/lottie_animation"
                 android:layout_width="00dp"
@@ -120,8 +120,8 @@
                 android:layout_marginRight="52dp"
                 android:layout_marginLeft="52dp"
                 android:layout_marginBottom="90dp"
+                android:paddingBottom="70dp"
                 />
--->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout

@@ -8,6 +8,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
+import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.stringToDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NoticeRVAdapter(val items:  ArrayList<Pair<String,String>> ): RecyclerView.Adapter<NoticeRVAdapter.ViewHolder>() {
 
@@ -24,7 +28,8 @@ class NoticeRVAdapter(val items:  ArrayList<Pair<String,String>> ): RecyclerView
 
     override fun onBindViewHolder(holder:ViewHolder, position: Int) {
         holder.body.text=items[position].first
-        holder.date.text=items[position].second
+        val date= items[position].second.split(".")
+        holder.date.text="${date[0]}.${date[1]}.${date[2]}"
     }
 
     override fun getItemCount(): Int {
