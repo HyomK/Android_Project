@@ -19,4 +19,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <LinearLayout
+        android:id="@+id/archive_list_no_search_result_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation = "vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/archive_list_no_search_result_iv"
+            android:layout_width="140dp"
+            android:layout_height="250dp"
+            android:src="@drawable/alocasia_no_result"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/archive_list_no_search_result"
+            android:textSize="@dimen/archive_list_no_search_result"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center"/>
+
+
+    </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/archive_list_loading_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

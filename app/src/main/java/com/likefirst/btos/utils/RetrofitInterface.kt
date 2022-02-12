@@ -14,6 +14,19 @@ import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import com.likefirst.btos.data.remote.viewer.response.ArchiveList
+import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
+import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
+import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
+import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.posting.response.*
+import com.likefirst.btos.data.remote.users.response.GetProfileResponse
+import com.likefirst.btos.data.remote.users.response.LoginResponse
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
+import com.likefirst.btos.data.remote.viewer.response.ArchiveList
+import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -22,7 +35,7 @@ interface RetrofitInterface {
 
     // ------------------- UserAuth -------------------------- //
     @POST("/auth/google")
-    fun login(@Body email: String) : Call<LoginResponse>
+    fun login(@Body email: UserEmail) : Call<LoginResponse>
 
     @GET("/auth/jwt")
     fun autoLogin() : Call<LoginResponse>
@@ -105,15 +118,23 @@ interface RetrofitInterface {
         @Body postDiaryRequest : PostDiaryRequest
     ) : Call<BaseResponse<PostDiaryResponse>>
 
+    @GET("/archives/{diaryIdx}")
+    fun getDiary(
+        @Path("diaryIdx") diaryIdx : Int
+        ) : Call<BaseResponse<ArchiveDiaryResult>>
+
     // ---------------- Archive List ----------------- //
     @GET("/archives/diaryList/{userIdx}/{pageNum}")
     fun getArchiveList(
         @Path("userIdx") userIdx : Int,
         @Path("pageNum") pageNum : Int,
         @QueryMap search : Map<String, String>?
-//        @QueryMap startDate : Map<String, String>?,
-//        @QueryMap endDate : Map<String, String>?
     ) : Call<ArchiveList>
+
+    @PUT("/diaries")
+    fun updateDiary(
+        @Body updateRequest : UpdateDiaryRequest
+    ) : Call<BaseResponse<String>>
     // ------------------- SettingUser -------------------------- //
     @PATCH("/users/{userIdx}/nickname")
     fun setName(
@@ -194,10 +215,26 @@ interface RetrofitInterface {
     ): Call<BaseResponse<String>>
 
 
+
     @POST("/reports")
     fun sendReport(
         @Body ReportRequest: Report
     ):Call<BaseResponse<ReportResponse>>
 
+
+    @GET("/histories/sender/{userIdx}/{senderNickName}/{pageNum}")
+    fun historyListSenderDetail(
+        @Path("userIdx") userIdx : Int,
+        @Path("senderNickName") senderNickName : String,
+        @Path("pageNum") pageNum : Int,
+        @Query("search") search : String?
+    ) : Call<HistorySenderDetailResponse>
+
+    @GET("/histories/{userIdx}/{type}/{typeIdx}")
+    fun historyDetailList(
+        @Path("userIdx") userIdx : Int,
+        @Path("type") type : String,
+        @Path("typeIdx") typeIdx : Int,
+    ) : Call<HistoryDetailResponse>
 
 }
