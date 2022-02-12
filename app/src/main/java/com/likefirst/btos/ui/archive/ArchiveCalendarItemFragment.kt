@@ -1,16 +1,23 @@
 package com.likefirst.btos.ui.archive
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
 import com.likefirst.btos.data.remote.viewer.service.ArchiveCalendarService
+import com.likefirst.btos.data.remote.viewer.service.ArchiveDiaryService
 import com.likefirst.btos.data.remote.viewer.view.ArchiveCalendarView
+import com.likefirst.btos.data.remote.viewer.view.ArchiveDiaryView
 import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.posting.DiaryActivity
+import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.dateToStringMonth
 import com.likefirst.btos.utils.getUserIdx
@@ -18,7 +25,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate)
-, ArchiveCalendarView{
+, ArchiveCalendarView, ArchiveDiaryView{
 
     override fun initAfterBinding() {
 
@@ -92,7 +99,6 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
                     //                   2. calendar > GregorianCalendar.getInstance() : 1
                     //                   3. calendar < GregorianCalendar.getInstance() : -1)
                     if(calendar.compareTo(GregorianCalendar.getInstance()) == 1){
-                        // TODO: Toast는 커스텀이 deprecated 되었기 때문에 SnackBar를 이용해서 커스텀 진행
                         Snackbar.make(view!!, "미래의 일기는 작성할 수 없어요!!!", Snackbar.LENGTH_SHORT).show()
                     } else {
                         val dateString = dateToString(calendar.time)
@@ -102,8 +108,10 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
                     }
                 }
 
-                override fun onDiarySelectedListener() {
-                    // TODO: 일기조회 API연결
+                override fun onDiarySelectedListener(diaryIdx: Int) {
+                    val service = ArchiveDiaryService()
+                    service.setArchiveCalendarView(this@ArchiveCalendarItemFragment)
+                    service.getDiary(diaryIdx)
                 }
             })
         }
@@ -114,6 +122,31 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
             // TODO: 4000번 에러 뜨는 이유 물어보기
             4000 -> Snackbar.make(requireView(), "일기를 불러오는데 실패하였습니다. 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
             6004 -> Snackbar.make(requireView(), "프리미엄 계정 가입이 필요합니다.", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onArchiveDiaryLoading() {
+        //TODO("Not yet implemented")
+    }
+
+    override fun onArchiveDiarySuccess(result: ArchiveDiaryResult) {
+        var isPublic = false
+        if (result.isPublic == 1){
+            isPublic = true
+        }
+        val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
+        val intent = Intent(requireContext(), DiaryViewerActivity::class.java)
+        intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, result.emotionIdx, result.diaryDate, result.content, isPublic, result.doneList))
+        intent.putExtra("diaryIdx", result.diaryIdx)
+        startActivity(intent)
+        ArchiveCalendarFragment.pageIndexFlag = true
+    }
+
+    override fun onArchiveDiaryFailure(code: Int) {
+        when (code){
+            4000 -> Snackbar.make(requireView(), "데이터베이스 연결에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
+            6002 -> Snackbar.make(requireView(), "존재하지 않는 일기입니다. 개발자에게 문의해 주세요.", Snackbar.LENGTH_SHORT).show()
+            6008 -> Snackbar.make(requireView(), "일기 복호화에 실패했습니다. 개발자에게 문의해 주세요.", Snackbar.LENGTH_SHORT).show()
         }
     }
 }

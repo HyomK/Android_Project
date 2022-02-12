@@ -8,6 +8,8 @@ import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
 import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
+import com.likefirst.btos.data.remote.posting.view.UpdateDiaryView
+import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +20,8 @@ class DiaryService (){
 
     private lateinit var diaryView: MailDiaryView
     private lateinit var postDiaryView: PostDiaryView
+    private lateinit var updateDiaryView: UpdateDiaryView
+
 
     private val DiaryService = retrofit.create(RetrofitInterface::class.java)
 
@@ -27,6 +31,10 @@ class DiaryService (){
 
     fun setPostDiaryView(postDiaryView: PostDiaryView){
         this.postDiaryView = postDiaryView
+    }
+
+    fun setUpdateDiaryView(UpdateDiaryView: UpdateDiaryView){
+        this.updateDiaryView = UpdateDiaryView
     }
 
     fun postDiary(postDiaryRequest: PostDiaryRequest){
@@ -69,6 +77,28 @@ class DiaryService (){
 
             }
 
+        })
+    }
+
+    fun updateDiary(updateRequest : UpdateDiaryRequest){
+        updateDiaryView.onArchiveUpdateLoading()
+
+        DiaryService.updateDiary(updateRequest).enqueue(object : Callback<BaseResponse<String>> {
+            override fun onResponse(
+                call: Call<BaseResponse<String>>,
+                response: Response<BaseResponse<String>>,
+            ) {
+                val resp = response.body()!!
+                when (resp.code){
+                    1000 -> updateDiaryView.onArchiveUpdateSuccess()
+                    else -> updateDiaryView.onArchiveUpdateFailure(resp.code)
+                }
+            }
+
+            override fun onFailure(call: Call<BaseResponse<String>>, t: Throwable) {
+                Log.d("ArchiveCalendarService / getCalendar Failure", t.toString())
+                updateDiaryView.onArchiveUpdateFailure(400)
+            }
         })
     }
 }

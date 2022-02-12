@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.archive
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,17 +17,19 @@ import java.util.*
 
 class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(FragmentArchiveCalendarBinding::inflate){
 
-    var pageIndex = 0
     lateinit var currentDate : Date
     val mCalendar: Calendar = GregorianCalendar.getInstance()
 
     companion object {
+        var pageIndexFlag = false
+        var pageIndex = 0
         var datePickerFlag = true
     }
 
     override fun initAfterBinding() {
         initCalendar(0)
         setDatePicker()
+        Log.d("pageIndex", "$pageIndex, $pageIndexFlag")
     }
 
     fun initCalendar(viewMode : Int){
@@ -43,7 +46,11 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
         binding.archiveCalendarVp.apply {
             adapter = calendarAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-            setCurrentItem(Int.MAX_VALUE/2, false)
+            if(pageIndexFlag){
+                setCurrentItem(Int.MAX_VALUE/2+ pageIndex, false)
+            } else {
+                setCurrentItem(Int.MAX_VALUE/2, false)
+            }
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
 

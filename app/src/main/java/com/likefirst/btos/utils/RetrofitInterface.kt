@@ -12,7 +12,9 @@ import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
 import com.likefirst.btos.data.remote.viewer.response.ArchiveList
+import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -104,15 +106,23 @@ interface RetrofitInterface {
         @Body postDiaryRequest : PostDiaryRequest
     ) : Call<BaseResponse<PostDiaryResponse>>
 
+    @GET("/archives/{diaryIdx}")
+    fun getDiary(
+        @Path("diaryIdx") diaryIdx : Int
+        ) : Call<BaseResponse<ArchiveDiaryResult>>
+
     // ---------------- Archive List ----------------- //
     @GET("/archives/diaryList/{userIdx}/{pageNum}")
     fun getArchiveList(
         @Path("userIdx") userIdx : Int,
         @Path("pageNum") pageNum : Int,
         @QueryMap search : Map<String, String>?
-//        @QueryMap startDate : Map<String, String>?,
-//        @QueryMap endDate : Map<String, String>?
     ) : Call<ArchiveList>
+
+    @PUT("/diaries")
+    fun updateDiary(
+        @Body updateRequest : UpdateDiaryRequest
+    ) : Call<BaseResponse<String>>
     // ------------------- SettingUser -------------------------- //
     @PATCH("/users/{userIdx}/nickname")
     fun setName(
