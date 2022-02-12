@@ -31,7 +31,6 @@ class DiaryService (){
 
     fun postDiary(postDiaryRequest: PostDiaryRequest){
         postDiaryView.onDiaryPostLoading()
-
         DiaryService.postDiary(postDiaryRequest).enqueue(object :Callback<BaseResponse<PostDiaryResponse>>{
             override fun onResponse(call: Call<BaseResponse<PostDiaryResponse>>, response: Response<BaseResponse<PostDiaryResponse>>, ) {
                 val resp = response.body()!!
@@ -41,12 +40,10 @@ class DiaryService (){
                     else -> postDiaryView.onDiaryPostFailure(resp.code)
                 }
             }
-
             override fun onFailure(call: Call<BaseResponse<PostDiaryResponse>>, t: Throwable) {
                 // Network Error
                 postDiaryView.onDiaryPostFailure(400)
             }
-
         })
     }
 
