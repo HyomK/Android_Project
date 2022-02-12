@@ -20,6 +20,7 @@ import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.databinding.ActivityDiaryBinding
+import com.likefirst.btos.databinding.ItemDiaryEmotionRvBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.splash.LoginActivity
@@ -40,7 +41,6 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
-        //TODO: 프리미엄 회원 확인해서 뷰 다르게 보여주기
 
         // companion object 초기화
         emotionIdx = 0
@@ -76,16 +76,22 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     fun initContents(){
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         if(userDB.getUser().premium == "free"){
             binding.diaryEmotionsRv.visibility = View.GONE
         }
-        binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
+        // 일기 수정모드일 때 contents set
+        if(intent.getBooleanExtra("editingMode", false) &&
+            intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
+
+            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
+            binding.diaryContentsEt.setText(intentDataset!!.contents)
+            binding.diaryDateTv.text = intentDataset.diaryDate
+        } else {
+            binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
+        }
+
     }
 
     fun setToolbar(){
@@ -94,6 +100,12 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             onBackPressed()
         }
 
+        // 일기 수정모드일 때 토글버튼 set
+        if(intent.getBooleanExtra("editingMode", false) &&
+            intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
+            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
+            diaryToggleSwitcher(!intentDataset!!.isPublic)
+        }
         binding.diaryToolbar.diaryToggleIv.setOnClickListener {
             val isPublic = isPublic()
             diaryToggleSwitcher(isPublic)
@@ -163,6 +175,15 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             }
             false
         }
+
+        // 일기 수정모드일 때 doneList set
+        if(intent.getBooleanExtra("editingMode", false) &&
+            intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
+            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
+            for (i in 0 until intentDataset!!.doneLists.size){
+                doneListAdapter.addDoneList(intentDataset.doneLists[i])
+            }
+        }
     }
 
     fun showOneBtnDialog(message : String, tag : String){
@@ -194,7 +215,12 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             val emotionGrayId = resources.getIdentifier("emotion$num"+"_gray", "drawable", this.packageName)
             emotionGrayIds.add(emotionGrayId)
         }
-        val emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames)
+        var emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, null)
+        if(intent.getBooleanExtra("editingMode", false) &&
+            intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
+            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
+            emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, intentDataset!!.emotionIdx - 1)
+        }
         val emotionDecoration = DiaryEmotionRVItemDecoration()
         emotionDecoration.setSize(this)
         binding.diaryEmotionsRv.apply {
@@ -204,6 +230,12 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             setItemViewCacheSize(8)
             addItemDecoration(emotionDecoration)
         }
+        // 일기 수정모드 일 때 emotion set
+//        if(intent.getBooleanExtra("editingMode", false) &&
+//            intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
+//            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
+//            emotionAdapter.setEmotion(intentDataset!!.emotionIdx - 1)
+//        }
     }
 
     fun goToDiaryViewer(){
@@ -246,15 +278,22 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     override fun onDiaryPostLoading() {
-        //TODO: 로딩화면 처리
+        binding.diaryLoadingView.apply{
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+
     }
 
     override fun onDiaryPostSuccess() {
+        binding.diaryLoadingView.visibility = View.GONE
         goToDiaryViewer()
         saveLastPostingDate(Date())
     }
 
     override fun onDiaryPostFailure(code: Int) {
+        binding.diaryLoadingView.visibility = View.GONE
         when (code){
             4000, 7012, 7013 -> {
                 showOneBtnDialog("데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", "onDiaryPostFailure Code:4000")

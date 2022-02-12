@@ -13,15 +13,31 @@ import com.likefirst.btos.databinding.ItemDiaryEmotionRvBinding
 
 class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                             val emotionGrayIds : ArrayList<Int>,
-                            val emotionNames : Array<String>) : RecyclerView.Adapter<DiaryEmotionRVAdapter.ViewHolder>(){
+                            val emotionNames : Array<String>, val emotionSelectedIdx : Int?) : RecyclerView.Adapter<DiaryEmotionRVAdapter.ViewHolder>(){
 
     var itemList = emotionColorIds
+    private var mHolder : ViewHolder? = null
 
     inner class ViewHolder(val binding:ItemDiaryEmotionRvBinding) : RecyclerView.ViewHolder(binding.root) {
+        // 아무것도 선택하지 않았을 때
         fun initView(emotionColorId : Int){
             binding.itemDiaryEmotionIv.setImageResource(emotionColorId)
             binding.itemDiaryEmotionTv.visibility = View.INVISIBLE
         }
+        // 하나만 이미 선택되어 있는 상태
+        fun initSelectedView(emotionColorId : Int, emotionGrayId: Int, position: Int, emotionSelectedIdx: Int, emotionName : String){
+            if (position == emotionSelectedIdx){
+                binding.itemDiaryEmotionIv.setImageResource(emotionColorId)
+                binding.itemDiaryEmotionIv.visibility = View.VISIBLE
+                binding.itemDiaryEmotionTv.visibility = View.VISIBLE
+                binding.itemDiaryEmotionTv.text = emotionName
+                DiaryActivity.emotionIdx = emotionSelectedIdx + 1
+            } else {
+                binding.itemDiaryEmotionIv.setImageResource(emotionGrayId)
+                binding.itemDiaryEmotionTv.visibility = View.INVISIBLE
+            }
+        }
+        // 하나를 새로 선택했을 때
         fun setEmotionGray(emotionGrayId : Int){
             binding.itemDiaryEmotionIv.setImageResource(emotionGrayId)
             binding.itemDiaryEmotionTv.visibility = View.INVISIBLE
@@ -39,8 +55,14 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        mHolder = holder
         Log.d("onBindViewHolder", "bind!!!")
-        holder.initView(itemList[position])
+//        holder.initView(itemList[position])
+        if(emotionSelectedIdx != null){
+            holder.initSelectedView(emotionColorIds[position], emotionGrayIds[position], position, emotionSelectedIdx, emotionNames[position + 1])
+        } else {
+            holder.initView(itemList[position])
+        }
         holder.binding.itemDiaryEmotionIv.setOnClickListener {
             DiaryActivity.emotionIdx = position + 1
             itemList = emotionGrayIds
@@ -76,4 +98,9 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
         return emotionColorIds.size
     }
 
+//    fun setEmotion(position : Int){
+//        itemList = emotionGrayIds
+//        mHolder!!.setEmotionSelected(emotionColorIds[position], emotionNames[position + 1])
+//        notifyItemChanged(position)
+//    }
 }

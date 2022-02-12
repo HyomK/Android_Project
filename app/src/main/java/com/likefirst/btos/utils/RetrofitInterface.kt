@@ -11,6 +11,7 @@ import com.likefirst.btos.data.remote.posting.response.LetterResponse
 import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
 import com.likefirst.btos.data.remote.viewer.response.ArchiveList
+import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -109,6 +110,11 @@ interface RetrofitInterface {
         @Path("pageNum") pageNum : Int,
         @QueryMap search : Map<String, String>?
     ) : Call<ArchiveList>
+
+    @PUT("/diaries")
+    fun updateDiary(
+        @Body updateRequest : UpdateDiaryRequest
+    ) : Call<BaseResponse<String>>
     // ------------------- SettingUser -------------------------- //
     @PATCH("/users/{userIdx}/nickname")
     fun setName(
