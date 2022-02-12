@@ -5,25 +5,16 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class MailLetterDetailResponse(
+data class LetterInfo(
     @SerializedName("letterIdx") val letterIdx : Int,
-    @SerializedName("replierIdx") val replierIdx : Int,
-    @SerializedName("receiverIdx") val receiverIdx : Int,
     @SerializedName("content") val content :String
 ):Parcelable
 
 
-data class MailLetterResponse(
-    @SerializedName("isSuccess") val isSuccess: Boolean,
-    @SerializedName("code") val code : Int,
-    @SerializedName("message") val message : String,
-    @SerializedName("result") val result : LetterInfo
-)
 
 @Parcelize
-data class LetterInfo(
-    @SerializedName("type") val type : String,
-    @SerializedName("content") val content : MailLetterDetailResponse,
+data class MailLetterResponse(
+    @SerializedName("mail") val mail : LetterInfo,
     @SerializedName("senderNickName") val senderNickname :String,
     @SerializedName("senderFontIdx") val senderFontIdx : Int
 ):Parcelable

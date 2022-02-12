@@ -137,7 +137,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             updateUserService.setUpdateIsSadView(this)
             updateUserService.updateIsSad(getUserIdx(), UserIsSad(true))
             userDB.updateIsSad(true)
-            initSadPot(animationView)
+            initSadPot(animationView )
         } else {
             initHappyPot(animationView)
         }
@@ -145,7 +145,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
-        animationView.setAnimation("${plantName}/${plantName }_${2}.json")
+        animationView.setAnimation("${plantName}/${plantName }_${currentLevel}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
@@ -154,8 +154,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initHappyPot(animationView: LottieAnimationView) {
-        val plantDB = PlantDatabase.getInstance(requireContext())?.plantDao()
-        val currentPlant = plantDB?.getSelectedPlant()!!
+        val currentPlant = getCurrentPlant()
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
         animationView.setAnimation("${plantName}/${plantName }_${currentPlant.currentLevel}.json")
@@ -167,7 +166,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun initSadPot(animationView: LottieAnimationView){
-        animationView.setAnimation("alocasia/alocasia_sad_3.json")
+        val currentPlant = getCurrentPlant()
+        val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
+        val plantName =plantIndex[currentPlant.plantIdx-1]
+        animationView.setAnimation( "${plantName}/${plantName }_sad_${3}.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
         // 테스트 기기 추가
@@ -193,6 +195,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         animationView.setOnClickListener {
             showUpdateSadPotDialog(mRewardedVideoAd)
         }
+    }
+
+    fun getCurrentPlant():Plant{
+        val plantDB = PlantDatabase.getInstance(requireContext())?.plantDao()
+        val currentPlant = plantDB?.getSelectedPlant()!!
+        return currentPlant
     }
 
     fun loadInterstitialAd(mRewardedVideoAd : RewardedAd){

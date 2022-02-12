@@ -2,6 +2,7 @@ package com.likefirst.btos.data.remote.posting.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
+import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.utils.RetrofitInterface
@@ -25,9 +26,9 @@ class MailLetterService(){
     fun loadLetter(userId:Int,type:String, idx:Int){
         mailLetterView.onLetterLoading()
 
-        LetterService.loadLetter(userId,type,idx).enqueue(object:Callback<MailLetterResponse> {
-            override fun onResponse(call: Call<MailLetterResponse>, response: Response<MailLetterResponse>) {
-                val letterResponse: MailLetterResponse =response.body()!!
+        LetterService.loadLetter(userId,type,idx).enqueue(object:Callback<BaseResponse<MailLetterResponse>> {
+            override fun onResponse(call: Call<BaseResponse<MailLetterResponse>>, response: Response<BaseResponse<MailLetterResponse>>) {
+                val letterResponse: BaseResponse<MailLetterResponse> =response.body()!!
                 Log.d("Letter/APIe",  letterResponse.toString())
                 Log.d("Letter/API",letterResponse.code.toString())
                 when( letterResponse.code){
@@ -40,7 +41,7 @@ class MailLetterService(){
 
             }
 
-            override fun onFailure(call: Call<MailLetterResponse>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<MailLetterResponse>>, t: Throwable) {
 
             }
 

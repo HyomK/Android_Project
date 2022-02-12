@@ -54,18 +54,18 @@ class DiaryService (){
 
         diaryView.onDiaryLoading()
 
-        DiaryService.loadDiary(userId,type,idx).enqueue(object:Callback<MailDiaryResponse>{
-            override fun onResponse(call: Call<MailDiaryResponse>, response: Response<MailDiaryResponse>) {
-                val diaryResponse=response.body()!!
+        DiaryService.loadDiary(userId,type,idx).enqueue(object:Callback<BaseResponse<MailDiaryResponse>>{
+            override fun onResponse(call: Call<BaseResponse<MailDiaryResponse>>, response: Response<BaseResponse<MailDiaryResponse>>) {
+                val diaryResponse :BaseResponse<MailDiaryResponse> =response.body()!!
                 Log.e("Diary/API",  diaryResponse.toString())
 
                 when( diaryResponse.code){
-                    1000->diaryView.onDiarySuccess( diaryResponse.result.content)
+                    1000->diaryView.onDiarySuccess( diaryResponse.result)
                     else->diaryView.onDiaryFailure( diaryResponse.code,  diaryResponse.message)
                 }
             }
 
-            override fun onFailure(call: Call<MailDiaryResponse>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<MailDiaryResponse>>, t: Throwable) {
 
             }
 

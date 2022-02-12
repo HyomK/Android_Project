@@ -103,25 +103,22 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         editor.commit()
     }
 
-    fun getDiary(diary: Diary){
+    fun getDiary(diary: MailDiaryResponse){
         var name : String="(알 수 없음)"
         if(diary.senderNickName !=null)
             name=diary.senderNickName
-        val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
-        //TODO : Emotion 임의 값 넣음 -> 수정해서 이용
-        val Diary = DiaryViewerInfo( diary.senderNickName, diary.emotionIdx, diary.diaryDate, diary.content, diary.isPublic, doneList.toArrayList())
+        val doneList :List<String> = diary.mail.doneList.map{donelist ->donelist.content}
+        val Diary = DiaryViewerInfo( diary.senderNickName, diary.mail.emotionIdx, diary.mail.diaryDate, diary.mail.content, true, doneList.toArrayList())
         val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
-        Log.e("Mailbox", Diary.toString())
         intent.putExtra("diaryInfo",Diary)
         requireActivity().startActivity(intent)
     }
 
 
-    fun getLetter(letter:LetterInfo){
+    fun getLetter(letter:MailLetterResponse){
         val spf= requireActivity().getSharedPreferences("MailBox",
             AppCompatActivity.MODE_PRIVATE)
         val sendAt=spf.getString("sendAt","")
-        Log.d("Letter/API",id.toString())
         val Letter = letter
         val bundle =bundleOf(
             "date" to sendAt,
@@ -137,7 +134,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         startActivity(intent)
     }
 
-    fun getReply(reply:ReplyInfo){
+    fun getReply(reply:MailReplyResponse){
         val spf= requireActivity().getSharedPreferences("MailBox",
             AppCompatActivity.MODE_PRIVATE)
         val sendAt=spf.getString("sendAt","")
@@ -201,7 +198,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     }
 
-    override fun onLetterSuccess(letter: LetterInfo) {
+    override fun onLetterSuccess(letter: MailLetterResponse) {
         Log.d("Letter/API : Success",letter.toString())
         getLetter(letter)
     }
@@ -214,7 +211,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onDiaryLoading() {
     }
 
-    override fun onDiarySuccess(diary: Diary) {
+    override fun onDiarySuccess(diary:MailDiaryResponse) {
         Log.d("Diary/API : Success",diary.toString())
         getDiary(diary)
     }
@@ -228,7 +225,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         TODO("Not yet implemented")
     }
 
-    override fun onReplySuccess(reply: ReplyInfo) {
+    override fun onReplySuccess(reply: MailReplyResponse) {
        getReply(reply)
     }
 

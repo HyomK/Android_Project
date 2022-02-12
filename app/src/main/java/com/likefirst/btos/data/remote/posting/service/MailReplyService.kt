@@ -2,6 +2,7 @@ package com.likefirst.btos.data.remote.posting.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
+import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.utils.RetrofitInterface
@@ -21,9 +22,9 @@ class MailReplyService() {
     fun loadReply(userId:Int, type:String, idx:Int){
 
 
-        ReplyService. loadReply(userId, type, idx).enqueue(object: Callback<MailReplyResponse>{
-            override fun onResponse(call: Call<MailReplyResponse>, response: Response<MailReplyResponse>) {
-                val replyResponse :MailReplyResponse =response.body()!!
+        ReplyService. loadReply(userId, type, idx).enqueue(object: Callback<BaseResponse<MailReplyResponse>>{
+            override fun onResponse(call: Call<BaseResponse<MailReplyResponse>>, response: Response<BaseResponse<MailReplyResponse>>) {
+                val replyResponse :BaseResponse<MailReplyResponse> =response.body()!!
                 Log.e("Reply/API", replyResponse.toString())
 
                 when(replyResponse.code){
@@ -32,7 +33,7 @@ class MailReplyService() {
                 }
             }
 
-            override fun onFailure(call: Call<MailReplyResponse>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<MailReplyResponse>>, t: Throwable) {
                 mailReplyView.onReplyFailure(4000,"데이터베이스 연결에 실패하였습니다.")
                 mailReplyView.onReplyFailure(6006,"일기 복호화에 실패하였습니다.")
             }
