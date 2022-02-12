@@ -19,6 +19,7 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         binding.MailReplyMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailReplyMenuList.setAdapter(adapter)
         binding.MailReplyHideView.visibility=View.VISIBLE
+        binding.MailReplyMenuSp.visibility=View.GONE
 
         binding.MailReplyToolbar.toolbarBackIc.setOnClickListener {
             onBackPressed()
@@ -43,6 +44,7 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
+            binding.MailReplyMenuSp.visibility=View.VISIBLE
         }
 
         binding.MailReplyWriteBtn.setOnClickListener {

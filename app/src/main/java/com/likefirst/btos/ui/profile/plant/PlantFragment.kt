@@ -71,7 +71,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             }
 
             override fun onClickSelectItem(plant : Plant,position:Int) {
-
                 val plantService = PlantService()
                 plantService.setPlantSelectView(plantSelectView)
                 val request = PlantRequest(USERIDX,plant.plantIdx)
@@ -184,11 +183,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         val plant = plantDB.plantDao().getPlant(plantIdx)
         if(plant!=null){
             sharedBuyModel.setResult(true)  // 성공 전달
-            //TODO 화분 선택 Dialog 구현
-
-            Log.e("PlantAPI"," / Before : Buy api success ${plantDB.plantDao().getPlants()}")
             plantDB.plantDao().setPlantInit(plantIdx,"active",0,true)
-            Log.e("PlantAPI"," / After : Buy api success ${plantDB.plantDao().getPlants()}")
 
         }
 
@@ -225,7 +220,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         }else{
             errorDialog().show(requireActivity().supportFragmentManager,"selectError")
         }
-        val selected = plantDB.plantDao().getSelectedPlant("selected")!!
+        val selected = plantDB.plantDao().getSelectedPlant()!!
         plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
         plantDB.plantDao().setPlantStatus(plantIdx,"selected")
 

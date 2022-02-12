@@ -91,8 +91,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .addToBackStack(null)
                 .show(MailboxFragment())
                 .commit()
-            val item =  requireActivity().supportFragmentManager.fragments
-            Log.d("homeSTACK","homeitem  ${item.toString()} }")
+
         }
 
         binding.homeWriteBtn.bringToFront()
@@ -146,7 +145,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
-        animationView.setAnimation("${plantName}/${plantName }_${currentLevel}.json")
+        animationView.setAnimation("${plantName}/${plantName }_${2}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
@@ -156,7 +155,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
     fun initHappyPot(animationView: LottieAnimationView) {
         val plantDB = PlantDatabase.getInstance(requireContext())?.plantDao()
-        val currentPlant = plantDB?.getSelectedPlant("selected")!!
+        val currentPlant = plantDB?.getSelectedPlant()!!
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
         animationView.setAnimation("${plantName}/${plantName }_${currentPlant.currentLevel}.json")

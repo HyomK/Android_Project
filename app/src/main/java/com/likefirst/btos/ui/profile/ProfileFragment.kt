@@ -42,8 +42,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val spf = requireActivity().getSharedPreferences("EditName",MODE_PRIVATE) // 기존에 있던 데이터
+        val spf = requireActivity().getSharedPreferences("EditName",MODE_PRIVATE)
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference
             .getString("UserName", "undefine")
@@ -87,10 +86,6 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 .commit()
         }
         binding.profileNoticeTv.setOnClickListener {
-//            requireActivity().supportFragmentManager
-//                .beginTransaction()
-//                .addToBackStack("profile-save")
-//                .commit()
             val intent = Intent(requireActivity(),NoticeActivity::class.java)
             startActivity(intent)
         }
@@ -106,7 +101,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     fun initProfile(){
         val plantDB = PlantDatabase.getInstance(requireContext())!!
         val userDatabase = UserDatabase.getInstance(requireContext())!!
-        val plant =plantDB.plantDao().getSelectedPlant("selected")!!
+        val plant =plantDB.plantDao().getSelectedPlant()!!
         val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
         val profile = requireContext()!!.resources.getIdentifier(
             plantName[plant.plantIdx-1]
