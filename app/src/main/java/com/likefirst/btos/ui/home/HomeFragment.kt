@@ -145,7 +145,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
-        animationView.setAnimation("${plantName}/${plantName }_${currentLevel}.json")
+        animationView.setAnimation("${plantName}/${plantName }_${3}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()

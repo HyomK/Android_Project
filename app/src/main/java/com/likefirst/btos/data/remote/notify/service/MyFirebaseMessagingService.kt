@@ -187,7 +187,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setShowBadge(false)
             }
         }
-        saveData(Message)
+       // saveData(Message)
         // 알림 생성
         val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
         if(spf.getBoolean("state",true)){
