@@ -1,6 +1,5 @@
 package com.likefirst.btos.ui.history
 
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
@@ -15,7 +14,10 @@ class HistoryDetailFragment(private val userIdx: Int,private val type: String,pr
     : BaseFragment<FragmentHistoryListBinding>(FragmentHistoryListBinding::inflate), MainActivity.onBackPressedListener, HistoryDetailView {
 
     val positioning : Int = -1
+    lateinit var recyclerView: RecyclerView
+
     override fun initAfterBinding() {
+        recyclerView = binding.historyDetailRv
         binding.historyToolbar.historyDetailBackIv.setOnClickListener{
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -25,18 +27,12 @@ class HistoryDetailFragment(private val userIdx: Int,private val type: String,pr
 
     private fun initHistoryDetailList() {
         val recyclerViewAdapter = HistoryDetailRecyclerViewAdapter(requireContext(), resources.getStringArray(
-            R.array.emotionNames))
+            R.array.emotionNames), recyclerView)
         binding.historyDetailRv.apply {
             adapter = recyclerViewAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
-        recyclerViewAdapter.setMyItemClickListener(object : HistoryDetailRecyclerViewAdapter.MyItemClickListener {
-            override fun foundPositioning(position: Int) {
-                Log.e("HISTORYDETAIL",recyclerViewAdapter.getPosition().toString())
-                binding.historyDetailRv.scrollToPosition(position)
-            }
-        })
         val historyService = HistoryService()
         historyService.setHistoryDetailView(this)
         historyService.historyDetail(userIdx, type, typeIdx, recyclerViewAdapter)
@@ -53,6 +49,15 @@ class HistoryDetailFragment(private val userIdx: Int,private val type: String,pr
     override fun onHistoryDetailSuccess(response: ArrayList<HistoryList>, recyclerViewAdapter: HistoryDetailRecyclerViewAdapter) {
         recyclerViewAdapter.setHistoryItems(response)
         recyclerViewAdapter.notifyDataSetChanged()
+        val size = recyclerViewAdapter.itemCount
+        var count = 0
+        response.forEach {
+            if(it.positioning){
+                recyclerView.scrollToPosition(count)
+                return@forEach
+            }
+            count++
+        }
     }
 
     override fun onHistoryDetailFailure(code: Int, message: String) {

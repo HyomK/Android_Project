@@ -7,13 +7,13 @@ import com.likefirst.btos.ui.history.HistoryDetailRecyclerViewAdapter
 interface HistorySenderView {
     fun onHistorySenderLoading()
     fun onHistorySenderSuccess(response : BasicHistory<SenderList>, pageInfo: PageInfo, recyclerViewAdapter : HistoryBasicRecyclerViewAdapter)
-    fun onHistorySenderFailure(code : Int, message : String)
+    fun onHistorySenderFailure(code : Int, message : String, recyclerViewAdapter : HistoryBasicRecyclerViewAdapter)
 }
 
 interface HistoryDiaryandLetterView {
     fun onHistoryDiaryLoading()
     fun onHistoryDiarySuccess(response : BasicHistory<Content>, pageInfo : PageInfo, recyclerViewAdapter: HistoryBasicRecyclerViewAdapter)
-    fun onHistoryDiaryFailure(code : Int, message : String)
+    fun onHistoryDiaryFailure(code : Int, message : String, recyclerViewAdapter : HistoryBasicRecyclerViewAdapter)
 }
 
 interface SenderDetailView {

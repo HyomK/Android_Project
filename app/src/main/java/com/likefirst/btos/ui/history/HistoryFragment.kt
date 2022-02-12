@@ -4,21 +4,30 @@ import android.view.View
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentHistoryBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.MainActivity
 
 class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBinding::inflate) {
+
     override fun initAfterBinding() {
+        val mActivity = activity as MainActivity
 
         binding.historyToolbar.historySearchIv.setOnClickListener {
             // 검색 버튼을 누른 경우
             binding.historyToolbar.historySearchEt.visibility = View.VISIBLE
             binding.historyToolbar.historyBackIv.visibility = View.VISIBLE
+            binding.historyToolbar.historySearchIv.isClickable = false
+            if(binding.historyToolbar.historySearchEt.text.toString() != "") {
+                binding.historyToolbar.historySearchEt.setText("")
+            }
         }
         binding.historyToolbar.historyBackIv.setOnClickListener {
-            binding.historyToolbar.historySearchEt.visibility = View.GONE
-            binding.historyToolbar.historyBackIv.visibility = View.GONE
+            checkET()
+            checkView()
+            mActivity.hideKeyboard(requireView())
         }
-
         binding.historyRadiogroup.setOnCheckedChangeListener { radioGroup, i ->
+            checkView()
+            mActivity.hideKeyboard(requireView())
             radioButton(i)
         }
     }
@@ -46,9 +55,29 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         }
     }
 
+    fun checkET(){
+        if(binding.historyToolbar.historySearchEt.visibility == View.VISIBLE && binding.historyToolbar.historySearchEt.text.toString() != "") {
+            binding.historyToolbar.historySearchEt.setText("")
+        }
+    }
+
+    fun checkView(){
+        binding.historyToolbar.historySearchEt.visibility = View.GONE
+        binding.historyToolbar.historyBackIv.visibility = View.GONE
+        binding.historyToolbar.historySearchIv.isClickable = true
+    }
+
     override fun onStart() {
         super.onStart()
         radioButton(binding.historyRadiogroup.checkedRadioButtonId)
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden){
+            binding.historyToolbar.historyBackIv.visibility = View.GONE
+            binding.historyToolbar.historySearchEt.visibility = View.GONE
+            binding.historyToolbar.historySearchEt.text = null
+        }
+    }
 }

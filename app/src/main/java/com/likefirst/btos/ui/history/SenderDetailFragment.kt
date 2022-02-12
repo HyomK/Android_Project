@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.history
 
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,8 +26,14 @@ class SenderDetailFragment(private val userIdx : Int, private val senderNickName
 
     override fun initAfterBinding() {
 
-        binding.historyDetailToolbar.historyDetailBackIv.setOnClickListener{
-            requireActivity().supportFragmentManager.popBackStack()
+        binding.historyDetailToolbar.historyBackIv.setOnClickListener{
+            if(binding.historyDetailToolbar.historySearchEt.visibility == View.GONE){
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+            else{
+                binding.historyDetailToolbar.historySearchEt.visibility = View.GONE
+                binding.historyDetailToolbar.historySearchEt.setText("")
+            }
         }
 
         requiredPageNum = 1

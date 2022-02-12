@@ -124,7 +124,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun initDoneListRv(){
-        val doneListAdapter = DiaryDoneListRVAdapter()
+        val doneListAdapter = DiaryDoneListRVAdapter("diary")
         binding.diaryDoneListRv.apply{
             adapter = doneListAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

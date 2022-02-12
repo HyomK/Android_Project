@@ -56,14 +56,14 @@ class HistoryService {
 
                 when(senderList.code){
                     1000->historySenderView.onHistorySenderSuccess(senderList.result, senderList.pageInfo, recyclerViewAdapter)
-                    else->historySenderView.onHistorySenderFailure(senderList.code,senderList.message)
+                    else->historySenderView.onHistorySenderFailure(senderList.code,senderList.message, recyclerViewAdapter)
                 }
             }
             override fun onFailure(
                 call: Call<HistoryBaseResponse<BasicHistory<SenderList>>>,
                 t: Throwable,
             ) {
-                historySenderView.onHistorySenderFailure(400,"네트워크 오류가 발생했습니다.")
+                historySenderView.onHistorySenderFailure(400,"네트워크 오류가 발생했습니다.", recyclerViewAdapter)
             }
         })
 
@@ -82,14 +82,14 @@ class HistoryService {
 
                 when(DLlist.code){
                     1000->historyDLView.onHistoryDiarySuccess(DLlist.result, DLlist.pageInfo, recyclerViewAdapter)
-                    else->historyDLView.onHistoryDiaryFailure(DLlist.code,DLlist.message)
+                    else->historyDLView.onHistoryDiaryFailure(DLlist.code,DLlist.message, recyclerViewAdapter)
                 }
             }
             override fun onFailure(
                 call: Call<HistoryBaseResponse<BasicHistory<Content>>>,
                 t: Throwable,
             ) {
-                historyDLView.onHistoryDiaryFailure(400,"네트워크 오류가 발생했습니다.")
+                historyDLView.onHistoryDiaryFailure(400,"네트워크 오류가 발생했습니다.", recyclerViewAdapter)
             }
         })
     }

@@ -38,15 +38,21 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
 
     override fun onBindViewHolder(holder: HistoryBasicRecyclerViewAdapter.ViewHolder, position: Int) {
 
-        if(filtering == "sender") {
+        if(senderItems.isNotEmpty()){
             holder.senderBind(senderItems[position])
             holder.binding.itemHistoryLayout.setOnClickListener {
-                mItemClickListener.moveToSenderDetail(userIdx, senderItems[position].firstContent.senderNickName!!)
+                senderItems[position].firstContent.senderNickName?.let { it1 ->
+                    mItemClickListener.moveToSenderDetail(userIdx,
+                        it1)
+                }
             }
-        }else if(filtering == "diary" || filtering == "letter" || filtering == "senderDetail"){
-            holder.dlBind(dlItems[position])
+        }
+        if(dlItems.isNotEmpty()){
+            dlItems[position].let { holder.dlBind(it) }
             holder.binding.itemHistoryLayout.setOnClickListener {
-                mItemClickListener.moveToHistoryList(userIdx, dlItems[position].type, dlItems[position].typeIdx)
+                dlItems[position].let { it1 ->
+                    dlItems[position].let { it2 ->
+                        mItemClickListener.moveToHistoryList(userIdx, it2.type, it1.typeIdx) } }
             }
         }
     }
@@ -111,6 +117,22 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
     fun setdlItems(items: ArrayList<Content>){
 //        this.dlItems.clear()
         this.dlItems.addAll(items)
+    }
+
+    fun clearSenderItems(){
+        this.senderItems.clear()
+    }
+
+    fun cleardlItems(){
+        this.dlItems.clear()
+    }
+
+    fun isSenderEmpty() : Boolean{
+        return senderItems.isEmpty()
+    }
+
+    fun isDLEmpty() : Boolean{
+        return dlItems.isEmpty()
     }
 
 }

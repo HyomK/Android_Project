@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
@@ -81,7 +82,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
-        authService.login(email)
+        authService.login(UserEmail(email))
     }
 
     override fun onSignUpFailure(code: Int, message: String) {

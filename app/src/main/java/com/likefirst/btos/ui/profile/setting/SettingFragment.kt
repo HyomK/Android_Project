@@ -1,9 +1,10 @@
 package com.likefirst.btos.ui.profile.setting
 
-import android.content.Intent
+import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.likefirst.btos.R
@@ -17,7 +18,6 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.EditDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.splash.LoginActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.removeJwt
 import kotlin.system.exitProcess
@@ -83,9 +83,16 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                     googleSignInClient.signOut()
                     removeJwt()
                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
-                    val intent = Intent(requireContext(),LoginActivity::class.java)
-                    startActivity(intent)
-                    exitProcess(0)
+
+                    //해당 앱의 루트 액티비티를 종료시킨다.
+                    val mActivity = activity as MainActivity
+                     if(Build.VERSION.SDK_INT >= 16){
+                         mActivity.finishAffinity()
+                    }else {
+                         ActivityCompat.finishAffinity(mActivity)
+                     }
+                    System.runFinalization() //현재 작업중인 쓰레드가 다 종료되면, 종료 시키라는 명령어
+                    exitProcess(0) // 현재 액티비티를 종료시킨다.
                 }
             })
             dialog.show(requireActivity().supportFragmentManager, "CustomDialog")
@@ -158,8 +165,20 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                         dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                             override fun onButton1Clicked(){
                                 if(isDeleted){
-                                    val mactivity = activity as MainActivity
-                                    mactivity.finish()
+                                    val gso = getGSO()
+                                    val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+                                    googleSignInClient.signOut()
+                                    removeJwt()
+                                    userDatabase.userDao().delete(userDatabase.userDao().getUser())
+                                    //해당 앱의 루트 액티비티를 종료시킨다.
+                                    val mActivity = activity as MainActivity
+                                    if(Build.VERSION.SDK_INT >= 16){
+                                        mActivity.finishAffinity()
+                                    }else {
+                                        ActivityCompat.finishAffinity(mActivity)
+                                    }
+                                    System.runFinalization() //현재 작업중인 쓰레드가 다 종료되면, 종료 시키라는 명령어
+                                    exitProcess(0) // 현재 액티비티를 종료시킨다.
                                 }
                             }
                             override fun onButton2Clicked() {

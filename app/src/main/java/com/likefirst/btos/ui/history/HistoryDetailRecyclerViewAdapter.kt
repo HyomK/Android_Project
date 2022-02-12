@@ -1,7 +1,6 @@
 package com.likefirst.btos.ui.history
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,11 @@ import com.likefirst.btos.data.entities.HistoryList
 import com.likefirst.btos.databinding.ItemHistoryDetailDiaryBinding
 import com.likefirst.btos.ui.posting.DiaryDoneListRVAdapter
 
-class HistoryDetailRecyclerViewAdapter(private val context: Context?, private val emotionName: Array<String>)
+class HistoryDetailRecyclerViewAdapter(
+    private val context: Context?,
+    private val emotionName: Array<String>,
+    private val historyDetailRv: RecyclerView
+)
     : RecyclerView.Adapter<HistoryDetailRecyclerViewAdapter.ViewHolder>(){
 
     val historyItems = ArrayList<HistoryList>()
@@ -38,12 +41,6 @@ class HistoryDetailRecyclerViewAdapter(private val context: Context?, private va
 
     override fun onBindViewHolder(holder: HistoryDetailRecyclerViewAdapter.ViewHolder, position: Int) {
         holder.bind(historyItems[position])
-        if(historyItems[position].positioning) {
-            Log.e("HISTORYDETAIL/RECYCLERADAPTER",position.toString() + "    "+historyItems[position].positioning)
-            positioning = position
-            mItemClickListener.foundPositioning(positioning)
-        }
-
     }
 
     override fun getItemCount(): Int = historyItems.size
@@ -51,7 +48,7 @@ class HistoryDetailRecyclerViewAdapter(private val context: Context?, private va
     inner class ViewHolder(val binding : ItemHistoryDetailDiaryBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item : HistoryList){
-            if(item.type == "letter"){
+            if(item.type == "letter" || item.type == "reply"){
                 binding.itemHistoryDetailBgIv.setImageResource(0)
                 binding.itemHistoryDetailBgIv.setBackgroundResource(R.drawable.history_repeat_bg)
             }
@@ -66,7 +63,8 @@ class HistoryDetailRecyclerViewAdapter(private val context: Context?, private va
                 binding.diaryViewerEmotionIv.visibility = View.GONE
             }
             if(item.doneList != null){
-                val doneListAdapter = DiaryDoneListRVAdapter()
+                val doneListAdapter = DiaryDoneListRVAdapter("history")
+
                 binding.diaryViewerDoneListRv.apply{
                     adapter = doneListAdapter
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -74,9 +72,8 @@ class HistoryDetailRecyclerViewAdapter(private val context: Context?, private va
                     itemAnimator = null
                 }
                 item.doneList.forEach {
-                    doneListAdapter.updateDoneList(0,it.content!!)
+                    doneListAdapter.addDoneList(it.content!!)
                 }
-
             }else{
                 binding.diaryViewerDoneListRv.visibility = View.GONE
             }

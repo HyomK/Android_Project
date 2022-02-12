@@ -9,6 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/history_toolbar"
+        android:backgroundTint="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,7 +19,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,17 +31,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginTop="25dp"
-            android:hint="검색어를 입력하세요"
-            android:textSize="14sp"
-            android:textCursorDrawable="@color/black"
             android:backgroundTint="@color/black"
-            android:inputType="text"
             android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/history_back_iv"
-            app:layout_constraintTop_toTopOf="parent"
+            android:hint="검색어를 입력하세요"
+            android:inputType="text"
+            android:textCursorDrawable="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/history_back_iv"
             app:layout_constraintEnd_toStartOf="@id/history_search_iv"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toEndOf="@id/history_back_iv"
+            app:layout_constraintTop_toTopOf="@+id/history_back_iv" />
 
         <ImageView
             android:id="@+id/history_search_iv"
@@ -48,6 +48,7 @@
             android:layout_height="26dp"
             android:src="@drawable/ic_search"
             android:layout_marginEnd="25dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
