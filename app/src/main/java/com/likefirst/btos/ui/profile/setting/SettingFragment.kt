@@ -82,6 +82,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                     val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
                     googleSignInClient.signOut()
                     removeJwt()
+                    userDatabase.userDao().delete(userDatabase.userDao().getUser())
                     val intent = Intent(requireContext(),LoginActivity::class.java)
                     startActivity(intent)
                     exitProcess(0)
@@ -156,8 +157,10 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                         }
                         dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                             override fun onButton1Clicked(){
-                                val mactivity = activity as MainActivity
-                                mactivity.finish()
+                                if(isDeleted){
+                                    val mactivity = activity as MainActivity
+                                    mactivity.finish()
+                                }
                             }
                             override fun onButton2Clicked() {
                             }
