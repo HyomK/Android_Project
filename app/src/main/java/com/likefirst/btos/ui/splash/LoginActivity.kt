@@ -26,6 +26,7 @@ import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
@@ -119,7 +120,7 @@ class LoginActivity
             Log.e("account", email)
 
             authService.setLoginView(this)
-            authService.login(email)
+            authService.login(UserEmail(email))
         }
     }
 

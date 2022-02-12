@@ -31,6 +31,10 @@ data class UserSign(
     @ColumnInfo(name = "birth") var birth: Int = 0,
 )
 
+data class UserEmail(
+    @ColumnInfo(name = "email") var email: String=""
+)
+
 data class UserIsSad(
     @ColumnInfo(name = "isSad") var sad: Boolean?
 )

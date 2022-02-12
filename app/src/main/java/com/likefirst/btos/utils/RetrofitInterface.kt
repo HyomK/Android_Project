@@ -21,7 +21,7 @@ interface RetrofitInterface {
 
     // ------------------- UserAuth -------------------------- //
     @POST("/auth/google")
-    fun login(@Body email: String) : Call<LoginResponse>
+    fun login(@Body email: UserEmail) : Call<LoginResponse>
 
     @GET("/auth/jwt")
     fun autoLogin() : Call<LoginResponse>
