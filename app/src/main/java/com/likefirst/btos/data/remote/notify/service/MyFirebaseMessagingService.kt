@@ -1,9 +1,6 @@
 package com.likefirst.btos.data.remote.notify.service
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
@@ -30,12 +27,21 @@ import com.google.gson.GsonBuilder
 import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import org.json.JSONArray
 import java.lang.reflect.Type
+import android.content.pm.ResolveInfo
+
+import android.content.pm.PackageManager
+import com.likefirst.btos.ui.splash.LoginActivity
+import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.ViewModelProvider
+import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     val TAG = "Firebase"
+    lateinit var listener : NoticeAPIView
 
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -137,8 +143,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0, notificationBuilder.build()) // 알림 생성
         showDataMessage(title,body)
+        val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
+        if(spf.getBoolean("state",true)){
+            notificationManager.notify(0, notificationBuilder.build())
+        }
     }
 
     private fun sendMessageNotification( Message : Map<String, String>){
@@ -147,7 +156,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val body = Message["body"]!!
         // PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Activity Stack을 경로만 남김, A-B-C-D-B => A-B
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //\
         val pendingIntent = PendingIntent.getActivity(this, uniId, intent, PendingIntent.FLAG_ONE_SHOT)
 
         // 알림 채널 이름
@@ -166,6 +175,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)       // 알림 실행 시 Intent
             .setDefaults(Notification.DEFAULT_SOUND)
 
+
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -173,11 +183,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
+            channel.apply {
+                setShowBadge(false)
+            }
         }
-        saveData(Message)
+       // saveData(Message)
         // 알림 생성
-
-        notificationManager.notify(uniId, notificationBuilder.build())
+        val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
+        if(spf.getBoolean("state",true)){
+           notificationManager.notify(uniId, notificationBuilder.build())
+        }
 
     }
 
@@ -245,11 +260,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val strList = gson.toJson(tempArray,groupListType)
             editor.putString("messageList",strList)
         }
-
         editor.apply()
 
     }
-
 
 
 }

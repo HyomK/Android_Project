@@ -7,7 +7,7 @@
     <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
     <string name="btos_default_web_client_id" translatable="false">969188195320-ne8ipt9t7o9lgvp403r2afkn2sfvfc1n.apps.googleusercontent.com</string>
     <string name ="firebase_server_key">AAAA4ageO_g:APA91bGMNBpRuyibDVwa9RptTRXZb5wFmMXk1Z9VE_tVyb0zl5re63CGQUgudTuXBaJnXTQzP__2m-YwSQ7Mefca20Fo_OWaRK23NMGKUQhGtwtP3kblibvqHapWqlYaptwhYXIqqhBw</string>
-    <string name ="default_notification_channel_id">LinkedFirst_BTOS</string>
+    <string name ="default_notification_channel_id">LikeFirst_BTOS</string>
 
 
     <string-array name="onboarding_agelist">
@@ -165,11 +165,13 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
         <item>기타</item>
     </string-array>
 
-    <string name="profile_notice">안녕하세요. 저편너머입니다 공지공지공지공지 공지공지공지공지 공지공지공지공지
-        공지공지공 공지공지공지공지 공지공지공지공지 공지공지공지공지  공지공지공지공지 공지공지공지공지 공지공지공지공지 </string>
 
     <string name="historydetail">부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.
     부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.</string>
 
+
+    <string name="opensource"></string>
+
     <string name="noresult">검색 결과가 없습니다.</string>
+
 </resources>

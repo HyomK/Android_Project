@@ -1,5 +1,7 @@
 package com.likefirst.btos.ui.profile.setting
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
@@ -7,6 +9,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserLeave
 import com.likefirst.btos.data.entities.UserPush
@@ -109,9 +112,14 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
         //initPushButton
         initToggle(btnPush, binding.settingToggleIv,  binding.settingToggleSelector)
         isPush = btnPush
+
         binding.settingPush.setOnClickListener {
             btnPush=pushToggleSwitcher(btnPush)
             isPush = btnPush
+            val spf = requireActivity().getSharedPreferences("Alarm", FirebaseMessagingService.MODE_PRIVATE) // 기존에 있던 데
+            val editor= spf.edit()
+            editor.putBoolean("state",isPush)
+            editor.apply()
             settingService.setSettingUserView(this)
             settingService.setPushAlarm(userDatabase.userDao().getUserIdx(), UserPush(btnPush))
         }
@@ -155,7 +163,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                             )
                             isDeleted = true
                             settingService.setSettingUserView(this@SettingFragment)
-                            settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
+                           // settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{
                             dialog.arguments= bundleOf(
                                 "bodyContext" to "닉네임이 일치하지 않습니다",

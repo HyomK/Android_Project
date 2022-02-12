@@ -153,8 +153,21 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@null"
         android:inputType="textMultiLine"
+        android:visibility="gone"
         />
 
+
+    <TextView
+        android:id="@+id/MailReply_body_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+        android:layout_marginVertical="@dimen/mail_view_marginVertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@null"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

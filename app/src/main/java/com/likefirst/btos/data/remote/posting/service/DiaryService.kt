@@ -39,7 +39,6 @@ class DiaryService (){
 
     fun postDiary(postDiaryRequest: PostDiaryRequest){
         postDiaryView.onDiaryPostLoading()
-
         DiaryService.postDiary(postDiaryRequest).enqueue(object :Callback<BaseResponse<PostDiaryResponse>>{
             override fun onResponse(call: Call<BaseResponse<PostDiaryResponse>>, response: Response<BaseResponse<PostDiaryResponse>>, ) {
                 val resp = response.body()!!
@@ -49,31 +48,29 @@ class DiaryService (){
                     else -> postDiaryView.onDiaryPostFailure(resp.code)
                 }
             }
-
             override fun onFailure(call: Call<BaseResponse<PostDiaryResponse>>, t: Throwable) {
                 // Network Error
                 postDiaryView.onDiaryPostFailure(400)
             }
-
         })
     }
 
-    fun loadDiary( userId:Int, type:String, Idx:String){
+    fun loadDiary( userId:Int, type:String, idx:Int){
 
         diaryView.onDiaryLoading()
 
-        DiaryService.loadDiary(userId,type,Idx).enqueue(object:Callback<MailDiaryResponse>{
-            override fun onResponse(call: Call<MailDiaryResponse>, response: Response<MailDiaryResponse>) {
-                val diaryResponse=response.body()!!
+        DiaryService.loadDiary(userId,type,idx).enqueue(object:Callback<BaseResponse<MailDiaryResponse>>{
+            override fun onResponse(call: Call<BaseResponse<MailDiaryResponse>>, response: Response<BaseResponse<MailDiaryResponse>>) {
+                val diaryResponse :BaseResponse<MailDiaryResponse> =response.body()!!
                 Log.e("Diary/API",  diaryResponse.toString())
 
                 when( diaryResponse.code){
-                    1000->diaryView.onDiarySuccess( diaryResponse.result.content)
+                    1000->diaryView.onDiarySuccess( diaryResponse.result)
                     else->diaryView.onDiaryFailure( diaryResponse.code,  diaryResponse.message)
                 }
             }
 
-            override fun onFailure(call: Call<MailDiaryResponse>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<MailDiaryResponse>>, t: Throwable) {
 
             }
 

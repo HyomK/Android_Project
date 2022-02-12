@@ -30,6 +30,7 @@ class NoticeActivity: BaseActivity<ActivityNoticeBinding>(ActivityNoticeBinding:
 
     override fun onNoticeAPISuccess(noticeList: ArrayList<NoticeDetailResponse>) {
         var noticeArray = ArrayList<Pair<String, String>>()//body , date
+        noticeList.sortByDescending { it ->it.createdAt }
         noticeList.forEach(){
             it -> noticeArray.add(Pair(it.content, it.createdAt))
         }

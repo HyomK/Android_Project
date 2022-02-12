@@ -45,6 +45,15 @@
         <item>rubyball</item>
     </string-array>
 
+    <string-array name="plantInfo">
+        <item>“저편너머에 온 당신을 가장먼저 반겨준 잎이 큰 친구에요. 햇빛을 받으면 기분이 좋아져요.”</item>
+        <item>산세베리아</item>
+        <item>금낭화</item>
+        <item>선인장</item>
+        <item>안스리움</item>
+        <item>비모란</item>
+    </string-array>
+
     <string-array name="font">
         <item>기본</item>
         <item>어린이 하늘맑은체</item>
@@ -53,4 +62,30 @@
         <item>꽃내음</item>
         <item>어비 퀸제이체</item>
     </string-array>
+
+    <string-array name="fontEng">
+        <item>notosanskr_regular</item>
+        <item>aac_child_sky_shine</item>
+        <item>kotra_songeulssi</item>
+        <item>goyangchae</item>
+        <item>handwriting_flower_smell</item>
+        <item>uhbee_queen_j</item>
+    </string-array>
+
+    <string-array name="report_options">
+        <item>스팸</item>
+        <item>성적 컨텐츠</item>
+        <item>혐오 발언 또는 괴롭힘</item>
+        <item>마음에 들지 않습니다</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="report_api_options">
+        <item>spam</item>
+        <item>sex</item>
+        <item>hate</item>
+        <item>dislike</item>
+        <item>etc</item>
+    </string-array>
+
 </resources>

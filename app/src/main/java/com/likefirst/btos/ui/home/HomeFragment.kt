@@ -2,12 +2,15 @@ package com.likefirst.btos.ui.home
 
 
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
@@ -20,9 +23,12 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.UserIsSad
+import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
+import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -41,6 +47,8 @@ import java.util.*
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
     var isMailboxOpen =false
     lateinit var  sharedNotifyModel : SharedNotifyModel
+    lateinit var sharedSelectModel: SharedSelectModel
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedNotifyModel= ViewModelProvider(requireActivity()).get(SharedNotifyModel::class.java)
@@ -52,7 +60,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             if(it) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
             else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
         })
-
+        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
+        sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
+            val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
+            val check = it.getString("plantName",null)
+            if(check!=null) updateHappyPot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
+        })
     }
     override fun initAfterBinding() {
 
@@ -78,8 +91,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .addToBackStack(null)
                 .show(MailboxFragment())
                 .commit()
-            val item =  requireActivity().supportFragmentManager.fragments
-            Log.d("homeSTACK","homeitem  ${item.toString()} }")
+
         }
 
         binding.homeWriteBtn.bringToFront()
@@ -89,6 +101,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             intent.putExtra("diaryDate", date)
             startActivity(intent)
         }
+
 
     }
 
@@ -123,25 +136,39 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             updateUserService.setUpdateIsSadView(this)
             updateUserService.updateIsSad(getUserIdx(), UserIsSad(true))
             userDB.updateIsSad(true)
-            initSadPot(animationView)
+            initSadPot(animationView )
         } else {
             initHappyPot(animationView)
         }
         // TODO: 서버 반영해서 유저가 선택한 화분에 따라서 표시되게 변경, 현재는 더미데이터일 뿐임
     }
 
-    fun initHappyPot(animationView: LottieAnimationView){
-        animationView.setAnimation("alocasia/alocasia_3.json")
+    fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
+        animationView.setAnimation("${plantName}/${plantName }_${3}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
         animationView.setOnClickListener {
+        }
+    }
 
+    fun initHappyPot(animationView: LottieAnimationView) {
+        val currentPlant = getCurrentPlant()
+        val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
+        val plantName =plantIndex[currentPlant.plantIdx-1]
+        animationView.setAnimation("${plantName}/${plantName }_${currentPlant.currentLevel}.json")
+        animationView.repeatCount = LottieDrawable.INFINITE
+        animationView.repeatMode = LottieDrawable.RESTART
+        animationView.playAnimation()
+        animationView.setOnClickListener {
         }
     }
 
     fun initSadPot(animationView: LottieAnimationView){
-        animationView.setAnimation("alocasia/alocasia_sad_3.json")
+        val currentPlant = getCurrentPlant()
+        val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
+        val plantName =plantIndex[currentPlant.plantIdx-1]
+        animationView.setAnimation( "${plantName}/${plantName }_sad_${3}.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
         // 테스트 기기 추가
@@ -167,6 +194,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         animationView.setOnClickListener {
             showUpdateSadPotDialog(mRewardedVideoAd)
         }
+    }
+
+    fun getCurrentPlant():Plant{
+        val plantDB = PlantDatabase.getInstance(requireContext())?.plantDao()
+        val currentPlant = plantDB?.getSelectedPlant()!!
+        return currentPlant
     }
 
     fun loadInterstitialAd(mRewardedVideoAd : RewardedAd){

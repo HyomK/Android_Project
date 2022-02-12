@@ -26,19 +26,19 @@ import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
 import android.R.attr.data
+import android.accounts.AccountManager
+import android.app.NotificationManager
+import android.os.Handler
 import com.google.android.gms.auth.api.signin.*
 
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
 import javax.crypto.Cipher
 import javax.crypto.Cipher.SECRET_KEY
 import javax.crypto.spec.SecretKeySpec
 
 
 class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
-
-    companion object {
-        const val SECRET_KEY = "BTOS12345678BTOS"
-      }
 
     val RC_SIGN_IN =1111
     val fireStore = Firebase.firestore
@@ -56,15 +56,12 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance() //추가
-        initFirebaseDatabase();
         initFirebaseAuth();
         initValues();
         signIn()
-
     }
 
     private fun initFirebaseAuth() {
-        Log.e("Firebase","#########Auth init##############")
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.btos_default_web_client_id))
             .requestEmail()
@@ -76,26 +73,6 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
         mAuthListener = FirebaseAuth.AuthStateListener() { updateProfile() }
     }
 
-    private fun initFirebaseDatabase() {
-        mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("message")
-        mChildEventListener = object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
-                chatData?.fromToken = dataSnapshot.key
-
-            }
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-            }
-            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
-            override fun onCancelled(databaseError: DatabaseError) {}
-        }
-
-
-        mDatabaseReference?.addChildEventListener( mChildEventListener!!)
-    }
-
 
     private fun initValues() {
         val user = mAuth!!.currentUser
@@ -104,6 +81,10 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
         } else {
             userName = user.displayName
         }
+    }
+
+    fun onError(){
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -126,12 +107,15 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
+        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
+                    Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
+
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
@@ -149,10 +133,8 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
         if(user == null) {
             //TODO 비로그인 상태 일때 처리
             Log.e("FIREBASE", "실패! 비로그인 상태입니다")
-
         }else{
             var userData = UserDTO()
-
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
                     task-> if(!task.isSuccessful){
                 Log.w(ApplicationClass.TAG,"FetchingFCM registration token failed", task.exception)
@@ -161,7 +143,6 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
                 val token = task.result
                 val msg = getString(R.string.msg_token_fmt, token)
                 Log.e("FIREBASE", msg)
-                //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                 userData.email = email.substring(0, email.indexOf('@'))
                 userData.fcmToken= token
 
@@ -178,26 +159,15 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
                     .setValue(userData)
-
-                /*"users" : {
-                    "fatherhana" : {
-                      "fcmToken" : "ceWUhK_fO0Q:APA91bG2fqt1DNtT1_9ldvXxZUhsUSsFtyG7usvkybVF-NFiSapSV4VxRgPDnbaf59EIyXv7DGHvav-dcStMEa61NHxIHl_4GKdk0tgrT3rbZeoUXxxGoHwhxUCXcHoKqFExjg8p7ytE",
-                     "userEmailID" : "fatherhana"
-                   }
-                  }
-                 구조*/
             })
 
         }
     }
 
     private fun signIn() {
-        Log.e("firebase","###########SignIn############")
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-
-
 
 
     override fun initAfterBinding() {
@@ -222,7 +192,8 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
     // 로그아웃하지 않을 시 자동 로그인
     public override fun onStart() {
         super.onStart()
-        Log.d("commit","")
+        val notificationManager:NotificationManager =getSystemService(NOTIFICATION_SERVICE) as  NotificationManager
+        notificationManager.cancelAll();
         moveMainPage(mAuth?.currentUser)
     }
 

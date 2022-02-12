@@ -19,7 +19,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class FCMService {
-    private val CHANNEL_ID="LinkedFirst_BTOS"
+   // private val CHANNEL_ID="LinkedFirst_BTOS"
+   private val CHANNEL_ID="LikeFirst_BTOS"
     private val FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send"
     private val SERVER_KEY = "AAAA4ageO_g:APA91bGMNBpRuyibDVwa9RptTRXZb5wFmMXk1Z9VE_tVyb0zl5re63CGQUgudTuXBaJnXTQzP__2m-YwSQ7Mefca20Fo_OWaRK23NMGKUQhGtwtP3kblibvqHapWqlYaptwhYXIqqhBw"
     //TODO SEVER KEY  숨기는 법 찾기

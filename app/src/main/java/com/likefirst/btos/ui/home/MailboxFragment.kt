@@ -8,26 +8,27 @@ import androidx.fragment.app.Fragment
 import androidx.room.ColumnInfo
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.posting.response.Diary
-import com.likefirst.btos.data.remote.posting.response.MailLetterDetailResponse
-import com.likefirst.btos.data.remote.posting.response.Mailbox
+import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.service.MailLetterService
+import com.likefirst.btos.data.remote.posting.service.MailReplyService
 import com.likefirst.btos.data.remote.posting.service.MailboxService
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
+import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.data.remote.posting.view.MailboxView
 import com.likefirst.btos.databinding.FragmentMailboxBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
+import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.utils.toArrayList
 
 
 class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),
-    MailboxView, MailLetterView,
+    MailboxView, MailLetterView,MailReplyView,
     MailDiaryView ,MainActivity.onBackPressedListener {
 
     override fun initAfterBinding() {
@@ -67,20 +68,25 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
             override fun onClickItem(mail:Mailbox) {
-
                 when(mail.type){
                     "letter"->{
                         saveMail(mail)
                         val letterService= MailLetterService()
                         letterService.setLetterView(this@MailboxFragment)
-                        letterService.loadLetter(userID,"letter",mail.idx.toString())
+                        letterService.loadLetter(userID,"letter",mail.idx)
 
                     }
                     "diary"->{
                         saveMail(mail)
                         val diaryService= DiaryService()
                         diaryService.setDiaryView(this@MailboxFragment)
-                        diaryService.loadDiary(userID,"diary",mail.idx.toString())
+                        diaryService.loadDiary(userID,"diary",mail.idx)
+                    }
+                    "reply"->{
+                        saveMail(mail)
+                        val replyService= MailReplyService()
+                        replyService.setReplyView(this@MailboxFragment)
+                        replyService.loadReply(userID,"reply",mail.idx)
                     }
                 }
 
@@ -93,48 +99,31 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val spf= requireActivity().getSharedPreferences("MailBox",
             AppCompatActivity.MODE_PRIVATE)
         val editor=spf.edit()
-        editor.putInt("Idx",mail.idx)
-        editor.putString("senderName",mail.senderNickName)
         editor.putString("sendAt",mail.sendAt)
         editor.commit()
     }
 
-    fun getDiary(diary: Diary){
+    fun getDiary(diary: MailDiaryResponse){
         var name : String="(알 수 없음)"
         if(diary.senderNickName !=null)
             name=diary.senderNickName
-
-        val doneList :List<String> = diary.doneList.map{donelist ->donelist.content}
-
-        //TODO : Emotion 임의 값 넣음 -> 수정해서 이용
-        val Diary = DiaryViewerInfo( name, 1, diary.diaryDate, diary.content, true, doneList.toArrayList())
-        Log.e("Diary/API-DIARY",Diary.toString())
+        val doneList :List<String> = diary.mail.doneList.map{donelist ->donelist.content}
+        val Diary = DiaryViewerInfo( diary.senderNickName, diary.mail.emotionIdx, diary.mail.diaryDate, diary.mail.content, true, doneList.toArrayList())
         val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo",Diary)
         requireActivity().startActivity(intent)
     }
 
 
-    fun getLetter(letter:MailLetterDetailResponse){
+    fun getLetter(letter:MailLetterResponse){
         val spf= requireActivity().getSharedPreferences("MailBox",
             AppCompatActivity.MODE_PRIVATE)
-        val id=spf.getInt("Idx",-1)
-        val senderName=spf.getString("senderName","")
         val sendAt=spf.getString("sendAt","")
-        Log.d("Letter/API",id.toString())
         val Letter = letter
-        if(Letter==null){
-            Log.d("Letter", "찾기 실패")
-            return
-        }
-        // 테이블에 읽은 편지를 표시할 수 있는 isWritten =true
-        //body에 본문 내용을 서버에서 받아 넣음
         val bundle =bundleOf(
-            "sender" to senderName,
             "date" to sendAt,
-            "body" to Letter?.content.toString()
+            "letter" to Letter
         )
-
         requireActivity().supportFragmentManager
             .beginTransaction()
             .addToBackStack(null)
@@ -143,7 +132,24 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val intent = Intent(context, MailViewActivity::class.java)
         intent.putExtra("MailView",bundle)
         startActivity(intent)
+    }
 
+    fun getReply(reply:MailReplyResponse){
+        val spf= requireActivity().getSharedPreferences("MailBox",
+            AppCompatActivity.MODE_PRIVATE)
+        val sendAt=spf.getString("sendAt","")
+        val bundle =bundleOf(
+            "date" to sendAt,
+            "reply" to reply
+        )
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .commit()
+
+        val intent = Intent(context, MailReplyActivity::class.java)
+        intent.putExtra("MailReply",bundle)
+        startActivity(intent)
     }
 
 
@@ -163,7 +169,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
                 override fun onButton1Clicked() {}
                 override fun onButton2Clicked() {
                     mActivity.notifyDrawerHandler("lock")
-                    mActivity.startNextActivity(MailWriteActivity::class.java)
+                    mActivity.startNextActivity(MailReplyActivity::class.java)
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")
@@ -192,10 +198,11 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     }
 
-    override fun onLetterSuccess(letter:MailLetterDetailResponse) {
+    override fun onLetterSuccess(letter: MailLetterResponse) {
         Log.d("Letter/API : Success",letter.toString())
         getLetter(letter)
     }
+
 
     override fun onLetterFailure(code: Int, message: String) {
         Log.d("Letter/API : Fail",message.toString())
@@ -204,7 +211,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onDiaryLoading() {
     }
 
-    override fun onDiarySuccess(diary: Diary) {
+    override fun onDiarySuccess(diary:MailDiaryResponse) {
         Log.d("Diary/API : Success",diary.toString())
         getDiary(diary)
     }
@@ -212,6 +219,18 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onDiaryFailure(code: Int, message: String) {
         Log.d("Diary/API : Fail", message.toString())
 
+    }
+
+    override fun onReplyLoading() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onReplySuccess(reply: MailReplyResponse) {
+       getReply(reply)
+    }
+
+    override fun onReplyFailure(code: Int, message: String) {
+       Log.e("ReplyAPI",message)
     }
 
     override fun onBackPressed() {

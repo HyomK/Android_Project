@@ -28,7 +28,6 @@ class ApplicationClass : Application() {
         const val BASE_URL: String = DEV_URL
 
         lateinit var mSharedPreferences: SharedPreferences
-
         lateinit var retrofit: Retrofit
     }
 

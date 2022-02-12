@@ -43,7 +43,7 @@
                 android:id="@+id/home_mail_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginStart="30dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_mailbox"
@@ -84,25 +84,20 @@
                 android:src="@drawable/window_night"  />
 
 
-
-
-            <com.airbnb.lottie.LottieAnimationView
-
+           <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_animation"
-                android:layout_width="00dp"
+                android:layout_width="330dp"
                 android:layout_height="wrap_content"
-                app:lottie_fileName="alocasia_splash.json"
-                app:lottie_loop="true"
-                app:lottie_autoPlay="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="200dp"
-                android:layout_marginRight="52dp"
-                android:layout_marginLeft="52dp"
-                android:layout_marginBottom="90dp"
-                />
+                app:layout_constraintVertical_bias="0.60"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="dicentra/dicentra_3.json"
+                app:lottie_loop="true" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

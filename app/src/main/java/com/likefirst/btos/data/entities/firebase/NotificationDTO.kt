@@ -17,6 +17,7 @@ data class NotificationDTO (
     @ColumnInfo var detailIdx : Int,
     @ColumnInfo var title : String? = null,
     @ColumnInfo var content: String?=null,
-    @ColumnInfo var fromUser: String?=null
+    @ColumnInfo var fromUser: String?=null,
+    @ColumnInfo var isRead : Boolean=false
 
 ): Parcelable

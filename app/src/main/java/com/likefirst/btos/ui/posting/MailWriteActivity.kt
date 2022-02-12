@@ -63,7 +63,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     binding.MailWriteWriteBtn.visibility=View.VISIBLE
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
-
+                    binding.MailWriteMenuSp.visibility= View.VISIBLE
                     //TODO 임시 테스트 위치
                     sendNotification()
                 }
@@ -97,7 +97,8 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
 
 
         binding.MailWriteWriteBtn.setOnClickListener {
-            binding.MailWriteMenuBtn.visibility= View.INVISIBLE
+            binding.MailWriteMenuBtn.visibility= View.GONE
+            binding.MailWriteMenuSp.visibility= View.GONE
             binding.MailWriteWriteBtn.visibility=View.INVISIBLE
             binding.MailWriteCheckBtn.visibility=View.VISIBLE
             //   binding.MailReplyHideView.visibility=View.VISIBLE
@@ -130,7 +131,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         }
         //TODO : token에 상대방의 token을 넣고 message는 알림에서 보여질 세부 내용 ... 이외 custom은 service에서 가능 ->MessageDTO CUSTOM
         // smaple token
-        val token ="cJdKzRt5Tf2Qx5EeeWlpRX:APA91bEcn2c3KPN0_tYckYrfXMH73Paz5v7zgpgwISjzMX4AS9FilTOFZe6iXSo1qPbtj6Tes7eht9icULBvfyGp26Vf7U5Ecjg0IFlsdn28ennngva1i0iELdKLL5nDs2qOG5sJnkyR"
+        val token ="dCyqv_CwS5Ksgvq-pD6T2x:APA91bGTq7-NWnqszTKL4jjXkoD6fn_SIMX3AmzpB_KuEBnptnmmVVa1RkaZUH7GkQuIc74224P4kaZiDs54mZ2kUR6FUFfAINqWPGRCmy2rK5xu-gbfALqCPGxPzL5VDI8r-0DTV6B2"
         val toMe = userData.fcmToken
         FCMService().sendPostToFCM(token, userData,userData.email+"님의 편지가 도착했습니다")
 

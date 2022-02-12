@@ -25,7 +25,7 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
         binding.premiumToolbar.toolbarBackIc.setOnClickListener {
             mActivity.supportFragmentManager.popBackStack()
         }
-        val data = arrayListOf(R.drawable.paper_bg, R.drawable.emotion8, R.drawable.emotion3)
+        val data = arrayListOf(R.drawable.alocasia_no_result)
         val adapter = PremiumVPAdapter(data)
         val currentVisibleItemPx = requireContext().dp2px(40f).toInt()
         binding.premiumVp.clipToPadding = false

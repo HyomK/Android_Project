@@ -2,6 +2,18 @@ package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.*
 import com.likefirst.btos.data.remote.BaseResponse
+import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
+import com.likefirst.btos.data.remote.notify.response.Report
+import com.likefirst.btos.data.remote.notify.response.ReportResponse
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
+import com.likefirst.btos.data.remote.posting.response.*
+import com.likefirst.btos.data.remote.users.response.BlackList
+import com.likefirst.btos.data.remote.users.response.BlockUser
+import com.likefirst.btos.data.remote.users.response.GetProfileResponse
+import com.likefirst.btos.data.remote.users.response.LoginResponse
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
+import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
 import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
 import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
@@ -51,23 +63,23 @@ interface RetrofitInterface {
     fun loadDiary(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("idx")idx: String
-    ): Call<MailDiaryResponse>
+        @Query("typeIdx")idx:Int
+    ): Call<BaseResponse<MailDiaryResponse>>
 
-    @GET("/mailboxes/mail")
+    @GET("/mailboxes/mail/{userIdx}")
     fun loadLetter(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("idx")idx: String
-    ): Call<MailLetterResponse>
+        @Query("typeIdx")idx:Int
+    ): Call<BaseResponse<MailLetterResponse>>
 
 
     @GET("/mailboxes/mail/{userIdx}")
     fun loadReply(
         @Path("userIdx") userIdx: Int,
         @Query("type") type: String,
-        @Query("idx")idx: String
-    ): Call<MailReplyResponse>
+        @Query("typeIdx")idx:Int
+    ): Call<BaseResponse<MailReplyResponse>>
 
     // -------------------PlantList-------------------------- //
 
@@ -160,28 +172,55 @@ interface RetrofitInterface {
         @Body fontIdx : UserFont
     ): Call<BaseResponse<String>>
 
-    @PATCH("/users/{userIdx}/status")
-    fun leave(
-        @Path("userIdx") userIdx : Int,
-        @Body status : UserLeave
-    ) : Call<BaseResponse<String>>
-
     // ------------------- History -------------------------- //
-    @GET("/histories/list/{userIdx}/{pageNum}")
-    fun historyListSender(
-        @Path("userIdx") userIdx : Int,
-        @Path("pageNum") pageNum : Int,
-        @Query("filtering") filtering: String,
-        @Query("search") search: String?
-    ) : Call<HistoryBaseResponse<BasicHistory<SenderList>>>
+//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+//    fun historyListSender(
+//        @Path("userIdx") userIdx : Int,
+//        @Path("pageNum") pageNum : Int,
+//        @Query("filtering") filtering : String,
+//        @Query("search") search : String?
+//    ) : Call<BaseResponse<SenderHistory>>
+//
+//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+//    fun historyListDiary(
+//        @Path("userIdx") userIdx : Int,
+//        @Path("pageNum") pageNum : Int,
+//        @Query("filtering") filtering : String,
+//        @Query("search") search : String?
+//    ) : Call<BaseResponse<DiaryHistory>>
+//
+//    @GET("/histories/list/{userIdx}/{pageNum}?filtering=&search=")
+//    fun historyListLetter(
+//        @Path("userIdx") userIdx : Int,
+//        @Path("pageNum") pageNum : Int,
+//        @Query("filtering") filtering : String,
+//        @Query("search") search : String?
+//    ) : Call<BaseResponse<LetterHistory>>
 
-    @GET("/histories/list/{userIdx}/{pageNum}")
-    fun historyListDiaryLetter(
-        @Path("userIdx") userIdx : Int,
-        @Path("pageNum") pageNum : Int,
-        @Query("filtering") filtering : String,
-        @Query("search") search : String?
-    ) : Call<HistoryBaseResponse<BasicHistory<Content>>>
+
+    // -------------------blacklist-------------------------- //
+    @POST("/blocklists")
+    fun setBlock(
+        @Body blacklist : BlackList
+    ): Call<BaseResponse<Int>>
+
+    @GET("/blocklists")
+    fun getBlackList(
+        @Query("userIdx") userIdx : Int
+    ): Call<BaseResponse<ArrayList<BlockUser>>>
+
+    @PATCH("/blocklists/{blockIdx}")
+    fun unBlock(
+        @Path("blockIdx") blockIdx : Int
+    ): Call<BaseResponse<String>>
+
+
+
+    @POST("/reports")
+    fun sendReport(
+        @Body ReportRequest: Report
+    ):Call<BaseResponse<ReportResponse>>
+
 
     @GET("/histories/sender/{userIdx}/{senderNickName}/{pageNum}")
     fun historyListSenderDetail(
@@ -197,4 +236,5 @@ interface RetrofitInterface {
         @Path("type") type : String,
         @Path("typeIdx") typeIdx : Int,
     ) : Call<HistoryDetailResponse>
+
 }

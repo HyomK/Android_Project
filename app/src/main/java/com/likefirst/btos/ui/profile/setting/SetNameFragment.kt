@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.profile.setting
 
+import android.content.Context.MODE_PRIVATE
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -50,6 +51,10 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
                 if(isSuccess){
                     settingService.setSettingUserView(this)
                     settingService.setName(userDB!!.getUserIdx(), UserName(binding.nicknameEdit.text.toString()))
+                    val spf =requireActivity().getSharedPreferences("EditName",MODE_PRIVATE)
+                    val editor = spf.edit()
+                    editor.putString("UserName",binding.nicknameEdit.text.toString())
+                    editor.apply()
                 }else{
 
                 }
@@ -60,6 +65,7 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
         }
     }
     override fun onBackPressed() {
+
         requireActivity().supportFragmentManager.popBackStack()
     }
 
