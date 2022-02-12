@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="35dp"
         android:layout_marginVertical="35dp"
+        android:overScrollMode="never"
         >
         <TextView
             android:id="@+id/appinfo_detail_body_tv"

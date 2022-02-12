@@ -17,12 +17,13 @@ android {
 
     defaultConfig {
         applicationId "com.likefirst.btos"
-        minSdk 23
+        minSdk 21
         targetSdk 31
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled false
     }
 
     buildTypes {
@@ -37,6 +38,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    dexOptions {
+        preDexLibraries true
     }
     compileSdkVersion 31
 }
@@ -106,7 +110,7 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt('com.github.bumptech.glide:compiler:4.11.0')
 
     //Google Login
     implementation 'com.google.android.gms:play-services-auth:20.0.1'
