@@ -16,7 +16,7 @@ interface NotificationDao {
     @Delete
     fun delete (notification: NotificationDTO)
 
-    @Query("SELECT * FROM NotificationTable")
+    @Query("SELECT * FROM NotificationTable ORDER BY detailIdx DESC")
     fun getNotifications(): List<NotificationDTO>
 
     @Query("SELECT COUNT(*) FROM NotificationTable")
@@ -27,4 +27,10 @@ interface NotificationDao {
 
     @Query("SELECT * FROM NotificationTable WHERE type= :type")
     fun getNotificationsByType(type: String): List<NotificationDTO>
+
+    @Query("UPDATE NotificationTable SET isRead=:status WHERE type=:type and detailIdx=:Idx")
+    fun setIsRead(type:String, Idx: Int , status:Boolean)
+
+    @Query("SELECT * FROM NotificationTable WHERE isRead=:status ORDER BY detailIdx DESC")
+    fun getUnreadNotifications(status:Boolean=false): List<NotificationDTO>
 }

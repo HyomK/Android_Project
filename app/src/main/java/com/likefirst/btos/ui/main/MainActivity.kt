@@ -113,7 +113,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         binding.mainLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {
-                val notifications =notificationDatabase.NotificationDao().getNotifications().toArrayList()
+                val notifications =notificationDatabase.NotificationDao().getUnreadNotifications().toArrayList()
                 if(notifications.isEmpty()){
                     initNotice()
                 }else{
@@ -135,9 +135,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             .setReorderingAllowed(true)
             .commitNowAllowingStateLoss()
 
-
         binding.mainBnv.setOnItemSelectedListener { it ->BottomNavView().onNavigationItemSelected(it) }
-
 
     }
 
@@ -147,8 +145,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         NoticeService.loadNotice()
 
     }
-
-
 
     inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
         override fun onNavigationItemSelected(it: MenuItem): Boolean {
@@ -328,7 +324,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
          adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
             override fun onClickItem(item : NotificationDTO , pos :Int) {
                 binding.mainLayout.closeDrawers()
-                notifyDAO?.delete(item)
+                notifyDAO?.setIsRead(item.type, item.detailIdx , true)
                 adapter.remove(pos)
                 when(item.type){
                     "notice"-> {
@@ -379,9 +375,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         }
 
         loadFromFirebase()
-       // Log.e("NOTICE/API -> Firebase", "Result: ${result}")
         if(FLAG) sharedNotifyModel.setNoticeLiveData(true)
-        val notices = notificationDatabase.NotificationDao().getNotifications().toArrayList()
+        val notices = notificationDatabase.NotificationDao().getUnreadNotifications().toArrayList()
 
         initNotifyAdapter( notices)
 
@@ -439,12 +434,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         sharedNotifyModel.setMsgLiveData(true)
         sharedNotifyModel.setNoticeLiveData(true)
 
-        Log.e("Firebaese/DB",notificationDatabase.NotificationDao().getNotifications().toString() )
+        Log.e("Firebaese/DB",notificationDatabase.NotificationDao().getUnreadNotifications().toString() )
         val editor = spf.edit()
         editor.remove("messageList")
         editor.apply()  //저장된 건 삭제하기
 
-        return notificationDatabase.NotificationDao().getNotifications().toArrayList()
+        return notificationDatabase.NotificationDao().getUnreadNotifications().toArrayList()
     }
 
     override fun onRestart() {
