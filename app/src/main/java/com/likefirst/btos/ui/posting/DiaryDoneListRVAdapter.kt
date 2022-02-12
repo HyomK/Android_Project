@@ -1,8 +1,5 @@
 package com.likefirst.btos.ui.posting
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.databinding.ItemDiaryDoneListRvBinding
 
-class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHolder>() {
+class DiaryDoneListRVAdapter(private val start : String): RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHolder>() {
     val doneLists : ArrayList<String> = ArrayList()
     var doneListWatcher = ""
 
@@ -34,30 +31,37 @@ class DiaryDoneListRVAdapter: RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHo
         holder.binding.itemDiaryDoneListDeleteIv.setOnClickListener {
             deleteDoneList(position)
         }
+        if(start == "history"){
+            holder.binding.itemDiaryDoneListDeleteIv.visibility = View.GONE
+            holder.binding.itemDiaryDoneListTv.visibility = View.VISIBLE
+            holder.binding.itemDiaryDoneListEt.visibility = View.GONE
+        }
         holder.itemView.setOnClickListener{
-            val text = holder.binding.itemDiaryDoneListTv.text.toString()
-            holder.binding.itemDiaryDoneListTv.visibility = View.INVISIBLE
-            holder.binding.itemDiaryDoneListEt.visibility = View.VISIBLE
-            holder.binding.itemDiaryDoneListEt.setText(text)
+            if(start == "diary"){
+                val text = holder.binding.itemDiaryDoneListTv.text.toString()
+                holder.binding.itemDiaryDoneListTv.visibility = View.INVISIBLE
+                holder.binding.itemDiaryDoneListEt.visibility = View.VISIBLE
+                holder.binding.itemDiaryDoneListEt.setText(text)
 
-            //엔터 눌렀을 때 업데이트
-            holder.binding.itemDiaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
-                if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
-                    if(holder.binding.itemDiaryDoneListEt.text.length < 100){
-                        holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
-                    }
-                    setDoneList(holder, position)
-                }
-                false
-            }
-
-            // 포커스 벗어났을 때 doneList 업데이트
-            holder.binding.itemDiaryDoneListEt.onFocusChangeListener =
-                View.OnFocusChangeListener { view, hasFocus ->
-                    if (!hasFocus){
+                //엔터 눌렀을 때 업데이트
+                holder.binding.itemDiaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
+                    if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
+                        if(holder.binding.itemDiaryDoneListEt.text.length < 100){
+                            holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
+                        }
                         setDoneList(holder, position)
                     }
+                    false
                 }
+
+                // 포커스 벗어났을 때 doneList 업데이트
+                holder.binding.itemDiaryDoneListEt.onFocusChangeListener =
+                    View.OnFocusChangeListener { view, hasFocus ->
+                        if (!hasFocus){
+                            setDoneList(holder, position)
+                        }
+                    }
+            }
         }
     }
 

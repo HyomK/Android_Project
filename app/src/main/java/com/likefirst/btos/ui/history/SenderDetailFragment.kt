@@ -1,69 +1,116 @@
 package com.likefirst.btos.ui.history
 
-import android.content.Intent
+import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.RadioGroup
-import androidx.appcompat.widget.Toolbar
-import androidx.core.os.bundleOf
+import android.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.History
+import com.likefirst.btos.data.entities.Content
+import com.likefirst.btos.data.entities.PageInfo
+import com.likefirst.btos.data.remote.history.service.HistoryService
+import com.likefirst.btos.data.remote.history.view.SenderDetailView
 import com.likefirst.btos.databinding.FragmentHistorySenderDetailBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.MainActivity
 
-class SenderDetailFragment: BaseFragment<FragmentHistorySenderDetailBinding>(FragmentHistorySenderDetailBinding::inflate),MainActivity.onBackPressedListener {
+class SenderDetailFragment(private val userIdx : Int, private val senderNickName : String)
+    : BaseFragment<FragmentHistorySenderDetailBinding>(FragmentHistorySenderDetailBinding::inflate),MainActivity.onBackPressedListener, SenderDetailView{
 
-    val items = List(20, { i -> History(i, "부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자. " +
-                "부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.", "2021.12.12", "처음이", 1, 3) })
-
-    lateinit var radiogroup : RadioGroup
+    companion object {
+        var requiredPageNum = 1
+    }
     lateinit var toolbar: Toolbar
     lateinit var back : ImageView
-    lateinit var search : ImageView
-    lateinit var edittext : EditText
 
     override fun initAfterBinding() {
 
-        toolbar = requireActivity().findViewById<Toolbar>(R.id.history_toolbar)
+        binding.historyDetailToolbar.historyBackIv.setOnClickListener{
+            if(binding.historyDetailToolbar.historySearchEt.visibility == View.GONE){
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+            else{
+                binding.historyDetailToolbar.historySearchEt.visibility = View.GONE
+                binding.historyDetailToolbar.historySearchEt.setText("")
+            }
+        }
 
-        back = toolbar.findViewById<ImageView>(R.id.history_back_iv)
-        back.visibility = View.VISIBLE
+        requiredPageNum = 1
+        binding.itemHistorySenderTitle.text = senderNickName
+        initSenderDetailList()
 
-        search = toolbar.findViewById<ImageView>(R.id.history_search_iv)
-        search.visibility = View.GONE
+    }
 
-        edittext = toolbar.findViewById<EditText>(R.id.history_search_et)
-        edittext.visibility = View.GONE
+    private fun initSenderDetailList() {
+        val recyclerViewAdapter = HistoryBasicRecyclerViewAdapter(requireContext(), "senderDetail", userIdx)
 
-        val mActivity = activity as MainActivity
+        binding.fragmentSenderRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-        binding.itemHistorySenderTitle.text = items[0].sender
-
-        val recyclerViewAdapter = NoSenderRecyclerViewAdapter(context, items)
-        binding.fragmentSenderRv.adapter = recyclerViewAdapter
-        binding.fragmentSenderRv.layoutManager = LinearLayoutManager(
-            context,
-            LinearLayoutManager.VERTICAL, false
-        )
-
-        recyclerViewAdapter.setMyItemClickListener(object :
-            NoSenderRecyclerViewAdapter.MyItemClickListener {
-            override fun MoveToDetail(historyIdx: Int) {
-                mActivity.let {
-                    val intent = Intent(context,HistoryDetailActivity::class.java)
-                    val bundle = bundleOf("backPos" to "historydetail")
-                    intent.putExtras(bundle)
-                    startActivity(intent)
+                // 스크롤이 끝에 도달했는지 확인
+                if (!binding.fragmentSenderRv.canScrollVertically(1)) {
+                    if (requiredPageNum == 0) {
+                        // 더이상 불러올 페이지가 없으면 스크롤 리스너 clear
+                        binding.fragmentSenderRv.clearOnScrollListeners()
+                    } else {
+                        // 다음 페이지 불러오기
+                        Log.e("SenderDETAIL", "else 안")
+                        loadSenderDetail(requiredPageNum, recyclerViewAdapter)
+                    }
                 }
             }
         })
+        binding.fragmentSenderRv.apply {
+            adapter = recyclerViewAdapter
+            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        }
+
+        recyclerViewAdapter.setMyItemClickListener(object : HistoryBasicRecyclerViewAdapter.MyItemClickListener{
+            override fun moveToSenderDetail(userIdx: Int, sender: String) {
+            }
+
+            override fun moveToHistoryList(userIdx: Int, type: String, typeIdx: Int) {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fr_layout,HistoryDetailFragment(userIdx, type, typeIdx), "senderdetail")
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+        })
+        loadSenderDetail(requiredPageNum, recyclerViewAdapter)
+    }
+
+    fun loadSenderDetail(pageNum : Int, adapter : HistoryBasicRecyclerViewAdapter){
+        val historyService = HistoryService()
+        historyService.setSenderDetailView(this)
+        historyService.senderDetail(userIdx, senderNickName, pageNum, null, adapter)
     }
 
     override fun onBackPressed() {
         requireActivity().supportFragmentManager.popBackStack()
-        requireActivity().supportFragmentManager.popBackStack()
+    }
+
+    override fun onSenderDetailLoading() {
+    }
+
+    override fun onSenderDetailSuccess(
+        response: ArrayList<Content>,
+        pageInfo: PageInfo,
+        recyclerViewAdapter: HistoryBasicRecyclerViewAdapter,
+    ) {
+        recyclerViewAdapter.setdlItems(response)
+        recyclerViewAdapter.notifyItemRangeInserted((requiredPageNum -1)*20,(requiredPageNum -1)*20+pageInfo.dataNum_currentPage!!)
+        if (pageInfo.hasNext!!){
+            requiredPageNum++
+        } else {
+            requiredPageNum = 0
+        }
+    }
+
+    override fun onSenderDetailFailure(code: Int, message: String) {
     }
 }
