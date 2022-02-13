@@ -101,7 +101,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             val intent = getIntent()
             val bundle = intent.getBundleExtra("mypackage")
             email = bundle?.getString("email").toString()
-
             val nickname = binding.onboardingNameEt.text.toString()
             val birth = binding.onboardingAgelist.text.toString().toInt()
             Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
@@ -170,10 +169,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.e("PROFILE/API", userDB?.getUser().toString())
         saveUserIdx(user.userIdx!!)
         updatePlantDB()
-
-
         firbaseSignIn()
-
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -273,7 +269,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     updateProfile()
 
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
-                   //  moveMainPage(task.result?.user)
+                    //  moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
@@ -332,12 +328,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
-                chatData?.fromToken = dataSnapshot.key
-
+                Log.e("Firebase","child added")
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -346,14 +340,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             override fun onCancelled(databaseError: DatabaseError) {}
         }
 
+
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
-    fun gotoFirebaseSignUp(){
-        val intent = Intent(this, FirebaseActivity::class.java)
-        intent.putExtra("movePos","tutorial")
-        startActivity(intent)
-    }
     override fun onBackPressed() {
         super.onBackPressed()
         val gso = getGSO()

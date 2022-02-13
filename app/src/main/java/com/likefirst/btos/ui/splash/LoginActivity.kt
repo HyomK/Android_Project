@@ -368,12 +368,10 @@ class LoginActivity
 
     private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
-                chatData?.fromToken = dataSnapshot.key
-
+                Log.e("Firebase","child added")
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -389,12 +387,9 @@ class LoginActivity
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             Log.e("Firebase - move"," move nonnull")
-            initValues()
-            firbaseSignIn()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
-
             firbaseSignIn()
         }
     }
