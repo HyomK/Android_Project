@@ -33,7 +33,6 @@ import java.lang.reflect.Type
 import android.content.pm.ResolveInfo
 
 import android.content.pm.PackageManager
-import com.likefirst.btos.ui.splash.LoginActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel

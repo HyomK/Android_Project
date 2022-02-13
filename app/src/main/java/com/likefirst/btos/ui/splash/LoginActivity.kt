@@ -311,7 +311,6 @@ class LoginActivity
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
-
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
@@ -344,15 +343,11 @@ class LoginActivity
 
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
                 if(fcmDatabase.fcmDao().getData() ==null){
-                    Log.e("Firebase - insert", userData.toString() )
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
-                    Log.e("Firebase - update", userData.toString() )
                     fcmDatabase.fcmDao().update(userData)
                 }
-
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
-
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
                     .setValue(userData)
@@ -368,12 +363,10 @@ class LoginActivity
 
     private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
-                chatData?.fromToken = dataSnapshot.key
-
+                Log.e("Firebase","child added")
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -381,20 +374,22 @@ class LoginActivity
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onCancelled(databaseError: DatabaseError) {}
         }
-
-
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             Log.e("Firebase - move"," move nonnull")
-            initValues()
-            firbaseSignIn()
+       /*     val dialog = LoginDialogFragment()
+            dialog.setButtonClickListener(object:LoginDialogFragment.OnButtonClickListener{
+                override fun onButtonClicked() {
+                }
+            })
+            dialog.show(supportFragmentManager,"")*/
+            //TODO 이용약관 동의 다이얼로그
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
-
             firbaseSignIn()
         }
     }

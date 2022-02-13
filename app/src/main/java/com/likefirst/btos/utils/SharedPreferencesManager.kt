@@ -1,8 +1,10 @@
 package com.likefirst.btos.utils
 
 import android.content.Context
+import android.provider.Settings.Global.getString
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.likefirst.btos.ApplicationClass.Companion.mSharedPreferences
+import com.likefirst.btos.R
 import com.likefirst.btos.data.local.UserDatabase
 import java.util.*
 
@@ -21,7 +23,11 @@ fun removeJwt(){
 }
 
 fun getGSO(): GoogleSignInOptions {
-    return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+    val web_client_id="969188195320-ne8ipt9t7o9lgvp403r2afkn2sfvfc1n.apps.googleusercontent.com"
+    return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestEmail()
+        .requestIdToken(web_client_id)
+        .build()
 }
 fun saveLastPostingDate(date : Date){
     val editor = mSharedPreferences.edit()

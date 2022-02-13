@@ -57,6 +57,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance() //추가
         initFirebaseAuth();
+        initFirebaseDatabase()
         initValues();
         signIn()
     }
@@ -132,6 +133,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
+                    initValues()
                     updateProfile()
 
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
@@ -160,7 +162,7 @@ class FirebaseActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding
             }
                 val token = task.result
                 val msg = getString(R.string.msg_token_fmt, token)
-                Log.e("FIREBASE", msg)
+                Log.e("FIREBASE ㅎㅎ", msg)
                 userData.email = email.substring(0, email.indexOf('@'))
                 userData.fcmToken= token
 
