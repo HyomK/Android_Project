@@ -80,8 +80,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     }
 
-
-
     override fun initAfterBinding() {
 
         val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -297,14 +295,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 Log.e("FIREBASE", msg)
                 userData.email = email.substring(0, email.indexOf('@'))
                 userData.fcmToken= token
-
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
-
                 if(fcmDatabase.fcmDao().getData() ==null){
-                    Log.e("Firebase - insert", userData.toString() )
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
-                    Log.e("Firebase - update", userData.toString() )
                     fcmDatabase.fcmDao().update(userData)
                 }
 

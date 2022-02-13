@@ -311,7 +311,6 @@ class LoginActivity
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
-
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
@@ -344,15 +343,11 @@ class LoginActivity
 
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
                 if(fcmDatabase.fcmDao().getData() ==null){
-                    Log.e("Firebase - insert", userData.toString() )
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
-                    Log.e("Firebase - update", userData.toString() )
                     fcmDatabase.fcmDao().update(userData)
                 }
-
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
-
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
                     .setValue(userData)
@@ -379,8 +374,6 @@ class LoginActivity
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onCancelled(databaseError: DatabaseError) {}
         }
-
-
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
