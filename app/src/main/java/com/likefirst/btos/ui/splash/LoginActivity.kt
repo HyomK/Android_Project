@@ -380,6 +380,13 @@ class LoginActivity
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             Log.e("Firebase - move"," move nonnull")
+       /*     val dialog = LoginDialogFragment()
+            dialog.setButtonClickListener(object:LoginDialogFragment.OnButtonClickListener{
+                override fun onButtonClicked() {
+                }
+            })
+            dialog.show(supportFragmentManager,"")*/
+            //TODO 이용약관 동의 다이얼로그
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
