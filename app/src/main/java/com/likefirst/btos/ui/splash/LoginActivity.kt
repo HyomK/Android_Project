@@ -379,7 +379,7 @@ class LoginActivity
 
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
-            Log.e("Firebase - move"," move nonnull")
+          
        /*     val dialog = LoginDialogFragment()
             dialog.setButtonClickListener(object:LoginDialogFragment.OnButtonClickListener{
                 override fun onButtonClicked() {
