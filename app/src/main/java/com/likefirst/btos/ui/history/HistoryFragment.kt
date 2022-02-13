@@ -75,9 +75,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if(!hidden){
-            binding.historyToolbar.historyBackIv.visibility = View.GONE
-            binding.historyToolbar.historySearchEt.visibility = View.GONE
-            binding.historyToolbar.historySearchEt.text = null
+            checkView()
         }
     }
 }
