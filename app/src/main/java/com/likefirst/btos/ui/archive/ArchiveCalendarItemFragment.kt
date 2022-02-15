@@ -119,7 +119,6 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
 
     override fun onArchiveCalendarFailure(code : Int) {
         when (code){
-            // TODO: 4000번 에러 뜨는 이유 물어보기
             4000 -> Snackbar.make(requireView(), "일기를 불러오는데 실패하였습니다. 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
             6004 -> Snackbar.make(requireView(), "프리미엄 계정 가입이 필요합니다.", Snackbar.LENGTH_SHORT).show()
         }

@@ -39,6 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:backgroundTint="@color/black"
             android:inputType="textImeMultiLine"
             android:imeOptions="actionSearch"
             android:layout_marginHorizontal="10dp"

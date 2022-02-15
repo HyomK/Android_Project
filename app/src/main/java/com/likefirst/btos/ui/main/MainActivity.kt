@@ -58,6 +58,10 @@ import kotlin.random.Random
 import android.preference.PreferenceManager
 import androidx.lifecycle.Observer
 import com.likefirst.btos.utils.LiveSharedPreferences
+import androidx.fragment.app.FragmentPagerAdapter
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
 
 
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),NoticeAPIView{
@@ -258,6 +262,28 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             }
             return false
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        Log.d("mainOnNewIntent", "intented")
+        Log.d("intent", intent.toString())
+        Log.d("intentnt11", intent?.getIntExtra("position", -1).toString())
+        Log.d("intentnt12",intent?.getParcelableExtra<DiaryViewerInfo>("diaryInfo").toString())
+        Log.d("intentnt13", intent?.getBooleanExtra("isDiaryUpdated", false).toString())
+        if (intent != null){
+            Log.d("intentnt1", intent.getIntExtra("position", -1).toString())
+            Log.d("intentnt2",intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo").toString())
+            Log.d("intentnt3", intent.getBooleanExtra("isDiaryUpdated", false).toString())
+            if(intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
+                && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) >= 0){
+                val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
+                val position = intent.getIntExtra("position", -1)
+                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
+                mArchiveFragment.listPage.mAdapter.updateList(position, intentDataset.doneLists.size, intentDataset.emotionIdx, intentDataset.contents)
+            }
+        }
+
+        super.onNewIntent(intent)
     }
 
     fun mailOpenStatus():Boolean{
