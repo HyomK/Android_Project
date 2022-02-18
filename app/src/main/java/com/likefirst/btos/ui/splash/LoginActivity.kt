@@ -65,6 +65,7 @@ class LoginActivity
     val RC_SIGN_IN =1111
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var email : String
+    private val handler= Handler(Looper.getMainLooper())
 
     val authService = AuthService()
     val plantService= PlantService()
@@ -73,10 +74,7 @@ class LoginActivity
     lateinit var mAuth: FirebaseAuth
     private var mAuthListener: AuthStateListener? = null
     lateinit var mGoogleApiClient: GoogleApiClient
-
     private var userName: String? = null
-    private var movePose : String? = null
-
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
     private var mChildEventListener: ChildEventListener? = null
@@ -95,7 +93,7 @@ class LoginActivity
         val animFadeIn = AnimationUtils.loadAnimation(applicationContext, R.anim.fade_in)
 
         // animation_logo_FadeOut
-        Handler(Looper.getMainLooper()).postDelayed({
+        handler.postDelayed({
             binding.loginLogoIv.visibility = View.VISIBLE
 
             //자동로그인
@@ -398,6 +396,12 @@ class LoginActivity
         super.onPause()
         mGoogleApiClient.stopAutoManage(this);
         mGoogleApiClient.disconnect();
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
     }
 
 }
