@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit
 
 
 
-
 class ApplicationClass : Application() {
     companion object{
         const val X_ACCESS_TOKEN: String = "x-access-token"         // JWT Token Key

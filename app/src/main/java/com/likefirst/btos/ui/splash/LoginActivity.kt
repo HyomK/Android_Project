@@ -84,8 +84,8 @@ class LoginActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        initFirebaseDatabase()
         initFirebaseAuth()
+        initValues()
 
     }
 
@@ -145,7 +145,6 @@ class LoginActivity
             if( result.isSuccess) {
                 email =result.signInAccount?.email!!
                 firebaseAuthWithGoogle(result.signInAccount)
-                updateProfile()
             }
             else{
                 updateProfile()
@@ -234,8 +233,7 @@ class LoginActivity
         } else {
             userDB.update(user)
         }
-        //TODO 로그아웃하고 다시 다른 아이디로 로그인하려고 할때 DB가 이미 쌓여 있어서 UPDATE 안됨
-        //로그아웃시 데이터 비우기 필요할 듯!
+
         Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
         saveUserIdx(user.userIdx!!)
         updatePlantDB()
@@ -303,13 +301,11 @@ class LoginActivity
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
-                    Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
@@ -366,9 +362,11 @@ class LoginActivity
         mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                Log.e("Firebase","child added")
+                // child 내에 있는 데이터만큼 반복합니다.
             }
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+                Log.e("Firebase","child changed: ${dataSnapshot.key} / ${s} ")
+            }
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
             }
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
@@ -379,17 +377,11 @@ class LoginActivity
 
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
-          
-       /*     val dialog = LoginDialogFragment()
-            dialog.setButtonClickListener(object:LoginDialogFragment.OnButtonClickListener{
-                override fun onButtonClicked() {
-                }
-            })
-            dialog.show(supportFragmentManager,"")*/
             //TODO 이용약관 동의 다이얼로그
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
+            initFirebaseDatabase()
             firbaseSignIn()
         }
     }

@@ -87,7 +87,8 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                     googleSignInClient.signOut()
                     removeJwt()
                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
-
+                    val fcmDatabase=FCMDatabase.getInstance(requireContext())
+                    fcmDatabase?.fcmDao()?.delete(fcmDatabase.fcmDao().getData())
                     //해당 앱의 루트 액티비티를 종료시킨다.
                     val mActivity = activity as MainActivity
                      if(Build.VERSION.SDK_INT >= 16){

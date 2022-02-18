@@ -121,7 +121,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             if( result.isSuccess) {
                 email =result.signInAccount?.email!!
                 firebaseAuthWithGoogle(result.signInAccount)
-                updateProfile()
+
             }
             else{
                 updateProfile()
@@ -256,7 +256,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
@@ -325,7 +324,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                Log.e("Firebase","child added")
+                // child 내에 있는 데이터만큼 반복합니다.
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
