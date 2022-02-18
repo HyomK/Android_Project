@@ -66,7 +66,7 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
 
         // 리사이클러뷰 상태유지
         mAdapter = ArchiveListRVAdapter(requireContext())
-        mAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+//        mAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         initToolbar(mAdapter)
         initDatePicker(mAdapter)

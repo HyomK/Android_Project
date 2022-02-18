@@ -351,10 +351,10 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                 })
                 dialog.show(this.supportFragmentManager, "onDiaryPostFailure Code:6000")
             }
-            6003 -> {
+            6009 -> {
                 showOneBtnDialog("해당 날짜에 이미 일기를 작성하셨습니다.", "onDiaryPostFailure Code:6003")
             }
-            6004 -> {
+            6010 -> {
                 showOneBtnDialog("오늘 작성한 일기만 공개설정하여 타인에게 전송할 수 있습니다.", "onDiaryPostFailure Code:6001")
             }
         }
