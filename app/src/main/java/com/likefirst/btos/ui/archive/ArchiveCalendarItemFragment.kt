@@ -42,7 +42,6 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
             0 -> type = "doneList"
             1 -> type = "emotion"
         }
-        Log.d("viewMode", viewMode.toString())
         val date = dateToStringMonth(getCalendar())
         val archiveCalendarService = ArchiveCalendarService()
         archiveCalendarService.setArchiveCalendarView(this)
@@ -107,13 +106,14 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
     }
 
     override fun onArchiveCalendarLoading() {
-        //TODO : 로딩화면 처리
+
     }
 
     override fun onArchiveCalendarSuccess(result: ArrayList<ArchiveCalendar>) {
 
         val calendarAdapter = ArchiveCalendarRVAdapter(createCalendarList(result), requireContext(), viewMode)
 
+        binding.archiveCalendarLoadingView.visibility = View.GONE
         binding.archiveCalendarRv.apply {
             adapter = calendarAdapter
             layoutManager = GridLayoutManager(requireContext(), 7)
@@ -155,11 +155,7 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
     }
 
     override fun onArchiveDiaryLoading() {
-        binding.archiveCalendarLoadingView.apply {
-            setAnimation("sprout_loading.json")
-            visibility = View.VISIBLE
-            playAnimation()
-        }
+
     }
 
     override fun onArchiveDiarySuccess(result: ArchiveDiaryResult) {
@@ -173,7 +169,7 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
         intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, result.emotionIdx, result.diaryDate, result.content, isPublic, result.doneList))
         intent.putExtra("diaryIdx", result.diaryIdx)
         startActivity(intent)
-        ArchiveCalendarFragment.pageIndexFlag = true
+//        ArchiveCalendarFragment.pageIndexFlag = true
     }
 
     override fun onArchiveDiaryFailure(code: Int) {

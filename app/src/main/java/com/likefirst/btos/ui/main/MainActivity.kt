@@ -265,21 +265,18 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onNewIntent(intent: Intent?) {
-        Log.d("mainOnNewIntent", "intented")
-        Log.d("intent", intent.toString())
-        Log.d("intentnt11", intent?.getIntExtra("position", -1).toString())
-        Log.d("intentnt12",intent?.getParcelableExtra<DiaryViewerInfo>("diaryInfo").toString())
-        Log.d("intentnt13", intent?.getBooleanExtra("isDiaryUpdated", false).toString())
         if (intent != null){
-            Log.d("intentnt1", intent.getIntExtra("position", -1).toString())
-            Log.d("intentnt2",intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo").toString())
-            Log.d("intentnt3", intent.getBooleanExtra("isDiaryUpdated", false).toString())
+            // 리스트에서 수정이 일어난 경우
             if(intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
                 && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) >= 0){
                 val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
                 val position = intent.getIntExtra("position", -1)
                 val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
                 mArchiveFragment.listPage.mAdapter.updateList(position, intentDataset.doneLists.size, intentDataset.emotionIdx, intentDataset.contents)
+            } else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
+                && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) == -1){
+                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
+                mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
             }
         }
 

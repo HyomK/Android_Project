@@ -309,15 +309,9 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
     }
 
     override fun onArchiveDiaryLoading() {
-        binding.archiveListLoadingView.apply {
-            setAnimation("sprout_loading.json")
-            visibility = View.VISIBLE
-            playAnimation()
-        }
     }
 
     override fun onArchiveDiarySuccess(result: ArchiveDiaryResult) {
-        binding.archiveListLoadingView.visibility = View.GONE
         var isPublic = false
         if (result.isPublic == 1){
             isPublic = true
