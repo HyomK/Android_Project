@@ -56,6 +56,7 @@ import com.likefirst.btos.utils.toArrayList
 import java.lang.reflect.Type
 import kotlin.random.Random
 import android.preference.PreferenceManager
+import android.widget.RadioGroup
 import androidx.lifecycle.Observer
 import com.likefirst.btos.utils.LiveSharedPreferences
 import androidx.fragment.app.FragmentPagerAdapter
@@ -265,18 +266,36 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onNewIntent(intent: Intent?) {
+        Log.d("dkfkf", intent?.getParcelableExtra<DiaryViewerInfo>("diaryInfo").toString())
+        Log.d("dkfkf", intent?.getBooleanExtra("isDiaryUpdated", false).toString())
+
         if (intent != null){
-            // 리스트에서 수정이 일어난 경우
             if(intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
                 && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) >= 0){
+                    // 리스트에서 일기 수정이 일어난 경우 (현재 보이는 리스트 즉시 업데이트)
                 val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
                 val position = intent.getIntExtra("position", -1)
                 val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
                 mArchiveFragment.listPage.mAdapter.updateList(position, intentDataset.doneLists.size, intentDataset.emotionIdx, intentDataset.contents)
             } else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
                 && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) == -1){
+                    // 달력에서 일기 수정이 일어난 경우 (리스트 새로 갱신)
                 val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
                 mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
+                Log.d("아랄", "'아랄라")
+            } else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
+                && !intent.getBooleanExtra("isDiaryUpdated", false)){
+                    // 일기가 작성된 경우 (리스트 새로 갱신, 달력 현재 페이지 갱신)
+                        Log.d("dkfkf", "아랄")
+                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
+                mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
+                var viewMode = 0
+                val radioGroup = findViewById<RadioGroup>(R.id.archive_calendar_rg)
+                when (radioGroup.checkedRadioButtonId){
+                    R.id.archive_calendar_done_list_rb -> viewMode = 0
+                    R.id.archive_calendar_emotion_rb -> viewMode = 1
+                }
+                mArchiveFragment.calendarPage.initCalendar(viewMode)
             }
         }
 

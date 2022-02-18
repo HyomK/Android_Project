@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="false"
+    android:backgroundTint="#FDFAF5"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
