@@ -204,12 +204,7 @@ class LoginActivity
 
     }
 
-    fun gotoFirebaseSignUp(){
-        val intent = Intent(this, FirebaseActivity::class.java)
-        intent.putExtra("movePos","main")
-        finish()
-        startActivity(intent)
-    }
+
 
 
     override fun onAutoLoginFailure(code: Int, message: String) {

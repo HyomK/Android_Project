@@ -38,14 +38,13 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     lateinit var  sharedBuyModel : SharedBuyModel
     lateinit var plantName :Array<String>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         sharedSelectModel=ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
         sharedBuyModel=ViewModelProvider(requireActivity()).get(SharedBuyModel::class.java)
         plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
 
     }
-
     override fun initAfterBinding() {
         val mActivity= activity as MainActivity
         val Plants =loadData()
