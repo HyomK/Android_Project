@@ -8,16 +8,13 @@ import kotlinx.android.parcel.Parcelize
 
 
 @Parcelize
-@Entity(tableName = "NotificationTable" ,primaryKeys = arrayOf("timestamp", "type","detailIdx"))
+@Entity(tableName = "NotificationTable" )
 data class NotificationDTO (
 
-    @ColumnInfo var timestamp : String = "",
-    @ColumnInfo var fromToken : String?=null,
-    @ColumnInfo var type :  String ="",
-    @ColumnInfo var detailIdx : Int,
-    @ColumnInfo var title : String? = null,
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo var alarmIdx : Int,
     @ColumnInfo var content: String?=null,
-    @ColumnInfo var fromUser: String?=null,
-    @ColumnInfo var isRead : Boolean=false
+    @ColumnInfo var createAt: String?=null,
+    @ColumnInfo var isChecked: Boolean = false,
 
 ): Parcelable

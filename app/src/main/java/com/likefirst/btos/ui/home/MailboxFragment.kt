@@ -35,11 +35,11 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val presFragment  = this
         val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
         val userID= userDao.getUser()!!.userIdx!!
-
+        setClickListener()
         val mailboxService= MailboxService()
         mailboxService.setMailboxView(this)
         mailboxService.loadMailbox(userID)
-        setClickListener(presFragment)
+
 
     }
 
@@ -154,8 +154,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
 
 
-    fun setClickListener(presFragment: Fragment){
-
+    fun setClickListener(){
         val mActivity = activity as MainActivity
         binding.mailboxWriteBtn.setOnClickListener {
 
@@ -169,7 +168,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
                 override fun onButton1Clicked() {}
                 override fun onButton2Clicked() {
                     mActivity.notifyDrawerHandler("lock")
-                    mActivity.startNextActivity(MailReplyActivity::class.java)
+                    mActivity.startNextActivity(MailWriteActivity::class.java)
                 }
             })
             dialog.show(mActivity.supportFragmentManager, "CustomDialog")

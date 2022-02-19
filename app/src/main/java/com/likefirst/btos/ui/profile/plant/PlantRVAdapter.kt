@@ -103,14 +103,11 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
 
 
     fun buyItem(position :Int){
-        Log.e("PLANT BUY ITEM : ", "rv buyitem start")
         val select =dataSet[position]
         if(sharedBuyModel.isSuccess().value==true ) {
             val buyItem = sharedBuyModel.getLiveData().value!!
-            Log.e("PLANT BUY ITEM : ", buyItem.toString())
             if (select.first.plantIdx != buyItem.getInt("plantIdx") || select.first.plantName != buyItem.getString("plantName")) {
-                Log.e("PLANT BUY ITEM 선택된 화분이 다름 : ",
-                    select.first.toString() + " / " + buyItem.toString())
+                Log.e("PLANT BUY ITEM 선택된 화분이 다름 : ", select.first.toString() + " / " + buyItem.toString())
             } else {
                 select.first.plantStatus = buyItem.getString("status")!!
                 select.first.currentLevel = 0
@@ -126,13 +123,11 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
 
     fun selectItem(position: Int){
         if(sharedSelectModel.isSuccess().value==true ) {
-            Log.e("Plant/ select for"," rv handler start")
             for ((index, plant) in  dataSet.withIndex()) {
                 if (plant.first.plantStatus == "selected") {
                     dataSet[index].first.plantStatus = "active"
                     dataSet[position].first.plantStatus="selected"
                     if( dataSet[position].first.currentLevel==-1)  dataSet[position].first.currentLevel=0
-
                     break
                 }
             }
@@ -146,7 +141,6 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
         val newData =origin.sortedWith(ComparePlant)
         dataSet.clear()
         dataSet.addAll(newData)
-        Log.e("Plant/RV - Soreted :  ", newData.toString())
         notifyDataSetChanged()
     }
 

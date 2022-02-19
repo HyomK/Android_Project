@@ -119,21 +119,16 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
 
-
-
    override fun initAfterBinding() {
-        val notificationDatabase= NotificationDatabase.getInstance(this)!!
-        prevNoticeSize = notificationDatabase.NotificationDao().itemCount()
-
         binding.mainBnv.itemIconTintList = null
-
         initAlarm()
-       alarmService.getAlarmList(getUserIdx())
+        alarmService.getAlarmList(getUserIdx())
 
         binding.mainLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {
                 alarmService.getAlarmList(getUserIdx())
+                sharedNotifyModel.setNoticeLiveData(false)
             }
             override fun onDrawerClosed(drawerView: View) {}
             override fun onDrawerStateChanged(newState: Int) {}
@@ -166,7 +161,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
         override fun onNavigationItemSelected(it: MenuItem): Boolean {
-
             when (it.itemId) {
                 R.id.homeFragment -> {
                     isDrawerOpen=true
@@ -192,7 +186,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     }
                     return true
                 }
-
                 R.id.historyFragment ->{
                     isDrawerOpen=false
                     val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
@@ -306,7 +299,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         if(homeFragment.isVisible && !isMailOpen){
             finish()
         } else {
-
             val fragmentList = supportFragmentManager.fragments
             for (fragment in fragmentList) {
                 if (fragment is onBackPressedListener) {
@@ -338,6 +330,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         val adapter = AlarmRVAdapter(alarmList)
         adapter.setMyItemCLickLister(object:AlarmRVAdapter.AlarmItemClickListener{
             override fun onClickItem(alarm: Alarm, position: Int) {
+                val notificationDatabase = NotificationDatabase.getInstance(this@MainActivity)!!
+                notificationDatabase.NotificationDao().setIsChecked(alarm.alarmIdx)
                 alarmService.getAlarmInfo(alarm.alarmIdx, getUserIdx())
                 binding.mainLayout.closeDrawers()
                 adapter.remove(position)
@@ -348,64 +342,16 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
 
 
-    fun rand(): Int {
-        val rand = Random(System.nanoTime())
-        return (0..100000).random(rand)
-    }
-
-    fun loadFromFirebase():ArrayList<NotificationDTO> {
-        val gson = GsonBuilder().create()
-        val messageList =ArrayList<NotificationDTO>()
-        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
-        val notification = spf.getString("messageList", "undefine")
-        val groupListType: Type = object : TypeToken<ArrayList<MessageDTO?>?>() {}.type
-        if (notification =="undefine") {
-            Toast.makeText(this, "메세지 로드에 실패했습니다", Toast.LENGTH_SHORT)
-            return messageList
-        }
-        val list: ArrayList<MessageDTO> = gson.fromJson(notification, groupListType)
-        Log.e("Firebase/list", list.toString())
-
-        if(list.size ==0){
-            sharedNotifyModel.setMsgLiveData(false)
-            val editor = spf.edit()
-            editor.remove("messageList")
-            editor.apply()  //저장된 건 삭제하기
-            return messageList
-        }
-        val notificationDatabase= NotificationDatabase.getInstance(this)!!
-        list.forEach {
-            i->
-            run {
-                val it = NotificationDTO(i.timestamp!!,
-                    i.fromToken,
-                    i.type!!,
-                    rand(),
-                    i.title,
-                    i.body,
-                    i.fromUser)
-                if (notificationDatabase.NotificationDao()
-                        .getNotification(it.timestamp, it.detailIdx, it.type) == null)
-                    notificationDatabase.NotificationDao().insert(it)
-            }
-        }
-        //TODO rand()-> 각 공지, 편지, 다이어리의 idx 로 수정
-        sharedNotifyModel.setMsgLiveData(true)
-        sharedNotifyModel.setNoticeLiveData(true)
-
-        val editor = spf.edit()
-        editor.remove("messageList")
-        editor.apply()  //저장된 건 삭제하기
-
-        return notificationDatabase.NotificationDao().getUnreadNotifications().toArrayList()
-    }
-
     override fun onRestart() {
         super.onRestart()
         binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
     }
 
     override fun onGetAlarmListSuccess(result: ArrayList<Alarm>) {
+        val notificationDatabase = NotificationDatabase.getInstance(this)!!
+        result.map { i->run{
+            notificationDatabase.NotificationDao().insert(NotificationDTO(i.alarmIdx,i.content,i.createdAt,false))
+        } }
         initAlarmAdapter(result)
     }
 
@@ -414,6 +360,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onGetAlarmInfoViewSuccess(item : AlarmInfo) {
+
         when(item.alarmType){
             "notice"-> {
                 startNextActivity(NoticeActivity::class.java)

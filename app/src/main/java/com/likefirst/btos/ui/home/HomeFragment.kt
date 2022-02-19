@@ -66,21 +66,11 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             val check = it.getString("plantName",null)
             if(check!=null) updateHappyPot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
         })
-    }
-    override fun initAfterBinding() {
 
         val mActivity = activity as MainActivity
-        val updateUserService = UpdateUserService()
-        updateUserService.setUpdateIsSadView(this)
-
-        initFlowerPot()
-
-        binding.homeNotificationBtn.setOnClickListener {
-            if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
-
-        }
 
         binding.homeMailBtn.setOnClickListener {
+            Log.e("home","click mail")
             sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
@@ -91,8 +81,17 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .addToBackStack(null)
                 .show(MailboxFragment())
                 .commit()
-
         }
+
+    }
+    override fun initAfterBinding() {
+
+        val mActivity = activity as MainActivity
+
+        binding.homeNotificationBtn.setOnClickListener {
+            if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
+        }
+
 
         binding.homeWriteBtn.bringToFront()
         binding.homeWriteBtn.setOnClickListener {
@@ -102,7 +101,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             startActivity(intent)
         }
 
-
+    /*    val updateUserService = UpdateUserService()
+        updateUserService.setUpdateIsSadView(this)
+        initFlowerPot()
+*/
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
