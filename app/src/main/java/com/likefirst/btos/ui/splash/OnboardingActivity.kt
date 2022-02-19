@@ -39,6 +39,7 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
@@ -60,7 +61,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     lateinit var mGoogleApiClient: GoogleApiClient
 
     private var userName: String? = null
-    private var movePose : String? = null
 
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
@@ -69,6 +69,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val dialog = LoginDialogFragment()
+        dialog.show(supportFragmentManager, "")
+
         mAuth = FirebaseAuth.getInstance()
         initFirebaseDatabase()
         initFirebaseAuth()
@@ -394,7 +398,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e("ONBOARDING","LOGOUT.ONSTOP")
         val gso = getGSO()
         val googleSignInClient = GoogleSignIn.getClient(this, gso)
         googleSignInClient.signOut()

@@ -107,13 +107,14 @@ class LoginDialogFragment(): DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         Log.e("LOGINDIALOG","destroy")
-        val activity = activity as OnboardingActivity
-        val intent = Intent(requireActivity(),LoginActivity::class.java)
-        dismiss()
-        activity.finish()
-        startActivity(intent)
+        if(!binding.loginDialogAllCheck.loginDialogCheckbox.isChecked){
+            val activity = activity as OnboardingActivity
+            val intent = Intent(requireActivity(),LoginActivity::class.java)
+            activity.finish()
+            startActivity(intent)
+        }
+        _binding = null
     }
 
     // 클릭 이벤트 설정
