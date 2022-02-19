@@ -121,7 +121,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             if( result.isSuccess) {
                 email =result.signInAccount?.email!!
                 firebaseAuthWithGoogle(result.signInAccount)
-
             }
             else{
                 updateProfile()
@@ -264,9 +263,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     Log.e("Firebase token : ", taskId.toString())
                     initValues()
                     updateProfile()
-
+                    goToTutorial() //TODO 위치 수정
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
-                    //  moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
@@ -307,9 +305,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     .child(userData.email.toString())
                     .setValue(userData)
             })
-
         }
-        goToTutorial()
     }
 
 
@@ -332,8 +328,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onCancelled(databaseError: DatabaseError) {}
         }
-
-
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
