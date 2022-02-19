@@ -81,8 +81,6 @@
             android:windowSoftInputMode="adjustPan">
 
         </activity>
-        <activity android:name=".ui.splash.FirebaseActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".ui.posting.DiaryActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"/>

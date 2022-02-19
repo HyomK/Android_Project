@@ -12,4 +12,11 @@
         android:title="@string/diary_viewer_option_delete"
         app:showAsAction="never"
         android:actionLayout="@layout/toolbar_diary_viewer"/>
+
+    <item
+        android:id="@+id/asdf"
+        android:title="@string/diary_viewer_option_delete"
+        app:showAsAction="never"
+        android:actionLayout="@layout/toolbar_diary_viewer"/>
+
 </menu>
