@@ -27,9 +27,15 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.messaging.FirebaseMessaging
+import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
+import com.likefirst.btos.data.entities.firebase.UserDTO
+import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
@@ -41,17 +47,10 @@ import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
-import com.google.firebase.ktx.app
-import com.google.firebase.messaging.FirebaseMessaging
-import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.entities.UserEmail
-import com.likefirst.btos.data.entities.firebase.MessageDTO
-import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.FCMDatabase
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.saveUserIdx
 
 
@@ -125,20 +124,20 @@ class LoginActivity
 
     }
 
-
     override fun onConnectionFailed(p0: ConnectionResult) {
-
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == G_SIGN_IN){
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-
-            val account = task.getResult(ApiException::class.java)
-            email = account?.email.toString()
-            Log.e("account ", email )
-            authService.setLoginView(this)
-            authService.login(UserEmail(email)) //Error
+            if(resultCode!=0){
+                Log.e("RESULTCODE",resultCode.toString())
+                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account = task.getResult(ApiException::class.java)
+                email = account?.email.toString()
+                Log.e("account ", email )
+                authService.setLoginView(this)
+                authService.login(UserEmail(email))
+            }
         }else if(requestCode ==RC_SIGN_IN){
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)!!
             Log.e("Firebase","#########onActivityResult RC_SIGN IN : "+result?.toString())
@@ -181,6 +180,7 @@ class LoginActivity
             5003 -> {
                 Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
+
                 val intent = Intent(this, OnboardingActivity::class.java)
                 val bundle = Bundle()
                 bundle.putString("email",email)
@@ -243,7 +243,6 @@ class LoginActivity
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
-
     }
 
     fun updatePlantDB(){
@@ -255,7 +254,6 @@ class LoginActivity
     }
 
     override fun onPlantListLoading() {
-
     }
 
     override fun onPlantListSuccess(plantList: ArrayList<Plant>) {

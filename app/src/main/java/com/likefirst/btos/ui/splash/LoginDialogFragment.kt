@@ -1,18 +1,18 @@
 package com.likefirst.btos.ui.splash
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import com.likefirst.btos.R
 import com.likefirst.btos.databinding.LoginDialogBinding
 
 
-class LoginDialogFragment: DialogFragment() {
+class LoginDialogFragment(): DialogFragment() {
     private var _binding: LoginDialogBinding? = null
     private val binding get() = _binding!!
 
@@ -30,8 +30,9 @@ class LoginDialogFragment: DialogFragment() {
       binding.loginDialogAllCheck.loginDialogItemLook.visibility=View.GONE
 
       binding.loginDialogNextBtn.setOnClickListener{
-          buttonClickListener.onButtonClicked()
-          if(binding.loginDialogAllCheck.loginDialogCheckbox.isChecked)   dismiss()
+          if(binding.loginDialogAllCheck.loginDialogCheckbox.isChecked) {
+              dismiss()
+          }
           else Toast.makeText(requireContext(),"필수 약관에 동의해주세요",Toast.LENGTH_SHORT).show()
       }
       binding.loginDialogPrivacy.loginDialogItemTitle.text="[필수] 개인정보 수집 동의"
@@ -52,13 +53,14 @@ class LoginDialogFragment: DialogFragment() {
           val dialog = LoginDetailDialogFragment()
           val bundle = bundleOf("content" to getString("term.text"))
           dialog.arguments=bundle
+          Log.e("LOGINDIALOG",dialog.arguments.toString())
           dialog.show(requireActivity().supportFragmentManager, "")
       }
       binding.loginDialogPrivacy.loginDialogItemLook.setOnClickListener {
           val dialog = LoginDetailDialogFragment()
           val bundle = bundleOf("content" to getString("privacy_policy.text"))
           dialog.arguments=bundle
-          val a =0
+          Log.e("LOGINDIALOG",dialog.arguments.toString())
           dialog.show(requireActivity().supportFragmentManager, "")
       }
 
@@ -91,7 +93,6 @@ class LoginDialogFragment: DialogFragment() {
 
     interface OnButtonClickListener{
         fun onButtonClicked()
-
     }
 
     override fun onStart() {
@@ -107,6 +108,12 @@ class LoginDialogFragment: DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        Log.e("LOGINDIALOG","destroy")
+        val activity = activity as OnboardingActivity
+        val intent = Intent(requireActivity(),LoginActivity::class.java)
+        dismiss()
+        activity.finish()
+        startActivity(intent)
     }
 
     // 클릭 이벤트 설정
