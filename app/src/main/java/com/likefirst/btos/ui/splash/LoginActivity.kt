@@ -200,8 +200,6 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-
-
     }
 
 
