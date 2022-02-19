@@ -24,14 +24,11 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
     override fun initAfterBinding() {
 
         val menuItem = resources.getStringArray(R.array.suggest_item)
-        val adapter= ArrayAdapter(requireContext(), R.layout.menu_dropdown_item, menuItem)
+        val adapter= ArrayAdapter(requireContext(), R.layout.menu_dropdown_left_item, menuItem)
         binding.profileSuggestList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.profileSuggestList.setAdapter(adapter)
         binding.profileSuggestList.dropDownHeight=300
         binding.profileSuggestToolbar.toolbarTitleTv.text="개발자에게 건의하기"
-
-       /* binding.profileSuggestEdit.isClickable=false
-        binding.profileSuggestEdit.isFocusable=false*/
 
        binding.profileSuggestDoneBtn.setOnClickListener {
            sendEmail(option, binding.profileSuggestEdit.text.toString())
@@ -49,6 +46,10 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun sendEmail(option:Int, content: String) {
+        if(option ==-1){
+            Toast.makeText(requireContext(),"카테고리를 선택해 주세요",Toast.LENGTH_SHORT).show()
+            return
+        }
         val menuItem = resources.getStringArray(R.array.suggest_item)
         val emailAddress = "beyondtheotherside00@gmail.com"
         val title = "건의사항 [${menuItem[option]}]"

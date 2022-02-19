@@ -168,7 +168,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val currentPlant = getCurrentPlant()
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
-        animationView.setAnimation( "${plantName}/${plantName }_sad_${3}.json")
+        animationView.setAnimation( "${plantName}/${plantName}_sad_${currentPlant.currentLevel}.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
         // 테스트 기기 추가
