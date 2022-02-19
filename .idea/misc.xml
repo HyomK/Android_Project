@@ -65,6 +65,9 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/flowerpt_cover.xml" value="0.1671875" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/history_radiobutton_selector.xml" value="0.22395833333333334" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic__null.xml" value="0.23541666666666666" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_back.xml" value="0.3697916666666667" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_bg_diary.xml" value="0.2630208333333333" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_bg_received.xml" value="0.2630208333333333" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_check.xml" value="0.234375" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_check_false.xml" value="0.234375" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/drawable/ic_dots.xml" value="0.2947916666666667" />
@@ -91,6 +94,7 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_mail_reply.xml" value="0.22" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_mail_write.xml" value="0.24641148325358853" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_main.xml" value="0.19479166666666667" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_notice.xml" value="0.4082018927444795" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_onboarding.xml" value="0.24906367041198502" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/activity_tutorial.xml" value="0.1" />
@@ -144,6 +148,8 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/login_detail_dialog.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/login_dialog.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/main_include_drawer.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/menu_dropdown_item.xml" value="0.17391304347826086" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/menu_dropdown_left_item.xml" value="0.2765625" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/onboarding_dropdown_item.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/privacy_policy.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/privacy_policy_dialog.xml" value="0.33" />
