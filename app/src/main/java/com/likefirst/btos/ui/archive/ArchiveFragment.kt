@@ -22,7 +22,7 @@ class ArchiveFragment : BaseFragment<FragmentArchiveBinding>(FragmentArchiveBind
             adapter = archiveAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             isSaveEnabled = false
-//            offscreenPageLimit = 2   // 뷰페이저 이전상태 유지하는 페이지 최대 개수
+            offscreenPageLimit = 2   // 뷰페이저 이전상태 유지하는 페이지 최대 개수
         }
     }
 }

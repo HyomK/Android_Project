@@ -268,12 +268,13 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         val selectedPosition = intent.getIntExtra("selectedPosition", -1)
         val diaryDate = binding.diaryDateTv.text.toString()
         val userDB = UserDatabase.getInstance(this)!!.userDao()
-        val intent = Intent(this, DiaryViewerActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        intent.putExtra("selectedPosition", selectedPosition)
-        intent.putExtra("isUpdated", isUpdated)
-        intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
-        startActivity(intent)
+        val mIntent = Intent(this, DiaryViewerActivity::class.java)
+        mIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        mIntent.putExtra("selectedPosition", selectedPosition)
+        mIntent.putExtra("isUpdated", isUpdated)
+        mIntent.putExtra("diaryIdx", intent.getIntExtra("diaryIdx", 0))
+        mIntent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
+        startActivity(mIntent)
     }
 
     fun diaryValidationCheck() : Boolean{

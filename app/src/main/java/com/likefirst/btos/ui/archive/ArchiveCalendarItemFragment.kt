@@ -106,11 +106,16 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
     }
 
     override fun onArchiveCalendarLoading() {
-
+        binding.archiveCalendarLoadingView.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 
     override fun onArchiveCalendarSuccess(result: ArrayList<ArchiveCalendar>) {
 
+        binding.archiveCalendarLoadingView.visibility = View.GONE
         val calendarAdapter = ArchiveCalendarRVAdapter(createCalendarList(result), requireContext(), viewMode)
 
         binding.archiveCalendarLoadingView.visibility = View.GONE
@@ -147,6 +152,9 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
     }
 
     override fun onArchiveCalendarFailure(code : Int) {
+
+        binding.archiveCalendarLoadingView.visibility = View.GONE
+
         when (code){
             4000 -> Snackbar.make(requireView(), "일기를 불러오는데 실패하였습니다. 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
             6000 -> showLogoutDialog("유효하지 않은 회원입니다. 다시 로그인 해 주세요", "onArchiveCalendarFailure Code:6000")

@@ -47,7 +47,9 @@ import kotlin.system.exitProcess
 class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArchiveListBinding::inflate),
     ArchiveDiaryView, ArchiveListView{
 
-    lateinit var mAdapter: ArchiveListRVAdapter
+    val mAdapter : ArchiveListRVAdapter by lazy {
+        ArchiveListRVAdapter(requireContext())
+    }
     var selectedPosition = 0
 
     companion object{
@@ -65,7 +67,6 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
         query.clear()
 
         // 리사이클러뷰 상태유지
-        mAdapter = ArchiveListRVAdapter(requireContext())
 //        mAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         initToolbar(mAdapter)

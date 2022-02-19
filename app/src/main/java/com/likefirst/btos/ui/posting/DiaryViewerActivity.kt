@@ -93,12 +93,11 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
         val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
         val mIntent = Intent(this, MainActivity::class.java)
         mIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        if(intent.getBooleanExtra("isUpdated", false)){
-            mIntent.putExtra("diaryInfo", intentDataset)
-            mIntent.putExtra("isDiaryUpdated", intent.getBooleanExtra("isUpdated", false))
-            mIntent.putExtra("position", intent.getIntExtra("selectedPosition", -1))
-            startActivity(mIntent)
-        }
+        mIntent.putExtra("diaryInfo", intentDataset)
+        mIntent.putExtra("isDiaryUpdated", intent.getBooleanExtra("isUpdated", false))
+        mIntent.putExtra("position", intent.getIntExtra("selectedPosition", -1))
+        startActivity(mIntent)
+
         super.onBackPressed()
     }
 }
