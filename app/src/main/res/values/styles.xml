@@ -58,7 +58,6 @@
         <item name="android:background">@drawable/archive_date_picker_dialog_style</item>
     </style>
 
-
     <style name="tabTextSizeBold" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>

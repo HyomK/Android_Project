@@ -33,6 +33,7 @@
                 android:fitsSystemWindows="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/background"
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:elevation="0dp">
 
@@ -43,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:background="@color/background"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     app:layout_constraintStart_toStartOf="parent"

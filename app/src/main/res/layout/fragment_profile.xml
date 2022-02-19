@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:layout="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_cd"
+        android:elevation="10dp"
         android:layout_width="@dimen/profile_layout_width"
         android:layout_height="@dimen/profile_layout_height"
         android:layout_marginHorizontal="@dimen/profile_view_marginHorizontal"

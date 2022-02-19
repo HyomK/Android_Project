@@ -11,3 +11,8 @@ data class UpdateDiaryRequest(
     @SerializedName("isPublic") val isPublic : Int,
     @SerializedName("doneList") val doneList : ArrayList<String>
     )
+//
+//data class DeleteDiaryRequest(
+//    @SerializedName("diaryIdx") val diaryIdx : Int,
+//    @SerializedName("userIdx") val userIdx : Int,
+//    )
