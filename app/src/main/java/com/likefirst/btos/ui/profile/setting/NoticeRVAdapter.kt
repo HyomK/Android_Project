@@ -5,19 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.stringToDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NoticeRVAdapter(val items:  ArrayList<Pair<String,String>> ): RecyclerView.Adapter<NoticeRVAdapter.ViewHolder>() {
+class NoticeRVAdapter(var items:  ArrayList<Pair<NoticeDetailResponse, Boolean>>): RecyclerView.Adapter<NoticeRVAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val body: TextView = view.findViewById(R.id.item_notice_body)
+        val title: TextView = view.findViewById(R.id.item_notice_title)
         val date : TextView = view.findViewById(R.id.item_notice_date)
+        val body : TextView = view.findViewById(R.id.item_notice_body)
+        val arrow: ImageButton = view.findViewById(R.id.item_notice_arrow)
+        val layoutExpand : LinearLayout = view.findViewById(R.id.item_notice_layout_expand)
+        val layout : ConstraintLayout= view.findViewById(R.id.item_notice_layout)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,9 +36,30 @@ class NoticeRVAdapter(val items:  ArrayList<Pair<String,String>> ): RecyclerView
     }
 
     override fun onBindViewHolder(holder:ViewHolder, position: Int) {
-        holder.body.text=items[position].first
-        val date= items[position].second.split(".")
+        holder.title.text=items[position].first.title
+        holder.body.text=items[position].first.content
+        val date= items[position].first.createdAt.split(".")
         holder.date.text="${date[0]}.${date[1]}.${date[2]}"
+
+        holder.layout.setOnClickListener{
+            val show = toggleLayout(!items[position].second, holder.arrow,holder.layoutExpand)
+            items[position]=Pair(items[position].first, show)
+        }
+        holder.arrow.setOnClickListener{
+            val show = toggleLayout(!items[position].second, holder.arrow,holder.layoutExpand)
+            items[position]=Pair(items[position].first, show)
+        }
+    }
+
+
+    private fun toggleLayout(isExpanded: Boolean, view: View, layoutExpand: LinearLayout): Boolean {
+        ToggleAnimation.toggleArrow(view, isExpanded)
+        if (isExpanded) {
+            ToggleAnimation.expand(layoutExpand)
+        } else {
+            ToggleAnimation.collapse(layoutExpand)
+        }
+        return isExpanded
     }
 
     override fun getItemCount(): Int {
