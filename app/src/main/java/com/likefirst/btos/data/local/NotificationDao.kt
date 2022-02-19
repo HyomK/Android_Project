@@ -7,7 +7,7 @@ import com.likefirst.btos.data.entities.firebase.UserDTO
 
 @Dao
 interface NotificationDao {
-    @Insert
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
     fun insert (notification: NotificationDTO)
 
     @Update

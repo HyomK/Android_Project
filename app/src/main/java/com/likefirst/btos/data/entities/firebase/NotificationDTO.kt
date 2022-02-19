@@ -11,8 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "NotificationTable" )
 data class NotificationDTO (
 
-    @PrimaryKey(autoGenerate = false)
-    @ColumnInfo var alarmIdx : Int,
+    @PrimaryKey(autoGenerate = false)  @ColumnInfo var alarmIdx : Int,
     @ColumnInfo var content: String?=null,
     @ColumnInfo var createAt: String?=null,
     @ColumnInfo var isChecked: Boolean = false,

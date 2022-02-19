@@ -88,10 +88,13 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
         val mActivity = activity as MainActivity
 
+        val updateUserService = UpdateUserService()
+        updateUserService.setUpdateIsSadView(this)
+        initFlowerPot()
+
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
         }
-
 
         binding.homeWriteBtn.bringToFront()
         binding.homeWriteBtn.setOnClickListener {
@@ -101,10 +104,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             startActivity(intent)
         }
 
-    /*    val updateUserService = UpdateUserService()
-        updateUserService.setUpdateIsSadView(this)
-        initFlowerPot()
-*/
+
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

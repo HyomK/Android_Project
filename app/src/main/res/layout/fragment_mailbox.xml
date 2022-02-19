@@ -6,7 +6,7 @@
     android:clickable="true"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/transparent">
+    android:background="@color/background_shadow">
 
     <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -65,7 +65,7 @@
         android:layout_marginEnd="@dimen/icon_mail_margin"
         android:scaleType="centerCrop"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_writeletter"
+        android:src="@drawable/ic_writeletter_solid"
         />
 
 
