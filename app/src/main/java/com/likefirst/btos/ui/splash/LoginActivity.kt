@@ -66,6 +66,7 @@ class LoginActivity
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var email : String
     private val handler= Handler(Looper.getMainLooper())
+    private var stop = false
 
     val authService = AuthService()
     val plantService= PlantService()
@@ -94,22 +95,23 @@ class LoginActivity
 
         // animation_logo_FadeOut
         handler.postDelayed({
-            binding.loginLogoIv.visibility = View.VISIBLE
+            if(!stop) {
+                binding.loginLogoIv.visibility = View.VISIBLE
 
-            //자동로그인
-            authService.setAutoLoginView(this)
-            Log.e("AUTOLOGIN/JWT",getJwt().toString())
-            if(getJwt()!=null)
-                authService.autologin()
-            else{
-                binding.loginLogoIv.startAnimation(animFadeOut)
-                // animation_loginText_FadeIn
-                binding.loginWelcomeTv.visibility = View.VISIBLE
-                binding.loginWelcomeTv.startAnimation(animFadeIn)
-                binding.loginGoogleLoginTv.visibility = View.VISIBLE
-                binding.loginGoogleLoginTv.startAnimation(animFadeIn)
+                //자동로그인
+                authService.setAutoLoginView(this)
+                Log.e("AUTOLOGIN/JWT", getJwt().toString())
+                if (getJwt() != null)
+                    authService.autologin()
+                else {
+                    binding.loginLogoIv.startAnimation(animFadeOut)
+                    // animation_loginText_FadeIn
+                    binding.loginWelcomeTv.visibility = View.VISIBLE
+                    binding.loginWelcomeTv.startAnimation(animFadeIn)
+                    binding.loginGoogleLoginTv.visibility = View.VISIBLE
+                    binding.loginGoogleLoginTv.startAnimation(animFadeIn)
+                }
             }
-
         },3000)
 
 
@@ -311,6 +313,7 @@ class LoginActivity
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
                     Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
+                    finish() //TODO 실패 처리 필요
                 }
             }
     }
@@ -402,6 +405,7 @@ class LoginActivity
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+        stop=true
     }
 
 }
