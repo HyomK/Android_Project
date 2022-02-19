@@ -110,7 +110,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val FirebaseDB =FCMDatabase.getInstance(this)!!.fcmDao()
         val prev = FirebaseDB.getData()
         if(prev!= null )FirebaseDB.update(UserDTO(prev.email, token))
-
         sendRegistrationToServer(token)
     }
 
@@ -166,7 +165,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보와 작업을 지정
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.emotion2)     // 아이콘 설정
+            .setSmallIcon(R.drawable.emotion4)     // 아이콘 설정
             .setContentTitle(title)     // 제목
             .setContentText(body)     // 메시지 내용
             .setAutoCancel(true)
@@ -219,7 +218,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.i("### noti msgTitle : ", msgTitle.toString())
         Log.i("### noti msgContent : ", msgContent.toString())
         val toastText =
-            String.format("[Notification 메시지] abcdedfge title: %s => content: %s", msgTitle, msgContent)
+            String.format("[Notification 메시지] title: %s => content: %s", msgTitle, msgContent)
         Looper.prepare()
         Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
         Looper.loop()

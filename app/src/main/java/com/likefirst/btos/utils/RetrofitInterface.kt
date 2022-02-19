@@ -5,9 +5,7 @@ import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
 import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
 import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
-import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
-import com.likefirst.btos.data.remote.notify.response.Report
-import com.likefirst.btos.data.remote.notify.response.ReportResponse
+import com.likefirst.btos.data.remote.notify.response.*
 import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.posting.response.*
@@ -228,5 +226,17 @@ interface RetrofitInterface {
         @Path("type") type : String,
         @Path("typeIdx") typeIdx : Int,
     ) : Call<HistoryDetailResponse>
+
+    //-------------Alarm-----------------//
+    @GET("/alarms")
+    fun getAlarmList(
+        @Query("userIdx") userIdx:Int
+    ):Call<BaseResponse<ArrayList<Alarm>>>
+
+    @GET("/alarms/{alarmIdx}")
+    fun getAlarmInfo(
+        @Path("alarmIdx") alarmIdx : Int,
+        @Query("userIdx") userIdx : Int
+    ):Call<BaseResponse<AlarmInfo>>
 
 }
