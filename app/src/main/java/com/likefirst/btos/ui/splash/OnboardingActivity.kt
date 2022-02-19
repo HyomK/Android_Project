@@ -39,7 +39,6 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
@@ -61,6 +60,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     lateinit var mGoogleApiClient: GoogleApiClient
 
     private var userName: String? = null
+    private var nickname: String? = null
 
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
@@ -114,7 +114,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             val intent = getIntent()
             val bundle = intent.getBundleExtra("mypackage")
             email = bundle?.getString("email").toString()
-            val nickname = binding.onboardingNameEt.text.toString()
+            nickname = binding.onboardingNameEt.text.toString()
             var birth_string = binding.onboardingAgelist.text.toString()
 
 
@@ -147,13 +147,15 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             if(checkvali){
                 Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
                 authService.setSignUpView(this)
-                authService.signUp(UserSign(email, nickname, birth))
+                authService.signUp(UserSign(email, nickname!!, birth))
             }
         }
     }
 
     fun goToTutorial(){
-        startActivity(Intent(this, TutorialActivity::class.java))
+        val intent = Intent(this, TutorialActivity::class.java)
+        intent.putExtra("nickname",nickname)
+        startActivity(intent)
         finish()
     }
 
@@ -309,7 +311,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     initValues()
-                    updateProfile()
+                    //updateProfile()
 
                     Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     //  moveMainPage(task.result?.user)

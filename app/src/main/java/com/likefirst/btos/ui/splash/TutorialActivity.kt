@@ -1,7 +1,12 @@
 package com.likefirst.btos.ui.splash
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.likefirst.btos.R
@@ -12,18 +17,33 @@ import com.likefirst.btos.ui.main.MainActivity
 class TutorialActivity : BaseActivity<ActivityTutorialBinding>(ActivityTutorialBinding::inflate) {
 
     private lateinit var viewpager : ViewPager2
+    private var backpressedTime : Long = 0
 
     override fun initAfterBinding() {
-        initViewPager()
+
+        val intent = intent
+        val nickname = intent.getStringExtra("nickname")
+        binding.tutorialNameTv.text = "반가워요, ${nickname}님."
+        binding.tutorialNameTv.bringToFront()
+        binding.tutorialNameCl.bringToFront()
+        val animFadeOut = AnimationUtils.loadAnimation(applicationContext, R.anim.fade_out)
+        val animFadeIn = AnimationUtils.loadAnimation(applicationContext, R.anim.fade_in)
+        // animation_logo_FadeOut
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.tutorialNameCl.startAnimation(animFadeOut)
+            binding.tutorialNameTv.startAnimation(animFadeOut)
+            binding.tutorialVp.startAnimation(animFadeIn)
+            binding.tutorialTablayout.startAnimation(animFadeIn)
+            initViewPager()
+        },2000)
+
     }
 
     private fun initViewPager() {
 
-        val imageList = ArrayList<Int>()
-        imageList.add(R.drawable.ic_bg_received)
-        imageList.add(R.drawable.ic_bg_sent)
-        imageList.add(R.drawable.ic_bg_diary)
-        val imageAdapter = TutorialViewPagerAdapter(this,imageList)
+        val imageList = resources.getStringArray(R.array.tutorial_lottie)
+        val introTextList = resources.getStringArray(R.array.tutorial)
+        val imageAdapter = TutorialViewPagerAdapter(this,imageList,introTextList)
 
         viewpager = binding.tutorialVp
         viewpager.adapter = imageAdapter
@@ -39,5 +59,16 @@ class TutorialActivity : BaseActivity<ActivityTutorialBinding>(ActivityTutorialB
                 startActivity(Intent(this@TutorialActivity,MainActivity::class.java))
             }
         })
+    }
+
+    override fun onBackPressed() {
+        Log.e("TUTORIAL",(System.currentTimeMillis() - backpressedTime).toString())
+        if(System.currentTimeMillis() - backpressedTime < 2000) {
+            super.onBackPressed()
+        }else{
+            Toast.makeText(this,"뒤로가기를 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            backpressedTime = System.currentTimeMillis()
+            return
+        }
     }
 }
