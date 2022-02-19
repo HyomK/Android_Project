@@ -5,39 +5,53 @@
     android:layout_marginStart="12dp"
     android:layout_marginEnd="12dp"
     android:layout_marginTop="40dp"
-    android:layout_marginBottom="50dp"
-    android:background="@drawable/onboarding_age_box"
+    android:layout_marginBottom="45dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <ImageView
-            android:id="@+id/tutorial_iv"
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/tutorial_lottie"
+            android:layout_width="300dp"
+            android:layout_height="500dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/tutorial_intro_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:lottie_fileName="onboarding1_emotions_leaves.json" />
+
+        <TextView
+            android:id="@+id/tutorial_intro_tv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="3dp"
-            android:scaleType="fitXY"
-            android:background="@drawable/tutorial_image_box"
-            android:src="@drawable/bg"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:gravity="center"
+            android:lineSpacingExtra="8sp"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:fontFamily="@font/notosanskr_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tutorial_okay_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="27dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/onboarding_okay_box"
-            android:fontFamily="@font/notosanskr_regular"
             android:gravity="center"
             android:letterSpacing="0.11"
             android:text="OKAY!"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:visibility="gone"
+
             android:textStyle="bold"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/tutorial_iv"
-            app:layout_constraintEnd_toEndOf="@id/tutorial_iv" />
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
