@@ -53,15 +53,9 @@ import com.likefirst.btos.ui.home.MailboxFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.utils.toArrayList
-import java.lang.reflect.Type
-import kotlin.random.Random
-import android.preference.PreferenceManager
 import android.widget.RadioGroup
 import androidx.lifecycle.Observer
-import androidx.room.ColumnInfo
 import com.likefirst.btos.data.entities.DiaryViewerInfo
-import com.likefirst.btos.data.entities.HistoryList
-import com.likefirst.btos.data.remote.history.view.HistoryDetailView
 import com.likefirst.btos.data.remote.notify.response.Alarm
 import com.likefirst.btos.data.remote.notify.response.AlarmInfo
 import com.likefirst.btos.data.remote.notify.service.AlarmService
@@ -76,10 +70,6 @@ import com.likefirst.btos.data.remote.posting.service.MailboxService
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
-import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
-import com.likefirst.btos.data.remote.viewer.service.ArchiveDiaryService
-import com.likefirst.btos.data.remote.viewer.view.ArchiveDiaryView
-import com.likefirst.btos.ui.history.HistoryDetailRecyclerViewAdapter
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.utils.LiveSharedPreferences
