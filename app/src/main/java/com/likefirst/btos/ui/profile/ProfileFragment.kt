@@ -26,19 +26,6 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     var isSettingOpen = false
     var isFetch=true
     lateinit var  sharedSelectModel : SharedSelectModel
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
-        sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
-            val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
-            binding.profileIv.setImageResource(requireContext()!!.resources.getIdentifier(
-                plantName[it.getInt("plantIdx")-1]
-                        +"_"+it.getInt("level").toString()
-                        +"_circle","drawable",
-                requireActivity().packageName))
-            binding.profileLevelTv.text=it.getString("plantName")+" "+it.getInt("level").toString()+"단계"
-        })
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +38,16 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                     binding.profileNicknameTv.text=result
                 }
             })
+        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
+        sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
+            val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
+            binding.profileIv.setImageResource(requireContext()!!.resources.getIdentifier(
+                plantName[it.getInt("plantIdx")-1]
+                        +"_"+it.getInt("level").toString()
+                        +"_circle","drawable",
+                requireActivity().packageName))
+            binding.profileLevelTv.text=it.getString("plantName")+" "+it.getInt("level").toString()+"단계"
+        })
     }
 
 

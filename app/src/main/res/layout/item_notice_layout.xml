@@ -1,44 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/bg"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-   <TextView
-       android:id="@+id/item_notice_body"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintTop_toTopOf="parent"
-       android:textSize="14dp"
-       android:textColor="@color/black"
-       android:fontFamily="@font/notosanskr_regular"
-       android:layout_marginHorizontal="40dp"
-       android:layout_marginTop="20dp"
-       android:maxLength="200"
-       />
-    <TextView
-        android:id="@+id/item_notice_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/item_notice_body"
-        app:layout_constraintTop_toBottomOf="@id/item_notice_body"
-        android:text="2021.11.30"
-        android:textSize="14dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:fontFamily="@font/notosanskr_regular"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_notice_layout"
+        android:background="@color/bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/item_notice_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="35dp"
+            android:layout_marginTop="20dp"
+            android:maxLength="200"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:minHeight="0dp"
+            />
+        <TextView
+            android:id="@+id/item_notice_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="35dp"
+            android:text="2021.11.30"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:fontFamily="@font/notosanskr_regular"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_notice_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:minHeight="0dp"
+            />
+        <ImageButton
+            android:id="@+id/item_notice_arrow"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_up"
+            android:visibility="gone"
+            android:layout_marginEnd="30dp"
+            android:background="@color/transparent"
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/black"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_notice_date"
-        />
+        android:layout_height="1dp"
+        android:background="@color/white"/>
 
+    <LinearLayout
+        android:id="@+id/item_notice_layout_expand"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingHorizontal="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/item_notice_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:background="@color/white"
+            android:text="nnionnoinionin"/>
+
+    </LinearLayout>
+
+</LinearLayout>
