@@ -108,9 +108,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.profile.setting.NoticeActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.history.HistoryDetailActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+
     </application>
 
 
