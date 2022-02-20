@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.likefirst.btos.ui.main.MainActivity
@@ -29,6 +30,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.i("### msg : ", remoteMessage.toString());
+
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){
             sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body!!)
@@ -38,6 +40,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 handleNow();
             }
         }
+
         // 다른 기기에서 서버로 보냈을 때
         else if(remoteMessage.data.isNotEmpty()){
             val title = remoteMessage.data["title"]!!
@@ -96,7 +99,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
     fun sendNotification(title: String?, body: String) {
-        Log.e("fcm","sendNotification")
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // 액티비티 중복 생성 방지
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,

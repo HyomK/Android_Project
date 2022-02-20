@@ -30,9 +30,6 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
         binding.profileSuggestList.dropDownHeight=300
         binding.profileSuggestToolbar.toolbarTitleTv.text="개발자에게 건의하기"
 
-       /* binding.profileSuggestEdit.isClickable=false
-        binding.profileSuggestEdit.isFocusable=false*/
-
        binding.profileSuggestDoneBtn.setOnClickListener {
            sendEmail(option, binding.profileSuggestEdit.text.toString())
            requireActivity().supportFragmentManager.popBackStack()

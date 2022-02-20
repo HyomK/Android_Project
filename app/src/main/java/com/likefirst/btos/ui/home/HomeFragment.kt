@@ -81,6 +81,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
 
         binding.homeMailBtn.setOnClickListener {
+            Log.e("home","click mail")
             sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
@@ -91,7 +92,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .addToBackStack(null)
                 .show(MailboxFragment())
                 .commit()
-
         }
 
         binding.homeWriteBtn.bringToFront()
@@ -101,7 +101,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             intent.putExtra("diaryDate", date)
             startActivity(intent)
         }
-
 
     }
 
@@ -168,7 +167,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val currentPlant = getCurrentPlant()
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
-        animationView.setAnimation( "${plantName}/${plantName }_sad_${3}.json")
+        animationView.setAnimation( "${plantName}/${plantName}_sad_${currentPlant.currentLevel}.json")
         //Google Admob 구현
         MobileAds.initialize(requireContext())
         // 테스트 기기 추가

@@ -22,9 +22,6 @@
             tools:context=".ui.home.HomeFragment">
 
 
-
-
-
             <ImageButton
                 android:id="@+id/home_write_btn"
                 android:layout_width="55dp"
