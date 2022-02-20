@@ -37,13 +37,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:orientation="vertical"
-        android:layout_gravity = "left"
+        android:layout_gravity = "start"
         app:itemTextColor="#fff"
         android:paddingTop="30dp"
         android:layout_width="match_parent"
@@ -57,7 +56,6 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="500"
             tools:listitem="@layout/item_notify_rv" />
 
     </com.google.android.material.navigation.NavigationView>

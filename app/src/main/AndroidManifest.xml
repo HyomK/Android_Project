@@ -108,6 +108,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.profile.setting.NoticeActivity"
             android:screenOrientation="portrait"/>
+
     </application>
 
 
