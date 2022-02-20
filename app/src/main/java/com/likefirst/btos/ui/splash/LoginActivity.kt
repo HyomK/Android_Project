@@ -24,15 +24,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
-import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
@@ -47,15 +44,14 @@ import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.app
 import com.google.firebase.messaging.FirebaseMessaging
 import com.likefirst.btos.ApplicationClass
+import com.likefirst.btos.data.entities.UserEmail
+import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
-import com.likefirst.btos.data.remote.service.AuthService
-import com.likefirst.btos.data.remote.users.response.Login
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.saveUserIdx
 
 
@@ -81,10 +77,16 @@ class LoginActivity
     private var userName: String? = null
     private var movePose : String? = null
 
+    private var mFirebaseDatabase: FirebaseDatabase? = null
+    private var mDatabaseReference: DatabaseReference? = null
+    private var mChildEventListener: ChildEventListener? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+        initFirebaseDatabase()
         initFirebaseAuth()
+
     }
 
     override fun initAfterBinding() {
@@ -136,7 +138,7 @@ class LoginActivity
             email = account?.email.toString()
             Log.e("account ", email )
             authService.setLoginView(this)
-            authService.login(email)
+            authService.login(UserEmail(email)) //Error
         }else if(requestCode ==RC_SIGN_IN){
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)!!
             Log.e("Firebase","#########onActivityResult RC_SIGN IN : "+result?.toString())
@@ -199,9 +201,7 @@ class LoginActivity
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
-//        val intent = Intent(this, MainActivity::class.java)
-//        //  intent.putExtra("movePos","main")
-//        startActivity(intent)
+
 
     }
 
@@ -343,10 +343,11 @@ class LoginActivity
                 userData.fcmToken= token
 
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
-
                 if(fcmDatabase.fcmDao().getData() ==null){
+                    Log.e("Firebase - insert", userData.toString() )
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
+                    Log.e("Firebase - update", userData.toString() )
                     fcmDatabase.fcmDao().update(userData)
                 }
 
@@ -365,13 +366,35 @@ class LoginActivity
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+    private fun initFirebaseDatabase() {
+        mFirebaseDatabase = FirebaseDatabase.getInstance()
+        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mChildEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
+                chatData?.fromToken = dataSnapshot.key
+
+            }
+            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+            }
+            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onCancelled(databaseError: DatabaseError) {}
+        }
+
+
+        mDatabaseReference?.addChildEventListener( mChildEventListener!!)
+    }
+
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
+            Log.e("Firebase - move"," move nonnull")
+            initValues()
+            firbaseSignIn()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
-            initFirebaseAuth()
-            initValues()
+
             firbaseSignIn()
         }
     }

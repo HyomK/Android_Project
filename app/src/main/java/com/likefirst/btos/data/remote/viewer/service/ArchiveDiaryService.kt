@@ -19,7 +19,6 @@ class ArchiveDiaryService {
         this.archiveDiaryView = archiveDiaryView
     }
 
-
     fun getDiary(diaryIdx : Int){
         archiveDiaryView.onArchiveDiaryLoading()
 

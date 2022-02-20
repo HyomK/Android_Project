@@ -13,6 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserLeave
 import com.likefirst.btos.data.entities.UserPush
+import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.users.service.SettingUserService
 import com.likefirst.btos.data.remote.users.view.SetSettingUserView
@@ -163,7 +164,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                             )
                             isDeleted = true
                             settingService.setSettingUserView(this@SettingFragment)
-                           // settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
+                            settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{
                             dialog.arguments= bundleOf(
                                 "bodyContext" to "닉네임이 일치하지 않습니다",
@@ -178,6 +179,8 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                                     googleSignInClient.signOut()
                                     removeJwt()
                                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
+                                    val fcmDatabase=FCMDatabase.getInstance(requireContext())
+                                    fcmDatabase?.fcmDao()?.delete(fcmDatabase.fcmDao().getData())
                                     //해당 앱의 루트 액티비티를 종료시킨다.
                                     val mActivity = activity as MainActivity
                                     if(Build.VERSION.SDK_INT >= 16){

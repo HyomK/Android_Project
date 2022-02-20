@@ -25,10 +25,10 @@ data class ArchiveListResult(
 
 data class ArchiveListDiaryList(
     @SerializedName("diaryIdx") val diaryIdx : Int,
-    @SerializedName("doneListNum") val doneListNum : Int,
-    @SerializedName("emotionIdx") val emotionIdx : Int,
+    @SerializedName("doneListNum") var doneListNum : Int,
+    @SerializedName("emotionIdx") var emotionIdx : Int,
     @SerializedName("diaryDate") val diaryDate : String,
-    @SerializedName("content") val content : String,
+    @SerializedName("content") var content : String,
     )
 
 data class ArchiveListPageInfo(

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" android:drawable="@drawable/archive_sel"  />
-    <item android:state_checked="false" android:drawable="@drawable/archive"  />
+    <item android:state_checked="true" android:drawable="@drawable/select_bnv_archive"  />
+    <item android:state_checked="false" android:drawable="@drawable/ic_bnv_archive"  />
 </selector>

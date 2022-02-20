@@ -15,7 +15,7 @@ import java.lang.RuntimeException
 class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val DIARY_TYPE = 0
     private val MONTH_TYPE = 1
-    private val LOADING_TYPE = 2
+//    private val LOADING_TYPE = 2
     private var diaryList = arrayListOf<Any>()
 
     inner class DiaryViewHolder(val binding : ItemArchiveListRvDiaryBinding): RecyclerView.ViewHolder(binding.root) {
@@ -65,34 +65,34 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
         }
     }
 
-    inner class LoadingViewHolder(val binding : ItemArchiveListRvMonthBinding) : RecyclerView.ViewHolder(binding.root){
-        fun initView(){
-            binding.itemArchiveListLoading.apply {
-                setAnimation("sprout_loading.json")
-                visibility = View.VISIBLE
-                playAnimation()
-            }
-            binding.itemArchiveListMonthTv.visibility = View.GONE
-            binding.itemArchiveListYearTv.visibility = View.GONE
-        }
-    }
+//    inner class LoadingViewHolder(val binding : ItemArchiveListRvMonthBinding) : RecyclerView.ViewHolder(binding.root){
+//        fun initView(){
+//            binding.itemArchiveListLoading.apply {
+//                setAnimation("sprout_loading.json")
+//                visibility = View.VISIBLE
+//                playAnimation()
+//            }
+//            binding.itemArchiveListMonthTv.visibility = View.GONE
+//            binding.itemArchiveListYearTv.visibility = View.GONE
+//        }
+//    }
 
     override fun getItemViewType(position: Int): Int {
         return when {
             diaryList[position] is String -> {
                 MONTH_TYPE
             }
-            diaryList[position] is ArchiveListDiaryList -> {
+            else -> {
                 DIARY_TYPE
             }
-            else -> {
-                LOADING_TYPE
-            }
+//            else -> {
+//                LOADING_TYPE
+//            }
         }
     }
 
     interface DiarySelectedListener {
-        fun onDiarySelect(diaryIdx : Int)
+        fun onDiarySelect(diaryIdx : Int, position: Int)
     }
 
     lateinit var mDiarySelectedListener : DiarySelectedListener
@@ -111,10 +111,10 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
                 val binding = ItemArchiveListRvMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 MonthViewHolder(binding)
             }
-            LOADING_TYPE -> {
-                val binding = ItemArchiveListRvMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                LoadingViewHolder(binding)
-            }
+//            LOADING_TYPE -> {
+//                val binding = ItemArchiveListRvMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//                LoadingViewHolder(binding)
+//            }
             else -> {
                 throw RuntimeException("Unknown ViewType Error in ArchiveListRVAdapter")
             }
@@ -126,15 +126,15 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
             is DiaryViewHolder -> {
                 holder.initView(diaryList[position] as ArchiveListDiaryList)
                 holder.itemView.setOnClickListener {
-                    mDiarySelectedListener.onDiarySelect((diaryList[position] as ArchiveListDiaryList).diaryIdx)
+                    mDiarySelectedListener.onDiarySelect((diaryList[position] as ArchiveListDiaryList).diaryIdx, position)
                 }
             }
             is MonthViewHolder -> {
                 holder.initView(diaryList[position] as String)
             }
-            is LoadingViewHolder -> {
-                holder.initView()
-            }
+//            is LoadingViewHolder -> {
+//                holder.initView()
+//            }
         }
     }
 
@@ -146,10 +146,14 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
         diaryList.addAll(dataList)
     }
 
-    fun deleteLoading(){
-        if (diaryList[itemCount-1] == 0){ diaryList.removeAt(itemCount - 1) }
-        Log.d("itemcount", itemCount.toString())
-    }
+//    fun deleteLoading(){
+//        Log.d("itemcount", itemCount.toString())
+//
+//        if (diaryList[itemCount-1] == 0){
+//            diaryList.removeAt(itemCount - 1)
+//        }
+//        Log.d("itemcount", itemCount.toString())
+//    }
 
     fun clearList(){
         diaryList = arrayListOf()
@@ -158,5 +162,12 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
 
     fun isDiaryEmpty() : Boolean{
         return diaryList == ArrayList<String>()
+    }
+
+    fun updateList(position : Int, doneListNum : Int, emotionIdx : Int, content : String) {
+        (diaryList[position] as ArchiveListDiaryList).doneListNum = doneListNum
+        (diaryList[position] as ArchiveListDiaryList).emotionIdx = emotionIdx
+        (diaryList[position] as ArchiveListDiaryList).content = content
+        notifyItemChanged(position)
     }
 }

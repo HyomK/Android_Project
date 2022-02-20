@@ -32,11 +32,11 @@
         android:value="false" />
 
 
-
 <application
         android:noHistory="true"
         android:usesCleartextTraffic="true"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:name=".ApplicationClass"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -76,6 +76,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
 
