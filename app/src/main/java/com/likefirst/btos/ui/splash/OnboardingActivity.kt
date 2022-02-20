@@ -28,6 +28,7 @@ import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
@@ -126,8 +127,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
-        authService.login(email)
-
+        authService.login(UserEmail(email))
     }
 
     override fun onSignUpFailure(code: Int, message: String) {
@@ -155,13 +155,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.e("PROFILE/API", userDB?.getUser().toString())
         saveUserIdx(user.userIdx!!)
         updatePlantDB()
-
         initValues()
         firbaseSignIn()
-
         startActivity(Intent(this, TutorialActivity::class.java))
         finish()
-
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -319,8 +316,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         intent.putExtra("movePos","main")
         startActivity(intent)
     }*/
-
-
 
     fun gotoFirebaseSignUp(){
         val intent = Intent(this, FirebaseActivity::class.java)

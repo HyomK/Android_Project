@@ -24,26 +24,29 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
+import com.likefirst.btos.data.remote.plant.view.PlantListView
+import com.likefirst.btos.data.remote.service.AuthService
+import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
-import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
-
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.app
@@ -132,10 +135,8 @@ class LoginActivity
             val account = task.getResult(ApiException::class.java)
             email = account?.email.toString()
             Log.e("account ", email )
-
             authService.setLoginView(this)
             authService.login(email)
-
         }else if(requestCode ==RC_SIGN_IN){
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)!!
             Log.e("Firebase","#########onActivityResult RC_SIGN IN : "+result?.toString())
@@ -207,6 +208,7 @@ class LoginActivity
     fun gotoFirebaseSignUp(){
         val intent = Intent(this, FirebaseActivity::class.java)
         intent.putExtra("movePos","main")
+        finish()
         startActivity(intent)
     }
 

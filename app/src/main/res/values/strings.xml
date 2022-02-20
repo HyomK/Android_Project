@@ -138,6 +138,7 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string name="archive_list_period_to">까지</string>
     <string name="archive_list_period_cancel">취소</string>
     <string name="archive_list_period_submit">완료</string>
+    <string name="archive_list_no_search_result">검색 결과가 없습니다.</string>
 
     <!--archive calendar-->
     <string name="archive_calendar_radio_done_list">DONE LIST</string>
@@ -169,7 +170,8 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.</string>
 
 
-
     <string name="opensource"></string>
+
+    <string name="noresult">검색 결과가 없습니다.</string>
 
 </resources>

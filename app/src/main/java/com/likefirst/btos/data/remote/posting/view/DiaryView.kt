@@ -13,3 +13,9 @@ interface PostDiaryView{
     fun onDiaryPostSuccess()
     fun onDiaryPostFailure(code : Int)
 }
+
+interface UpdateDiaryView{
+    fun onArchiveUpdateLoading()
+    fun onArchiveUpdateSuccess()
+    fun onArchiveUpdateFailure(code : Int)
+}

@@ -13,8 +13,8 @@ import com.likefirst.btos.ui.main.MainActivity
 class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiaryViewerBinding::inflate) {
     override fun initAfterBinding() {
 
-        binding.diaryViewerToolbar.toolbarBackIc.setOnClickListener {
-            goToHome()
+        binding.diaryViewerToolbar.diaryViewerBackIv.setOnClickListener {
+            onBackPressed()
         }
         initView()
         initToolbar()
@@ -42,10 +42,18 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
     }
 
     fun initToolbar(){
-        binding.diaryViewerMoreIv.setOnClickListener {
+        binding.diaryViewerToolbar.diaryViewerMoreIv.setOnClickListener {
             //TODO: 공개/비공개 전환
             //  삭제 기능 구현
        }
+
+        binding.diaryViewerToolbar.diaryViewerEditIv.setOnClickListener{
+            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
+            val intent = Intent(this, DiaryActivity::class.java)
+            intent.putExtra("diaryInfo", intentDataset)
+            intent.putExtra("editingMode", true)
+            startActivity(intent)
+        }
     }
 
     fun setDoneListRv(doneLists : ArrayList<String>){
@@ -60,13 +68,6 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
     }
 
     override fun onBackPressed() {
-        goToHome()
         super.onBackPressed()
-    }
-
-    fun goToHome(){
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
     }
 }

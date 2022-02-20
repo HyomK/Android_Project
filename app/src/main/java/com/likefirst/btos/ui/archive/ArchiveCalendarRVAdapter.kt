@@ -94,7 +94,7 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<ArchiveCalendar>, va
         // 빈 날짜칸 선택 리스너 -> DiaryActivity
         fun onDateSelectedListener(date : Date, dayInt: Int)
         // 이미 일기가 작성된 칸 선택 리스너 -> DiaryViewerActivity
-        fun onDiarySelectedListener()
+        fun onDiarySelectedListener(diaryIdx : Int)
     }
 
     private lateinit var mCalendarDateSelectedListener: CalendarDateSelectedListener
@@ -140,9 +140,15 @@ class ArchiveCalendarRVAdapter(val calendarList : ArrayList<ArchiveCalendar>, va
             }
             is LeafViewHolder -> {
                 holder.initView(position)
+                holder.itemView.setOnClickListener {
+                    mCalendarDateSelectedListener.onDiarySelectedListener(calendarList[position].diaryIdx!!)
+                }
             }
             is EmotionViewHolder -> {
                 holder.initView(position)
+                holder.itemView.setOnClickListener {
+                    mCalendarDateSelectedListener.onDiarySelectedListener(calendarList[position].diaryIdx!!)
+                }
             }
         }
     }
