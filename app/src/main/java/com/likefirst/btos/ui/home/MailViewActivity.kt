@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.likefirst.btos.R
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.databinding.ActivityMailViewBinding
 
@@ -19,10 +20,10 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
     override fun initAfterBinding() {
         val bundle : Bundle = intent.getBundleExtra("MailView")!!
-        val letter :MailLetterResponse? =bundle.getParcelable("letter")
-        binding.mailViewBodyTv.text= letter?.mail?.content
-        binding.mailViewDateTv.text=bundle.getString("date")
-        binding.mailViewSenderTv.text=letter?.senderNickname
+        val letter : MailInfoResponse? =bundle.getParcelable("letter")
+        binding.mailViewBodyTv.text= letter?.content
+        binding.mailViewDateTv.text=letter?.sendAt
+        binding.mailViewSenderTv.text=letter?.senderNickName
         setFont(letter?.senderFontIdx!!)
 
         val menuItem = resources.getStringArray(R.array.report_items)
@@ -72,8 +73,8 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                 //신고
                 1 -> {
                     val intent = Intent(this,ReportActivity::class.java)
-                    intent.putExtra("type","letter") //TODO 이후 REPLY랑 구분 필요
-                    intent.putExtra("typeIdx",letter?.mail?.letterIdx)
+                    intent.putExtra("type",letter.type)
+                    intent.putExtra("typeIdx",letter?.typeIdx)
                     Log.e("ReportIntent",intent.toString())
                     startActivity(intent)
                 }

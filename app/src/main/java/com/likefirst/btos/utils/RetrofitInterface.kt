@@ -49,32 +49,32 @@ interface RetrofitInterface {
 
 
     // -------------------Mailbox -------------------------- //
-    @GET("/mailboxes/{userId}")
+    @GET("/mailboxes")
     fun loadMailbox(
-        @Path("userId") id: Int
+        @Query("userIdx") id: Int
     ): Call<MailboxResponse>
 
-    @GET("/mailboxes/mail/{userIdx}")
+    @GET("/mailboxes/mail")
     fun loadDiary(
-        @Path("userIdx") userIdx: Int,
-        @Query("type") type: String,
+        @Query("userIdx")userIdx: Int,
+        @Query("type") type: String = "diary",
         @Query("typeIdx")idx:Int
-    ): Call<BaseResponse<MailDiaryResponse>>
+    ): Call<BaseResponse<MailInfoResponse>>
 
-    @GET("/mailboxes/mail/{userIdx}")
+    @GET("/mailboxes/mail")
     fun loadLetter(
-        @Path("userIdx") userIdx: Int,
-        @Query("type") type: String,
+        @Query("userIdx")  userIdx: Int,
+        @Query("type") type: String = "letter",
         @Query("typeIdx")idx:Int
-    ): Call<BaseResponse<MailLetterResponse>>
+    ): Call<BaseResponse<MailInfoResponse>>
 
 
-    @GET("/mailboxes/mail/{userIdx}")
+    @GET("/mailboxes/mail")
     fun loadReply(
-        @Path("userIdx") userIdx: Int,
-        @Query("type") type: String,
+        @Query("userIdx") userIdx: Int,
+        @Query("type") type: String = "reply",
         @Query("typeIdx")idx:Int
-    ): Call<BaseResponse<MailReplyResponse>>
+    ): Call<BaseResponse<MailInfoResponse>>
 
     // -------------------PlantList-------------------------- //
 

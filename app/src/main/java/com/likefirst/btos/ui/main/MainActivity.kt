@@ -55,6 +55,7 @@ import com.likefirst.btos.data.remote.notify.response.AlarmInfo
 import com.likefirst.btos.data.remote.notify.service.AlarmService
 import com.likefirst.btos.data.remote.notify.view.*
 import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
 import com.likefirst.btos.data.remote.posting.service.DiaryService
@@ -418,9 +419,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     }
 
-    override fun onDiarySuccess(resp: MailDiaryResponse) {
-        val doneList :List<String> = resp.mail.doneList.map{donelist ->donelist.content}
-        val diary = DiaryViewerInfo(resp.senderNickName,resp.mail.emotionIdx,resp.mail.diaryDate,resp.mail.content,true,doneList.toArrayList())
+    override fun onDiarySuccess(resp: MailInfoResponse) {
+        val diary = DiaryViewerInfo(resp.senderNickName,resp.emotionIdx,resp.sendAt,resp.content,true,resp.doneList!!)
         val intent = Intent(this@MainActivity,DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo",diary)
         startActivity(intent)
@@ -434,8 +434,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     }
 
-    override fun onLetterSuccess(letter: MailLetterResponse) {
-         val bundle = bundleOf("letter" to  letter , "date" to "임시 데이터")
+    override fun onLetterSuccess(letter:MailInfoResponse) {
+         val bundle = bundleOf("letter" to  letter)
          val intent = Intent(this@MainActivity,MailViewActivity::class.java)
          intent.putExtra("MailView",bundle)
          startActivity(intent)
@@ -449,11 +449,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         TODO("Not yet implemented")
     }
 
-    override fun onReplySuccess(reply: MailReplyResponse) {
-        val bundle =bundleOf(
-            "date" to "임시 데이터",
-            "reply" to reply
-        )
+    override fun onReplySuccess(reply:MailInfoResponse) {
+        val bundle =bundleOf("reply" to reply)
         val intent = Intent(this, MailReplyActivity::class.java)
         intent.putExtra("MailReply",bundle)
         startActivity(intent)

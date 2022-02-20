@@ -14,11 +14,6 @@ import retrofit2.Response
 
 class MailboxService() {
     private lateinit var mailboxView: MailboxView
-    private lateinit var mailDiaryView: MailDiaryView
-    private lateinit var mailLetterView: MailLetterView
-    private lateinit var mailReplyView: MailReplyView
-
-
 
     private val mailboxService= ApplicationClass.retrofit.create(RetrofitInterface::class.java)
 
@@ -49,12 +44,7 @@ class MailboxService() {
 
             }
         })
-
-
     }
 
-    fun loadDiary(userId: String){
-        mailboxView.onMailboxLoading()
-    }
 
 }
