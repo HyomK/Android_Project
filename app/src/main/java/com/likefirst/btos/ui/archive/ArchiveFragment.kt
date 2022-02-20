@@ -7,13 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
 import com.likefirst.btos.databinding.FragmentArchiveBinding
 import com.likefirst.btos.ui.BaseFragment
 
 class ArchiveFragment : BaseFragment<FragmentArchiveBinding>(FragmentArchiveBinding::inflate) {
+    val calendarPage = ArchiveCalendarFragment()
+    val listPage = ArchiveListFragment()
+
     override fun initAfterBinding() {
-        val calendarPage = ArchiveCalendarFragment()
-        val listPage = ArchiveListFragment()
         val archivePageList = arrayListOf<Fragment>(calendarPage, listPage)
         val archiveAdapter = ArchiveFragmentVPAdapter(this, archivePageList)
         binding.archiveVp.apply {

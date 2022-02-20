@@ -56,8 +56,14 @@ import com.likefirst.btos.utils.toArrayList
 import java.lang.reflect.Type
 import kotlin.random.Random
 import android.preference.PreferenceManager
+import android.widget.RadioGroup
 import androidx.lifecycle.Observer
 import com.likefirst.btos.utils.LiveSharedPreferences
+import androidx.fragment.app.FragmentPagerAdapter
+import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
+import com.likefirst.btos.ui.archive.ArchiveCalendarFragment
 
 
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),NoticeAPIView{
@@ -258,6 +264,43 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             }
             return false
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+
+        if (intent != null){
+            // 리스트에서 일기 수정이 일어난 경우 (현재 보이는 리스트 즉시 업데이트)
+            if(intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
+                && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) >= 0){
+                val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
+                val position = intent.getIntExtra("position", -1)
+                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
+                mArchiveFragment.listPage.mAdapter.updateList(position, intentDataset.doneLists.size, intentDataset.emotionIdx, intentDataset.contents)
+            }
+            // 달력에서 일기 수정이 일어난 경우 (리스트 새로 갱신)
+            else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
+                && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) == -1){
+                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
+                mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
+            }
+            // 일기가 작성된 경우 (리스트 새로 갱신, 달력 현재 페이지 갱신)
+            else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
+                && !intent.getBooleanExtra("isDiaryUpdated", false)){
+                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
+                mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
+                var viewMode = 0
+                val radioGroup = findViewById<RadioGroup>(R.id.archive_calendar_rg)
+                when (radioGroup.checkedRadioButtonId){         // 라디오버튼에 따라서 viewMode 변경
+                    R.id.archive_calendar_done_list_rb -> viewMode = 0
+                    R.id.archive_calendar_emotion_rb -> viewMode = 1
+                }
+//                ArchiveCalendarFragment.pageIndexFlag = true
+                mArchiveFragment.calendarPage.initCalendar(viewMode, true)
+//                ArchiveCalendarFragment.pageIndexFlag = false
+            }
+        }
+
+        super.onNewIntent(intent)
     }
 
     fun mailOpenStatus():Boolean{

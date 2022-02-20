@@ -6,6 +6,7 @@ import com.likefirst.btos.data.entities.PostDiaryRequest
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
 import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
+import com.likefirst.btos.data.remote.posting.view.DeleteDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.data.remote.posting.view.UpdateDiaryView
@@ -21,7 +22,7 @@ class DiaryService (){
     private lateinit var diaryView: MailDiaryView
     private lateinit var postDiaryView: PostDiaryView
     private lateinit var updateDiaryView: UpdateDiaryView
-
+    private lateinit var deleteDiaryView: DeleteDiaryView
 
     private val DiaryService = retrofit.create(RetrofitInterface::class.java)
 
@@ -35,6 +36,10 @@ class DiaryService (){
 
     fun setUpdateDiaryView(UpdateDiaryView: UpdateDiaryView){
         this.updateDiaryView = UpdateDiaryView
+    }
+
+    fun deleteDiaryView(deleteDiaryView: DeleteDiaryView){
+        this.deleteDiaryView = deleteDiaryView
     }
 
     fun postDiary(postDiaryRequest: PostDiaryRequest){
@@ -55,7 +60,7 @@ class DiaryService (){
         })
     }
 
-    fun loadDiary( userId:Int, type:String, idx:Int){
+    fun loadDiary(userId:Int, type:String, idx:Int){
 
         diaryView.onDiaryLoading()
 
@@ -95,6 +100,24 @@ class DiaryService (){
             override fun onFailure(call: Call<BaseResponse<String>>, t: Throwable) {
                 Log.d("ArchiveCalendarService / getCalendar Failure", t.toString())
                 updateDiaryView.onArchiveUpdateFailure(400)
+            }
+        })
+    }
+
+    fun deleteDiary(diaryIdx : Int, userIdx : Int){
+        deleteDiaryView.onDiaryDeleteLoading()
+        DiaryService.deleteDiary(diaryIdx, userIdx).enqueue(object :Callback<BaseResponse<String>>{
+            override fun onResponse(call: Call<BaseResponse<String>>, response: Response<BaseResponse<String>>, ) {
+                val resp = response.body()!!
+                Log.d("debug", resp.toString())
+                when (resp.code){
+                    1000 -> deleteDiaryView.onDiaryDeleteSuccess()
+                    else -> deleteDiaryView.onDiaryDeleteFailure(resp.code)
+                }
+            }
+            override fun onFailure(call: Call<BaseResponse<String>>, t: Throwable) {
+                // Network Error
+                deleteDiaryView.onDiaryDeleteFailure(400)
             }
         })
     }

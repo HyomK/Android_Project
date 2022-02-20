@@ -127,6 +127,12 @@ interface RetrofitInterface {
     fun updateDiary(
         @Body updateRequest : UpdateDiaryRequest
     ) : Call<BaseResponse<String>>
+
+    @PATCH("/diaries/delete/{diaryIdx}")
+    fun deleteDiary(
+        @Path("diaryIdx") diaryIdx: Int,
+        @Query("userIdx") userIdx : Int
+    ) : Call<BaseResponse<String>>
     // ------------------- SettingUser -------------------------- //
     @PATCH("/users/{userIdx}/nickname")
     fun setName(
