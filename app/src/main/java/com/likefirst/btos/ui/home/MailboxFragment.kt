@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.room.ColumnInfo
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.*
@@ -23,13 +22,12 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
-import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.utils.toArrayList
 
 
 class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),
     MailboxView, MailLetterView,MailReplyView,
-    MailDiaryView ,MainActivity.onBackPressedListener {
+    MailDiaryView , MainActivity.onBackPressedListener{
 
     override fun initAfterBinding() {
         val presFragment  = this

@@ -1,11 +1,18 @@
 package com.likefirst.btos.ui.splash
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -42,7 +49,7 @@ import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 import com.likefirst.btos.utils.saveUserIdx
-import java.util.regex.Pattern
+
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
     SignUpView, GetProfileView, LoginView, PlantListView {
@@ -50,7 +57,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     val authService = AuthService()
     val plantService= PlantService()
     lateinit var email: String
-    private var auth : FirebaseAuth? = null
 
     val RC_SIGN_IN =1111
     val fireStore = Firebase.firestore
@@ -60,11 +66,13 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     private var userName: String? = null
     private var nickname: String? = null
+    private var textWatcher : TextWatcher? = null
+    private var checkName : Boolean = false
+    private var checkAge : Boolean = false
 
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
     private var mChildEventListener: ChildEventListener? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +83,60 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         mAuth = FirebaseAuth.getInstance()
         initFirebaseDatabase()
         initFirebaseAuth()
+        initListener()
+    }
 
+    private fun initListener() {
+        textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString() == ""){
+                    checkName = false
+                    binding.nicknameError.visibility = View.VISIBLE
+                    binding.nicknameError.text = "닉네임을 입력해주세요."
+                }
+                else{
+                    checkName = true
+                    binding.nicknameError.visibility = View.GONE
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        }
+        binding.onboardingNameEt.addTextChangedListener(textWatcher)
+
+        binding.onboardingNotageCb.setOnCheckedChangeListener { compoundButton, isChecked ->
+            var birth_string = binding.onboardingAgelist.text.toString()
+            if(!isChecked && birth_string == "선택안함"){
+                checkAge = false
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "나이를 선택해주세요.\n공개하고 싶지 않다면 아래를 클릭하세요!"
+            }else if(isChecked) {
+                checkAge = true
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "생년 정보가 반영되지 않습니다."
+            }else{
+                checkAge = true
+                binding.ageError.visibility = View.GONE
+            }
+        }
+
+        binding.onboardingAgelist.addTextChangedListener {
+            if(binding.onboardingAgelist.text.toString()!="선택안함"){
+                checkAge = true
+                binding.ageError.visibility = View.GONE
+            }
+        }
+
+        //나이 선택 시 키보드 내리기
+//        binding.onboardingAgeTil.setEndIconOnClickListener { it ->
+//            hideKeyboard(it)
+//            binding.onboardingAgelist.showDropDown()
+//        }
+        binding.onboardingAgelist.setOnClickListener {
+            hideKeyboard(it)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -86,64 +147,30 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         binding.onboardingAgelist.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
         binding.onboardingAgelist.dropDownHeight = 800
 
-        //나이 선택 시 키보드 내리기
-        binding.onboardingAgeTil.setOnClickListener {
-            hideKeyboard(it)
-        }
-        binding.onboardingAgelist.setOnClickListener {
-            hideKeyboard(it)
-        }
-
-        binding.onboardingNotageCb.setOnClickListener {
-            if(binding.onboardingNotageCb.isChecked){
-                binding.ageError.visibility = View.VISIBLE
-                binding.ageError.text = "생년 정보가 들어가지 않습니다."
-            }
-            else{
-                binding.ageError.visibility = View.GONE
-            }
-        }
-
         binding.onboardingOkayTv.setOnClickListener {
 
-            var checkvali = false
             var birth : Int? = 0
-
-            // loginactivity에서 넘어온 email 받기
-            val intent = getIntent()
-            val bundle = intent.getBundleExtra("mypackage")
-            email = bundle?.getString("email").toString()
-            nickname = binding.onboardingNameEt.text.toString()
-            var birth_string = binding.onboardingAgelist.text.toString()
-
-
-            //닉네임 : 빈칸, 한글, 비속어 금지
-            // 생일 선택 여부
-
-            if(nickname == ""){
-                binding.ageError.visibility = View.GONE
+            Log.e("회원가입","확인 누른 곳")
+            if(binding.onboardingNameEt.text.toString() == ""){
+                checkName = false
                 binding.nicknameError.visibility = View.VISIBLE
                 binding.nicknameError.text = "닉네임을 입력해주세요."
             }
-            else if(!Pattern.matches("^[가-힣]*\$",nickname)){
-                binding.ageError.visibility = View.GONE
-                binding.nicknameError.visibility = View.VISIBLE
-                binding.nicknameError.text = "한글만 가능합니다."
-            }
-            else if(birth_string == "선택안함" && !binding.onboardingNotageCb.isChecked) {
-                binding.nicknameError.visibility = View.GONE
+            else if(!binding.onboardingNotageCb.isChecked && binding.onboardingAgelist.text.toString() == "선택안함"){
+                checkAge = false
                 binding.ageError.visibility = View.VISIBLE
                 binding.ageError.text = "나이를 선택해주세요.\n공개하고 싶지 않다면 아래를 클릭하세요!"
             }
-            else {
-                binding.nicknameError.visibility = View.GONE
-                binding.ageError.visibility = View.GONE
-                checkvali = true
+            else if(checkName && checkAge){
+                // loginactivity에서 넘어온 email 받기
+                val intent = getIntent()
+                val bundle = intent.getBundleExtra("mypackage")
+                email = bundle?.getString("email").toString()
+                nickname = binding.onboardingNameEt.text.toString()
+
                 if(binding.onboardingNotageCb.isChecked) birth = null
                 else birth == binding.onboardingAgelist.text.toString().toInt()
-            }
 
-            if(checkvali){
                 Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
                 authService.setSignUpView(this)
                 authService.signUp(UserSign(email, nickname!!, birth))
@@ -379,8 +406,27 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val view = currentFocus
+        if (view != null && (ev.action == MotionEvent.ACTION_UP || ev.action == MotionEvent.ACTION_MOVE) && view is EditText && !view.javaClass.name.startsWith(
+                "android.webkit.")
+        ) {
+            val scrcoords = IntArray(2)
+            view.getLocationOnScreen(scrcoords)
+            val x = ev.rawX + view.getLeft() - scrcoords[0]
+            val y = ev.rawY + view.getTop() - scrcoords[1]
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom()) (this.getSystemService(
+                Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                this.window.decorView.applicationWindowToken, 0)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
+        val gso = getGSO()
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
         val intent = Intent(this,LoginActivity::class.java)
         finish()
         startActivity(intent)
@@ -394,8 +440,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onDestroy() {
         super.onDestroy()
-        val gso = getGSO()
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        googleSignInClient.signOut()
+        binding.onboardingNameEt.removeTextChangedListener(textWatcher)
     }
 }

@@ -106,6 +106,7 @@
 
             <AutoCompleteTextView
                 android:id="@+id/onboarding_agelist"
+                android:scrollbars="none"
                 android:layout_width="125dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
