@@ -77,7 +77,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 val handler = android.os.Handler()
                 handler.postDelayed({
                     if(sharedSelectModel.isSuccess().value==true)
-                        Snackbar.make(view!!,"화분이 변경되었습니다",Snackbar.LENGTH_SHORT).show()
+                       // Snackbar.make(view!!,"화분이 변경되었습니다",Snackbar.LENGTH_SHORT).show()
                     else
                         errorDialog().show(requireActivity().supportFragmentManager,"")
                     adapter.selectItem(position)

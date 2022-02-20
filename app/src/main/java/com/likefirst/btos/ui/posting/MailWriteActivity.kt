@@ -23,9 +23,6 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 
 
-
-
-
 class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWriteBinding::inflate) {
 
 
@@ -125,7 +122,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
 
         val fcmDatabase = FCMDatabase.getInstance(this)!!
         val userData = fcmDatabase.fcmDao().getData()
-        if(userData.fcmToken == ""){
+        if(userData == null ||userData.fcmToken ==" "){
             Log.e("Firebase", "토큰이 비었습니다")
             return
         }
@@ -133,7 +130,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         // smaple token
         val token ="cMN2diC7S1aiRCJFiJ3JCH:APA91bH4Utd8Y8AY2mK5keVmYRfbVvN1GD7nVx8KQZMNeW0r77rB9QZa7v9G49C7WNsnZf9IxOJ8FofZalzlKPsq4R4blMxT91AXpzptQf18bJ9dbHa-L9kTE2XTPBznlUFFhVjktisM"
         val toMe = userData.fcmToken
-        FCMService().sendPostToFCM(token, userData,userData.email+"님의 편지가 도착했습니다")
+        FCMService().sendPostToFCM(toMe, userData,userData.email+"님의 편지가 도착했습니다")
 
     }
 

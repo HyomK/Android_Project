@@ -328,7 +328,7 @@ class LoginActivity
                 userData.fcmToken= token
 
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
-                if(fcmDatabase.fcmDao().getData() ==null){
+                if(fcmDatabase.fcmDao().getData()==null){
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
                     fcmDatabase.fcmDao().update(userData)
@@ -368,10 +368,14 @@ class LoginActivity
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             //TODO 이용약관 동의 다이얼로그
-            Log.e("count", "${++count}")
+            Log.e("count", "non null ${++count} " )
+
+            val fcmDatabase = FCMDatabase.getInstance(this)!!
+            Log.e("count", "non null ${fcmDatabase.fcmDao().getData()} " )
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
+            Log.e("count", "null ${++count} " )
             initFirebaseDatabase()
             firbaseSignIn()
         }

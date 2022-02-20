@@ -81,7 +81,7 @@
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="start"
-            android:background="@color/white" />
+            android:background="@color/background" />
 
         <ImageView
             android:id="@+id/letterView_menu_btn"
