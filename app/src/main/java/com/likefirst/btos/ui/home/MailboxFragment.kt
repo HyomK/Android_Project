@@ -22,6 +22,7 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
+import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.utils.toArrayList
 
 
