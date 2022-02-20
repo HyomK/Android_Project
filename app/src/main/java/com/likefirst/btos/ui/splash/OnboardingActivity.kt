@@ -1,7 +1,6 @@
 package com.likefirst.btos.ui.splash
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -9,7 +8,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
@@ -122,20 +120,13 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             }
         }
 
+
+
         binding.onboardingAgelist.addTextChangedListener {
             if(binding.onboardingAgelist.text.toString()!="선택안함"){
                 checkAge = true
                 binding.ageError.visibility = View.GONE
             }
-        }
-
-        //나이 선택 시 키보드 내리기
-//        binding.onboardingAgeTil.setEndIconOnClickListener { it ->
-//            hideKeyboard(it)
-//            binding.onboardingAgelist.showDropDown()
-//        }
-        binding.onboardingAgelist.setOnClickListener {
-            hideKeyboard(it)
         }
     }
 
@@ -146,6 +137,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         binding.onboardingAgelist.setAdapter(arrayAdapter)
         binding.onboardingAgelist.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
         binding.onboardingAgelist.dropDownHeight = 800
+        binding.onboardingAgelist.getOffsetForPosition(0f,12f)
 
         binding.onboardingOkayTv.setOnClickListener {
 
@@ -327,7 +319,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Tokent -> ", account?.idToken.toString())
+        Log.e("Token -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
@@ -406,6 +398,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
+    //edittext 이외의 화면 클릭시 키보드 내리기
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val view = currentFocus
         if (view != null && (ev.action == MotionEvent.ACTION_UP || ev.action == MotionEvent.ACTION_MOVE) && view is EditText && !view.javaClass.name.startsWith(
@@ -415,9 +408,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             view.getLocationOnScreen(scrcoords)
             val x = ev.rawX + view.getLeft() - scrcoords[0]
             val y = ev.rawY + view.getTop() - scrcoords[1]
-            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom()) (this.getSystemService(
-                Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                this.window.decorView.applicationWindowToken, 0)
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                hideKeyboard(view)
         }
         return super.dispatchTouchEvent(ev)
     }
