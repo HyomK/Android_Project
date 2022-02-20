@@ -3,7 +3,6 @@
     android:id="@+id/MailWrite_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -81,7 +80,7 @@
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="start"
-            android:background="@color/white" />
+            android:background="@color/background" />
 
         <ImageView
             android:id="@+id/MailReply_menu_btn"
@@ -108,7 +107,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="70dp"
             android:src="@drawable/ic_write"
-            android:background="@color/white"
+            android:background="@color/background"
             android:visibility="invisible"
             />
 
@@ -121,7 +120,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_check"
-            android:background="@color/white"
+            android:background="@color/background"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/background"
     android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -44,6 +44,7 @@
         />
     <FrameLayout
         android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -55,16 +56,6 @@
             android:layout_gravity="center"
             android:overScrollMode="never" />
 
-<!--        <me.relex.circleindicator.CircleIndicator3-->
-<!--            android:id="@+id/indicator"-->
-<!--            app:ci_drawable="@drawable/black_indicator"-->
-<!--            app:ci_drawable_unselected="@drawable/white_indicator"-->
-<!--            android:layout_width="match_parent"-->
-<!--            app:ci_width="3pt"-->
-<!--            app:ci_height="3pt"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:layout_gravity="bottom"/>-->
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/premium_tablayout"
@@ -82,17 +73,6 @@
             app:tabIndicatorHeight="0dp"
      />
 
-<!--        <com.google.android.material.tabs.TabLayout-->
-<!--            android:id="@+id/tab_layout"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_gravity="bottom|center"-->
-<!--            app:tabBackground="@drawable/selector_indicator"-->
-<!--            app:tabGravity="center"-->
-<!--            app:tabIndicatorHeight="0dp"-->
-<!--            app:tabSelectedTextColor="@android:color/transparent"-->
-<!--            app:tabTextColor="@android:color/transparent" />-->
     </FrameLayout>
 
 

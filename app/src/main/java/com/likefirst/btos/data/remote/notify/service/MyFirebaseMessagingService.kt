@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.graphics.drawable.IconCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.likefirst.btos.ui.main.MainActivity
@@ -19,25 +17,9 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.likefirst.btos.R
 import com.likefirst.btos.utils.fcm.MyWorker
-import android.os.PowerManager
-import android.media.AudioAttributes
-import com.google.common.reflect.TypeToken
-import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.GsonBuilder
-import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
-import org.json.JSONArray
-import java.lang.reflect.Type
-import android.content.pm.ResolveInfo
-
-import android.content.pm.PackageManager
-import android.widget.Toast.makeText
-import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
-import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -49,8 +31,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.i("### msg : ", remoteMessage.toString());
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){
-            sendNotification(remoteMessage.notification?.title,
-                remoteMessage.notification?.body!!)
+            sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body!!)
             if (true) {
                 scheduleJob();
             } else {
@@ -141,7 +122,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
-
+        saveMessage()
         showNotificationMessage(title,body)
         val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
         if(spf.getBoolean("state",true)){
@@ -156,7 +137,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val body = Message["body"]!!
         // PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //\
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, uniId, intent, PendingIntent.FLAG_ONE_SHOT)
 
         // 알림 채널 이름
@@ -175,7 +156,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)       // 알림 실행 시 Intent
             .setDefaults(Notification.DEFAULT_SOUND)
 
-
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -187,13 +167,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setShowBadge(false)
             }
         }
-       // saveData(Message)
-        // 알림 생성
-        showDataMessage(title,body)
+
+        saveMessage()
+
         val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
         if(spf.getBoolean("state",true)){
            notificationManager.notify(uniId, notificationBuilder.build())
         }
+
 
     }
 
@@ -206,7 +187,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     fun showDataMessage(msgTitle: String?, msgContent: String?) {
         Log.i("### data msgTitle : ", msgTitle.toString())
         Log.i("### data msgContent : ", msgContent.toString())
-        val toastText = String.format("[Data 메시지] title: %s => content: %s", msgTitle, msgContent)
+        val toastText = msgContent.toString()
         Looper.prepare()
         Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
         Looper.loop()
@@ -225,6 +206,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Looper.prepare()
         Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
         Looper.loop()
+    }
+
+    fun saveMessage(){
+        val spf = getSharedPreferences("notification",MODE_PRIVATE)
+        val editor = spf.edit()
+        editor.putString("newNotification","new")
+        editor.putString("newMail","new")
+        editor.apply()
     }
 
 

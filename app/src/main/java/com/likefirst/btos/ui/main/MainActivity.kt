@@ -1,41 +1,23 @@
 package com.likefirst.btos.ui.main
 
 
-import android.accounts.Account
-import android.accounts.AccountManager
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.preference.Preference
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationBarView
-import com.google.common.reflect.TypeToken
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.GsonBuilder
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.NotificationDTO
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.NotificationDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
-import com.likefirst.btos.data.remote.notify.service.FCMService
-import com.likefirst.btos.data.remote.notify.service.NoticeService
-import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -43,10 +25,8 @@ import com.likefirst.btos.ui.archive.ArchiveFragment
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewActivity
-import com.likefirst.btos.ui.home.MailboxFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
-import com.likefirst.btos.utils.toArrayList
 import android.widget.RadioGroup
 import androidx.lifecycle.Observer
 import com.likefirst.btos.data.entities.DiaryViewerInfo
@@ -54,14 +34,10 @@ import com.likefirst.btos.data.remote.notify.response.Alarm
 import com.likefirst.btos.data.remote.notify.response.AlarmInfo
 import com.likefirst.btos.data.remote.notify.service.AlarmService
 import com.likefirst.btos.data.remote.notify.view.*
-import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
-import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
-import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.service.MailLetterService
 import com.likefirst.btos.data.remote.posting.service.MailReplyService
-import com.likefirst.btos.data.remote.posting.service.MailboxService
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
@@ -98,15 +74,26 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
+        setNotificationIcon()
+
+    }
+
+    fun setNotificationIcon(){
         sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
         val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
         val liveSharedPreference = LiveSharedPreferences(spf)
-        liveSharedPreference
-            .getString("messageList", "undefine")
+        liveSharedPreference.getString("newNotification", "undefine")
+            .observe(this, Observer<String> { result ->
+                if(result!="undefine"){
+                    sharedNotifyModel.setNoticeLiveData(true)
+                }else{
+                    sharedNotifyModel.setNoticeLiveData(false)
+                }
+            })
+        liveSharedPreference.getString("newMail", "undefine")
             .observe(this, Observer<String> { result ->
                 if(result!="undefine"){
                     sharedNotifyModel.setMsgLiveData(true)
-                    sharedNotifyModel.setNoticeLiveData(true)
                 }else{
                     sharedNotifyModel.setMsgLiveData(false)
                 }
@@ -124,6 +111,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             override fun onDrawerOpened(drawerView: View) {
                 alarmService.getAlarmList(getUserIdx())
                 sharedNotifyModel.setNoticeLiveData(false)
+                val spf = getSharedPreferences("notification", MODE_PRIVATE)
+                spf.edit().putString("newNotification","undefine").apply()
             }
             override fun onDrawerClosed(drawerView: View) {}
             override fun onDrawerStateChanged(newState: Int) {}
@@ -420,7 +409,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onDiarySuccess(resp: MailInfoResponse) {
-        val diary = DiaryViewerInfo(resp.senderNickName,resp.emotionIdx,resp.sendAt,resp.content,true,resp.doneList!!)
+        val diary = DiaryViewerInfo(resp.senderNickName,resp.emotionIdx,resp.sendAt,resp.content!!,true,resp.doneList!!)
         val intent = Intent(this@MainActivity,DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo",diary)
         startActivity(intent)

@@ -75,6 +75,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
+            val spf = requireActivity().getSharedPreferences("notification", AppCompatActivity.MODE_PRIVATE)
+            spf.edit().putString("newMail","undefine").apply()
 
             requireActivity().supportFragmentManager
                 .beginTransaction()
@@ -147,7 +149,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
-        animationView.setAnimation("${plantName}/${plantName }_${3}.json")
+        animationView.setAnimation("${plantName}/${plantName }_${currentLevel}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()

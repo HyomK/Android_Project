@@ -2,15 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bg"
+    android:background="@color/background"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_notice_layout"
-        android:background="@color/bg"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <TextView
             android:id="@+id/item_notice_title"
             android:layout_width="match_parent"
@@ -36,7 +35,6 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:fontFamily="@font/notosanskr_regular"
-            android:layout_marginBottom="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/item_notice_title"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -54,14 +52,10 @@
             android:layout_marginEnd="30dp"
             android:background="@color/transparent"
 
+
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white"/>
 
     <LinearLayout
         android:id="@+id/item_notice_layout_expand"
@@ -76,6 +70,7 @@
             android:id="@+id/item_notice_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
             android:textSize="14dp"
             android:background="@color/white"
             android:text="nnionnoinionin"/>

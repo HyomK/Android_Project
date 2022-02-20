@@ -105,7 +105,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         var name : String="(알 수 없음)"
         if(diary.senderNickName !=null)
             name=diary.senderNickName
-        val Diary = DiaryViewerInfo( diary.senderNickName, diary.emotionIdx, diary.sendAt, diary.content, true, diary.doneList!!)
+        val Diary = DiaryViewerInfo( diary.senderNickName, diary.emotionIdx, diary.sendAt, diary.content!!, true, diary.doneList!!)
         val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo",Diary)
         requireActivity().startActivity(intent)
