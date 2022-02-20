@@ -3,14 +3,9 @@ package com.likefirst.btos.ui.splash
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import androidx.core.widget.addTextChangedListener
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -47,7 +42,7 @@ import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 import com.likefirst.btos.utils.saveUserIdx
-
+import java.util.regex.Pattern
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
     SignUpView, GetProfileView, LoginView, PlantListView {
@@ -55,6 +50,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     val authService = AuthService()
     val plantService= PlantService()
     lateinit var email: String
+    private var auth : FirebaseAuth? = null
 
     val RC_SIGN_IN =1111
     val fireStore = Firebase.firestore

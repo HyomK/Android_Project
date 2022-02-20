@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -22,6 +23,7 @@ import com.likefirst.btos.data.remote.plant.view.SharedBuyModel
 import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.utils.errorDialog
+import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.toArrayList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,23 +35,19 @@ import kotlin.collections.ArrayList
 class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  ,
     PlantSelectView, PlantBuyView {
 
-    var USERIDX=-1
     lateinit var  sharedSelectModel : SharedSelectModel
     lateinit var  sharedBuyModel : SharedBuyModel
     lateinit var plantName :Array<String>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         sharedSelectModel=ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
         sharedBuyModel=ViewModelProvider(requireActivity()).get(SharedBuyModel::class.java)
         plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
-        val userDB= UserDatabase.getInstance(requireContext())!!
-        USERIDX=userDB.userDao().getUser().userIdx!!
-    }
 
+    }
     override fun initAfterBinding() {
         val mActivity= activity as MainActivity
-
         val Plants =loadData()
         val adapter = PlantRVAdapter(getPlantProfile(Plants), sharedSelectModel, sharedBuyModel)
         val plantSelectView : PlantSelectView =this
@@ -73,16 +71,15 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             override fun onClickSelectItem(plant : Plant,position:Int) {
                 val plantService = PlantService()
                 plantService.setPlantSelectView(plantSelectView)
-                val request = PlantRequest(USERIDX,plant.plantIdx)
+                val request = PlantRequest(getUserIdx(),plant.plantIdx)
                 plantService.selectPlant( request )
 
                 val handler = android.os.Handler()
                 handler.postDelayed({
                     if(sharedSelectModel.isSuccess().value==true)
-                        Toast.makeText(requireActivity(),"화분이 변경되었습니다",Toast.LENGTH_SHORT).show()
+                       // Snackbar.make(view!!,"화분이 변경되었습니다",Snackbar.LENGTH_SHORT).show()
                     else
                         errorDialog().show(requireActivity().supportFragmentManager,"")
-
                     adapter.selectItem(position)
                 }, 600)
 
@@ -107,7 +104,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                         val handler = android.os.Handler()
                         val plantService = PlantService()
                         plantService.setPlantBuyView(plantBuyView)
-                        val request :PlantRequest = PlantRequest(USERIDX,plant.first.plantIdx)
+                        val request :PlantRequest = PlantRequest(getUserIdx(),plant.first.plantIdx)
                         plantService.buyPlant(request)
                         val img= requireContext()!!.resources.getIdentifier(
                             plantName[ origin.plantIdx-1]

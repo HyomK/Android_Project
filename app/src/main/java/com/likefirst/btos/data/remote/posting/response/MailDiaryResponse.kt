@@ -23,7 +23,11 @@ data class Diary(
 
 
 data class MailDiaryResponse(
-    @SerializedName("mail") val mail : Diary,
+    @SerializedName("diaryIdx") val diaryIdx : Int,
+    @SerializedName("emotionIdx") val emotionIdx : Int,
+    @SerializedName("diaryDate") val diaryDate : String,
+    @SerializedName("content") val content :String,
+    @SerializedName("doneList") val doneList :ArrayList<DoneList>,
     @SerializedName("senderNickName") val senderNickName :String,
     @SerializedName("senderFontIdx") val senderFontIdx :Int
 

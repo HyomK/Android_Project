@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@color/background"
     android:orientation="vertical"
     android:clickable="true"
     android:layout_width="match_parent"
@@ -63,50 +63,5 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"/>
 
-    <!--    <TextView-->
-<!--        android:paddingTop="30dp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/settingListStyle"-->
-<!--        android:text="기본"-->
-<!--        android:paddingVertical="@dimen/profile_settingList_paddingVertical"-->
-<!--        />-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/settingListStyle"-->
-<!--        android:text="교보손글씨"-->
-<!--        android:paddingVertical="@dimen/profile_settingList_paddingVertical"-->
-<!--        />-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/settingListStyle"-->
-<!--        android:text="수신 설정"-->
-<!--        android:paddingVertical="@dimen/profile_settingList_paddingVertical"-->
-<!--        />-->
-
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/settingListStyle"-->
-<!--        android:text="코트라 손글씨"-->
-<!--        android:paddingVertical="@dimen/profile_settingList_paddingVertical"-->
-<!--        />-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/settingListStyle"-->
-<!--        android:text="몽돌"-->
-<!--        android:paddingVertical="@dimen/profile_settingList_paddingVertical"-->
-<!--        />-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/settingListStyle"-->
-<!--        android:text="어비 돌돌체"-->
-<!--        android:paddingVertical="@dimen/profile_settingList_paddingVertical"-->
-
-<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
