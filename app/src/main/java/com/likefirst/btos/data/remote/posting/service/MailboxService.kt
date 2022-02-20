@@ -3,11 +3,11 @@ package com.likefirst.btos.data.remote.posting.service
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.data.remote.posting.response.MailboxResponse
-import com.likefirst.btos.data.remote.posting.view.MailboxView
-import com.likefirst.btos.utils.RetrofitInterface
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
+import com.likefirst.btos.data.remote.posting.view.MailboxView
+import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,8 +49,6 @@ class MailboxService() {
 
             }
         })
-
-
     }
 
     fun loadDiary(userId: String){
