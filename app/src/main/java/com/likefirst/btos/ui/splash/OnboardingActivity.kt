@@ -189,6 +189,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
+        Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
@@ -308,6 +309,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
+        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
@@ -316,13 +318,11 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     Log.e("Firebase token : ", taskId.toString())
                     initValues()
                     updateProfile()
+                    goToTutorial() //TODO 위치 수정
 
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
-                    //  moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
-                    Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
+                    Log.e("Firebase-login fail",task.exception?.message.toString())
                 }
             }
     }
@@ -359,9 +359,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     .child(userData.email.toString())
                     .setValue(userData)
             })
-
         }
-        goToTutorial()
     }
 
 
@@ -384,16 +382,11 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onCancelled(databaseError: DatabaseError) {}
         }
-
-
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val gso = getGSO()
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        googleSignInClient.signOut()
         val intent = Intent(this,LoginActivity::class.java)
         finish()
         startActivity(intent)
@@ -403,5 +396,12 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         super.onPause()
         mGoogleApiClient.stopAutoManage(this);
         mGoogleApiClient.disconnect();
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val gso = getGSO()
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
     }
 }

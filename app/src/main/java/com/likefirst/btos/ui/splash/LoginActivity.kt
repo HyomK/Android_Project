@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseUser
@@ -27,9 +28,15 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.messaging.FirebaseMessaging
+import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
+import com.likefirst.btos.data.entities.firebase.UserDTO
+import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
@@ -41,17 +48,10 @@ import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
-import com.google.firebase.ktx.app
-import com.google.firebase.messaging.FirebaseMessaging
-import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.entities.UserEmail
-import com.likefirst.btos.data.entities.firebase.MessageDTO
-import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.FCMDatabase
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.saveUserIdx
 
 
@@ -67,6 +67,7 @@ class LoginActivity
     lateinit var email : String
     private val handler= Handler(Looper.getMainLooper())
     private var stop = false
+    var count = 0
 
     val authService = AuthService()
     val plantService= PlantService()
@@ -112,6 +113,7 @@ class LoginActivity
                     binding.loginGoogleLoginTv.startAnimation(animFadeIn)
                 }
             }
+
         },3000)
 
 
@@ -125,30 +127,27 @@ class LoginActivity
 
     }
 
-
     override fun onConnectionFailed(p0: ConnectionResult) {
-
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == G_SIGN_IN){
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-
-            val account = task.getResult(ApiException::class.java)
-            email = account?.email.toString()
-            Log.e("account ", email )
-            authService.setLoginView(this)
-            authService.login(UserEmail(email)) //Error
+            if(resultCode!=0){
+                Log.e("RESULTCODE",resultCode.toString())
+                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account = task.getResult(ApiException::class.java)
+                email = account?.email.toString()
+                Log.e("account ", email )
+                authService.setLoginView(this)
+                authService.login(UserEmail(email))
+            }
         }else if(requestCode ==RC_SIGN_IN){
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)!!
             Log.e("Firebase","#########onActivityResult RC_SIGN IN : "+result?.toString())
             if( result.isSuccess) {
                 email =result.signInAccount?.email!!
                 firebaseAuthWithGoogle(result.signInAccount)
-            }
-            else{
                 updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -203,6 +202,7 @@ class LoginActivity
     }
 
 
+
     override fun onAutoLoginFailure(code: Int, message: String) {
         binding.loginLoadingPb.visibility = View.GONE
     }
@@ -232,7 +232,6 @@ class LoginActivity
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
-
     }
 
     fun updatePlantDB(){
@@ -292,19 +291,18 @@ class LoginActivity
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
+        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
                     updateProfile()
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
                     Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
-                    finish() //TODO 실패 처리 필요
                 }
             }
     }
@@ -370,6 +368,7 @@ class LoginActivity
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             //TODO 이용약관 동의 다이얼로그
+            Log.e("count", "${++count}")
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{

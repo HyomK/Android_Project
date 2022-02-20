@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -76,7 +77,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 val handler = android.os.Handler()
                 handler.postDelayed({
                     if(sharedSelectModel.isSuccess().value==true)
-                        Toast.makeText(requireActivity(),"화분이 변경되었습니다",Toast.LENGTH_SHORT).show()
+                        Snackbar.make(view!!,"화분이 변경되었습니다",Snackbar.LENGTH_SHORT).show()
                     else
                         errorDialog().show(requireActivity().supportFragmentManager,"")
                     adapter.selectItem(position)
