@@ -15,6 +15,7 @@ import com.likefirst.btos.databinding.LoginDialogBinding
 class LoginDialogFragment(): DialogFragment() {
     private var _binding: LoginDialogBinding? = null
     private val binding get() = _binding!!
+    private var isnextClicked : Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding =  LoginDialogBinding.inflate(inflater, container, false)
@@ -31,9 +32,14 @@ class LoginDialogFragment(): DialogFragment() {
 
       binding.loginDialogNextBtn.setOnClickListener{
           if(binding.loginDialogAllCheck.loginDialogCheckbox.isChecked) {
+              isnextClicked = true
               dismiss()
           }
-          else Toast.makeText(requireContext(),"필수 약관에 동의해주세요",Toast.LENGTH_SHORT).show()
+          else {
+              //필수 약관에 동의 error 문자 표시
+              Toast.makeText(requireContext(), "필수 약관에 동의해주세요", Toast.LENGTH_SHORT).show()
+              isnextClicked = false
+          }
       }
       binding.loginDialogPrivacy.loginDialogItemTitle.text="[필수] 개인정보 수집 동의"
       binding.loginDialogUse.loginDialogItemTitle.text="[필수] 서비스 이용약관"
@@ -108,7 +114,8 @@ class LoginDialogFragment(): DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         Log.e("LOGINDIALOG","destroy")
-        if(!binding.loginDialogAllCheck.loginDialogCheckbox.isChecked){
+        Log.e("LOGINDIALOG",isnextClicked.toString())
+        if(!isnextClicked){
             val activity = activity as OnboardingActivity
             val intent = Intent(requireActivity(),LoginActivity::class.java)
             activity.finish()
@@ -123,4 +130,5 @@ class LoginDialogFragment(): DialogFragment() {
     }
     // 클릭 이벤트 실행
     private lateinit var buttonClickListener: OnButtonClickListener
+
 }

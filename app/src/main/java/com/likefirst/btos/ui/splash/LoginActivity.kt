@@ -8,7 +8,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -148,7 +147,6 @@ class LoginActivity
             }
             else{
                 updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -174,13 +172,10 @@ class LoginActivity
 
         when(code){
             4000 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
             }
             5003 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
-
                 val intent = Intent(this, OnboardingActivity::class.java)
                 val bundle = Bundle()
                 bundle.putString("email",email)
@@ -301,12 +296,10 @@ class LoginActivity
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
                 }
             }
     }

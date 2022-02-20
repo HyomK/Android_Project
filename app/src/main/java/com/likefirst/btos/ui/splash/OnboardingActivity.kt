@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -172,7 +171,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             }
             else{
                 updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -183,7 +181,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
-        Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
@@ -312,13 +309,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     Log.e("Firebase token : ", taskId.toString())
                     initValues()
                     //updateProfile()
-
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     //  moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
                 }
             }
     }
