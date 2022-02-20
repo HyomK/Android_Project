@@ -22,7 +22,6 @@ import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.UserIsSad
@@ -67,16 +66,24 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             val check = it.getString("plantName",null)
             if(check!=null) updateHappyPot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
         })
+    }
+    override fun initAfterBinding() {
 
         val mActivity = activity as MainActivity
+        val updateUserService = UpdateUserService()
+        updateUserService.setUpdateIsSadView(this)
+
+        initFlowerPot()
+
+        binding.homeNotificationBtn.setOnClickListener {
+            if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
+
+        }
 
         binding.homeMailBtn.setOnClickListener {
-            Log.e("home","click mail")
             sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
-            val spf = requireActivity().getSharedPreferences("notification", AppCompatActivity.MODE_PRIVATE)
-            spf.edit().putString("newMail","undefine").apply()
 
             requireActivity().supportFragmentManager
                 .beginTransaction()
@@ -84,17 +91,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .addToBackStack(null)
                 .show(MailboxFragment())
                 .commit()
+
         }
-
-    }
-    override fun initAfterBinding() {
-
-        val mActivity = activity as MainActivity
-
-        binding.homeNotificationBtn.setOnClickListener {
-            if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
-        }
-
 
         binding.homeWriteBtn.bringToFront()
         binding.homeWriteBtn.setOnClickListener {
@@ -104,10 +102,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             startActivity(intent)
         }
 
-    /*    val updateUserService = UpdateUserService()
-        updateUserService.setUpdateIsSadView(this)
-        initFlowerPot()
-*/
+
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -149,7 +144,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
-        animationView.setAnimation("${plantName}/${plantName }_${currentLevel}.json")
+        animationView.setAnimation("${plantName}/${plantName }_${3}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
@@ -184,8 +179,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .setTestDeviceIds(testDeviceIds)
                 .build()
         )
-        // ca-app-pub-3439488559531418/3923063443
-        // ca-app-pub-3940256099942544/5224354917 -> test
         val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
         val adLoadCallback = object: RewardedAdLoadCallback() {
             override fun onRewardedAdLoaded() {
@@ -193,7 +186,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
             }
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-                // Ad failed to load.로드하지
+                // Ad failed to load.
                 Log.e("rewardLoadError", adError.toString())
             }
         }
@@ -227,7 +220,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 }
                 override fun onRewardedAdFailedToShow(adError: AdError) {
                     // Ad failed to display.
-                    Snackbar.make(requireView(), "광고를 로드하지 못하였습니다. 조금 있다 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
                 }
             }
             mRewardedVideoAd.show(activityContext, adCallback)

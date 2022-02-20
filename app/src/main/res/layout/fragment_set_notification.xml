@@ -12,7 +12,6 @@
         android:id="@+id/set_notify_cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:layout_marginBottom="15dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -156,7 +155,6 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/set_notify_rv"
             tools:listitem="@layout/item_blacklist"
-            android:background="@color/white"
             android:overScrollMode="never"
             app:layout_constraintTop_toTopOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

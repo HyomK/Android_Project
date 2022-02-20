@@ -144,7 +144,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
             val fragments = arrayOf("premium", "plantrv","plantItem")
             cleanUpFragment(fragments)
             if (isSettingOpen) {
-                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo")
+                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo","setNotify")
                 cleanUpFragment(fragments)
                 isSettingOpen=false
             }
@@ -152,7 +152,6 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 requireActivity().supportFragmentManager
                     .findFragmentByTag("setting")?.let { remove(it) }
             }
-
         }
     }
 
