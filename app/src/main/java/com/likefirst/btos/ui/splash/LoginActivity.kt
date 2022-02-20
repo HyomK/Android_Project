@@ -77,6 +77,8 @@ class LoginActivity
     private var mAuthListener: AuthStateListener? = null
     lateinit var mGoogleApiClient: GoogleApiClient
     private var userName: String? = null
+    private var movePose : String? = null
+
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
     private var mChildEventListener: ChildEventListener? = null
@@ -173,13 +175,10 @@ class LoginActivity
 
         when(code){
             4000 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
             }
             5003 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
-
                 val intent = Intent(this, OnboardingActivity::class.java)
                 val bundle = Bundle()
                 bundle.putString("email",email)
@@ -224,7 +223,6 @@ class LoginActivity
         } else {
             userDB.update(user)
         }
-
         Log.e("PROFILE/ROOMDB",userDB?.getUser().toString())
         saveUserIdx(user.userIdx!!)
         updatePlantDB()
@@ -302,7 +300,6 @@ class LoginActivity
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
                 }
             }
     }
