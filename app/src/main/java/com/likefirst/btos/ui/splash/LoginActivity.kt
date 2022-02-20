@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseUser
@@ -66,6 +67,7 @@ class LoginActivity
     lateinit var email : String
     private val handler= Handler(Looper.getMainLooper())
     private var stop = false
+    var count = 0
 
     val authService = AuthService()
     val plantService= PlantService()
@@ -147,10 +149,6 @@ class LoginActivity
                 firebaseAuthWithGoogle(result.signInAccount)
                 updateProfile()
             }
-            else{
-                updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
@@ -212,7 +210,6 @@ class LoginActivity
 
     override fun onGetProfileViewLoading() {
         binding.loginLoadingPb.visibility = View.VISIBLE
-
     }
 
     override fun onGetProfileViewSuccess(user: User) {
@@ -294,15 +291,13 @@ class LoginActivity
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
-                    Log.e("Firebase token : ", taskId.toString())
+                    Snackbar.make(binding.root,"파이어베이스 토큰 생성 성공", Snackbar.LENGTH_SHORT).show()
                     updateProfile()
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
@@ -373,6 +368,7 @@ class LoginActivity
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             //TODO 이용약관 동의 다이얼로그
+            Log.e("count", "${++count}")
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{

@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
@@ -70,10 +71,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val dialog = LoginDialogFragment()
         dialog.show(supportFragmentManager, "")
-
         mAuth = FirebaseAuth.getInstance()
         initFirebaseDatabase()
         initFirebaseAuth()
@@ -170,10 +169,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 email =result.signInAccount?.email!!
                 firebaseAuthWithGoogle(result.signInAccount)
                 updateProfile()
-            }
-            else{
-                updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -304,22 +299,19 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
-                    Log.e("Firebase token : ", taskId.toString())
+                    Snackbar.make(binding.root,"파이어베이스 토큰 생성 성공",Snackbar.LENGTH_SHORT).show()
                     initValues()
                     updateProfile()
                     goToTutorial() //TODO 위치 수정
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
-                    //  moveMainPage(task.result?.user)
+
                 }else{
                     // 틀렸을 때
-                    Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
+                    Log.e("Firebase-login fail",task.exception?.message.toString())
                 }
             }
     }
@@ -351,7 +343,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 }
 
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
-
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
                     .setValue(userData)
