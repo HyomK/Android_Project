@@ -1,24 +1,19 @@
 package com.likefirst.btos.ui.splash
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,7 +25,6 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
-import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
@@ -44,11 +38,11 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
 import com.likefirst.btos.utils.saveUserIdx
+import java.util.regex.Pattern
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
     SignUpView, GetProfileView, LoginView, PlantListView {
@@ -65,7 +59,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     lateinit var mGoogleApiClient: GoogleApiClient
 
     private var userName: String? = null
-    private var movePose : String? = null
+    private var nickname: String? = null
 
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
@@ -74,44 +68,93 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val dialog = LoginDialogFragment()
+        dialog.show(supportFragmentManager, "")
+
         mAuth = FirebaseAuth.getInstance()
         initFirebaseDatabase()
         initFirebaseAuth()
 
     }
 
-
-
+    @SuppressLint("SetTextI18n")
     override fun initAfterBinding() {
-
-        val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         val agelist = resources.getStringArray(R.array.onboarding_agelist)
         val arrayAdapter = ArrayAdapter(this, R.layout.onboarding_dropdown_item, agelist)
         binding.onboardingAgelist.setAdapter(arrayAdapter)
         binding.onboardingAgelist.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
-        binding.onboardingAgelist.dropDownHeight = 400
+        binding.onboardingAgelist.dropDownHeight = 800
 
         //나이 선택 시 키보드 내리기
         binding.onboardingAgeTil.setOnClickListener {
-            imm.hideSoftInputFromWindow(binding.onboardingNameEt.windowToken, 0);
+            hideKeyboard(it)
+        }
+        binding.onboardingAgelist.setOnClickListener {
+            hideKeyboard(it)
+        }
+
+        binding.onboardingNotageCb.setOnClickListener {
+            if(binding.onboardingNotageCb.isChecked){
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "생년 정보가 들어가지 않습니다."
+            }
+            else{
+                binding.ageError.visibility = View.GONE
+            }
         }
 
         binding.onboardingOkayTv.setOnClickListener {
+
+            var checkvali = false
+            var birth : Int? = 0
+
             // loginactivity에서 넘어온 email 받기
             val intent = getIntent()
             val bundle = intent.getBundleExtra("mypackage")
             email = bundle?.getString("email").toString()
+            nickname = binding.onboardingNameEt.text.toString()
+            var birth_string = binding.onboardingAgelist.text.toString()
 
-            val nickname = binding.onboardingNameEt.text.toString()
-            val birth = binding.onboardingAgelist.text.toString().toInt()
-            Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
-            authService.setSignUpView(this)
-            authService.signUp(UserSign(email, nickname, birth))
+
+            //닉네임 : 빈칸, 한글, 비속어 금지
+            // 생일 선택 여부
+
+            if(nickname == ""){
+                binding.ageError.visibility = View.GONE
+                binding.nicknameError.visibility = View.VISIBLE
+                binding.nicknameError.text = "닉네임을 입력해주세요."
+            }
+            else if(!Pattern.matches("^[가-힣]*\$",nickname)){
+                binding.ageError.visibility = View.GONE
+                binding.nicknameError.visibility = View.VISIBLE
+                binding.nicknameError.text = "한글만 가능합니다."
+            }
+            else if(birth_string == "선택안함" && !binding.onboardingNotageCb.isChecked) {
+                binding.nicknameError.visibility = View.GONE
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "나이를 선택해주세요.\n공개하고 싶지 않다면 아래를 클릭하세요!"
+            }
+            else {
+                binding.nicknameError.visibility = View.GONE
+                binding.ageError.visibility = View.GONE
+                checkvali = true
+                if(binding.onboardingNotageCb.isChecked) birth = null
+                else birth == binding.onboardingAgelist.text.toString().toInt()
+            }
+
+            if(checkvali){
+                Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
+                authService.setSignUpView(this)
+                authService.signUp(UserSign(email, nickname!!, birth))
+            }
         }
     }
 
     fun goToTutorial(){
-        startActivity(Intent(this, TutorialActivity::class.java))
+        val intent = Intent(this, TutorialActivity::class.java)
+        intent.putExtra("nickname",nickname)
+        startActivity(intent)
         finish()
     }
 
@@ -128,7 +171,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             }
             else{
                 updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -139,7 +181,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
-        Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
@@ -170,10 +211,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         Log.e("PROFILE/API", userDB?.getUser().toString())
         saveUserIdx(user.userIdx!!)
         updatePlantDB()
-
-
         firbaseSignIn()
-
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
@@ -270,14 +308,11 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     initValues()
-                    updateProfile()
-
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
-                   //  moveMainPage(task.result?.user)
+                    //updateProfile()
+                    //  moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
                 }
             }
     }
@@ -301,14 +336,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 Log.e("FIREBASE", msg)
                 userData.email = email.substring(0, email.indexOf('@'))
                 userData.fcmToken= token
-
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
-
                 if(fcmDatabase.fcmDao().getData() ==null){
-                    Log.e("Firebase - insert", userData.toString() )
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
-                    Log.e("Firebase - update", userData.toString() )
                     fcmDatabase.fcmDao().update(userData)
                 }
 
@@ -332,12 +363,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
-                chatData?.fromToken = dataSnapshot.key
-
+                Log.e("Firebase","child added")
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -346,19 +375,12 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             override fun onCancelled(databaseError: DatabaseError) {}
         }
 
+
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
-    fun gotoFirebaseSignUp(){
-        val intent = Intent(this, FirebaseActivity::class.java)
-        intent.putExtra("movePos","tutorial")
-        startActivity(intent)
-    }
     override fun onBackPressed() {
         super.onBackPressed()
-        val gso = getGSO()
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        googleSignInClient.signOut()
         val intent = Intent(this,LoginActivity::class.java)
         finish()
         startActivity(intent)
@@ -368,5 +390,12 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         super.onPause()
         mGoogleApiClient.stopAutoManage(this);
         mGoogleApiClient.disconnect();
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val gso = getGSO()
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
     }
 }

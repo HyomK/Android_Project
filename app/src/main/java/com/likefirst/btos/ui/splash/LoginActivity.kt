@@ -8,7 +8,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -27,9 +26,15 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.messaging.FirebaseMessaging
+import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
+import com.likefirst.btos.data.entities.UserEmail
+import com.likefirst.btos.data.entities.firebase.UserDTO
+import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.plant.service.PlantService
@@ -41,17 +46,10 @@ import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getJwt
 import com.likefirst.btos.utils.saveJwt
-import com.google.firebase.ktx.app
-import com.google.firebase.messaging.FirebaseMessaging
-import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.entities.UserEmail
-import com.likefirst.btos.data.entities.firebase.MessageDTO
-import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.FCMDatabase
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.saveUserIdx
 
 
@@ -125,20 +123,20 @@ class LoginActivity
 
     }
 
-
     override fun onConnectionFailed(p0: ConnectionResult) {
-
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == G_SIGN_IN){
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-
-            val account = task.getResult(ApiException::class.java)
-            email = account?.email.toString()
-            Log.e("account ", email )
-            authService.setLoginView(this)
-            authService.login(UserEmail(email)) //Error
+            if(resultCode!=0){
+                Log.e("RESULTCODE",resultCode.toString())
+                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account = task.getResult(ApiException::class.java)
+                email = account?.email.toString()
+                Log.e("account ", email )
+                authService.setLoginView(this)
+                authService.login(UserEmail(email))
+            }
         }else if(requestCode ==RC_SIGN_IN){
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data!!)!!
             Log.e("Firebase","#########onActivityResult RC_SIGN IN : "+result?.toString())
@@ -149,7 +147,6 @@ class LoginActivity
             }
             else{
                 updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -175,11 +172,9 @@ class LoginActivity
 
         when(code){
             4000 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
             }
             5003 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
                 val intent = Intent(this, OnboardingActivity::class.java)
                 val bundle = Bundle()
@@ -204,14 +199,6 @@ class LoginActivity
 
 
     }
-
-    fun gotoFirebaseSignUp(){
-        val intent = Intent(this, FirebaseActivity::class.java)
-        intent.putExtra("movePos","main")
-        finish()
-        startActivity(intent)
-    }
-
 
     override fun onAutoLoginFailure(code: Int, message: String) {
         binding.loginLoadingPb.visibility = View.GONE
@@ -243,7 +230,6 @@ class LoginActivity
     }
 
     override fun onGetProfileViewFailure(code: Int, message: String) {
-
     }
 
     fun updatePlantDB(){
@@ -255,7 +241,6 @@ class LoginActivity
     }
 
     override fun onPlantListLoading() {
-
     }
 
     override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
@@ -311,13 +296,10 @@ class LoginActivity
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     updateProfile()
-
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
                     moveMainPage(task.result?.user)
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
                 }
             }
     }
@@ -344,15 +326,11 @@ class LoginActivity
 
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
                 if(fcmDatabase.fcmDao().getData() ==null){
-                    Log.e("Firebase - insert", userData.toString() )
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
-                    Log.e("Firebase - update", userData.toString() )
                     fcmDatabase.fcmDao().update(userData)
                 }
-
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
-
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
                     .setValue(userData)
@@ -368,12 +346,10 @@ class LoginActivity
 
     private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("message")
+        mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val chatData: MessageDTO? = dataSnapshot.getValue(MessageDTO::class.java)
-                chatData?.fromToken = dataSnapshot.key
-
+                Log.e("Firebase","child added")
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -381,20 +357,22 @@ class LoginActivity
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onCancelled(databaseError: DatabaseError) {}
         }
-
-
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
 
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
-            Log.e("Firebase - move"," move nonnull")
-            initValues()
-            firbaseSignIn()
+          
+       /*     val dialog = LoginDialogFragment()
+            dialog.setButtonClickListener(object:LoginDialogFragment.OnButtonClickListener{
+                override fun onButtonClicked() {
+                }
+            })
+            dialog.show(supportFragmentManager,"")*/
+            //TODO 이용약관 동의 다이얼로그
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
-
             firbaseSignIn()
         }
     }
