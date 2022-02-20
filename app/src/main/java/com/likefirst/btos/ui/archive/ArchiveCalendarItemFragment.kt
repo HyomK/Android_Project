@@ -3,8 +3,11 @@ package com.likefirst.btos.ui.archive
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.local.UserDatabase
@@ -16,13 +19,14 @@ import com.likefirst.btos.data.remote.viewer.view.ArchiveCalendarView
 import com.likefirst.btos.data.remote.viewer.view.ArchiveDiaryView
 import com.likefirst.btos.databinding.ItemArchiveCalendarVpBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
-import com.likefirst.btos.utils.dateToString
-import com.likefirst.btos.utils.dateToStringMonth
-import com.likefirst.btos.utils.getUserIdx
+import com.likefirst.btos.ui.splash.LoginActivity
+import com.likefirst.btos.utils.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseFragment<ItemArchiveCalendarVpBinding>(ItemArchiveCalendarVpBinding::inflate)
 , ArchiveCalendarView, ArchiveDiaryView{
@@ -38,7 +42,6 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
             0 -> type = "doneList"
             1 -> type = "emotion"
         }
-        Log.d("viewMode", viewMode.toString())
         val date = dateToStringMonth(getCalendar())
         val archiveCalendarService = ArchiveCalendarService()
         archiveCalendarService.setArchiveCalendarView(this)
@@ -77,14 +80,45 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
         return customCalendar.dateList
     }
 
+    fun showLogoutDialog(message : String, tag : String){
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to  message,
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked() {
+                val gso = getGSO()
+                val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+                googleSignInClient.signOut()
+                removeJwt()
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                startActivity(intent)
+                exitProcess(0)
+            }
+
+            override fun onButton2Clicked() {
+
+            }
+        })
+        dialog.show(this.parentFragmentManager, tag)
+    }
+
     override fun onArchiveCalendarLoading() {
-        //TODO : 로딩화면 처리
+        binding.archiveCalendarLoadingView.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 
     override fun onArchiveCalendarSuccess(result: ArrayList<ArchiveCalendar>) {
 
+        binding.archiveCalendarLoadingView.visibility = View.GONE
         val calendarAdapter = ArchiveCalendarRVAdapter(createCalendarList(result), requireContext(), viewMode)
 
+        binding.archiveCalendarLoadingView.visibility = View.GONE
         binding.archiveCalendarRv.apply {
             adapter = calendarAdapter
             layoutManager = GridLayoutManager(requireContext(), 7)
@@ -118,18 +152,22 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
     }
 
     override fun onArchiveCalendarFailure(code : Int) {
+
+        binding.archiveCalendarLoadingView.visibility = View.GONE
+
         when (code){
-            // TODO: 4000번 에러 뜨는 이유 물어보기
             4000 -> Snackbar.make(requireView(), "일기를 불러오는데 실패하였습니다. 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
-            6004 -> Snackbar.make(requireView(), "프리미엄 계정 가입이 필요합니다.", Snackbar.LENGTH_SHORT).show()
+            6000 -> showLogoutDialog("유효하지 않은 회원입니다. 다시 로그인 해 주세요", "onArchiveCalendarFailure Code:6000")
+            6006 -> Snackbar.make(requireView(), "프리미엄 계정 가입이 필요합니다.", Snackbar.LENGTH_SHORT).show()
         }
     }
 
     override fun onArchiveDiaryLoading() {
-        //TODO("Not yet implemented")
+
     }
 
     override fun onArchiveDiarySuccess(result: ArchiveDiaryResult) {
+        binding.archiveCalendarLoadingView.visibility = View.GONE
         var isPublic = false
         if (result.isPublic == 1){
             isPublic = true
@@ -139,10 +177,11 @@ class ArchiveCalendarItemFragment(val pageIndex: Int, val viewMode: Int) : BaseF
         intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, result.emotionIdx, result.diaryDate, result.content, isPublic, result.doneList))
         intent.putExtra("diaryIdx", result.diaryIdx)
         startActivity(intent)
-        ArchiveCalendarFragment.pageIndexFlag = true
+//        ArchiveCalendarFragment.pageIndexFlag = true
     }
 
     override fun onArchiveDiaryFailure(code: Int) {
+        binding.archiveCalendarLoadingView.visibility = View.GONE
         when (code){
             4000 -> Snackbar.make(requireView(), "데이터베이스 연결에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
             6002 -> Snackbar.make(requireView(), "존재하지 않는 일기입니다. 개발자에게 문의해 주세요.", Snackbar.LENGTH_SHORT).show()

@@ -12,27 +12,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         layout="@layout/toolbar_diary_viewer"/>
 
-<!--    <ImageView-->
-<!--        android:id="@+id/diary_view_edit_iv"-->
-<!--        android:layout_width="26dp"-->
-<!--        android:layout_height="26dp"-->
-<!--        android:src="@drawable/ic_write"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/diary_viewer_more_iv"-->
-<!--        app:layout_constraintTop_toTopOf="@id/diary_viewer_toolbar"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/diary_viewer_toolbar"/>-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/diary_viewer_more_iv"-->
-<!--        android:layout_width="26dp"-->
-<!--        android:layout_height="26dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:src="@drawable/ic_dots"-->
-<!--        app:layout_constraintTop_toTopOf="@id/diary_viewer_toolbar"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/diary_viewer_toolbar"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
-
-
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -122,7 +101,9 @@
                 android:textSize="@dimen/diary_contents_font"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/handwriting_flower_smell"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/diary_viewer_date_tv"
                 app:layout_constraintStart_toStartOf="@id/diary_viewer_date_tv"/>
 

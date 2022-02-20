@@ -23,12 +23,12 @@ abstract class BaseFragment<VB : ViewBinding>(
     ): View? {
         _binding = inflate.invoke(inflater, container, false)
 
+        initAfterBinding()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        initAfterBinding()
     }
 
     override fun onDestroyView() {

@@ -19,3 +19,9 @@ interface UpdateDiaryView{
     fun onArchiveUpdateSuccess()
     fun onArchiveUpdateFailure(code : Int)
 }
+
+interface DeleteDiaryView{
+    fun onDiaryDeleteLoading()
+    fun onDiaryDeleteSuccess()
+    fun onDiaryDeleteFailure(code : Int)
+}

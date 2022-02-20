@@ -22,6 +22,7 @@ import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.UserIsSad
@@ -179,6 +180,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .setTestDeviceIds(testDeviceIds)
                 .build()
         )
+        // ca-app-pub-3439488559531418/3923063443
+        // ca-app-pub-3940256099942544/5224354917 -> test
         val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
         val adLoadCallback = object: RewardedAdLoadCallback() {
             override fun onRewardedAdLoaded() {
@@ -186,7 +189,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
             }
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-                // Ad failed to load.
+                // Ad failed to load.로드하지
                 Log.e("rewardLoadError", adError.toString())
             }
         }
@@ -220,6 +223,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 }
                 override fun onRewardedAdFailedToShow(adError: AdError) {
                     // Ad failed to display.
+                    Snackbar.make(requireView(), "광고를 로드하지 못하였습니다. 조금 있다 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
                 }
             }
             mRewardedVideoAd.show(activityContext, adCallback)

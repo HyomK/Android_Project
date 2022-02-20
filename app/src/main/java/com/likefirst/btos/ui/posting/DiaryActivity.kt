@@ -20,6 +20,7 @@ import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.data.remote.posting.view.UpdateDiaryView
+import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
 import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.databinding.ItemDiaryEmotionRvBinding
@@ -37,9 +38,9 @@ import kotlin.system.exitProcess
 class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate), PostDiaryView, UpdateDiaryView {
 
     companion object{
-        var emotionIdx = 0
-        var doneLists = ArrayList<String>()
-        var contents = ""
+        var emotionIdx = 0  // 이모션 선택할 때마다 리사이클러뷰 어댑터에서 자동으로 설정해줌
+        var doneLists = ArrayList<String>()     // 입력할 때마다 리사이클러뷰 어댑터에서 자동으로 설정해줌
+        var contents = ""   // 입력할 때마다 edittextlistener달아서 자동으로 설정해줌
     }
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
@@ -91,6 +92,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             binding.diaryContentsEt.setText(intentDataset!!.contents)
             binding.diaryDateTv.text = intentDataset.diaryDate
         } else {
+            // 일기 수정모드가 아닐 때 contents 초기화
             binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
         }
 
@@ -252,6 +254,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     fun updateDiary(){
         val diaryDate = binding.diaryDateTv.text.toString()
         val diaryIdx = intent.getIntExtra("diaryIdx", 0)
+        Log.d("donelist", doneLists.toString())
         var isPublic = 0
         if(isPublic()){
             isPublic = 1
@@ -259,15 +262,19 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         val diaryService = DiaryService()
         diaryService.setUpdateDiaryView(this)
         diaryService.updateDiary(UpdateDiaryRequest(diaryIdx, getUserIdx(), emotionIdx, diaryDate, contents, isPublic, doneLists))
-
     }
 
-    fun goToDiaryViewer(){
+    fun goToDiaryViewer(isUpdated : Boolean){
+        val selectedPosition = intent.getIntExtra("selectedPosition", -1)
         val diaryDate = binding.diaryDateTv.text.toString()
         val userDB = UserDatabase.getInstance(this)!!.userDao()
-        val intent = Intent(this, DiaryViewerActivity::class.java)
-        intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
-        startActivity(intent)
+        val mIntent = Intent(this, DiaryViewerActivity::class.java)
+        mIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        mIntent.putExtra("selectedPosition", selectedPosition)
+        mIntent.putExtra("isUpdated", isUpdated)
+        mIntent.putExtra("diaryIdx", intent.getIntExtra("diaryIdx", 0))
+        mIntent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
+        startActivity(mIntent)
     }
 
     fun diaryValidationCheck() : Boolean{
@@ -311,7 +318,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
     override fun onDiaryPostSuccess() {
         binding.diaryLoadingView.visibility = View.GONE
-        goToDiaryViewer()
+        goToDiaryViewer(false)
         saveLastPostingDate(Date())
     }
 
@@ -345,10 +352,10 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                 })
                 dialog.show(this.supportFragmentManager, "onDiaryPostFailure Code:6000")
             }
-            6003 -> {
+            6009 -> {
                 showOneBtnDialog("해당 날짜에 이미 일기를 작성하셨습니다.", "onDiaryPostFailure Code:6003")
             }
-            6004 -> {
+            6010 -> {
                 showOneBtnDialog("오늘 작성한 일기만 공개설정하여 타인에게 전송할 수 있습니다.", "onDiaryPostFailure Code:6001")
             }
         }
@@ -363,10 +370,12 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     override fun onArchiveUpdateSuccess() {
-        finish()
+        binding.diaryLoadingView.visibility = View.GONE
+        goToDiaryViewer(true)
     }
 
     override fun onArchiveUpdateFailure(code: Int) {
+        binding.diaryLoadingView.visibility = View.GONE
         when (code){
             4000 -> {
                 showOneBtnDialog("데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", "onDiaryPostFailure Code:4000")
