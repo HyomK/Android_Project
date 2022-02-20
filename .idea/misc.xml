@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android_Project/BTOS/app/src/main/res/layout/activity_main.xml" value="0.10625" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/archive_calendar_radiobutton_selector.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/archive_date_picker_dialog_style.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/archive_selector.xml" value="0.25333333333333335" />
@@ -16,19 +17,44 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/date_picker_selected_layer_list.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/date_picker_selector.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/history_radiobutton_selector.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic__null.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_archive.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_back.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bg_diary.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bg_received.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bg_sent.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bnv_archive.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bnv_history.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bnv_home.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_bnv_profile.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_calendar.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_calendar_selector.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_check.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_check_false.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_check_true.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_close.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_done_list_delete.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_dropdown.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_mailbox.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_mailbox_new.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_max_bg.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_max_gray_bg.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_navigate.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_notification.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_notification_new.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_search.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_send.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_toggle_false.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_toggle_true.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_toggle_true2.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_write.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_writediary.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_writediary_solid.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_writeletter.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/ic_writeletter_solid.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/login_googlelogin_box.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/mail_popup_bg.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/onboarding_age_box.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/profile_bg.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/radio_selected_layer_list.xml" value="0.25729166666666664" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/radio_selected_layer_list_short.xml" value="0.25333333333333335" />

@@ -264,14 +264,13 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         diaryService.updateDiary(UpdateDiaryRequest(diaryIdx, getUserIdx(), emotionIdx, diaryDate, contents, isPublic, doneLists))
     }
 
-    fun goToDiaryViewer(isUpdated : Boolean){
+    fun goToDiaryViewer(){
         val selectedPosition = intent.getIntExtra("selectedPosition", -1)
         val diaryDate = binding.diaryDateTv.text.toString()
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         val mIntent = Intent(this, DiaryViewerActivity::class.java)
         mIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         mIntent.putExtra("selectedPosition", selectedPosition)
-        mIntent.putExtra("isUpdated", isUpdated)
         mIntent.putExtra("diaryIdx", intent.getIntExtra("diaryIdx", 0))
         mIntent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
         startActivity(mIntent)
@@ -318,7 +317,8 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
     override fun onDiaryPostSuccess() {
         binding.diaryLoadingView.visibility = View.GONE
-        goToDiaryViewer(false)
+        goToDiaryViewer()
+        DiaryViewerActivity.diaryStateFlag = DiaryViewerActivity.CREATE
         saveLastPostingDate(Date())
     }
 
@@ -371,7 +371,8 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
     override fun onArchiveUpdateSuccess() {
         binding.diaryLoadingView.visibility = View.GONE
-        goToDiaryViewer(true)
+        goToDiaryViewer()
+        DiaryViewerActivity.diaryStateFlag = DiaryViewerActivity.UPDATE
     }
 
     override fun onArchiveUpdateFailure(code: Int) {

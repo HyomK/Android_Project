@@ -38,7 +38,7 @@ class DiaryService (){
         this.updateDiaryView = UpdateDiaryView
     }
 
-    fun deleteDiaryView(deleteDiaryView: DeleteDiaryView){
+    fun setDeleteDiaryView(deleteDiaryView: DeleteDiaryView){
         this.deleteDiaryView = deleteDiaryView
     }
 

@@ -63,16 +63,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- Custom Toolbar Style -->
-    <style name="customOverflowIcon" parent="android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_dots</item>
-    </style>
-
-    <!-- this style used to Overfolw popup Menu Style by ActoinBar -->
-    <style name="ActionBar_Overflow_Popup_Menu">
-        <item name="android:popupBackground">@color/background</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_regular</item>
+    <!--Custom Toolbar Popup style-->
+    <style name="customPopupStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:itemBackground">@color/background</item>
+        <item name="fontFamily">@font/notosanskr_regular</item>
         <item name="android:textSize">12sp</item>
     </style>
 

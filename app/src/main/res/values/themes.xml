@@ -16,8 +16,6 @@
 
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
-        <item name="android:popupMenuStyle">@style/ActionBar_Overflow_Popup_Menu</item>
-        <item name="android:actionOverflowButtonStyle">@style/customOverflowIcon</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="android:navigationBarColor">@color/green</item>

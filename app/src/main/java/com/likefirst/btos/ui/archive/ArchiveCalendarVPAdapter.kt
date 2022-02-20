@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.archive
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -18,7 +19,11 @@ class ArchiveCalendarVPAdapter(fragment: Fragment, val viewMode : Int): Fragment
 
     override fun createFragment(position: Int): Fragment {
         val pageIndex = position - centerPosition
-
-        return ArchiveCalendarItemFragment(pageIndex,viewMode)
+        val bundle = Bundle()
+        bundle.putInt("pageIndex", pageIndex)
+        bundle.putInt("viewMode", viewMode)
+        val calendarItemFragment = ArchiveCalendarItemFragment()
+        calendarItemFragment.arguments = bundle
+        return calendarItemFragment
     }
 }
