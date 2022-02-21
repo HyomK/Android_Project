@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp">
+    <CheckBox
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/login_dialog_checkbox"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:checked="false"
+        android:button="@color/transparent"
+        android:background="@drawable/selector_checkbox"
+        />
+    <TextView
+        app:layout_constraintStart_toEndOf="@+id/login_dialog_checkbox"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/login_dialog_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:text="[필수] 메탈러 서비스 이용약관"
+        android:layout_marginStart="10dp"
+        >
+    </TextView>
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/login_dialog_item_look"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@color/black"
+        android:text="@string/undlerline_look"
+        android:layout_marginStart="20dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

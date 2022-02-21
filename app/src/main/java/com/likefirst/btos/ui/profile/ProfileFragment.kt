@@ -3,7 +3,9 @@ package com.likefirst.btos.ui.profile
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
@@ -26,22 +28,10 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     var isSettingOpen = false
     var isFetch=true
     lateinit var  sharedSelectModel : SharedSelectModel
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
-        sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
-            val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
-            binding.profileIv.setImageResource(requireContext()!!.resources.getIdentifier(
-                plantName[it.getInt("plantIdx")-1]
-                        +"_"+it.getInt("level").toString()
-                        +"_circle","drawable",
-                requireActivity().packageName))
-            binding.profileLevelTv.text=it.getString("plantName")+" "+it.getInt("level").toString()+"단계"
-        })
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
         val spf = requireActivity().getSharedPreferences("EditName",MODE_PRIVATE)
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference
@@ -53,11 +43,36 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
             })
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)
+        onViewCreated(binding.root, savedInstanceState)
+        initAfterBinding()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
+            val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
+            binding.profileIv.setImageResource(requireContext()!!.resources.getIdentifier(
+                plantName[it.getInt("plantIdx")-1]
+                        +"_"+it.getInt("level").toString()
+                        +"_circle","drawable",
+                requireActivity().packageName))
+            binding.profileLevelTv.text=it.getString("plantName")+" "+it.getInt("level").toString()+"단계"
+        })
+
+        initAfterBinding()
+    }
+
 
     override fun initAfterBinding() {
         initProfile()
         initClickListener()
-
     }
 
     fun initClickListener(){
@@ -129,7 +144,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
             val fragments = arrayOf("premium", "plantrv","plantItem")
             cleanUpFragment(fragments)
             if (isSettingOpen) {
-                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo")
+                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo","setNotify")
                 cleanUpFragment(fragments)
                 isSettingOpen=false
             }
@@ -137,7 +152,6 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
                 requireActivity().supportFragmentManager
                     .findFragmentByTag("setting")?.let { remove(it) }
             }
-
         }
     }
 

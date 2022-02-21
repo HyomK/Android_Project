@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white"
+    android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:clickable="true"
@@ -49,19 +49,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setting_push_cl"
-        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/setting_notification"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+
         <TextView
             android:id="@+id/setting_push"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+            app:layout_constraintTop_toBottomOf="@id/setting_notification"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/settingListStyle"
@@ -74,23 +68,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/select_toggle"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/setting_toggle_iv"
             app:layout_constraintEnd_toEndOf="@id/setting_toggle_iv"
             app:layout_constraintStart_toStartOf="@id/setting_toggle_iv"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="@id/setting_toggle_iv"/>
         <ImageView
             android:id="@+id/setting_toggle_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/setting_push"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/setting_push"
             android:src="@drawable/ic_toggle_true"
-            android:layout_marginEnd="35dp"
-            />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginEnd="35dp" />
 
     <TextView
         android:id="@+id/setting_font"
@@ -99,7 +89,7 @@
         style="@style/settingListStyle"
         android:text="폰트"
         android:paddingVertical="@dimen/profile_settingList_paddingVertical"
-        app:layout_constraintTop_toBottomOf="@id/setting_push_cl"
+        app:layout_constraintTop_toBottomOf="@id/setting_push"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />

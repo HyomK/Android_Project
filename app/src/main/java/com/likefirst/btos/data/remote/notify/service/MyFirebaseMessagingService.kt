@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -19,24 +18,9 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.likefirst.btos.R
 import com.likefirst.btos.utils.fcm.MyWorker
-import android.os.PowerManager
-import android.media.AudioAttributes
-import com.google.common.reflect.TypeToken
-import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.GsonBuilder
-import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
-import org.json.JSONArray
-import java.lang.reflect.Type
-import android.content.pm.ResolveInfo
-
-import android.content.pm.PackageManager
-import com.likefirst.btos.ui.splash.LoginActivity
-import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.ViewModelProvider
-import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -49,8 +33,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){
-            sendNotification(remoteMessage.notification?.title,
-                remoteMessage.notification?.body!!)
+            sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body!!)
             if (true) {
                 scheduleJob();
             } else {
@@ -111,7 +94,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val FirebaseDB =FCMDatabase.getInstance(this)!!.fcmDao()
         val prev = FirebaseDB.getData()
         if(prev!= null )FirebaseDB.update(UserDTO(prev.email, token))
-
         sendRegistrationToServer(token)
     }
 
@@ -142,8 +124,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
-
-        showDataMessage(title,body)
+        saveMessage()
+        showNotificationMessage(title,body)
         val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
         if(spf.getBoolean("state",true)){
             notificationManager.notify(0, notificationBuilder.build())
@@ -151,12 +133,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendMessageNotification( Message : Map<String, String>){
+        Log.e("fcm","sendMessageNotification")
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         val title = Message["title"]!!
         val body = Message["body"]!!
         // PendingIntent : Intent 의 실행 권한을 외부의 어플리케이션에게 위임
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //\
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, uniId, intent, PendingIntent.FLAG_ONE_SHOT)
 
         // 알림 채널 이름
@@ -167,7 +150,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보와 작업을 지정
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.emotion2)     // 아이콘 설정
+            .setSmallIcon(R.drawable.emotion4)     // 아이콘 설정
             .setContentTitle(title)     // 제목
             .setContentText(body)     // 메시지 내용
             .setAutoCancel(true)
@@ -187,12 +170,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 setShowBadge(false)
             }
         }
-       // saveData(Message)
-        // 알림 생성
+
+        saveMessage()
+
         val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
         if(spf.getBoolean("state",true)){
            notificationManager.notify(uniId, notificationBuilder.build())
         }
+
 
     }
 
@@ -205,7 +190,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     fun showDataMessage(msgTitle: String?, msgContent: String?) {
         Log.i("### data msgTitle : ", msgTitle.toString())
         Log.i("### data msgContent : ", msgContent.toString())
-        val toastText = String.format("[Data 메시지] title: %s => content: %s", msgTitle, msgContent)
+        val toastText = msgContent.toString()
         Looper.prepare()
         Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
         Looper.loop()
@@ -220,48 +205,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.i("### noti msgTitle : ", msgTitle.toString())
         Log.i("### noti msgContent : ", msgContent.toString())
         val toastText =
-            String.format("[Notification 메시지] abcdedfge title: %s => content: %s", msgTitle, msgContent)
+            String.format("[Notification 메시지] title: %s => content: %s", msgTitle, msgContent)
         Looper.prepare()
         Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
         Looper.loop()
     }
 
-    fun saveData(Message:Map<String,String>){
-
-        val title = Message["title"]!!
-        val body = Message["body"]!!
-        val emailID= Message["emailID"]!!
-        val type= Message["type"]!!
-        val timestamp= Message["timestamp"]!!
-        val fromToken = Message["fromToken"]!!
-        val fromUser = Message["fromUser"]!!
-
-
-        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
-        val editor =spf.edit()
-        val gson = GsonBuilder().create()
-        val data = MessageDTO(title, body,emailID,type,timestamp,fromToken,fromUser)
-        val tempArray =ArrayList<MessageDTO>()
-        val groupListType: Type = object : TypeToken<ArrayList<MessageDTO?>?>() {}.type
-
-        val prev =spf.getString("messageList","none") // json list 가져오기
-        val convertedData = gson.toJson(prev)
-
-        Log.e(TAG, data.toString())
-        if(prev!="none"){
-            Log.e(TAG, "prev Json=> "+convertedData.toString())
-            if(prev!="[]" || prev!="")tempArray.addAll(gson.fromJson(prev,groupListType))
-            tempArray.add(data)
-            val strList = gson.toJson(tempArray,groupListType)
-            Log.e(TAG, "saved1:"+ strList)
-            editor.putString("messageList",strList)
-        }else{
-            tempArray.add(data)
-            val strList = gson.toJson(tempArray,groupListType)
-            editor.putString("messageList",strList)
-        }
+    fun saveMessage(){
+        val spf = getSharedPreferences("notification",MODE_PRIVATE)
+        val editor = spf.edit()
+        editor.putString("newNotification","new")
+        editor.putString("newMail","new")
         editor.apply()
-
     }
 
 

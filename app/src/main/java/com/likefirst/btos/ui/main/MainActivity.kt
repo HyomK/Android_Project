@@ -1,47 +1,23 @@
 package com.likefirst.btos.ui.main
 
 
-import android.accounts.Account
-import android.accounts.AccountManager
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.preference.Preference
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationBarView
-import com.google.common.reflect.TypeToken
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GetTokenResult
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.gson.GsonBuilder
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.NotificationDTO
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.NotificationDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
-import com.likefirst.btos.data.remote.notify.service.FCMService
-import com.likefirst.btos.data.remote.notify.service.NoticeService
-import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -49,29 +25,31 @@ import com.likefirst.btos.ui.archive.ArchiveFragment
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.home.MailViewActivity
-import com.likefirst.btos.ui.home.MailboxFragment
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
-import com.likefirst.btos.utils.toArrayList
-import java.lang.reflect.Type
-import kotlin.random.Random
-import android.preference.PreferenceManager
 import android.widget.RadioGroup
 import androidx.lifecycle.Observer
-import com.likefirst.btos.utils.LiveSharedPreferences
-import androidx.fragment.app.FragmentPagerAdapter
 import com.likefirst.btos.data.entities.DiaryViewerInfo
-import com.likefirst.btos.data.entities.User
-import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
-import com.likefirst.btos.ui.archive.ArchiveCalendarFragment
+import com.likefirst.btos.data.remote.notify.response.Alarm
+import com.likefirst.btos.data.remote.notify.response.AlarmInfo
+import com.likefirst.btos.data.remote.notify.service.AlarmService
+import com.likefirst.btos.data.remote.notify.view.*
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
+import com.likefirst.btos.data.remote.posting.service.DiaryService
+import com.likefirst.btos.data.remote.posting.service.MailLetterService
+import com.likefirst.btos.data.remote.posting.service.MailReplyService
+import com.likefirst.btos.data.remote.posting.view.MailDiaryView
+import com.likefirst.btos.data.remote.posting.view.MailLetterView
+import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
+import com.likefirst.btos.ui.posting.MailReplyActivity
+import com.likefirst.btos.utils.LiveSharedPreferences
+import com.likefirst.btos.utils.getUserIdx
 
 
-class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),NoticeAPIView{
+class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),AlarmInfoView,AlarmListView,MailDiaryView, MailLetterView, MailReplyView{
 
-    var USERIDX=-1
     private var auth : FirebaseAuth? = null
-
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
@@ -84,6 +62,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     lateinit var noticeList :ArrayList<NoticeDetailResponse>
     var prevNoticeSize : Int =0
     lateinit var  sharedNotifyModel: SharedNotifyModel
+    lateinit var alarmService: AlarmService
+    lateinit var diaryService : DiaryService
+    lateinit var letterService : MailLetterService
+    lateinit var replyService:MailReplyService
 
     interface onBackPressedListener {
         fun onBackPressed();
@@ -92,15 +74,26 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
+        setNotificationIcon()
+
+    }
+
+    fun setNotificationIcon(){
         sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
         val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
         val liveSharedPreference = LiveSharedPreferences(spf)
-        liveSharedPreference
-            .getString("messageList", "undefine")
+        liveSharedPreference.getString("newNotification", "undefine")
+            .observe(this, Observer<String> { result ->
+                if(result!="undefine"){
+                    sharedNotifyModel.setNoticeLiveData(true)
+                }else{
+                    sharedNotifyModel.setNoticeLiveData(false)
+                }
+            })
+        liveSharedPreference.getString("newMail", "undefine")
             .observe(this, Observer<String> { result ->
                 if(result!="undefine"){
                     sharedNotifyModel.setMsgLiveData(true)
-                    sharedNotifyModel.setNoticeLiveData(true)
                 }else{
                     sharedNotifyModel.setMsgLiveData(false)
                 }
@@ -108,33 +101,21 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
 
-
-
    override fun initAfterBinding() {
-        val notificationDatabase= NotificationDatabase.getInstance(this)!!
-        prevNoticeSize = notificationDatabase.NotificationDao().itemCount()
-
         binding.mainBnv.itemIconTintList = null
-        initNotice()
+        initAlarm()
+        alarmService.getAlarmList(getUserIdx())
 
         binding.mainLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {
-                val notifications =notificationDatabase.NotificationDao().getUnreadNotifications().toArrayList()
-                if(notifications.isEmpty()){
-                    initNotice()
-                }else{
-                    loadFromFirebase()
-                    initNotifyAdapter(notifications)
-                    //메세지만 업데이트 한다
-
-                    sharedNotifyModel.setNoticeLiveData(false)
-                }
+                alarmService.getAlarmList(getUserIdx())
+                sharedNotifyModel.setNoticeLiveData(false)
+                val spf = getSharedPreferences("notification", MODE_PRIVATE)
+                spf.edit().putString("newNotification","undefine").apply()
             }
             override fun onDrawerClosed(drawerView: View) {}
-            override fun onDrawerStateChanged(newState: Int) {
-
-            }
+            override fun onDrawerStateChanged(newState: Int) {}
         })
 
         supportFragmentManager.beginTransaction()
@@ -146,16 +127,24 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     }
 
-    fun initNotice(){
-        val NoticeService= NoticeService()
-        NoticeService.setNoticeView(this)
-        NoticeService.loadNotice()
+    fun initAlarm(){
+        alarmService = AlarmService()
+        alarmService.setAlarmInfoView(this)
+        alarmService.setAlarmListView(this)
+
+        diaryService = DiaryService()
+        diaryService.setDiaryView(this)
+
+        letterService = MailLetterService()
+        letterService.setLetterView(this)
+
+        replyService = MailReplyService()
+        replyService.setReplyView(this)
 
     }
 
     inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
         override fun onNavigationItemSelected(it: MenuItem): Boolean {
-
             when (it.itemId) {
                 R.id.homeFragment -> {
                     isDrawerOpen=true
@@ -181,7 +170,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     }
                     return true
                 }
-
                 R.id.historyFragment ->{
                     isDrawerOpen=false
                     val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
@@ -282,19 +270,25 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
                 && intent.getIntExtra("diaryStateFlag", -1) == DiaryViewerActivity.UPDATE
                 && intent.getIntExtra("position", -1) == -1){
-                reLoadArchiveList()
-                reLoadArchiveCalendar()
+                    if(archiveFragment.isAdded){
+                        reLoadArchiveList()
+                        reLoadArchiveCalendar()
+                    }
             }
             // 일기가 작성된 경우 (리스트 새로 갱신, 달력 현재 페이지 갱신)
             else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
                 && intent.getIntExtra("diaryStateFlag", -1) == DiaryViewerActivity.CREATE){
-                reLoadArchiveList()
-                reLoadArchiveCalendar()
+                if(archiveFragment.isAdded){
+                    reLoadArchiveList()
+                    reLoadArchiveCalendar()
+                }
             }
             else if (intent.getIntExtra("diaryStateFlag", -1) == DiaryViewerActivity.DELETE){
                 //TODO: 삭제 로직 구현(리스트 케이스 추가해야함)
-                reLoadArchiveList()
-                reLoadArchiveCalendar()
+                if(archiveFragment.isAdded){
+                    reLoadArchiveList()
+                    reLoadArchiveCalendar()
+                }
             }
         }
         super.onNewIntent(intent)
@@ -372,135 +366,105 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         }
     }
 
-    fun initNotifyAdapter(notificationList:  ArrayList<NotificationDTO>){
-        Log.e("Firebase -> Adapter ", "Result: ${notificationList}")
-        val adapter = NotifyRVAdapter(notificationList)
-        val notifyDAO =NotificationDatabase.getInstance(this)?.NotificationDao()
-
-         adapter.setMyItemCLickLister(object : NotifyRVAdapter.NotifyItemClickListener {
-            override fun onClickItem(item : NotificationDTO , pos :Int) {
+    fun initAlarmAdapter(alarmList : ArrayList<Alarm>){
+        val adapter = AlarmRVAdapter(alarmList)
+        adapter.setMyItemCLickLister(object:AlarmRVAdapter.AlarmItemClickListener{
+            override fun onClickItem(alarm: Alarm, position: Int) {
+                val notificationDatabase = NotificationDatabase.getInstance(this@MainActivity)!!
+                notificationDatabase.NotificationDao().setIsChecked(alarm.alarmIdx)
+                alarmService.getAlarmInfo(alarm.alarmIdx, getUserIdx())
                 binding.mainLayout.closeDrawers()
-                notifyDAO?.setIsRead(item.type, item.detailIdx , true)
-                adapter.remove(pos)
-                when(item.type){
-                    "notice"-> {
-                        startNextActivity(NoticeActivity::class.java)
-                    }
-                    "letter"->{
-                        //body date sender 구현 필수
-                        val bundle = bundleOf("body" to item.content, "date" to item.timestamp , "sender" to "sample")
-                        val intent = Intent(this@MainActivity,MailViewActivity::class.java)
-                        intent.putExtra("MailView",bundle)
-                        startActivity(intent)
-                    }
-                    "diary"->{
-                        //TODO 구현
-                    }
-
-                }
-
+                adapter.remove(position)
             }
         })
-        binding.sidebarNotifyRv.adapter = adapter
+        binding.sidebarNotifyRv.adapter=adapter
     }
 
-    override fun onNoticeAPIError(Dialog: CustomDialogFragment) {
-        Dialog.show(supportFragmentManager,"noticeErrorDialog")
-    }
 
-    override fun onNoticeAPISuccess(noticeData: ArrayList<NoticeDetailResponse>) {
-
-        val notificationDatabase= NotificationDatabase.getInstance(this)!!
-        var notificationList =ArrayList<NotificationDTO>()
-        var FLAG =false
-        noticeData.forEach{ notice ->
-            run {
-                if (notificationDatabase.NotificationDao()
-                        .getNotification(notice.createdAt, notice.noticeIdx, "notice") == null
-                ) {
-                    notificationDatabase.NotificationDao().insert(NotificationDTO(notice.createdAt,
-                        "BTOS_SERVER",
-                        "notice",
-                        notice.noticeIdx,
-                        notice.title,
-                        notice.content,
-                        "BTOS_SERVER"))
-                    FLAG = true
-                }
-            }
-        }
-
-        loadFromFirebase()
-        if(FLAG) sharedNotifyModel.setNoticeLiveData(true)
-        val notices = notificationDatabase.NotificationDao().getUnreadNotifications().toArrayList()
-
-        initNotifyAdapter( notices)
-
-    }
-
-    override fun onNoticeAPIFailure(code: Int, message: String) {
-        when(code){
-            4000->Log.e(code.toString(), "데이터베이스 연결에 실패하였습니다.")
-            else -> Log.e(code.toString(), "공지 조회 실패.")
-        }
-    }
-
-    fun rand(): Int {
-        val rand = Random(System.nanoTime())
-        return (0..100000).random(rand)
-    }
-
-    fun loadFromFirebase():ArrayList<NotificationDTO> {
-        val gson = GsonBuilder().create()
-        val messageList =ArrayList<NotificationDTO>()
-        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
-        val notification = spf.getString("messageList", "undefine")
-        val groupListType: Type = object : TypeToken<ArrayList<MessageDTO?>?>() {}.type
-        if (notification =="undefine") {
-            Toast.makeText(this, "메세지 로드에 실패했습니다", Toast.LENGTH_SHORT)
-            return messageList
-        }
-        val list: ArrayList<MessageDTO> = gson.fromJson(notification, groupListType)
-        Log.e("Firebase/list", list.toString())
-
-        if(list.size ==0){
-            sharedNotifyModel.setMsgLiveData(false)
-            val editor = spf.edit()
-            editor.remove("messageList")
-            editor.apply()  //저장된 건 삭제하기
-            return messageList
-        }
-        val notificationDatabase= NotificationDatabase.getInstance(this)!!
-        list.forEach {
-            i->
-            run {
-                val it = NotificationDTO(i.timestamp!!,
-                    i.fromToken,
-                    i.type!!,
-                    rand(),
-                    i.title,
-                    i.body,
-                    i.fromUser)
-                if (notificationDatabase.NotificationDao()
-                        .getNotification(it.timestamp, it.detailIdx, it.type) == null)
-                    notificationDatabase.NotificationDao().insert(it)
-            }
-        }
-        //TODO rand()-> 각 공지, 편지, 다이어리의 idx 로 수정
-        sharedNotifyModel.setMsgLiveData(true)
-        sharedNotifyModel.setNoticeLiveData(true)
-
-        Log.e("Firebaese/DB",notificationDatabase.NotificationDao().getUnreadNotifications().toString() )
-        val editor = spf.edit()
-        editor.remove("messageList")
-        editor.apply()  //저장된 건 삭제하기
-
-        return notificationDatabase.NotificationDao().getUnreadNotifications().toArrayList()
-    }
 
     override fun onRestart() {
         super.onRestart()
         binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+    }
+
+    override fun onGetAlarmListSuccess(result: ArrayList<Alarm>) {
+        val notificationDatabase = NotificationDatabase.getInstance(this)!!
+        result.map { i->run{
+            notificationDatabase.NotificationDao().insert(NotificationDTO(i.alarmIdx,i.content,i.createdAt,false))
+        } }
+        initAlarmAdapter(result)
+    }
+
+    override fun onGetAlarmListFailure(code: Int, message: String) {
+        Log.e("AlarmList-Fail","${code} -> ${message}")
+    }
+
+    override fun onGetAlarmInfoViewSuccess(item : AlarmInfo) {
+
+        when(item.alarmType){
+            "notice"-> {
+                startNextActivity(NoticeActivity::class.java)
+            }
+            "letter"->{
+                letterService.loadLetter(getUserIdx(),"letter",item.reqParamIdx)
+            }
+            "diary"->{
+                diaryService.loadDiary(getUserIdx(),"diary",item.reqParamIdx)
+            }
+            "reply"->{
+                replyService.loadReply(getUserIdx(),"reply",item.reqParamIdx)
+            }
+
+        }
+    }
+
+    override fun onGetAlarmInfoFailure(code: Int, message: String) {
+        Log.e("AlarmInfo-Fail","${code} -> ${message}")
+    }
+
+    override fun onDiaryLoading() {
+
+    }
+
+    override fun onDiarySuccess(resp: MailInfoResponse) {
+        val diary = DiaryViewerInfo(resp.senderNickName,resp.emotionIdx,resp.sendAt,resp.content!!,true,resp.doneList!!)
+        val intent = Intent(this@MainActivity,DiaryViewerActivity::class.java)
+        intent.putExtra("diaryInfo",diary)
+        startActivity(intent)
+    }
+
+    override fun onDiaryFailure(code: Int, message: String) {
+        Log.e("Alarm_Diary","${code} -> ${message}")
+    }
+
+    override fun onLetterLoading() {
+
+    }
+
+    override fun onLetterSuccess(letter:MailInfoResponse) {
+         val bundle = bundleOf("letter" to  letter)
+         val intent = Intent(this@MainActivity,MailViewActivity::class.java)
+         intent.putExtra("MailView",bundle)
+         startActivity(intent)
+    }
+
+    override fun onLetterFailure(code: Int, message: String) {
+        Log.e("Alarm_Letter","${code} -> ${message}")
+    }
+
+    override fun onReplyLoading() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onReplySuccess(reply:MailInfoResponse) {
+        val bundle =bundleOf("reply" to reply)
+        val intent = Intent(this, MailReplyActivity::class.java)
+        intent.putExtra("MailReply",bundle)
+        startActivity(intent)
+    }
+
+    override fun onReplyFailure(code: Int, message: String) {
+        Log.e("Alarm_Reply","${code} -> ${message}")
     }
 
 

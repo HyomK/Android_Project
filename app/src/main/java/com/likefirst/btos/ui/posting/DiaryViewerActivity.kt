@@ -90,7 +90,8 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
         setSupportActionBar(findViewById(com.likefirst.btos.R.id.diary_viewer_toolbar))
         supportActionBar?.setDisplayShowTitleEnabled(false)     // 타이틀 이름 안보이게
         binding.diaryViewerToolbar.diaryViewerMoreIv.setOnClickListener { it ->
-            //TODO: 공개/비공개 전환
+            //TODO: 내 일기일 경우 더보기 -> 삭제
+            //      상대방의 일기일 경우 더보기 -> 차단,신고,삭제 분기처리
             val popupMenu = PopupMenu(this, it)
             menuInflater.inflate(R.menu.diary_viewer_option_menu, popupMenu.menu)
             popupMenu.show()

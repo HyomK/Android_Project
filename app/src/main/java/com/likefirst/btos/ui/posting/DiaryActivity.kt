@@ -2,6 +2,8 @@ package com.likefirst.btos.ui.posting
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Typeface
+import android.service.autofill.UserData
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -9,6 +11,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.entities.PostDiaryRequest
+import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
@@ -79,8 +83,17 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         })
     }
 
+    fun setFont(fontIdx : Int){
+        val fontList = resources.getStringArray(R.array.fontEng)
+        val font = resources.getIdentifier(fontList[fontIdx], "font", this.packageName)
+        binding.diaryContentsEt.typeface = ResourcesCompat.getFont(this,font)
+        binding.diaryDoneListEt.typeface = ResourcesCompat.getFont(this,font)
+        binding.diaryDateTv.typeface = ResourcesCompat.getFont(this,font)
+    }
+
     fun initContents(){
         val userDB = UserDatabase.getInstance(this)!!.userDao()
+        setFont(userDB.getFontIdx()!!)
         if(userDB.getUser().premium == "free"){
             binding.diaryEmotionsRv.visibility = View.GONE
         }

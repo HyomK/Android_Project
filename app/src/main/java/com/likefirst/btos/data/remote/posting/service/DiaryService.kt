@@ -5,6 +5,7 @@ import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.entities.PostDiaryRequest
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
 import com.likefirst.btos.data.remote.posting.view.DeleteDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
@@ -64,9 +65,9 @@ class DiaryService (){
 
         diaryView.onDiaryLoading()
 
-        DiaryService.loadDiary(userId,type,idx).enqueue(object:Callback<BaseResponse<MailDiaryResponse>>{
-            override fun onResponse(call: Call<BaseResponse<MailDiaryResponse>>, response: Response<BaseResponse<MailDiaryResponse>>) {
-                val diaryResponse :BaseResponse<MailDiaryResponse> =response.body()!!
+        DiaryService.loadDiary(userId,type,idx).enqueue(object:Callback<BaseResponse<MailInfoResponse>>{
+            override fun onResponse(call: Call<BaseResponse<MailInfoResponse>>, response: Response<BaseResponse<MailInfoResponse>>) {
+                val diaryResponse :BaseResponse<MailInfoResponse> =response.body()!!
                 Log.e("Diary/API",  diaryResponse.toString())
 
                 when( diaryResponse.code){
@@ -75,7 +76,7 @@ class DiaryService (){
                 }
             }
 
-            override fun onFailure(call: Call<BaseResponse<MailDiaryResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<MailInfoResponse>>, t: Throwable) {
 
             }
 

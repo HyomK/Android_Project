@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:layout="http://schemas.android.com/tools">
+   >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_cd"
@@ -91,7 +92,7 @@
       android:layout_height="wrap_content"
       style="@style/settingListStyle"
       android:text="프리미엄"
-      android:paddingBottom="@dimen/profile_settingList_paddingVertical"
+      android:paddingVertical="@dimen/profile_settingList_paddingVertical"
       />
     <TextView
         android:id="@+id/profile_setting_tv"
@@ -99,7 +100,7 @@
         android:layout_height="wrap_content"
         style="@style/settingListStyle"
         android:text="설정"
-        android:paddingBottom="@dimen/profile_settingList_paddingVertical"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
         />
     <TextView
         android:id="@+id/profile_notice_tv"
@@ -107,7 +108,7 @@
         android:layout_height="wrap_content"
         style="@style/settingListStyle"
         android:text="공지사항"
-        android:paddingBottom="@dimen/profile_settingList_paddingVertical"
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical"
         />
     <TextView
         android:id="@+id/profile_suggest_tv"
@@ -115,8 +116,7 @@
         android:layout_height="wrap_content"
         style="@style/settingListStyle"
         android:text="개발자에게 건의하기"
-        android:paddingBottom="@dimen/profile_settingList_paddingVertical"
-        />
+        android:paddingVertical="@dimen/profile_settingList_paddingVertical" />
 
 
 </LinearLayout>

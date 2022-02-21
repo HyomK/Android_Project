@@ -88,4 +88,18 @@
         <item>etc</item>
     </string-array>
 
+    <string-array name="tutorial">
+        <item>오늘은 어떤 일들을 이루셨나요?\n느낀 감정과 함께 하루를 정리해보세요!</item>
+        <item>오늘 저녁 7시를 기다려 보세요!\n뭔가 좋은 일이 일어날지도 모른답니다.</item>
+        <item>저편너머에 오신 것을 환영해요!\n알로카시아 씨앗을 드릴게요.</item>
+        <item>일기작성에 소홀해지지 않도록\n주의해 주세요.</item>
+    </string-array>
+
+    <string-array name="tutorial_lottie">
+        <item>onboarding1_emotions_leaves.json</item>
+        <item>onboarding2_newletter.json</item>
+        <item>onboarding3_alocasia_0.json</item>
+        <item>onboarding4_alocasia_sad_1.json</item>
+    </string-array>
+
 </resources>

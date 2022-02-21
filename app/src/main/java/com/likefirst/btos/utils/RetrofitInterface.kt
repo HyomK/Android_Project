@@ -3,19 +3,19 @@ package com.likefirst.btos.utils
 import com.likefirst.btos.data.entities.*
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
-import com.likefirst.btos.data.remote.notify.response.Report
-import com.likefirst.btos.data.remote.notify.response.ReportResponse
-import com.likefirst.btos.data.remote.plant.response.*
+import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
+import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
+import com.likefirst.btos.data.remote.notify.response.*
+import com.likefirst.btos.data.remote.plant.response.PlantRequest
+import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.response.BlockUser
-import com.likefirst.btos.data.remote.viewer.response.*
-import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
-import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
-import com.likefirst.btos.data.remote.notify.response.NoticeAPIResponse
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
+import com.likefirst.btos.data.remote.viewer.response.ArchiveCalendar
 import com.likefirst.btos.data.remote.viewer.response.ArchiveDiaryResult
+import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import retrofit2.Call
 import retrofit2.http.*
@@ -44,32 +44,32 @@ interface RetrofitInterface {
 
 
     // -------------------Mailbox -------------------------- //
-    @GET("/mailboxes/{userId}")
+    @GET("/mailboxes")
     fun loadMailbox(
-        @Path("userId") id: Int
+        @Query("userIdx") id: Int
     ): Call<MailboxResponse>
 
-    @GET("/mailboxes/mail/{userIdx}")
+    @GET("/mailboxes/mail")
     fun loadDiary(
-        @Path("userIdx") userIdx: Int,
-        @Query("type") type: String,
+        @Query("userIdx")userIdx: Int,
+        @Query("type") type: String = "diary",
         @Query("typeIdx")idx:Int
-    ): Call<BaseResponse<MailDiaryResponse>>
+    ): Call<BaseResponse<MailInfoResponse>>
 
-    @GET("/mailboxes/mail/{userIdx}")
+    @GET("/mailboxes/mail")
     fun loadLetter(
-        @Path("userIdx") userIdx: Int,
-        @Query("type") type: String,
+        @Query("userIdx")  userIdx: Int,
+        @Query("type") type: String = "letter",
         @Query("typeIdx")idx:Int
-    ): Call<BaseResponse<MailLetterResponse>>
+    ): Call<BaseResponse<MailInfoResponse>>
 
 
-    @GET("/mailboxes/mail/{userIdx}")
+    @GET("/mailboxes/mail")
     fun loadReply(
-        @Path("userIdx") userIdx: Int,
-        @Query("type") type: String,
+        @Query("userIdx") userIdx: Int,
+        @Query("type") type: String = "reply",
         @Query("typeIdx")idx:Int
-    ): Call<BaseResponse<MailReplyResponse>>
+    ): Call<BaseResponse<MailInfoResponse>>
 
     // -------------------PlantList-------------------------- //
 
@@ -197,6 +197,7 @@ interface RetrofitInterface {
         @Body ReportRequest: Report
     ):Call<BaseResponse<ReportResponse>>
 
+    // -------------------History -------------------------- //
 
     @GET("/histories/list/{userIdx}/{pageNum}")
     fun historyListSender(
@@ -225,5 +226,17 @@ interface RetrofitInterface {
         @Path("type") type : String,
         @Path("typeIdx") typeIdx : Int,
     ) : Call<HistoryDetailResponse>
+
+    //-------------Alarm-----------------//
+    @GET("/alarms")
+    fun getAlarmList(
+        @Query("userIdx") userIdx:Int
+    ):Call<BaseResponse<ArrayList<Alarm>>>
+
+    @GET("/alarms/{alarmIdx}")
+    fun getAlarmInfo(
+        @Path("alarmIdx") alarmIdx : Int,
+        @Query("userIdx") userIdx : Int
+    ):Call<BaseResponse<AlarmInfo>>
 
 }
