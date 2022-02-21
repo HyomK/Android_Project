@@ -28,7 +28,9 @@ import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.remote.notify.response.Alarm
 import com.likefirst.btos.data.remote.notify.response.AlarmInfo
@@ -55,6 +57,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
     private val profileFragment= ProfileFragment()
+    private var backPressedMillis : Long = 0
 
     var isDrawerOpen =true
     var isMailOpen=false
@@ -336,7 +339,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     override fun onBackPressed() {
         if(homeFragment.isVisible && !isMailOpen){
-            finish()
+            if(System.currentTimeMillis() > backPressedMillis + 2000){
+                backPressedMillis = System.currentTimeMillis()
+                Snackbar.make(binding.mainLayout, "진짜 갈꺼야...?", Snackbar.LENGTH_SHORT).show()
+                return
+            } else {
+                finish()
+            }
         } else {
 
             val fragmentList = supportFragmentManager.fragments
