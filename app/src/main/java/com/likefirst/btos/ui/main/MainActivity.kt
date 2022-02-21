@@ -341,7 +341,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         if(homeFragment.isVisible && !isMailOpen){
             if(System.currentTimeMillis() > backPressedMillis + 2000){
                 backPressedMillis = System.currentTimeMillis()
-                Snackbar.make(binding.mainLayout, "진짜 갈꺼야...?", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.frLayout, "진짜 갈꺼야...?", Snackbar.LENGTH_SHORT).show()
                 return
             } else {
                 finish()
