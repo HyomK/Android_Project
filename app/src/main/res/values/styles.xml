@@ -71,4 +71,13 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="customEditText" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlActivated">@color/green</item>
+        <item name="colorControlNormal">@color/green</item>
+        <item name="android:textSelectHandle">@color/green</item>
+        <item name="android:textColorHighlight">@color/beige</item>
+        <item name="android:textCursorDrawable">@color/green</item>
+        <item name="backgroundTint">@color/black</item>
+    </style>
+
 </resources>

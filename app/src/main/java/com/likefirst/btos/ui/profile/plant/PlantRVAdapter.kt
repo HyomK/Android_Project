@@ -1,6 +1,8 @@
 package com.likefirst.btos.ui.profile.plant
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +14,19 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.data.remote.plant.view.SharedBuyModel
-import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
-import kotlinx.coroutines.*
+import com.likefirst.btos.utils.ViewModel.SharedBuyModel
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.request.RequestOptions
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
-class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel : SharedSelectModel,val buyModel : SharedBuyModel) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
+class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : SharedSelectModel, val buyModel : SharedBuyModel, val context : Context) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: PlantItemClickListener
     val sharedBuyModel = buyModel
@@ -107,7 +113,7 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
         if(sharedBuyModel.isSuccess().value==true ) {
             val buyItem = sharedBuyModel.getLiveData().value!!
             if (select.first.plantIdx != buyItem.getInt("plantIdx") || select.first.plantName != buyItem.getString("plantName")) {
-                Log.e("PLANT BUY ITEM 선택된 화분이 다름 : ", select.first.toString() + " / " + buyItem.toString())
+
             } else {
                 select.first.plantStatus = buyItem.getString("status")!!
                 select.first.currentLevel = 0

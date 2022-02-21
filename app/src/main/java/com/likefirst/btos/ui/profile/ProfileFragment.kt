@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,11 +17,11 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
-import com.likefirst.btos.utils.LiveSharedPreferences
+import com.likefirst.btos.utils.Model.LiveSharedPreferences
 
 class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     var isSettingOpen = false

@@ -41,18 +41,39 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             requireActivity().supportFragmentManager.popBackStack()
         }
         binding.settingName.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
+            /*requireActivity().supportFragmentManager.beginTransaction()
                 .add(R.id.fr_layout, SetNameFragment(),"setName")
                 .show(SetNameFragment())
                 .addToBackStack(null)
-                .commit()
+                .commit()*/
+            val dialog = SettingNameDialog()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "bodyContext" to "변경할 닉네임을 입력해주세요",
+                "btnData" to btn
+            )
+            dialog.setButtonClickListener(object:SettingNameDialog.OnButtonClickListener{
+                override fun onButton1Clicked() {}
+                override fun onButton2Clicked() {}
+            })
+            dialog.show(requireActivity().supportFragmentManager, "SettingNameDialog")
         }
         binding.settingBirth.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
+           /* requireActivity().supportFragmentManager.beginTransaction()
                 .add(R.id.fr_layout, SetBirthFragment(),"setBirth")
                 .show(SetBirthFragment())
                 .addToBackStack(null)
-                .commit()
+                .commit()*/
+            val dialog = SettingBirthDialog()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "btnData" to btn
+            )
+            dialog.setButtonClickListener(object:SettingBirthDialog.OnButtonClickListener{
+                override fun onButton1Clicked() {}
+                override fun onButton2Clicked() {}
+            })
+            dialog.show(requireActivity().supportFragmentManager, "SettingNameDialog")
 
         }
         binding.settingFont.setOnClickListener {
