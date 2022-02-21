@@ -6,32 +6,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.entities.firebase.NotificationDTO
 import com.likefirst.btos.data.local.NotificationDatabase
-import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
-import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
-import com.likefirst.btos.databinding.ActivityMainBinding
-import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.archive.ArchiveFragment
-import com.likefirst.btos.ui.history.HistoryFragment
-import com.likefirst.btos.ui.home.HomeFragment
-import com.likefirst.btos.ui.home.MailViewActivity
-import com.likefirst.btos.ui.profile.ProfileFragment
-import com.likefirst.btos.ui.profile.setting.NoticeActivity
-import android.widget.RadioGroup
-import androidx.lifecycle.Observer
-import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.remote.notify.response.Alarm
 import com.likefirst.btos.data.remote.notify.response.AlarmInfo
+import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 import com.likefirst.btos.data.remote.notify.service.AlarmService
 import com.likefirst.btos.data.remote.notify.view.*
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
@@ -41,8 +33,17 @@ import com.likefirst.btos.data.remote.posting.service.MailReplyService
 import com.likefirst.btos.data.remote.posting.view.MailDiaryView
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
+import com.likefirst.btos.databinding.ActivityMainBinding
+import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.archive.ArchiveFragment
+import com.likefirst.btos.ui.history.HistoryFragment
+import com.likefirst.btos.ui.history.HistoryUpdateFragment
+import com.likefirst.btos.ui.home.HomeFragment
+import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
+import com.likefirst.btos.ui.profile.ProfileFragment
+import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.utils.LiveSharedPreferences
 import com.likefirst.btos.utils.getUserIdx
 
@@ -54,7 +55,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
+    private val historyUpdateFragment = HistoryUpdateFragment()
     private val profileFragment= ProfileFragment()
+    private var backPressedMillis : Long = 0
 
     var isDrawerOpen =true
     var isMailOpen=false
@@ -151,7 +154,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .hide(profileFragment)
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -161,7 +164,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(profileFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -175,12 +178,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
                     editor.clear()
                     editor.commit()
-                    if(historyFragment.isAdded){
+                    if(historyUpdateFragment.isAdded){
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(homeFragment)
                             .hide(profileFragment)
-                            .show(historyFragment)
+                            .show(historyUpdateFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
                         Log.d("historyClick", "added")
@@ -189,8 +192,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                             .hide(homeFragment)
                             .hide(archiveFragment)
                             .hide(profileFragment)
-                            .add(R.id.fr_layout, historyFragment, "history")
-                            .show(historyFragment)
+                            .add(R.id.fr_layout, historyUpdateFragment, "history")
+                            .show(historyUpdateFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
                         Log.d("historyClick", "noadded")
@@ -207,7 +210,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (archiveFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .hide(profileFragment)
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -217,7 +220,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(profileFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .add(R.id.fr_layout, archiveFragment, "archive")
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -231,7 +234,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (profileFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .hide(archiveFragment)
                             .show(profileFragment)
                             .setReorderingAllowed(true)
@@ -241,7 +244,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(archiveFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .add(R.id.fr_layout, profileFragment, "profile")
                             .show(profileFragment)
                             .setReorderingAllowed(true)
@@ -256,40 +259,58 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onNewIntent(intent: Intent?) {
-
         if (intent != null){
             // 리스트에서 일기 수정이 일어난 경우 (현재 보이는 리스트 즉시 업데이트)
             if(intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
-                && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) >= 0){
+                && intent.getIntExtra("diaryStateFlag", -1) == DiaryViewerActivity.UPDATE
+                && intent.getIntExtra("position", -1) >= 0){
                 val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
                 val position = intent.getIntExtra("position", -1)
-                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
+                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentByTag("archive") as ArchiveFragment
                 mArchiveFragment.listPage.mAdapter.updateList(position, intentDataset.doneLists.size, intentDataset.emotionIdx, intentDataset.contents)
             }
-            // 달력에서 일기 수정이 일어난 경우 (리스트 새로 갱신)
+            // 달력에서 일기 수정이 일어난 경우 (리스트 새로 갱신, 달력 현재 페이지 갱신)
             else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
-                && intent.getBooleanExtra("isDiaryUpdated", false) && intent.getIntExtra("position", -1) == -1){
-                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
-                mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
+                && intent.getIntExtra("diaryStateFlag", -1) == DiaryViewerActivity.UPDATE
+                && intent.getIntExtra("position", -1) == -1){
+                    if(archiveFragment.isAdded){
+                        reLoadArchiveList()
+                        reLoadArchiveCalendar()
+                    }
             }
             // 일기가 작성된 경우 (리스트 새로 갱신, 달력 현재 페이지 갱신)
             else if (intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null
-                && !intent.getBooleanExtra("isDiaryUpdated", false)){
-                val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentById(R.id.fr_layout) as ArchiveFragment
-                mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
-                var viewMode = 0
-                val radioGroup = findViewById<RadioGroup>(R.id.archive_calendar_rg)
-                when (radioGroup.checkedRadioButtonId){         // 라디오버튼에 따라서 viewMode 변경
-                    R.id.archive_calendar_done_list_rb -> viewMode = 0
-                    R.id.archive_calendar_emotion_rb -> viewMode = 1
+                && intent.getIntExtra("diaryStateFlag", -1) == DiaryViewerActivity.CREATE){
+                if(archiveFragment.isAdded){
+                    reLoadArchiveList()
+                    reLoadArchiveCalendar()
                 }
-//                ArchiveCalendarFragment.pageIndexFlag = true
-                mArchiveFragment.calendarPage.initCalendar(viewMode, true)
-//                ArchiveCalendarFragment.pageIndexFlag = false
+            }
+            else if (intent.getIntExtra("diaryStateFlag", -1) == DiaryViewerActivity.DELETE){
+                //TODO: 삭제 로직 구현(리스트 케이스 추가해야함)
+                if(archiveFragment.isAdded){
+                    reLoadArchiveList()
+                    reLoadArchiveCalendar()
+                }
             }
         }
-
         super.onNewIntent(intent)
+    }
+
+    fun reLoadArchiveList(){
+        val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentByTag("archive") as ArchiveFragment
+        mArchiveFragment.listPage.reLoadDiaryList(mArchiveFragment.listPage.mAdapter, HashMap())
+    }
+
+    fun reLoadArchiveCalendar(){
+        val mArchiveFragment: ArchiveFragment = supportFragmentManager.findFragmentByTag("archive") as ArchiveFragment
+        var viewMode = 0
+        val radioGroup = findViewById<RadioGroup>(R.id.archive_calendar_rg)
+        when (radioGroup.checkedRadioButtonId){         // 라디오버튼에 따라서 viewMode 변경
+            R.id.archive_calendar_done_list_rb -> viewMode = 0
+            R.id.archive_calendar_emotion_rb -> viewMode = 1
+        }
+        mArchiveFragment.calendarPage.initCalendar(viewMode, true)
     }
 
     fun mailOpenStatus():Boolean{
@@ -318,7 +339,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     override fun onBackPressed() {
         if(homeFragment.isVisible && !isMailOpen){
-            finish()
+            if(System.currentTimeMillis() > backPressedMillis + 2000){
+                backPressedMillis = System.currentTimeMillis()
+                Snackbar.make(binding.frLayout, "진짜 갈꺼야...?", Snackbar.LENGTH_SHORT).show()
+                return
+            } else {
+                finish()
+            }
         } else {
 
             val fragmentList = supportFragmentManager.fragments
@@ -334,13 +361,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     .show(homeFragment)
                     .hide(archiveFragment)
                     .hide(profileFragment)
-                    .hide(historyFragment)
+                    .hide(historyUpdateFragment)
                     .commitNow()
             } else {
                 supportFragmentManager.beginTransaction()
                     .hide(archiveFragment)
                     .hide(profileFragment)
-                    .hide(historyFragment)
+                    .hide(historyUpdateFragment)
                     .add(R.id.fr_layout, homeFragment)
                     .commitNow()
             }

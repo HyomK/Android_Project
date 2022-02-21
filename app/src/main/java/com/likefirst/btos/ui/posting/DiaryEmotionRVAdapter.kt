@@ -60,7 +60,7 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
             holder.initView(itemList[position])
         }
         holder.binding.itemDiaryEmotionIv.setOnClickListener {
-            DiaryActivity.emotionIdx = position + 1
+            DiaryActivity.emotionIdx = position + 1     //
             itemList = emotionGrayIds
             notifyItemRangeChanged(0, itemCount, "setEmotionGray")
             Log.d("notify_1", "notify_1")
@@ -93,5 +93,4 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
     override fun getItemCount(): Int {
         return emotionColorIds.size
     }
-
 }
