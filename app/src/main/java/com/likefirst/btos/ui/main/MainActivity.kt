@@ -18,7 +18,7 @@ import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.firebase.NotificationDTO
 import com.likefirst.btos.data.local.NotificationDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
-import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
+import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.archive.ArchiveFragment
@@ -28,7 +28,6 @@ import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import android.widget.RadioGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo
@@ -45,7 +44,7 @@ import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
-import com.likefirst.btos.utils.LiveSharedPreferences
+import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.utils.getUserIdx
 
 
