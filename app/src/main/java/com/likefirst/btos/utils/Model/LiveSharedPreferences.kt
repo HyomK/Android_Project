@@ -1,9 +1,7 @@
-package com.likefirst.btos.utils
+package com.likefirst.btos.utils.Model
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.text.TextWatcher
+import com.likefirst.btos.utils.ViewModel.LivePreferenceModel
 import io.reactivex.subjects.PublishSubject
 
 class LiveSharedPreferences constructor(private val preferences: SharedPreferences) {
@@ -19,7 +17,7 @@ class LiveSharedPreferences constructor(private val preferences: SharedPreferenc
         }
     }
 
-    fun getString(key: String, defaultValue: String): LivePreference<String> {
-        return LivePreference(updates, preferences, key, defaultValue)
+    fun getString(key: String, defaultValue: String): LivePreferenceModel<String> {
+        return LivePreferenceModel(updates, preferences, key, defaultValue)
     }
 }

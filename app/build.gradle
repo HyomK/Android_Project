@@ -140,5 +140,8 @@ dependencies {
     //History_search observable
     implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 
+    //Image blur
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
 
 }

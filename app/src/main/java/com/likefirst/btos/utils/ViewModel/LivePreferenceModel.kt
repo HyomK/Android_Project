@@ -1,4 +1,4 @@
-package com.likefirst.btos.utils
+package com.likefirst.btos.utils.ViewModel
 
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
@@ -8,9 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
-import java.util.*
-
-class LivePreference<T> constructor(
+class LivePreferenceModel<T> constructor(
     private val updates: Observable<String>,
     private val preferences: SharedPreferences,
     private val key: String,
