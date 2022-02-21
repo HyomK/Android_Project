@@ -81,7 +81,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
 
         binding.homeMailBtn.setOnClickListener {
-            Log.e("home","click mail")
             sharedNotifyModel.setMsgLiveData(false)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
