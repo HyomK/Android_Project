@@ -64,7 +64,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
             val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
             val check = it.getString("plantName",null)
-            if(check!=null) updateHappyPot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
+            if(check!=null) updatePot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
         })
     }
     override fun initAfterBinding() {
@@ -142,8 +142,11 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         // TODO: 서버 반영해서 유저가 선택한 화분에 따라서 표시되게 변경, 현재는 더미데이터일 뿐임
     }
 
-    fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
-        animationView.setAnimation("${plantName}/${plantName }_${3}.json")
+    fun updatePot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        var plantStatus = ""
+        if(userDB!!.getIsSad()) plantStatus="sad_"
+        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${currentLevel}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
