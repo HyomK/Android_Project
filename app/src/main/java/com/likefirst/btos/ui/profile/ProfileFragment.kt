@@ -143,7 +143,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
             val fragments = arrayOf("premium", "plantrv","plantItem")
             cleanUpFragment(fragments)
             if (isSettingOpen) {
-                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo","setNotify")
+                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo","setNotify","setAppDetail")
                 cleanUpFragment(fragments)
                 isSettingOpen=false
             }
