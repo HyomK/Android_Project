@@ -44,7 +44,7 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
         binding.archiveCalendarVp.apply {
             adapter = calendarAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-            offscreenPageLimit = 2
+            offscreenPageLimit = 1
             if(reLoadFlag){
                 setCurrentItem(Int.MAX_VALUE/2+ pageIndex, false)
             } else {
