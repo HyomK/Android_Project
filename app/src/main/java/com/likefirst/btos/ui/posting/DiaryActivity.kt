@@ -228,6 +228,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun initEmotionRv(){
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
         val emotionColorIds = ArrayList<Int>()
         val emotionGrayIds = ArrayList<Int>()
         val emotionNames = resources.getStringArray(com.likefirst.btos.R.array.emotionNames)
@@ -237,12 +238,12 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             val emotionGrayId = resources.getIdentifier("emotion$num"+"_gray", "drawable", this.packageName)
             emotionGrayIds.add(emotionGrayId)
         }
-        var emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, null)
+        var emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, null, this, userDB.getFontIdx()!!)
         // 수정모드일 때 emotion리사이클러뷰 하나 선택되어있는 상태의 어댑터로 변경
         if(intent.getBooleanExtra("editingMode", false) &&
             intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
             val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
-            emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, intentDataset!!.emotionIdx - 1)
+            emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, intentDataset!!.emotionIdx - 1, this, userDB.getFontIdx()!!)
             emotionIdx = intentDataset.emotionIdx
         }
         val emotionDecoration = DiaryEmotionRVItemDecoration()

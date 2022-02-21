@@ -1,19 +1,23 @@
 package com.likefirst.btos.ui.posting
 
 
+import android.content.Context
 import android.content.res.Resources
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ItemDiaryEmotionRvBinding
 
 class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                             val emotionGrayIds : ArrayList<Int>,
-                            val emotionNames : Array<String>, val emotionSelectedIdx : Int?) : RecyclerView.Adapter<DiaryEmotionRVAdapter.ViewHolder>(){
+                            val emotionNames : Array<String>, val emotionSelectedIdx : Int?,
+                            val context : Context, val fontIdx : Int
+) : RecyclerView.Adapter<DiaryEmotionRVAdapter.ViewHolder>(){
 
     var itemList = emotionColorIds
 
@@ -26,6 +30,9 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
         // 하나만 이미 선택되어 있는 상태
         fun initSelectedView(emotionColorId : Int, emotionGrayId: Int, position: Int, emotionSelectedIdx: Int, emotionName : String){
             if (position == emotionSelectedIdx){
+                val fontList = context.resources.getStringArray(R.array.fontEng)
+                val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
+                binding.itemDiaryEmotionTv.typeface = ResourcesCompat.getFont(context,font) // 폰트지정
                 binding.itemDiaryEmotionIv.setImageResource(emotionColorId)
                 binding.itemDiaryEmotionIv.visibility = View.VISIBLE
                 binding.itemDiaryEmotionTv.visibility = View.VISIBLE
@@ -41,6 +48,9 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
             binding.itemDiaryEmotionTv.visibility = View.INVISIBLE
         }
         fun setEmotionSelected(emotionColorId: Int, emotionNames : String){
+            val fontList = context.resources.getStringArray(R.array.fontEng)
+            val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
+            binding.itemDiaryEmotionTv.typeface = ResourcesCompat.getFont(context,font) // 폰트지정
             binding.itemDiaryEmotionIv.setImageResource(emotionColorId)
             binding.itemDiaryEmotionTv.visibility = View.VISIBLE
             binding.itemDiaryEmotionTv.text = emotionNames
@@ -60,7 +70,7 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
             holder.initView(itemList[position])
         }
         holder.binding.itemDiaryEmotionIv.setOnClickListener {
-            DiaryActivity.emotionIdx = position + 1     //
+            DiaryActivity.emotionIdx = position
             itemList = emotionGrayIds
             notifyItemRangeChanged(0, itemCount, "setEmotionGray")
             Log.d("notify_1", "notify_1")
