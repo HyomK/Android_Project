@@ -174,8 +174,7 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
 
 
     <string name="opensource"></string>
-
-    <string name="noresult">검색 결과가 없습니다.</string>
     <string name="undlerline_look"><u>보기</u></string>
+    <string name="commingsoon">업데이트 예정!</string>
 
 </resources>

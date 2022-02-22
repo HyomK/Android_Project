@@ -1,7 +1,5 @@
 package com.likefirst.btos.ui.profile.setting
 
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
@@ -85,7 +83,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","로그아웃")
             dialog.arguments= bundleOf(
-                "bodyContext" to "로그아웃 하시겠습니까?\n 그동안 데이터는 연동되었던 계정에 보관됩니다",
+                "bodyContext" to "로그아웃 하시겠습니까?\n그동안의 데이터는 연동되었던 계정에 보관됩니다.",
                 "btnData" to btn
             )
             // 버튼 클릭 이벤트 설정

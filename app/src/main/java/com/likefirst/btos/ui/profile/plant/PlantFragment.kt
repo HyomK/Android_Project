@@ -206,9 +206,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
     override fun onPlantSelectSuccess(plantIdx: Int, request: PlantResponse) {
-        binding.setPlantLoadingPb.visibility= View.GONE
-        binding.flowerpotRv.isClickable=true
-        Log.d("Plantselect/API",request.isSuccess.toString())
+        Log.d("Plantselect/API",request.isSuccess.toString()) // acitve -> selected 변경
         val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
         val plant = plantDB.plantDao().getPlant(plantIdx)!!
         val bundle =Bundle()
