@@ -25,6 +25,10 @@ import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.utils.toArrayList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBinding::inflate),
@@ -64,28 +68,34 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
         val userID= userDao.getUser()!!.userIdx!!
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
-            override fun onClickItem(mail:Mailbox) {
-                when(mail.type){
-                    "letter"->{
-                        saveMail(mail)
-                        val letterService= MailLetterService()
-                        letterService.setLetterView(this@MailboxFragment)
-                        letterService.loadLetter(userID,"letter",mail.idx)
-                    }
-                    "diary"->{
-                        saveMail(mail)
-                        val diaryService= DiaryService()
-                        diaryService.setDiaryView(this@MailboxFragment)
-                        diaryService.loadDiary(userID,"diary",mail.idx)
-                    }
-                    "reply"->{
-                        saveMail(mail)
-                        val replyService= MailReplyService()
-                        replyService.setReplyView(this@MailboxFragment)
-                        replyService.loadReply(userID,"reply",mail.idx)
-                    }
+            override fun onClickItem(mail:Mailbox, position: Int) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding.setMailboxLoadingPb.visibility= View.VISIBLE
+                    binding.mailboxRv.isClickable=false
+                    CoroutineScope(Dispatchers.IO).async {
+                        when(mail.type){
+                            "letter"->{
+                                saveMail(mail)
+                                val letterService= MailLetterService()
+                                letterService.setLetterView(this@MailboxFragment)
+                                letterService.loadLetter(userID,"letter",mail.idx)
+                            }
+                            "diary"->{
+                                saveMail(mail)
+                                val diaryService= DiaryService()
+                                diaryService.setDiaryView(this@MailboxFragment)
+                                diaryService.loadDiary(userID,"diary",mail.idx)
+                            }
+                            "reply"->{
+                                saveMail(mail)
+                                val replyService= MailReplyService()
+                                replyService.setReplyView(this@MailboxFragment)
+                                replyService.loadReply(userID,"reply",mail.idx)
+                            }
+                        }
+                    }.await()
+                    adapter.removeItem(position)
                 }
-
             }
         })
     }
@@ -126,7 +136,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     fun setClickListener(){
         val mActivity = activity as MainActivity
         binding.mailboxWriteBtn.setOnClickListener {
-
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")
             dialog.arguments= bundleOf(

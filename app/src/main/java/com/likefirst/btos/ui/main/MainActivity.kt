@@ -84,13 +84,17 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     fun setNotificationIcon(){
-        val isNewUser = intent.getBooleanExtra("isNewUser",false)
         sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
+        val isNewUser = intent.getBooleanExtra("isNewUser",false)
+        Log.e("isNewUser",isNewUser.toString())
+        if(isNewUser){
+           intent.removeExtra("isNewUser")
+        }
         val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference.getString("newNotification", "undefine")
             .observe(this, Observer<String> { result ->
-                if(result!="undefine"){
+                if( result!="undefine"){
                     sharedNotifyModel.setNoticeLiveData(true)
                 }else{
                     sharedNotifyModel.setNoticeLiveData(false)
@@ -98,20 +102,22 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             })
         liveSharedPreference.getString("newMail", "undefine")
             .observe(this, Observer<String> { result ->
-                if(isNewUser || result!="undefine"){
+                if( isNewUser ||result!="undefine"){
                     sharedNotifyModel.setMsgLiveData(true)
                 }else{
                     sharedNotifyModel.setMsgLiveData(false)
                 }
             })
+
+
     }
 
 
    override fun initAfterBinding() {
         binding.mainBnv.itemIconTintList = null
+
         initAlarm()
         alarmService.getAlarmList(getUserIdx())
-
         binding.mainLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {

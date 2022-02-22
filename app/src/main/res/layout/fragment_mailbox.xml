@@ -66,7 +66,7 @@
         android:scaleType="centerCrop"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_writeletter_solid"
-        android:visibility="invisible"
+
         />
 
         <ProgressBar

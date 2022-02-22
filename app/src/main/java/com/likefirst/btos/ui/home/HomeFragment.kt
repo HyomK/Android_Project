@@ -68,7 +68,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         })
     }
     override fun initAfterBinding() {
-
         val mActivity = activity as MainActivity
         val updateUserService = UpdateUserService()
         updateUserService.setUpdateIsSadView(this)
@@ -78,7 +77,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
         }
-
         binding.homeMailBtn.setOnClickListener {
             sharedNotifyModel.setMsgLiveData(false)
             binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
