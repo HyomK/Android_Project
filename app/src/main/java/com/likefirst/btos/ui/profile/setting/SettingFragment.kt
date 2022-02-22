@@ -63,7 +63,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                 override fun onButton1Clicked() {}
                 override fun onButton2Clicked() {}
             })
-            dialog.show(requireActivity().supportFragmentManager, "SettingNameDialog")
+            dialog.show(requireActivity().supportFragmentManager, "SettingBirthDialog")
 
         }
         binding.settingFont.setOnClickListener {

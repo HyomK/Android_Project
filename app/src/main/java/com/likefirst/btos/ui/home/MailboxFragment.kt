@@ -32,7 +32,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     MailDiaryView , MainActivity.onBackPressedListener{
 
     override fun initAfterBinding() {
-        val presFragment  = this
         val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
         val userID= userDao.getUser()!!.userIdx!!
         setClickListener()
