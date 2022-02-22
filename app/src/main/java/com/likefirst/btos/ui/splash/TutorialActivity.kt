@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.splash
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -55,8 +56,10 @@ class TutorialActivity : BaseActivity<ActivityTutorialBinding>(ActivityTutorialB
 
         imageAdapter.setOnItemClickListener(object: TutorialViewPagerAdapter.OnItemClickListener{
             override fun onItemClick(v: View, pos: Int) {
+                val intent = Intent(this@TutorialActivity,MainActivity::class.java)
+                intent.putExtra("isNewUser",true)
                 finish()
-                startActivity(Intent(this@TutorialActivity,MainActivity::class.java))
+                startActivity(intent)
             }
         })
     }

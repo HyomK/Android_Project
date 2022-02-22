@@ -84,6 +84,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     fun setNotificationIcon(){
+        val isNewUser = intent.getBooleanExtra("isNewUser",false)
         sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
         val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
         val liveSharedPreference = LiveSharedPreferences(spf)
@@ -97,7 +98,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             })
         liveSharedPreference.getString("newMail", "undefine")
             .observe(this, Observer<String> { result ->
-                if(result!="undefine"){
+                if(isNewUser || result!="undefine"){
                     sharedNotifyModel.setMsgLiveData(true)
                 }else{
                     sharedNotifyModel.setMsgLiveData(false)

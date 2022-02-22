@@ -39,7 +39,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         mailboxService.setMailboxView(this)
         mailboxService.loadMailbox(userID)
 
-
     }
 
 
@@ -111,8 +110,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
 
-    fun getLetter(letter:MailInfoResponse){
-        val bundle =bundleOf("letter" to letter)
+    fun getMail(mail:MailInfoResponse){
+        val bundle =bundleOf("mail" to mail)
         requireActivity().supportFragmentManager
             .beginTransaction()
             .addToBackStack(null)
@@ -122,19 +121,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         intent.putExtra("MailView",bundle)
         startActivity(intent)
     }
-
-    fun getReply(reply:MailInfoResponse){
-        val bundle =bundleOf("reply" to reply)
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .addToBackStack(null)
-            .commit()
-
-        val intent = Intent(context, MailReplyActivity::class.java)
-        intent.putExtra("MailReply",bundle)
-        startActivity(intent)
-    }
-
 
 
     fun setClickListener(){
@@ -158,8 +144,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         }
 
         binding.mailboxBackBtn.setOnClickListener{
+            mActivity.isMailOpen=false
             mActivity.supportFragmentManager.popBackStack()
-
         }
     }
 
@@ -175,45 +161,53 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     override fun onMailboxFailure(code: Int, message: String) {
         Log.d("MailBox/API : Fail",message.toString())
+        binding.setMailboxLoadingPb.visibility= View.GONE
     }
 
     override fun onLetterLoading() {
-
+        binding.setMailboxLoadingPb.visibility= View.VISIBLE
     }
 
     override fun onLetterSuccess(letter: MailInfoResponse) {
         Log.d("Letter/API : Success",letter.toString())
-        getLetter(letter)
+        binding.setMailboxLoadingPb.visibility= View.GONE
+        getMail(letter)
     }
 
 
     override fun onLetterFailure(code: Int, message: String) {
         Log.d("Letter/API : Fail",message.toString())
+        binding.setMailboxLoadingPb.visibility= View.GONE
     }
 
     override fun onDiaryLoading() {
+        binding.setMailboxLoadingPb.visibility= View.VISIBLE
     }
 
     override fun onDiarySuccess(diary:MailInfoResponse) {
         Log.d("Diary/API : Success",diary.toString())
+        binding.setMailboxLoadingPb.visibility= View.GONE
         getDiary(diary)
     }
 
     override fun onDiaryFailure(code: Int, message: String) {
         Log.d("Diary/API : Fail", message.toString())
+        binding.setMailboxLoadingPb.visibility= View.GONE
 
     }
 
     override fun onReplyLoading() {
-        TODO("Not yet implemented")
+        binding.setMailboxLoadingPb.visibility= View.VISIBLE
     }
 
     override fun onReplySuccess(reply: MailInfoResponse){
-       getReply(reply)
+        binding.setMailboxLoadingPb.visibility= View.GONE
+        getMail(reply)
     }
 
     override fun onReplyFailure(code: Int, message: String) {
-       Log.e("ReplyAPI",message)
+        Log.e("ReplyAPI",message)
+        binding.setMailboxLoadingPb.visibility= View.GONE
     }
 
     override fun onBackPressed() {

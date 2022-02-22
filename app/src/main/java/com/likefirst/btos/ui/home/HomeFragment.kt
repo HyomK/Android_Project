@@ -77,11 +77,11 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
-
         }
 
         binding.homeMailBtn.setOnClickListener {
             sharedNotifyModel.setMsgLiveData(false)
+            binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
 

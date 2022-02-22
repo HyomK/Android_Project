@@ -16,6 +16,7 @@ import com.likefirst.btos.data.remote.users.service.SettingUserService
 import com.likefirst.btos.data.remote.users.view.SetSettingUserView
 import com.likefirst.btos.databinding.CustomEditDialogBinding
 import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.utils.saveUserName
 
 class SettingNameDialog: DialogFragment(), SetSettingUserView {
 
@@ -94,13 +95,7 @@ class SettingNameDialog: DialogFragment(), SetSettingUserView {
         userDB!!.updateNickName(binding.popupEdit.text.toString())
         Log.e("SETNAME",userDB.getUser().toString())
         binding.customDialogLayout.visibility=View.INVISIBLE
-
-        val spf =requireActivity().getSharedPreferences("EditName",
-            Context.MODE_PRIVATE)
-        val editor = spf.edit()
-        editor.putString("UserName",binding.popupEdit.text.toString())
-        editor.apply()
-
+        saveUserName(binding.popupEdit.text.toString())
 
         val dialog = CustomDialogFragment()
         val data = arrayOf("확인")

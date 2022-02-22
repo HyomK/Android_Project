@@ -31,7 +31,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
-        val spf = requireActivity().getSharedPreferences("EditName",MODE_PRIVATE)
+        val spf = requireActivity().getSharedPreferences("BTOS-APP",MODE_PRIVATE)
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference
             .getString("UserName", "undefine")
