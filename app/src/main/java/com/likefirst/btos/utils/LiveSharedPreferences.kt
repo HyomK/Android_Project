@@ -3,6 +3,7 @@ package com.likefirst.btos.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.text.TextWatcher
 import io.reactivex.subjects.PublishSubject
 
 class LiveSharedPreferences constructor(private val preferences: SharedPreferences) {
