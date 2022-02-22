@@ -44,7 +44,7 @@ import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
-import com.likefirst.btos.utils.LiveSharedPreferences
+import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.utils.getUserIdx
 
 

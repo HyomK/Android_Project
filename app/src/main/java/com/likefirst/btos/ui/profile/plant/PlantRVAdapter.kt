@@ -12,15 +12,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.data.remote.plant.view.SharedBuyModel
-import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
-import kotlinx.coroutines.*
+import com.likefirst.btos.utils.ViewModel.SharedBuyModel
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel : SharedSelectModel,val buyModel : SharedBuyModel) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
+class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : SharedSelectModel, val buyModel : SharedBuyModel) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: PlantItemClickListener
     val sharedBuyModel = buyModel

@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.plant.view
+package com.likefirst.btos.utils.ViewModel
 
 import android.os.Bundle
 import android.util.Log

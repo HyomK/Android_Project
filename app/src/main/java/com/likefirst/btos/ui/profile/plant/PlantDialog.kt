@@ -8,7 +8,7 @@ import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.data.remote.plant.view.SharedBuyModel
+import com.likefirst.btos.utils.ViewModel.SharedBuyModel
 import com.likefirst.btos.databinding.CustomDialogLayoutBinding
 import com.likefirst.btos.utils.errorDialog
 
