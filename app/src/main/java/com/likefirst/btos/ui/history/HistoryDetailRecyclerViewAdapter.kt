@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.HistoryList
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.databinding.ItemHistoryDetailDiaryBinding
 import com.likefirst.btos.ui.posting.DiaryDoneListRVAdapter
 
 class HistoryDetailRecyclerViewAdapter(
-    private val context: Context?,
+    private val context: Context,
     private val emotionName: Array<String>,
     private val historyDetailRv: RecyclerView
 )
@@ -48,6 +49,7 @@ class HistoryDetailRecyclerViewAdapter(
     inner class ViewHolder(val binding : ItemHistoryDetailDiaryBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item : HistoryList){
+            val userDB = UserDatabase.getInstance(context)!!.userDao()
             if(item.type == "letter" || item.type == "reply"){
                 binding.itemHistoryDetailBgIv.setImageResource(0)
                 binding.itemHistoryDetailBgIv.setBackgroundResource(R.drawable.history_repeat_bg)
@@ -63,7 +65,7 @@ class HistoryDetailRecyclerViewAdapter(
                 binding.diaryViewerEmotionIv.visibility = View.GONE
             }
             if(item.doneList != null){
-                val doneListAdapter = DiaryDoneListRVAdapter("history")
+                val doneListAdapter = DiaryDoneListRVAdapter("history", context, userDB.getFontIdx()!!)
 
                 binding.diaryViewerDoneListRv.apply{
                     adapter = doneListAdapter

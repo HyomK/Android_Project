@@ -65,7 +65,7 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d("onBindViewHolder", "bind!!!")
         if(emotionSelectedIdx != null){
-            holder.initSelectedView(emotionColorIds[position], emotionGrayIds[position], position, emotionSelectedIdx, emotionNames[position + 1])
+            holder.initSelectedView(emotionColorIds[position], emotionGrayIds[position], position, emotionSelectedIdx, emotionNames[position])
         } else {
             holder.initView(itemList[position])
         }
@@ -92,7 +92,7 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                         Log.d("setEmotionGray", "setEmotionGray")
                     }
                     if (TextUtils.equals(type, "setEmotion")){
-                        holder.setEmotionSelected(emotionColorIds[position], emotionNames[position + 1])
+                        holder.setEmotionSelected(emotionColorIds[position], emotionNames[position])
                         Log.d("setEmotion", "setEmotion")
                     }
                 }
