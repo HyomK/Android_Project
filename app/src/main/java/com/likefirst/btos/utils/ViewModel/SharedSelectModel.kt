@@ -13,10 +13,7 @@ class SharedSelectModel:ViewModel(){
     private var isSuccess =MutableLiveData<Boolean>()
     fun  getLiveData() :LiveData<Bundle>{ return liveData }
     fun setLiveData(data:Bundle)  {
-        Log.e("Plant/ select ",isSuccess.toString())
-        if(isSuccess().value==true){
-            liveData.setValue(data)
-        }
+        liveData.setValue(data)
     }
 
     fun isSuccess():LiveData<Boolean> {return isSuccess }

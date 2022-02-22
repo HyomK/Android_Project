@@ -42,36 +42,16 @@ class PlantDialog:DialogFragment(){
 
         }else{
             binding.popupBtn2.setOnClickListener {
-                val result = buttonClickListener.onButton2Clicked()
-                val handler = android.os.Handler()
-                handler.postDelayed({
-                    Log.e("PlantAPI"," / buy : Dialogstart")
-                    if(sharedBuyModel.isSuccess().value!!) sendData(result.first, result.second)
-                    else{
-                        Log.e("PlantAPI"," / Fail : DialogDismiss")
-                            errorDialog().show(requireActivity().supportFragmentManager,"tag")
-                    }
-                    dismiss()
-                }, 600)
+                buttonClickListener.onButton2Clicked()
             }
             binding.popupBtn2.text=btnBundle?.get(1)
         }
     }
-    fun sendData(plant: Plant, res : Int){
-        Log.e("PlantAPI"," / SEND DATA :"+ plant.toString())
-        val bundle =Bundle()
-        bundle.putString("plantName",plant.plantName)
-        bundle.putString("status","active")
-        bundle.putInt("plantIdx",plant.plantIdx)
-        bundle.putInt("resId",res)
-        sharedBuyModel.setLiveData(bundle)
-        sharedBuyModel.setResult(true)
 
-    }
 
     interface OnButtonClickListener{
         fun onButton1Clicked()
-        fun onButton2Clicked():Pair<Plant,Int>
+        fun onButton2Clicked()
     }
 
     override fun onStart() {

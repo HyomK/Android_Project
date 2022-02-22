@@ -108,37 +108,21 @@ class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : 
     }
 
 
-    fun buyItem(position :Int){
-        val select =dataSet[position]
-        if(sharedBuyModel.isSuccess().value==true ) {
-            val buyItem = sharedBuyModel.getLiveData().value!!
-            if (select.first.plantIdx != buyItem.getInt("plantIdx") || select.first.plantName != buyItem.getString("plantName")) {
-
-            } else {
-                select.first.plantStatus = buyItem.getString("status")!!
-                select.first.currentLevel = 0
-                select.first.isOwn = true
-                val newItem = Pair(select.first, buyItem.getInt("resId"))
-                dataSet[position] = newItem
-                sharedBuyModel.setResult(false)
-                reset(dataSet)  // 재정렬한다
-            }
-        }
+    fun buyItem(position :Int , buyPlant : Pair<Plant, Int>){
+        dataSet[position] =buyPlant
+        reset(dataSet)  // 재정렬한다
     }
 
 
     fun selectItem(position: Int){
-        if(sharedSelectModel.isSuccess().value==true ) {
-            for ((index, plant) in  dataSet.withIndex()) {
-                if (plant.first.plantStatus == "selected") {
-                    dataSet[index].first.plantStatus = "active"
-                    dataSet[position].first.plantStatus="selected"
-                    if( dataSet[position].first.currentLevel==-1)  dataSet[position].first.currentLevel=0
-                    break
-                }
+        for ((index, plant) in  dataSet.withIndex()) {
+            if (plant.first.plantStatus == "selected") {
+                dataSet[index].first.plantStatus = "active"
+                dataSet[position].first.plantStatus="selected"
+                if( dataSet[position].first.currentLevel==-1)  dataSet[position].first.currentLevel=0
+                break
             }
         }
-        Log.e("Plant/ select ","end =>> ${dataSet}")
         reset(dataSet)
     }
 

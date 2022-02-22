@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -164,10 +165,11 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onMailboxLoading() {
-
+        binding.setMailboxLoadingPb.visibility= View.VISIBLE
     }
 
     override fun onMailboxSuccess(mailboxList: ArrayList<Mailbox>) {
+        binding.setMailboxLoadingPb.visibility= View.GONE
         Log.d("MailBox/API : Success",mailboxList.toString())
         setMailView(mailboxList)
     }

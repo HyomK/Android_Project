@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.profile.plant
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.likefirst.btos.R
@@ -21,6 +22,11 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.utils.errorDialog
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.toArrayList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.text.FieldPosition
 import java.util.Comparator
 import kotlin.collections.ArrayList
 
@@ -64,17 +70,15 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 val plantService = PlantService()
                 plantService.setPlantSelectView(plantSelectView)
                 val request = PlantRequest(getUserIdx(),plant.plantIdx)
-                plantService.selectPlant( request )
-
-                val handler = android.os.Handler()
-                handler.postDelayed({
-                    if(sharedSelectModel.isSuccess().value==true)
-                    else
-                        errorDialog().show(requireActivity().supportFragmentManager,"")
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding.setPlantLoadingPb.visibility= View.VISIBLE
+                    binding.flowerpotRv.isClickable=false
+                    CoroutineScope(Dispatchers.IO).async {
+                        plantService.selectPlant(request)
+                    }.await()
                     adapter.selectItem(position)
-                }, 600)
+                }
 
-                sharedSelectModel.setResult(false)
             }
 
 
@@ -90,13 +94,8 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 buyDialog.arguments=bundle
                 buyDialog.setButtonClickListener(object:PlantDialog.OnButtonClickListener{
                     override fun onButton1Clicked() { checking = false}
-                    override fun onButton2Clicked():Pair<Plant,Int> {
+                    override fun onButton2Clicked(){
                         val origin = plant.first
-                        val handler = android.os.Handler()
-                        val plantService = PlantService()
-                        plantService.setPlantBuyView(plantBuyView)
-                        val request :PlantRequest = PlantRequest(getUserIdx(),plant.first.plantIdx)
-                        plantService.buyPlant(request)
                         val img= requireContext()!!.resources.getIdentifier(
                             plantName[ origin.plantIdx-1]
                                     +"_0"
@@ -107,11 +106,21 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                         newPlant.isOwn=true  //소유로 수정
                         newPlant.currentLevel=0
                         buyPlant= Pair(newPlant,img) //바뀐 내용 return
-                        handler.postDelayed({
-                            if(checking) adapter.buyItem(position)
-                        }, 700)
-                        Log.e("PlantAPI"," / buyPlant result ${buyPlant}")
-                        return buyPlant!! //
+
+                        val plantService = PlantService()
+                        plantService.setPlantBuyView(plantBuyView)
+                        val request :PlantRequest = PlantRequest(getUserIdx(),plant.first.plantIdx)
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            binding.setPlantLoadingPb.visibility= View.VISIBLE
+                            binding.flowerpotRv.isClickable=false
+
+                            CoroutineScope(Dispatchers.IO).async {
+                                plantService.buyPlant(request)
+                            }.await()
+                            if(checking) adapter.buyItem(position, buyPlant)
+                            buyDialog.dismiss()
+                        }
                     }
                 })
                 buyDialog.show(requireActivity().supportFragmentManager, "PlantDialog")
@@ -122,8 +131,8 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         binding.flowerpotToolbar.toolbarBackIc.setOnClickListener{
             mActivity.supportFragmentManager.popBackStack()
         }
-
     }
+
 
    fun  loadData() : ArrayList<Plant> {
         val plantDB = PlantDatabase.getInstance(requireContext()!!)
@@ -167,14 +176,13 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
     override fun onPlantBuySuccess(plantIdx: Int, response : PlantResponse) {
+        binding.setPlantLoadingPb.visibility= View.GONE
+        binding.flowerpotRv.isClickable=true
         val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
         val plant = plantDB.plantDao().getPlant(plantIdx)
         if(plant!=null){
-            sharedBuyModel.setResult(true)  // 성공 전달
             plantDB.plantDao().setPlantInit(plantIdx,"active",0,true)
-
         }
-
     }
 
 
@@ -193,25 +201,25 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     }
 
-    override fun onPlantSelectSuccess(plantIdx: Int, request: PlantResponse) {
-        Log.d("Plantselect/API",request.isSuccess.toString()) // acitve -> selected 변경
-        val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
-        sharedSelectModel.setResult(true)
+    override fun onPlantSelectLoading() {
 
+    }
+
+    override fun onPlantSelectSuccess(plantIdx: Int, request: PlantResponse) {
+        binding.setPlantLoadingPb.visibility= View.GONE
+        binding.flowerpotRv.isClickable=true
+        Log.d("Plantselect/API",request.isSuccess.toString())
+        val plantDB = PlantDatabase.getInstance(requireContext()!!)!!
         val plant = plantDB.plantDao().getPlant(plantIdx)!!
-        if(sharedSelectModel.isSuccess().value==true){
-            val bundle =Bundle()
-            bundle.putString("plantName",plant.plantName)
-            bundle.putInt("level",plant.currentLevel)
-            bundle.putInt("plantIdx",plant.plantIdx)
-            sharedSelectModel.setLiveData(bundle)
-        }else{
-            errorDialog().show(requireActivity().supportFragmentManager,"selectError")
-        }
+        val bundle =Bundle()
+        bundle.putString("plantName",plant.plantName)
+        bundle.putInt("level",plant.currentLevel)
+        bundle.putInt("plantIdx",plant.plantIdx)
+        sharedSelectModel.setLiveData(bundle)
+
         val selected = plantDB.plantDao().getSelectedPlant()!!
         plantDB.plantDao().setPlantStatus(selected.plantIdx,"active")
         plantDB.plantDao().setPlantStatus(plantIdx,"selected")
-
 
     }
 
@@ -221,7 +229,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             7010-> Log.e( code.toString(),"화분 상태 변경에 실패하였습니다.")
             else ->Log.e( code.toString(),"이미 선택된 화분입니다.")
         }
-        sharedSelectModel.setResult(false)
     }
 
     class ComparePlant {

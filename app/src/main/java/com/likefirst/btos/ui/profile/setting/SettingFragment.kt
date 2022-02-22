@@ -41,11 +41,6 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             requireActivity().supportFragmentManager.popBackStack()
         }
         binding.settingName.setOnClickListener {
-            /*requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fr_layout, SetNameFragment(),"setName")
-                .show(SetNameFragment())
-                .addToBackStack(null)
-                .commit()*/
             val dialog = SettingNameDialog()
             val btn= arrayOf("취소","확인")
             dialog.arguments= bundleOf(
@@ -59,11 +54,6 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             dialog.show(requireActivity().supportFragmentManager, "SettingNameDialog")
         }
         binding.settingBirth.setOnClickListener {
-           /* requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fr_layout, SetBirthFragment(),"setBirth")
-                .show(SetBirthFragment())
-                .addToBackStack(null)
-                .commit()*/
             val dialog = SettingBirthDialog()
             val btn= arrayOf("취소","확인")
             dialog.arguments= bundleOf(

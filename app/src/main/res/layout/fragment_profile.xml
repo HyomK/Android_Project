@@ -102,6 +102,7 @@
               style="@style/settingListStyle"
               android:text="프리미엄"
               android:paddingVertical="@dimen/profile_settingList_paddingVertical"
+              android:visibility="gone"
               />
           <TextView
               android:id="@+id/profile_setting_tv"

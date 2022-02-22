@@ -143,6 +143,7 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_appinfo.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_appinfo_detail.xml" value="0.10126582278481013" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_archive.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_archive_list.xml" value="0.17198581560283688" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_archive_list_search.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_birth.xml" value="0.3333333333333333" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.22" />
@@ -163,7 +164,7 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_plantinfo.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_post.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_premium.xml" value="0.25" />
-        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_profile.xml" value="0.14666666666666667" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_report.xml" value="0.22" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_set_notification.xml" value="0.22" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_setting.xml" value="0.22" />
