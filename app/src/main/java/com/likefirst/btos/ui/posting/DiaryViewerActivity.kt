@@ -1,9 +1,7 @@
 package com.likefirst.btos.ui.posting
 
 import android.content.Intent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.PopupMenu
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
@@ -103,7 +101,8 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
         binding.diaryViewerToolbar.diaryViewerMoreIv.setOnClickListener { it ->
             //TODO: 내 일기일 경우 더보기 -> 삭제
             //      상대방의 일기일 경우 더보기 -> 차단,신고,삭제 분기처리
-            val popupMenu = PopupMenu(this, it)
+            val themeWrapper = ContextThemeWrapper(this , R.style.ToolbarOptionMenuStyle)
+            val popupMenu = PopupMenu(themeWrapper , it, Gravity.CENTER , 0 , R.style.ToolbarOptionMenuStyle)
             menuInflater.inflate(R.menu.diary_viewer_option_menu, popupMenu.menu)
             popupMenu.show()
             popupMenu.setOnMenuItemClickListener {
@@ -134,7 +133,8 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
 
     fun setDoneListRv(doneLists : ArrayList<String>){
 
-        val doneListAdapter = DiaryViewerDoneListRVAdapter(doneLists)
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        val doneListAdapter = DiaryViewerDoneListRVAdapter(doneLists, this, userDB.getFontIdx()!!)
 
         binding.diaryViewerDoneListRv.apply {
             adapter = doneListAdapter

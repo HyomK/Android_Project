@@ -121,11 +121,9 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
     fun setFont(idx:Int){
         val fonts= resources.getStringArray(R.array.fontEng)
-        val fontId= resources.getIdentifier(fonts[idx-1],"font", packageName)
+        val fontId= resources.getIdentifier(fonts[idx],"font", packageName)
         binding.mailViewBodyTv.typeface = ResourcesCompat.getFont(this,fontId)
         binding.mailViewDateTv.typeface = ResourcesCompat.getFont(this,fontId)
         binding.mailViewSenderTv.typeface= ResourcesCompat.getFont(this,fontId)
     }
-
-
 }

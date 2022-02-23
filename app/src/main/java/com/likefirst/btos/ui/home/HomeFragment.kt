@@ -1,6 +1,5 @@
 package com.likefirst.btos.ui.home
 
-
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -100,7 +99,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             intent.putExtra("diaryDate", date)
             startActivity(intent)
         }
-
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

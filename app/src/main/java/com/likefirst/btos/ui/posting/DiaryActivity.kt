@@ -91,9 +91,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     fun initContents(){
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         setFont(userDB.getFontIdx()!!)
-        if(userDB.getUser().premium == "free"){
-            binding.diaryEmotionsRv.visibility = View.GONE
-        }
+
         // 일기 수정모드일 때 contents set
         if(intent.getBooleanExtra("editingMode", false) &&
             intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
@@ -289,12 +287,9 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun diaryValidationCheck() : Boolean{
-        val userDB = UserDatabase.getInstance(this)!!.userDao()
-        if (userDB.getUser().premium == "premium"){
-            if (emotionIdx == -1) {
-                showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
-                return false
-            }
+        if (emotionIdx == -1) {
+            showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
+            return false
         }
         if (contents == "") {
             showOneBtnDialog("일기를 한 글자라도 작성해 주세요!!", "No Contents Check")

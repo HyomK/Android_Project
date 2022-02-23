@@ -19,6 +19,7 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                             val context : Context, val fontIdx : Int
 ) : RecyclerView.Adapter<DiaryEmotionRVAdapter.ViewHolder>(){
 
+    var defaultSelectedIdx : Int? = emotionSelectedIdx
     var itemList = emotionColorIds
 
     inner class ViewHolder(val binding:ItemDiaryEmotionRvBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -64,13 +65,16 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d("onBindViewHolder", "bind!!!")
-        if(emotionSelectedIdx != null){
-            holder.initSelectedView(emotionColorIds[position], emotionGrayIds[position], position, emotionSelectedIdx, emotionNames[position])
+        if(defaultSelectedIdx != null){
+            holder.initSelectedView(emotionColorIds[position], emotionGrayIds[position], position, defaultSelectedIdx!!, emotionNames[position])
+            Log.d("initSelectedView", position.toString())
         } else {
             holder.initView(itemList[position])
+            Log.d("initView", position.toString())
         }
         holder.binding.itemDiaryEmotionIv.setOnClickListener {
             DiaryActivity.emotionIdx = position
+            defaultSelectedIdx = null
             itemList = emotionGrayIds
             notifyItemRangeChanged(0, itemCount, "setEmotionGray")
             Log.d("notify_1", "notify_1")
@@ -89,11 +93,11 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
                     val type = payload.toString()
                     if(TextUtils.equals(type, "setEmotionGray")){
                         holder.setEmotionGray(emotionGrayIds[position])
-                        Log.d("setEmotionGray", "setEmotionGray")
+                        Log.d("setEmotionGray", position.toString())
                     }
                     if (TextUtils.equals(type, "setEmotion")){
                         holder.setEmotionSelected(emotionColorIds[position], emotionNames[position])
-                        Log.d("setEmotion", "setEmotion")
+                        Log.d("setEmotion", position.toString())
                     }
                 }
             }
