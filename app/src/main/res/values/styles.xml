@@ -77,13 +77,4 @@
         <item name="android:dropDownVerticalOffset">10dp</item>
         <item name="android:popupBackground">@drawable/custom_drop_down_style</item>
     </style>
-<!--    <style name="customPopupStyle"-->
-<!--        parent="Widget.AppCompat.PopupMenu">-->
-<!--        <item name="background">@drawable/custom_drop_down_style</item>-->
-<!--    </style>-->
-
-<!--    <style name="MyPopupMenu" parent="@style/Widget.AppCompat.PopupMenu">-->
-<!--        <item name="android:popupBackground">@drawable/custom_drop_down_style</item>-->
-<!--        <item name="android:textColor">@color/white</item>-->
-<!--    </style>-->
 </resources>

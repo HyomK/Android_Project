@@ -35,6 +35,7 @@ import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.archive.ArchiveCalendarItemFragment
 import com.likefirst.btos.ui.archive.ArchiveFragment
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.history.HistoryUpdateFragment
@@ -121,6 +122,15 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             override fun onDrawerStateChanged(newState: Int) {}
         })
 
+       if(intent.getBooleanExtra("isNewUser", false)){
+           val bundle = Bundle()
+           bundle.putBoolean("isNewUser", true)
+           homeFragment.arguments = bundle
+           supportFragmentManager.beginTransaction()
+               .replace(R.id.fr_layout, homeFragment, "home")
+               .setReorderingAllowed(true)
+               .commitNowAllowingStateLoss()
+       }
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
             .setReorderingAllowed(true)

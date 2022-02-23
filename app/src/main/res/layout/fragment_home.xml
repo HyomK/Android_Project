@@ -66,7 +66,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
                 app:lottie_autoPlay="true"
-                app:lottie_fileName="dicentra/dicentra_3.json"
+                app:lottie_fileName="alocasia/alocasia_0.json"
                 app:lottie_loop="true" />
 
             <ImageButton
@@ -99,6 +99,117 @@
             <!--  -->
 
 
+            <FrameLayout
+                android:id="@+id/onBoarding_shadow_layout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#80000000"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            
+            <ImageView
+                android:id="@+id/onBoarding_line_1"
+                android:layout_width="113dp"
+                android:layout_height="88dp"
+                android:visibility="gone"
+                android:elevation="1dp"
+                android:src="@drawable/ic_tutorial_line1"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintVertical_bias="0.25"
+                app:layout_constraintEnd_toEndOf="@id/home_mail_btn"
+                app:layout_constraintBottom_toBottomOf="@id/home_mail_btn"
+                app:layout_constraintTop_toTopOf="@id/home_mail_btn"
+                app:layout_constraintStart_toStartOf="@id/home_mail_btn"/>
+
+            <TextView
+                android:id="@+id/onBoarding_text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onBoarding_guide_1"
+                android:textColor="@color/white"
+                android:elevation="1dp"
+                android:visibility="gone"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintStart_toEndOf="@id/onBoarding_line_1"
+                app:layout_constraintBottom_toBottomOf="@id/onBoarding_line_1"/>
+
+            <ImageView
+                android:id="@+id/onBoarding_line_2"
+                android:layout_width="180dp"
+                android:layout_height="222dp"
+                android:elevation="1dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_tutorial_line2"
+                app:layout_constraintHorizontal_bias="0.47"
+                app:layout_constraintVertical_bias="0.935"
+                app:layout_constraintEnd_toEndOf="@id/lottie_animation"
+                app:layout_constraintBottom_toBottomOf="@id/lottie_animation"
+                app:layout_constraintTop_toTopOf="@id/lottie_animation"
+                app:layout_constraintStart_toStartOf="@id/lottie_animation"/>
+
+            <TextView
+                android:id="@+id/onBoarding_text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onBoarding_guide_2"
+                android:textColor="@color/white"
+                android:elevation="1dp"
+                android:visibility="gone"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toTopOf="@id/onBoarding_line_2"
+                app:layout_constraintStart_toStartOf="@id/onBoarding_line_2"
+                app:layout_constraintEnd_toEndOf="@id/onBoarding_line_2"/>
+
+            <ImageView
+                android:id="@+id/onBoarding_line_3"
+                android:layout_width="65dp"
+                android:layout_height="36dp"
+                android:elevation="1dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="40dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_tutorial_line3"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintVertical_bias="0.25"
+                app:layout_constraintTop_toTopOf="@id/home_write_btn"
+                app:layout_constraintEnd_toEndOf="@id/home_write_btn" />
+
+            <TextView
+                android:id="@+id/onBoarding_text_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onBoarding_guide_3"
+                android:elevation="1dp"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="35dp"
+                app:layout_constraintEnd_toEndOf="@id/onBoarding_line_3"
+                app:layout_constraintBottom_toBottomOf="@id/onBoarding_line_3"/>
+
+            <TextView
+                android:id="@+id/onBoarding_text_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:elevation="1dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/onBoarding_guide_4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -113,6 +224,5 @@
             />
 
     </FrameLayout>
-
 
 </RelativeLayout>

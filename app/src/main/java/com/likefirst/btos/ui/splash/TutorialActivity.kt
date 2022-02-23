@@ -56,7 +56,9 @@ class TutorialActivity : BaseActivity<ActivityTutorialBinding>(ActivityTutorialB
         imageAdapter.setOnItemClickListener(object: TutorialViewPagerAdapter.OnItemClickListener{
             override fun onItemClick(v: View, pos: Int) {
                 finish()
-                startActivity(Intent(this@TutorialActivity,MainActivity::class.java))
+                val intent = Intent(this@TutorialActivity, MainActivity::class.java)
+                intent.putExtra("isNewUser", true)
+                startActivity(intent)
             }
         })
     }

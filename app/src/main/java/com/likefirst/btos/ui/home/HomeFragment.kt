@@ -5,8 +5,11 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -35,10 +38,7 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
-import com.likefirst.btos.utils.dateToString
-import com.likefirst.btos.utils.getLastPostingDate
-import com.likefirst.btos.utils.getUserIdx
-import com.likefirst.btos.utils.saveLastPostingDate
+import com.likefirst.btos.utils.*
 import java.time.LocalTime
 import java.util.*
 
@@ -99,6 +99,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             intent.putExtra("diaryDate", date)
             startActivity(intent)
         }
+
+        if(arguments!=null && requireArguments().getBoolean("isNewUser", false)){
+            playGuideAnim()
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -115,6 +119,54 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             mActivity.notifyDrawerHandler("unlock")
             binding.homeNotificationBtn.isClickable =true
         }
+    }
+
+    fun playGuideAnim(){
+        val animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+        val animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        val animFadeIn3000 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_delay3000)
+        binding.onBoardingShadowLayout.apply {
+            bringToFront()
+            visibility = View.VISIBLE
+            binding.onBoardingShadowLayout.isClickable = true
+        }
+        binding.onBoardingLine1.visibility = View.VISIBLE
+        binding.onBoardingLine1.startAnimation(animFadeIn)
+        binding.onBoardingLine2.visibility = View.VISIBLE
+        binding.onBoardingLine2.startAnimation(animFadeIn)
+        binding.onBoardingLine3.visibility = View.VISIBLE
+        binding.onBoardingLine3.startAnimation(animFadeIn)
+        binding.onBoardingText1.visibility = View.VISIBLE
+        binding.onBoardingText1.startAnimation(animFadeIn)
+        binding.onBoardingText2.visibility = View.VISIBLE
+        binding.onBoardingText2.startAnimation(animFadeIn)
+        binding.onBoardingText3.visibility = View.VISIBLE
+        binding.onBoardingText3.startAnimation(animFadeIn)
+        binding.onBoardingText4.visibility = View.VISIBLE
+        binding.onBoardingText4.startAnimation(animFadeIn3000)
+
+        val handler= Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            binding.onBoardingShadowLayout.setOnClickListener {
+                binding.onBoardingShadowLayout.visibility = View.GONE
+                binding.onBoardingShadowLayout.startAnimation(animFadeOut)
+                binding.onBoardingLine1.visibility = View.GONE
+                binding.onBoardingLine1.startAnimation(animFadeOut)
+                binding.onBoardingLine2.visibility = View.GONE
+                binding.onBoardingLine2.startAnimation(animFadeOut)
+                binding.onBoardingLine3.visibility = View.GONE
+                binding.onBoardingLine3.startAnimation(animFadeOut)
+                binding.onBoardingText1.visibility = View.GONE
+                binding.onBoardingText1.startAnimation(animFadeOut)
+                binding.onBoardingText2.visibility = View.GONE
+                binding.onBoardingText2.startAnimation(animFadeOut)
+                binding.onBoardingText3.visibility = View.GONE
+                binding.onBoardingText3.startAnimation(animFadeOut)
+                binding.onBoardingText4.visibility = View.GONE
+                binding.onBoardingText4.startAnimation(animFadeOut)
+                binding.onBoardingShadowLayout.isClickable = false
+            }
+        },3000)
     }
 
     fun initFlowerPot(){
