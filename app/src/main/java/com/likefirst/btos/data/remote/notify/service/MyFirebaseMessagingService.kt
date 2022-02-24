@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.likefirst.btos.ui.main.MainActivity
@@ -20,6 +21,7 @@ import com.likefirst.btos.utils.fcm.MyWorker
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
+import com.likefirst.btos.utils.getAlarmSound
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -109,7 +111,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentTitle(title) // 제목
             .setContentText(body) // 내용
             .setAutoCancel(true)
-            .setSmallIcon(R.drawable.emotion1) // d알림영역에 노출될 아이콘
+            .setSmallIcon(R.drawable.emotion2) // d알림영역에 노출될 아이콘
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
@@ -149,7 +151,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보와 작업을 지정
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.emotion3)     // 아이콘 설정
+            .setSmallIcon(R.mipmap.ic_launcher)     // 아이콘 설정
             .setContentTitle(title)     // 제목
             .setContentText(body)     // 메시지 내용
             .setAutoCancel(true)
@@ -170,10 +172,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
 
-        saveMessage()
-
-        val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
-        if(spf.getBoolean("state",true)){
+       // saveMessage()
+        //TODO 알림 추후
+        if(getAlarmSound()){
            notificationManager.notify(uniId, notificationBuilder.build())
         }
 

@@ -239,4 +239,11 @@ interface RetrofitInterface {
         @Query("userIdx") userIdx : Int
     ):Call<BaseResponse<AlarmInfo>>
 
+
+    //---------------sendService----------//
+    @POST("/letters")
+    fun sendLetter(
+        @Body request : SendLetterRequest
+    ):Call<BaseResponse<String>>
+
 }

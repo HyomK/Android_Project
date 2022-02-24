@@ -1,8 +1,6 @@
 package com.likefirst.btos.ui.home
 
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,7 +10,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
@@ -29,8 +26,8 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
-import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
+import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -38,6 +35,9 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
+import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.getLastPostingDate
+import com.likefirst.btos.utils.saveLastPostingDate
 import com.likefirst.btos.utils.*
 import java.time.LocalTime
 import java.util.*
@@ -67,23 +67,16 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         })
     }
     override fun initAfterBinding() {
-
         val mActivity = activity as MainActivity
         val updateUserService = UpdateUserService()
-        updateUserService.setUpdateIsSadView(this)
-
-        initFlowerPot()
-
         binding.homeNotificationBtn.setOnClickListener {
             if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
-
         }
-
         binding.homeMailBtn.setOnClickListener {
             sharedNotifyModel.setMsgLiveData(false)
+            binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
-
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .add(R.id.home_mailbox_layout, MailboxFragment(), "mailbox")
@@ -99,6 +92,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             intent.putExtra("diaryDate", date)
             startActivity(intent)
         }
+
+        updateUserService.setUpdateIsSadView(this) // 처리 순서 변경
+        initFlowerPot()
+
 
         if(arguments!=null && requireArguments().getBoolean("isNewUser", false)){
             playGuideAnim()
@@ -220,31 +217,35 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
         animationView.setAnimation( "${plantName}/${plantName}_sad_${currentPlant.currentLevel}.json")
-        //Google Admob 구현
+
         MobileAds.initialize(requireContext())
-        // 테스트 기기 추가
-        // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
         val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
         MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder()
-                .setTestDeviceIds(testDeviceIds)
-                .build()
-        )
-        val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
-        val adLoadCallback = object: RewardedAdLoadCallback() {
-            override fun onRewardedAdLoaded() {
-                // Ad successfully loaded.
-                Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
+              RequestConfiguration.Builder()
+             .setTestDeviceIds(testDeviceIds)
+           .build()
+           )
+
+          val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
+    // 테스트 기기 추가
+    // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
+          val adLoadCallback = object: RewardedAdLoadCallback() {
+              override fun onRewardedAdLoaded() {
+            // Ad successfully loaded.
+               Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
             }
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-                // Ad failed to load.
-                Log.e("rewardLoadError", adError.toString())
-            }
-        }
-        mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
-        animationView.setOnClickListener {
+            // Ad failed to load.
+              Log.e("rewardLoadError", adError.toString())
+              }
+          }
+          mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+          animationView.setOnClickListener {
             showUpdateSadPotDialog(mRewardedVideoAd)
-        }
+           }
+        //Google Admob 구현
+
+
     }
 
     fun getCurrentPlant():Plant{
@@ -300,8 +301,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     fun setWindowImage(){
         val current : LocalTime = LocalTime.now()
         val now = current.hour
-        Log.d("window", now.toString())
-
         if(now in 6..18){
             binding.windowIv.setImageResource(R.drawable.window_morning)
         }else if(now in 18..20) {

@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.home
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ class MailRVAdapter (private val dataSet:  ArrayList<Mailbox>) : RecyclerView.Ad
 
     private lateinit var mItemClickLister: MailItemClickListener
     interface MailItemClickListener{
-        fun onClickItem(data:Mailbox)
+        fun onClickItem(data:Mailbox, position: Int)
     }
 
     fun setMyItemCLickLister(itemClickLister: MailItemClickListener){
@@ -28,15 +29,12 @@ class MailRVAdapter (private val dataSet:  ArrayList<Mailbox>) : RecyclerView.Ad
         lateinit var type :String
         var idx : Int = 0
 
-
-
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
 
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_mailbox_rv, viewGroup, false)
-
         return ViewHolder(view)
     }
 
@@ -53,7 +51,13 @@ class MailRVAdapter (private val dataSet:  ArrayList<Mailbox>) : RecyclerView.Ad
         holder.type=dataSet[position].type
 
 
-        holder.mailView.setOnClickListener { mItemClickLister.onClickItem(dataSet[position]) }
+        holder.mailView.setOnClickListener { mItemClickLister.onClickItem(dataSet[position], position) }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun removeItem(position : Int){
+        dataSet.removeAt(position)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = dataSet.size

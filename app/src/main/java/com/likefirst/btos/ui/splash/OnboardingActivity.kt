@@ -317,7 +317,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Token -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
@@ -325,8 +324,8 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     // 아이디, 비밀번호 맞을 때
                     Log.e("Firebase token : ", taskId.toString())
                     initValues()
-                    //updateProfile()
-                    //  moveMainPage(task.result?.user)
+                    updateProfile()
+                    goToTutorial()
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
@@ -366,9 +365,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     .child(userData.email.toString())
                     .setValue(userData)
             })
-
         }
-        goToTutorial()
     }
 
 

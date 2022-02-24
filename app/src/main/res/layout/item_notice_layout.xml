@@ -39,6 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/item_notice_title"
             app:layout_constraintBottom_toBottomOf="parent"
             android:minHeight="0dp"
+            android:layout_marginTop="3dp"
             />
         <ImageButton
             android:id="@+id/item_notice_arrow"

@@ -14,6 +14,7 @@ import com.likefirst.btos.databinding.FragmentNicknameBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.utils.saveUserName
 
 class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBinding::inflate),
     MainActivity.onBackPressedListener, SetSettingUserView {
@@ -51,10 +52,7 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
                 if(isSuccess){
                     settingService.setSettingUserView(this)
                     settingService.setName(userDB!!.getUserIdx(), UserName(binding.nicknameEdit.text.toString()))
-                    val spf =requireActivity().getSharedPreferences("EditName",MODE_PRIVATE)
-                    val editor = spf.edit()
-                    editor.putString("UserName",binding.nicknameEdit.text.toString())
-                    editor.apply()
+                    saveUserName(binding.nicknameEdit.text.toString())
                 }else{
 
                 }

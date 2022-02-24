@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.remote.plant.view
+package com.likefirst.btos.utils.ViewModel
 
 import android.os.Bundle
 import android.util.Log
@@ -13,10 +13,7 @@ class SharedSelectModel:ViewModel(){
     private var isSuccess =MutableLiveData<Boolean>()
     fun  getLiveData() :LiveData<Bundle>{ return liveData }
     fun setLiveData(data:Bundle)  {
-        Log.e("Plant/ select ",isSuccess.toString())
-        if(isSuccess().value==true){
-            liveData.setValue(data)
-        }
+        liveData.setValue(data)
     }
 
     fun isSuccess():LiveData<Boolean> {return isSuccess }

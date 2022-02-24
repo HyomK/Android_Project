@@ -46,13 +46,14 @@
         android:layout_marginTop="10dp"
         android:outlineProvider="none"
         app:endIconDrawable="@drawable/ic_dropdown"
+        android:background="@color/background"
         android:layout_marginStart="20dp"
         android:textAlignment="textStart"
 
         >
         <AutoCompleteTextView
             android:id="@+id/profile_suggest_list"
-            android:layout_width="160dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="left"
             android:layout_marginStart="3dp"

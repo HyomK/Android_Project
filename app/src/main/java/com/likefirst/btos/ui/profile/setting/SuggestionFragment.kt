@@ -15,11 +15,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 
 import androidx.core.content.ContextCompat.getSystemService
+import com.google.android.material.snackbar.Snackbar
 import java.lang.Exception
 
 
 class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBinding::inflate),MainActivity.onBackPressedListener{
-    private var option = 0
+    private var option = -1
 
     override fun initAfterBinding() {
 
@@ -31,8 +32,12 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
         binding.profileSuggestToolbar.toolbarTitleTv.text="개발자에게 건의하기"
 
        binding.profileSuggestDoneBtn.setOnClickListener {
-           sendEmail(option, binding.profileSuggestEdit.text.toString())
-           requireActivity().supportFragmentManager.popBackStack()
+           if(option ==-1){
+               Snackbar.make(requireView(),"카테고리를 선택해 주세요",Snackbar.LENGTH_SHORT).show()
+           }else{
+               sendEmail(option, binding.profileSuggestEdit.text.toString())
+               requireActivity().supportFragmentManager.popBackStack()
+           }
        }
         binding.profileSuggestToolbar.toolbarBackIc.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
@@ -46,10 +51,7 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun sendEmail(option:Int, content: String) {
-        if(option ==-1){
-            Toast.makeText(requireContext(),"카테고리를 선택해 주세요",Toast.LENGTH_SHORT).show()
-            return
-        }
+
         val menuItem = resources.getStringArray(R.array.suggest_item)
         val emailAddress = "beyondtheotherside00@gmail.com"
         val title = "건의사항 [${menuItem[option]}]"

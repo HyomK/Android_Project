@@ -37,7 +37,7 @@
     <dimen name="profile_iv_radius">75dp</dimen>
     <dimen name="profile_level_textSize">14dp</dimen>
     <dimen name="profile_nickname_textSize">17dp</dimen>
-    <dimen name="profile_settingList_paddingVertical">15dp</dimen>
+    <dimen name="profile_settingList_paddingVertical">20dp</dimen>
 
     <!-- Flowerpot item -->
     <dimen name="flowerpot_layout_height">125dp </dimen>

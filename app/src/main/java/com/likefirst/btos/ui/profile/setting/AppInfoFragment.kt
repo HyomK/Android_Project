@@ -36,8 +36,8 @@ class AppInfoFragment: BaseFragment<FragmentAppinfoBinding>(FragmentAppinfoBindi
 
         requireActivity()!!.supportFragmentManager
             .beginTransaction()
-            .addToBackStack("appinfo")
-            .add(R.id.fr_layout,detailFragment,"appdetail")
+            .addToBackStack(null)
+            .add(R.id.fr_layout,detailFragment,"setAppDetail")
             .commit()
     }
 

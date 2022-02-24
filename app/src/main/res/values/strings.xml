@@ -170,7 +170,7 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string-array name="suggest_item">
         <item>버그 제보</item>
         <item>악성 유저 신고</item>
-        <item>추가되었으면 하는 기능</item>
+        <item>요청 기능</item>
         <item>기타</item>
     </string-array>
 

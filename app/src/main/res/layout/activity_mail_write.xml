@@ -135,7 +135,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_bg_diary"
+            android:src="@drawable/ic_bg_sent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -154,9 +154,19 @@
             app:layout_constraintTop_toTopOf="parent"
             android:background="@null"
             android:inputType="textMultiLine"
+            style="@style/EditTheme"
             />
 
+        <ProgressBar
+            android:id="@+id/mail_write_loading_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </LinearLayout>
