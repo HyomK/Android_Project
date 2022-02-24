@@ -92,7 +92,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundColor="@color/background"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:endIconTint="@android:color/black"

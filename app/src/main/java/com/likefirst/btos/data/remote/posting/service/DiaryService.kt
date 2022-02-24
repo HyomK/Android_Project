@@ -19,7 +19,6 @@ import retrofit2.Response
 
 class DiaryService (){
 
-
     private lateinit var diaryView: MailDiaryView
     private lateinit var postDiaryView: PostDiaryView
     private lateinit var updateDiaryView: UpdateDiaryView

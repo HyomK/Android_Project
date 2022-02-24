@@ -221,8 +221,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     override fun onBackPressed() {
         val mActivity = activity as MainActivity
-        mActivity.isMailOpen=false
         mActivity.supportFragmentManager.popBackStack()
+       // mActivity.isMailOpen=false
     }
 
     override fun onResume() {

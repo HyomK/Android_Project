@@ -126,6 +126,4 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
         binding.mailViewDateTv.typeface = ResourcesCompat.getFont(this,fontId)
         binding.mailViewSenderTv.typeface= ResourcesCompat.getFont(this,fontId)
     }
-
-
 }

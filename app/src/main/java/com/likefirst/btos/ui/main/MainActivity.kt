@@ -88,7 +88,11 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         val isNewUser = intent.getBooleanExtra("isNewUser",false)
         Log.e("isNewUser",isNewUser.toString())
         if(isNewUser){
-           intent.removeExtra("isNewUser")
+            sharedNotifyModel.setMsgLiveData(true)
+            sharedNotifyModel.setNoticeLiveData(false)
+            intent.removeExtra("isNewUser")
+            return
+
         }
         val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
         val liveSharedPreference = LiveSharedPreferences(spf)
@@ -102,7 +106,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             })
         liveSharedPreference.getString("newMail", "undefine")
             .observe(this, Observer<String> { result ->
-                if( isNewUser ||result!="undefine"){
+                if( result!="undefine"){
                     sharedNotifyModel.setMsgLiveData(true)
                 }else{
                     sharedNotifyModel.setMsgLiveData(false)
@@ -460,7 +464,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onLetterSuccess(letter:MailInfoResponse) {
-         val bundle = bundleOf("letter" to  letter)
+         val bundle = bundleOf("mail" to  letter)
          val intent = Intent(this@MainActivity,MailViewActivity::class.java)
          intent.putExtra("MailView",bundle)
          startActivity(intent)
@@ -475,9 +479,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     override fun onReplySuccess(reply:MailInfoResponse) {
-        val bundle =bundleOf("reply" to reply)
-        val intent = Intent(this, MailReplyActivity::class.java)
-        intent.putExtra("MailReply",bundle)
+        val bundle = bundleOf("mail" to  reply)
+        val intent = Intent(this@MainActivity,MailViewActivity::class.java)
+        intent.putExtra("MailView",bundle)
         startActivity(intent)
     }
 

@@ -1,11 +1,10 @@
 package com.likefirst.btos.ui.posting
 
 import android.content.Intent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.PopupMenu
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryViewerInfo
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.view.DeleteDiaryView
 import com.likefirst.btos.databinding.ActivityDiaryViewerBinding
@@ -65,25 +65,34 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
 //        binding.diaryViewerNameTv.text = intentDataset.userName
 //    }
 
+    fun setFont(fontIdx : Int){
+        val fontList = resources.getStringArray(R.array.fontEng)
+        val font = resources.getIdentifier(fontList[fontIdx], "font", this.packageName)
+        binding.diaryViewerNameTv.typeface = ResourcesCompat.getFont(this,font)
+        binding.diaryViewerEmotionTv.typeface = ResourcesCompat.getFont(this,font)
+        binding.diaryViewerDateTv.typeface = ResourcesCompat.getFont(this,font)
+        binding.diaryViewerContentsTv.typeface = ResourcesCompat.getFont(this,font)
+    }
+
     fun initView(){
         val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")!!
         val emotionNames = resources.getStringArray(com.likefirst.btos.R.array.emotionNames)
         val emotionIdx = intentDataset.emotionIdx
-        if(emotionIdx != 0){
-            val emotionImgRes = resources.getIdentifier("emotion"+(emotionIdx).toString(), "drawable", this.packageName)
-            binding.diaryViewerEmotionIv.apply {
-                visibility = View.VISIBLE
-                setImageResource(emotionImgRes)
-            }
-            binding.diaryViewerEmotionTv.apply {
-                visibility = View.VISIBLE
-                binding.diaryViewerEmotionTv.text = emotionNames[emotionIdx]
-            }
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        val emotionImgRes = resources.getIdentifier("emotion"+(emotionIdx).toString(), "drawable", this.packageName)
+        binding.diaryViewerEmotionIv.apply {
+            visibility = View.VISIBLE
+            setImageResource(emotionImgRes)
+        }
+        binding.diaryViewerEmotionTv.apply {
+            visibility = View.VISIBLE
+            binding.diaryViewerEmotionTv.text = emotionNames[emotionIdx]
         }
         setDoneListRv(intentDataset.doneLists)
         binding.diaryViewerContentsTv.text = intentDataset.contents
         binding.diaryViewerDateTv.text = intentDataset.diaryDate
         binding.diaryViewerNameTv.text = intentDataset.userName
+        setFont(userDB.getFontIdx()!!)
     }
 
     fun initToolbar(){
@@ -92,7 +101,8 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
         binding.diaryViewerToolbar.diaryViewerMoreIv.setOnClickListener { it ->
             //TODO: 내 일기일 경우 더보기 -> 삭제
             //      상대방의 일기일 경우 더보기 -> 차단,신고,삭제 분기처리
-            val popupMenu = PopupMenu(this, it)
+            val themeWrapper = ContextThemeWrapper(this , R.style.ToolbarOptionMenuStyle)
+            val popupMenu = PopupMenu(themeWrapper , it, Gravity.CENTER , 0 , R.style.ToolbarOptionMenuStyle)
             menuInflater.inflate(R.menu.diary_viewer_option_menu, popupMenu.menu)
             popupMenu.show()
             popupMenu.setOnMenuItemClickListener {
@@ -123,7 +133,8 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
 
     fun setDoneListRv(doneLists : ArrayList<String>){
 
-        val doneListAdapter = DiaryViewerDoneListRVAdapter(doneLists)
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        val doneListAdapter = DiaryViewerDoneListRVAdapter(doneLists, this, userDB.getFontIdx()!!)
 
         binding.diaryViewerDoneListRv.apply {
             adapter = doneListAdapter

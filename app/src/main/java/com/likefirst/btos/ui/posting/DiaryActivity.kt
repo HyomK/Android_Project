@@ -31,10 +31,7 @@ import com.likefirst.btos.databinding.ItemDiaryEmotionRvBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.splash.LoginActivity
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.getUserIdx
-import com.likefirst.btos.utils.removeJwt
-import com.likefirst.btos.utils.saveLastPostingDate
+import com.likefirst.btos.utils.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
@@ -42,7 +39,7 @@ import kotlin.system.exitProcess
 class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate), PostDiaryView, UpdateDiaryView {
 
     companion object{
-        var emotionIdx = 0  // 이모션 선택할 때마다 리사이클러뷰 어댑터에서 자동으로 설정해줌
+        var emotionIdx = -1  // 이모션 선택할 때마다 리사이클러뷰 어댑터에서 자동으로 설정해줌
         var doneLists = ArrayList<String>()     // 입력할 때마다 리사이클러뷰 어댑터에서 자동으로 설정해줌
         var contents = ""   // 입력할 때마다 edittextlistener달아서 자동으로 설정해줌
     }
@@ -50,7 +47,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     override fun initAfterBinding() {
 
         // companion object 초기화
-        emotionIdx = 0
+        emotionIdx = -1
         doneLists = arrayListOf()
         contents = ""
 
@@ -94,9 +91,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     fun initContents(){
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         setFont(userDB.getFontIdx()!!)
-        if(userDB.getUser().premium == "free"){
-            binding.diaryEmotionsRv.visibility = View.GONE
-        }
+
         // 일기 수정모드일 때 contents set
         if(intent.getBooleanExtra("editingMode", false) &&
             intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
@@ -167,7 +162,8 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun initDoneListRv(){
-        val doneListAdapter = DiaryDoneListRVAdapter("diary")
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        val doneListAdapter = DiaryDoneListRVAdapter("diary", this, userDB.getFontIdx()!!)
         binding.diaryDoneListRv.apply{
             adapter = doneListAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -228,21 +224,22 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun initEmotionRv(){
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
         val emotionColorIds = ArrayList<Int>()
         val emotionGrayIds = ArrayList<Int>()
         val emotionNames = resources.getStringArray(com.likefirst.btos.R.array.emotionNames)
-        for (num in 1..8){
+        for (num in 0..7){
             val emotionColorId = resources.getIdentifier("emotion$num", "drawable", this.packageName)
             emotionColorIds.add(emotionColorId)
             val emotionGrayId = resources.getIdentifier("emotion$num"+"_gray", "drawable", this.packageName)
             emotionGrayIds.add(emotionGrayId)
         }
-        var emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, null)
+        var emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, null, this, userDB.getFontIdx()!!)
         // 수정모드일 때 emotion리사이클러뷰 하나 선택되어있는 상태의 어댑터로 변경
         if(intent.getBooleanExtra("editingMode", false) &&
             intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
             val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
-            emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, intentDataset!!.emotionIdx - 1)
+            emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, intentDataset!!.emotionIdx, this, userDB.getFontIdx()!!)
             emotionIdx = intentDataset.emotionIdx
         }
         val emotionDecoration = DiaryEmotionRVItemDecoration()
@@ -290,12 +287,9 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun diaryValidationCheck() : Boolean{
-        val userDB = UserDatabase.getInstance(this)!!.userDao()
-        if (userDB.getUser().premium == "premium"){
-            if (emotionIdx == 0) {
-                showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
-                return false
-            }
+        if (emotionIdx == -1) {
+            showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
+            return false
         }
         if (contents == "") {
             showOneBtnDialog("일기를 한 글자라도 작성해 주세요!!", "No Contents Check")
@@ -332,7 +326,9 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         binding.diaryLoadingView.visibility = View.GONE
         goToDiaryViewer()
         DiaryViewerActivity.diaryStateFlag = DiaryViewerActivity.CREATE
-        saveLastPostingDate(Date())
+        if (dateToString(Date()) == binding.diaryDateTv.text.toString()){
+            saveLastPostingDate(Date())
+        }
     }
 
     override fun onDiaryPostFailure(code: Int) {
