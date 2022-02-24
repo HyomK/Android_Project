@@ -97,6 +97,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+    <activity
+        android:name=".ui.history.HistoryDetailActivity"
+        android:screenOrientation="portrait">
+    </activity>
+
         <activity android:name=".ui.posting.MailWriteActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.posting.MailReplyActivity"

@@ -9,8 +9,10 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -170,6 +172,12 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             itemAnimator = null
         }
+        doneListAdapter.setOnDoneListEnter(object : DiaryDoneListRVAdapter.ItemClickListener{
+            override fun onDoneListEnter(view : View) {
+                hideKeyboard(view)
+            }
+
+        })
 
         //doneList 엔터 입력 시 리사이클러뷰 갱신
         binding.diaryDoneListEt.imeOptions = EditorInfo.IME_ACTION_DONE

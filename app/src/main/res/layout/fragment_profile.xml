@@ -10,7 +10,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_cd"
-        android:elevation="10dp"
         android:layout_width="@dimen/profile_layout_width"
         android:layout_height="@dimen/profile_layout_height"
         android:layout_marginHorizontal="@dimen/profile_view_marginHorizontal"

@@ -6,17 +6,27 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ItemDiaryDoneListRvBinding
+import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.archive.ArchiveCalendarRVAdapter
 
 class DiaryDoneListRVAdapter(private val start : String,
                              val context : Context, val fontIdx : Int): RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHolder>() {
     val doneLists : ArrayList<String> = ArrayList()
     var doneListWatcher = ""
 
-    interface ItemClickListener
+    interface ItemClickListener {
+        fun onDoneListEnter(view : View)
+    }
+
+    fun setOnDoneListEnter(itemClickListener: ItemClickListener){
+        mItemClickListener = itemClickListener
+    }
 
     private lateinit var mItemClickListener : ItemClickListener
 
@@ -37,7 +47,6 @@ class DiaryDoneListRVAdapter(private val start : String,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.initView(doneLists[position])
         holder.binding.itemDiaryDoneListDeleteIv.setOnClickListener {
-            (context as DiaryActivity).hideKeyboard(holder.binding.itemDiaryDoneListEt)
             deleteDoneList(position)
         }
         if(start == "history"){
@@ -53,33 +62,46 @@ class DiaryDoneListRVAdapter(private val start : String,
 
                 holder.binding.itemDiaryDoneListDeleteIv.visibility = View.GONE
                 holder.binding.itemDiaryDoneListTv.visibility = View.GONE
-                holder.binding.itemDiaryDoneListEt.visibility = View.VISIBLE
-                holder.binding.itemDiaryDoneListEt.setText(text)
-                holder.binding.itemDiaryDoneListEt.requestFocus()
-                holder.binding.itemDiaryDoneListEt.typeface = ResourcesCompat.getFont(context,font)
-
-                //엔터 눌렀을 때 업데이트
-                holder.binding.itemDiaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
-                    if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
-                        if(holder.binding.itemDiaryDoneListEt.text.length < 100){
-                            holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
+                holder.binding.itemDiaryDoneListEt.apply{
+                    visibility = View.VISIBLE
+                    setText(text)
+                    requestFocus()
+                    typeface = ResourcesCompat.getFont(context,font)
+                    setOnFocusChangeListener { v, hasFocus ->
+                        if (hasFocus) {
+                                val scrollView = findViewById<NestedScrollView>(R.id.diary_sv)
+                            scrollView.postDelayed(Runnable {
+                                scrollView.smoothScrollBy(0,800)
+                            }, 100)
                         }
-                        setDoneList(holder, position)
-                        (context as DiaryActivity).hideKeyboard(it)
                     }
-                    false
                 }
+//                    holder.binding.itemDiaryDoneListEt.
+//                    holder.binding.itemDiaryDoneListEt.
+//                    holder.binding.itemDiaryDoneListEt.typeface = ResourcesCompat.getFont(context,font)
 
-                // 포커스 벗어났을 때 doneList 업데이트
-                holder.binding.itemDiaryDoneListEt.onFocusChangeListener =
-                    View.OnFocusChangeListener { view, hasFocus ->
-                        if (!hasFocus){
+                    //엔터 눌렀을 때 업데이트
+                    holder.binding.itemDiaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
+                        if(keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP){
+                            if(holder.binding.itemDiaryDoneListEt.text.length < 100){
+                                holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
+                            }
                             setDoneList(holder, position)
+                            mItemClickListener.onDoneListEnter(it)
                         }
+                        false
                     }
+
+                    // 포커스 벗어났을 때 doneList 업데이트
+                    holder.binding.itemDiaryDoneListEt.onFocusChangeListener =
+                        View.OnFocusChangeListener { view, hasFocus ->
+                            if (!hasFocus){
+                                setDoneList(holder, position)
+                            }
+                        }
+                }
             }
         }
-    }
 
     override fun getItemCount(): Int {
         return doneLists.size

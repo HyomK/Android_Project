@@ -81,6 +81,7 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_onboarding.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_tutorial.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/custom_dialog_layout.xml" value="0.21666666666666667" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/custom_edit_dialog.xml" value="0.1265625" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_archive_calendar_period.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_archive_list_period.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_archive_period.xml" value="0.264" />
@@ -116,6 +117,8 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_history_nosender.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_login_dialog.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_mailbox_rv.xml" value="0.23743589743589744" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_notice_layout.xml" value="0.24114583333333334" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_notify_rv.xml" value="0.2324074074074074" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_set_font.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_tutorialimage.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/onboarding_dropdown_item.xml" value="0.21666666666666667" />
