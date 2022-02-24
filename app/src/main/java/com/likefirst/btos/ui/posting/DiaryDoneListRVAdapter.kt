@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.posting
 
+import android.app.Activity
 import android.content.Context
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -36,6 +37,7 @@ class DiaryDoneListRVAdapter(private val start : String,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.initView(doneLists[position])
         holder.binding.itemDiaryDoneListDeleteIv.setOnClickListener {
+            (context as DiaryActivity).hideKeyboard(holder.binding.itemDiaryDoneListEt)
             deleteDoneList(position)
         }
         if(start == "history"){
@@ -46,9 +48,15 @@ class DiaryDoneListRVAdapter(private val start : String,
         holder.itemView.setOnClickListener{
             if(start == "diary"){
                 val text = holder.binding.itemDiaryDoneListTv.text.toString()
-                holder.binding.itemDiaryDoneListTv.visibility = View.INVISIBLE
+                val fontList = context.resources.getStringArray(R.array.fontEng)
+                val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
+
+                holder.binding.itemDiaryDoneListDeleteIv.visibility = View.GONE
+                holder.binding.itemDiaryDoneListTv.visibility = View.GONE
                 holder.binding.itemDiaryDoneListEt.visibility = View.VISIBLE
                 holder.binding.itemDiaryDoneListEt.setText(text)
+                holder.binding.itemDiaryDoneListEt.requestFocus()
+                holder.binding.itemDiaryDoneListEt.typeface = ResourcesCompat.getFont(context,font)
 
                 //엔터 눌렀을 때 업데이트
                 holder.binding.itemDiaryDoneListEt.setOnKeyListener { p0, keyCode, event ->
@@ -57,6 +65,7 @@ class DiaryDoneListRVAdapter(private val start : String,
                             holder.binding.itemDiaryDoneListEt.text.delete( holder.binding.itemDiaryDoneListEt.selectionStart - 1, holder.binding.itemDiaryDoneListEt.selectionStart)
                         }
                         setDoneList(holder, position)
+                        (context as DiaryActivity).hideKeyboard(it)
                     }
                     false
                 }
@@ -79,10 +88,12 @@ class DiaryDoneListRVAdapter(private val start : String,
     fun setDoneList(holder : ViewHolder, position: Int){
         if(holder.binding.itemDiaryDoneListEt.text.toString() == ""){
             deleteDoneList(position)
+            holder.binding.itemDiaryDoneListDeleteIv.visibility = View.VISIBLE
             holder.binding.itemDiaryDoneListTv.visibility = View.VISIBLE
             holder.binding.itemDiaryDoneListEt.visibility = View.GONE
         } else {
             updateDoneList(position, holder.binding.itemDiaryDoneListEt.text.toString())
+            holder.binding.itemDiaryDoneListDeleteIv.visibility = View.VISIBLE
             holder.binding.itemDiaryDoneListTv.visibility = View.VISIBLE
             holder.binding.itemDiaryDoneListEt.visibility = View.GONE
         }
@@ -91,13 +102,14 @@ class DiaryDoneListRVAdapter(private val start : String,
     fun updateDoneList(position : Int, doneList : String){
         doneLists[position] = doneList
         notifyItemChanged(position)
+        notifyItemRangeChanged(position, itemCount)
         DiaryActivity.doneLists = doneLists
     }
 
     fun deleteDoneList(position : Int){
         doneLists.removeAt(position)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, itemCount)
+        notifyItemRangeChanged(position-1, itemCount)
         DiaryActivity.doneLists = doneLists
     }
 

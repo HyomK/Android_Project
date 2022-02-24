@@ -66,6 +66,7 @@
 
     <style name="EditTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/green</item>
+        <item name="android:textSelectHandle">@color/green</item>
     </style>
 
     <!--Custom Toolbar Popup style-->
