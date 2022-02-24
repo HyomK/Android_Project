@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id "com.google.android.gms.oss-licenses-plugin"
 }
 
 apply plugin: 'com.android.application'
@@ -141,5 +142,6 @@ dependencies {
     //History_search observable
     implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 
-
+    //Open Source License
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 }
