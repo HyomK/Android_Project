@@ -52,11 +52,10 @@ import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
 import com.likefirst.btos.utils.getUserIdx
+import com.likefirst.btos.utils.removeNotice
 
 
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),AlarmInfoView,AlarmListView,MailDiaryView, MailLetterView, MailReplyView{
-
-    private var auth : FirebaseAuth? = null
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
@@ -82,9 +81,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
         setNotificationIcon()
-
     }
 
     fun setNotificationIcon(){
@@ -98,7 +95,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             return
 
         }
-        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
+        val spf = getSharedPreferences("BTOS-APP" , MODE_PRIVATE) // 기존에 있던 데이터
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference.getString("newNotification", "undefine")
             .observe(this, Observer<String> { result ->
@@ -131,8 +128,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             override fun onDrawerOpened(drawerView: View) {
                 alarmService.getAlarmList(getUserIdx())
                 sharedNotifyModel.setNoticeLiveData(false)
-                val spf = getSharedPreferences("notification", MODE_PRIVATE)
-                spf.edit().putString("newNotification","undefine").apply()
+                removeNotice()
+               /* val spf = getSharedPreferences("notification", MODE_PRIVATE)
+                spf.edit().putString("newNotification","undefine").apply()*/
             }
             override fun onDrawerClosed(drawerView: View) {}
             override fun onDrawerStateChanged(newState: Int) {}

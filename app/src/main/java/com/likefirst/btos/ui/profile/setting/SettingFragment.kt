@@ -20,10 +20,7 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.EditDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.utils.deleteUserInfo
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.removeJwt
-import com.likefirst.btos.utils.saveAlarmSound
+import com.likefirst.btos.utils.*
 import kotlin.system.exitProcess
 
 class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)
@@ -97,7 +94,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                     val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
                     googleSignInClient.signOut()
                     removeJwt()
-                    deleteUserInfo()
+                    removeUserInfo()
                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
                     val fcmDatabase=FCMDatabase.getInstance(requireContext())
                     fcmDatabase?.fcmDao()?.delete(fcmDatabase.fcmDao().getData())
@@ -174,7 +171,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                                 "btnData" to btn
                             )
                             isDeleted = true
-                            deleteUserInfo()
+                            removeUserInfo()
                             settingService.setSettingUserView(this@SettingFragment)
                             settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{
