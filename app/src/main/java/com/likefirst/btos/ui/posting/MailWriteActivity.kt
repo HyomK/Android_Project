@@ -12,12 +12,14 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FCMService
 import com.likefirst.btos.data.remote.posting.response.SendLetterRequest
 import com.likefirst.btos.data.remote.posting.service.SendService
@@ -33,13 +35,13 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
 
 
     override fun initAfterBinding() {
-
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.MailWriteMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailWriteMenuList.setAdapter(adapter)
         binding.MailWriteCheckBtn.visibility=View.GONE
-
+        setFont(userDB.getFontIdx()!!)
         binding.MailWriteToolbar.toolbarBackIc.setOnClickListener {
             onBackPressed()
         }
@@ -125,11 +127,9 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
     }
 
     fun sendNotification(){
-
         val sendService = SendService()
         sendService.setSendLetterView(this)
         sendService.sendLetter(SendLetterRequest(getUserIdx(),binding.MailWriteBodyEt.text.toString()))
-
         val fcmDatabase = FCMDatabase.getInstance(this)!!
         val userData = fcmDatabase.fcmDao().getData()
         if(userData == null ||userData.fcmToken ==" "){
@@ -154,5 +154,10 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         Log.e(TAG, "${code} ${message}")
     }
 
+    fun setFont(idx:Int){
+        val fonts= resources.getStringArray(R.array.fontEng)
+        val fontId= resources.getIdentifier(fonts[idx],"font", packageName)
+        binding.MailWriteBodyEt.typeface=ResourcesCompat.getFont(this,fontId)
 
+    }
 }

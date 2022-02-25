@@ -45,12 +45,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/birth_tv"
                 android:textSize="14sp"
+                android:minHeight="0dp"
+                app:errorEnabled="false"
+                app:placeholderTextColor="@color/black"
                 android:layout_marginStart="20dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/birth_list"
                     android:layout_width="125dp"
-                    android:layout_height="55dp"
+                    android:layout_height="40dp"
                     android:gravity="center"
                     android:layout_marginEnd="3dp"
                     android:background="@null"
@@ -58,7 +61,8 @@
                     android:inputType="none"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@string/none_selected"
+                    android:paddingHorizontal="0dp"
+                    android:paddingVertical="0dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="14sp"

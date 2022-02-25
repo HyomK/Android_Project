@@ -38,14 +38,24 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
     fun initDialog(){
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         val settingService = SettingUserService()
+        var birth: Int =userDB!!.getUser().birth
+      //  binding.birthTill.isHintEnabled=false
+        if(birth == 0)  binding.birthTill.hint="선택안함"
+        else binding.birthTill.hint=birth.toString()
 
         val agelist = resources.getStringArray(R.array.onboarding_agelist)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.onboarding_dropdown_item,agelist)
         binding.birthList.setAdapter(arrayAdapter)
         binding.birthList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
         binding.birthList.dropDownHeight=300
+        binding.birthList.setOnClickListener {
+            binding.birthTill.isHintEnabled=false
+            binding.birthTill.hint=""
+        }
 
-        var item=0
+
+
+
 
         val btnBundle = arguments?.getStringArray("btnData")
 

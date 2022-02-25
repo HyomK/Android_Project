@@ -129,7 +129,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:text="bodydddddddd"
                 android:id="@+id/mailView_body_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,7 +138,7 @@
                 android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
                 android:textColor="@color/black"
                 android:textSize="14dp"
-
+                android:lineHeight="23dp"
                 />
             <TextView
                 android:layout_marginTop="30dp"

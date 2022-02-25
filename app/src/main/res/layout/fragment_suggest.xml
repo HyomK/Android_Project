@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="완료"
+            android:background="@color/background"
             android:textColor="@color/black"
             android:textSize="@dimen/setting_content_fontSize"
             android:layout_marginEnd="25dp"
@@ -49,7 +50,7 @@
         android:background="@color/background"
         android:layout_marginStart="20dp"
         android:textAlignment="textStart"
-
+        android:textSize="14dp"
         >
         <AutoCompleteTextView
             android:id="@+id/profile_suggest_list"
@@ -58,7 +59,7 @@
             android:gravity="left"
             android:layout_marginStart="3dp"
             android:layout_marginEnd="3dp"
-            android:background="@null"
+            android:background="@color/background"
             android:ellipsize="end"
             android:inputType="none"
             android:maxLines="2"
@@ -90,7 +91,6 @@
             android:gravity="start"
             android:textSize="14dp"
             android:maxLength="200"
-            android:textCursorDrawable="@color/black"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -34,6 +34,8 @@ import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.service.FcmTokenService
+import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.service.AuthService
@@ -43,16 +45,14 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.getJwt
-import com.likefirst.btos.utils.saveJwt
-import com.likefirst.btos.utils.saveUserIdx
+import com.likefirst.btos.utils.*
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
-    SignUpView, GetProfileView, LoginView, PlantListView {
+    SignUpView, GetProfileView, LoginView, PlantListView ,FcmTokenView{
 
     val authService = AuthService()
     val plantService= PlantService()
+    val fcmTokenService= FcmTokenService()
     lateinit var email: String
     private var auth : FirebaseAuth? = null
 
@@ -352,6 +352,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 Log.e("FIREBASE", msg)
                 userData.email = email.substring(0, email.indexOf('@'))
                 userData.fcmToken= token
+
+                fcmTokenService.setFcmTokenView(this)
+                fcmTokenService.postFcmToken(getUserIdx(),token)
+
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
                 if(fcmDatabase.fcmDao().getData() ==null){
                     fcmDatabase.fcmDao().insert(userData)
@@ -428,5 +432,17 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     override fun onDestroy() {
         super.onDestroy()
         binding.onboardingNameEt.removeTextChangedListener(textWatcher)
+    }
+
+    override fun onLoadingFcmToken() {
+
+    }
+
+    override fun onSuccessFcmToken() {
+        Log.e("FCM-API - success","success")
+    }
+
+    override fun onFailureFcmToken(code : Int, msg: String) {
+        Log.e("FCM-API - fail","${code}= ${msg}")
     }
 }

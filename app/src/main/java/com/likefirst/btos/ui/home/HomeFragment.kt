@@ -35,6 +35,7 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
+import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
 import com.likefirst.btos.utils.getUserIdx
@@ -56,12 +57,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         super.onViewCreated(view, savedInstanceState)
         sharedNotifyModel= ViewModelProvider(requireActivity()).get(SharedNotifyModel::class.java)
         sharedNotifyModel.getMsgLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
-            if(it) binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox_new)
-            else binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
+            if(it) binding.homeMailBtn.setImageResource(R.drawable.mailbox_new)
+            else binding.homeMailBtn.setImageResource(R.drawable.mailbox)
         })
         sharedNotifyModel.getNoticeLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
-            if(it) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
-            else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
+            if(it) binding.homeNotificationBtn.setImageResource(R.drawable.notification_new)
+            else binding.homeNotificationBtn.setImageResource(R.drawable.notification)
         })
         sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
         sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
@@ -78,7 +79,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
         binding.homeMailBtn.setOnClickListener {
             sharedNotifyModel.setMsgLiveData(false)
-            binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
+            binding.homeMailBtn.setImageResource(R.drawable.mailbox)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
             requireActivity().supportFragmentManager
@@ -87,6 +88,10 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .addToBackStack(null)
                 .show(MailboxFragment())
                 .commit()
+        }
+        binding.homeSendMailBtn.setOnClickListener {
+            val intent = Intent(requireContext(), MailWriteActivity::class.java)
+            startActivity(intent)
         }
 
         binding.homeWriteBtn.bringToFront()
@@ -144,7 +149,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         var plantStatus = ""
         if(userDB!!.getIsSad()) plantStatus="sad_"
-        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${currentLevel}.json")
+        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${3}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
