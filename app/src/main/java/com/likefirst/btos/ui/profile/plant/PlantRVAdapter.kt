@@ -1,6 +1,8 @@
 package com.likefirst.btos.ui.profile.plant
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +14,19 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.data.remote.plant.view.SharedBuyModel
-import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
-import kotlinx.coroutines.*
+import com.likefirst.btos.utils.ViewModel.SharedBuyModel
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.request.RequestOptions
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
-class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel : SharedSelectModel,val buyModel : SharedBuyModel) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
+class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : SharedSelectModel, val buyModel : SharedBuyModel, val context : Context) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: PlantItemClickListener
     val sharedBuyModel = buyModel
@@ -102,42 +108,21 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
     }
 
 
-    fun buyItem(position :Int){
-        Log.e("PLANT BUY ITEM : ", "rv buyitem start")
-        val select =dataSet[position]
-        if(sharedBuyModel.isSuccess().value==true ) {
-            val buyItem = sharedBuyModel.getLiveData().value!!
-            Log.e("PLANT BUY ITEM : ", buyItem.toString())
-            if (select.first.plantIdx != buyItem.getInt("plantIdx") || select.first.plantName != buyItem.getString("plantName")) {
-                Log.e("PLANT BUY ITEM 선택된 화분이 다름 : ",
-                    select.first.toString() + " / " + buyItem.toString())
-            } else {
-                select.first.plantStatus = buyItem.getString("status")!!
-                select.first.currentLevel = 0
-                select.first.isOwn = true
-                val newItem = Pair(select.first, buyItem.getInt("resId"))
-                dataSet[position] = newItem
-                sharedBuyModel.setResult(false)
-                reset(dataSet)  // 재정렬한다
-            }
-        }
+    fun buyItem(position :Int , buyPlant : Pair<Plant, Int>){
+        dataSet[position] =buyPlant
+        reset(dataSet)  // 재정렬한다
     }
 
 
     fun selectItem(position: Int){
-        if(sharedSelectModel.isSuccess().value==true ) {
-            Log.e("Plant/ select for"," rv handler start")
-            for ((index, plant) in  dataSet.withIndex()) {
-                if (plant.first.plantStatus == "selected") {
-                    dataSet[index].first.plantStatus = "active"
-                    dataSet[position].first.plantStatus="selected"
-                    if( dataSet[position].first.currentLevel==-1)  dataSet[position].first.currentLevel=0
-
-                    break
-                }
+        for ((index, plant) in  dataSet.withIndex()) {
+            if (plant.first.plantStatus == "selected") {
+                dataSet[index].first.plantStatus = "active"
+                dataSet[position].first.plantStatus="selected"
+                if( dataSet[position].first.currentLevel==-1)  dataSet[position].first.currentLevel=0
+                break
             }
         }
-        Log.e("Plant/ select ","end =>> ${dataSet}")
         reset(dataSet)
     }
 
@@ -146,7 +131,6 @@ class PlantRVAdapter( var dataSet :ArrayList<Pair<Plant,Int>> ,val selectModel :
         val newData =origin.sortedWith(ComparePlant)
         dataSet.clear()
         dataSet.addAll(newData)
-        Log.e("Plant/RV - Soreted :  ", newData.toString())
         notifyDataSetChanged()
     }
 

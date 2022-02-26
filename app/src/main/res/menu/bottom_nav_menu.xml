@@ -8,21 +8,21 @@
         app:showAsAction="always"
         android:enabled="true"
         tools:ignore="AlwaysShowAction"
-        android:title="" />
+        android:title="홈"/>
     <item
         android:id="@+id/archiveFragment"
         android:icon="@drawable/bottom_nav_menu_archive_selector"
         app:showAsAction="always"
-        android:title="" />
+        android:title="일기"/>
     <item
         android:id="@+id/historyFragment"
         android:icon="@drawable/bottom_nav_menu_history_selector"
         app:showAsAction="always"
-        android:title="" />
+        android:title="편지"/>
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/bottom_nav_menu_profile_selector"
         app:showAsAction="always"
-        android:title="" />
+        android:title="프로필"/>
 
 </menu>

@@ -9,7 +9,6 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-@Entity(tableName = "FCMTable")
 data class UserDTO(
     @PrimaryKey(autoGenerate = false)
 

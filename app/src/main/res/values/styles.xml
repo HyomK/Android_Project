@@ -6,6 +6,10 @@
         <item name="android:textSize">14dp</item>
     </style>
 
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
+    </style>
+
     <style name="NotoSansTextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">@font/notosanskr_regular</item>
     </style>
@@ -24,9 +28,9 @@
 
     <style name="settingListStyle" parent="android:Widget.TextView">
         <item name="android:textSize"> @dimen/setting_content_fontSize</item>
-         <item name="android:textStyle">bold</item>
-         <item name="android:textColor">@color/black</item>
-         <item name="android:layout_marginStart">35dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginStart">35dp</item>
         <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:color">@color/black</item>
@@ -46,17 +50,49 @@
 
     <!--Archive Date Picker style-->
     <style name="ArchiveDatePickerStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="bottomSheetStyle">@style/customDatePickerStyle</item>
     </style>
-    <style name="AppModalStyle"
+    <style name="customDatePickerStyle"
         parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/archive_date_picker_dialog_style</item>
     </style>
 
-
     <style name="tabTextSizeBold" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="EditTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorAccent">@color/green</item>
+        <item name="android:textSelectHandle">@color/green</item>
+    </style>
+
+    <!--Custom Toolbar Popup style-->
+    <style name="ToolbarOptionMenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="fontFamily">@font/notosanskr_regular</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:dropDownHorizontalOffset">10dp</item>
+        <item name="android:dropDownVerticalOffset">10dp</item>
+        <item name="android:popupBackground">@drawable/custom_drop_down_style</item>
+    </style>
+<!--    <style name="customPopupStyle"-->
+<!--        parent="Widget.AppCompat.PopupMenu">-->
+<!--        <item name="background">@drawable/custom_drop_down_style</item>-->
+<!--    </style>-->
+
+<!--    <style name="MyPopupMenu" parent="@style/Widget.AppCompat.PopupMenu">-->
+<!--        <item name="android:popupBackground">@drawable/custom_drop_down_style</item>-->
+<!--        <item name="android:textColor">@color/white</item>-->
+<!--    </style>-->
+    <style name="customEditText" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlActivated">@color/green</item>
+        <item name="colorControlNormal">@color/green</item>
+        <item name="android:textSelectHandle">@color/green</item>
+        <item name="android:textColorHighlight">@color/beige</item>
+        <item name="android:textCursorDrawable">@color/green</item>
+        <item name="backgroundTint">@color/black</item>
     </style>
 
 </resources>

@@ -87,7 +87,7 @@ class SetNotificationFragment:BaseFragment<FragmentSetNotificationBinding>(Fragm
             bg.visibility = View.INVISIBLE
         } else {
             bg.visibility= View.VISIBLE
-           // bg.setImageResource(R.drawable.select_toggle)
+            // bg.setImageResource(R.drawable.select_toggle)
             btn.setImageResource(R.drawable.ic_toggle_true)
         }
         return !status

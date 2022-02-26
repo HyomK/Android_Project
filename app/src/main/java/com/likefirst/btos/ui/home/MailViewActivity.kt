@@ -3,10 +3,12 @@ package com.likefirst.btos.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.likefirst.btos.R
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.databinding.ActivityMailViewBinding
 
@@ -19,11 +21,17 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
     override fun initAfterBinding() {
         val bundle : Bundle = intent.getBundleExtra("MailView")!!
-        val letter :MailLetterResponse? =bundle.getParcelable("letter")
-        binding.mailViewBodyTv.text= letter?.mail?.content
-        binding.mailViewDateTv.text=bundle.getString("date")
-        binding.mailViewSenderTv.text=letter?.senderNickname
-        setFont(letter?.senderFontIdx!!)
+        val mail : MailInfoResponse? =bundle.getParcelable("mail")
+        binding.mailViewBodyTv.text= mail?.content
+
+        if(mail?.senderNickName =="저편너머"){
+            binding.mailViewDateTv.visibility= View.GONE
+            binding.mailViewSenderTv.visibility=View.GONE
+        }else{
+            binding.mailViewDateTv.text=mail?.sendAt
+            binding.mailViewSenderTv.text=mail?.senderNickName
+        }
+        setFont(mail?.senderFontIdx!!)
 
         val menuItem = resources.getStringArray(R.array.report_items)
         val adapter= ArrayAdapter( this ,R.layout.menu_dropdown_item, menuItem)
@@ -72,8 +80,8 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                 //신고
                 1 -> {
                     val intent = Intent(this,ReportActivity::class.java)
-                    intent.putExtra("type","letter") //TODO 이후 REPLY랑 구분 필요
-                    intent.putExtra("typeIdx",letter?.mail?.letterIdx)
+                    intent.putExtra("type",mail.type)
+                    intent.putExtra("typeIdx",mail?.typeIdx)
                     Log.e("ReportIntent",intent.toString())
                     startActivity(intent)
                 }
@@ -120,11 +128,9 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
     fun setFont(idx:Int){
         val fonts= resources.getStringArray(R.array.fontEng)
-        val fontId= resources.getIdentifier(fonts[idx-1],"font", packageName)
+        val fontId= resources.getIdentifier(fonts[idx],"font", packageName)
         binding.mailViewBodyTv.typeface = ResourcesCompat.getFont(this,fontId)
         binding.mailViewDateTv.typeface = ResourcesCompat.getFont(this,fontId)
         binding.mailViewSenderTv.typeface= ResourcesCompat.getFont(this,fontId)
     }
-
-
 }

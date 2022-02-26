@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="false"
+    android:backgroundTint="#FDFAF5"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -38,7 +39,7 @@
         android:id="@+id/history_basic_no_result_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/noresult"
+        android:text="@string/archive_list_no_search_result"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:visibility="gone"

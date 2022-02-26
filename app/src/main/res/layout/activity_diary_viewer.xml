@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/diary_viewer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,27 +14,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         layout="@layout/toolbar_diary_viewer"/>
 
-<!--    <ImageView-->
-<!--        android:id="@+id/diary_view_edit_iv"-->
-<!--        android:layout_width="26dp"-->
-<!--        android:layout_height="26dp"-->
-<!--        android:src="@drawable/ic_write"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/diary_viewer_more_iv"-->
-<!--        app:layout_constraintTop_toTopOf="@id/diary_viewer_toolbar"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/diary_viewer_toolbar"/>-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/diary_viewer_more_iv"-->
-<!--        android:layout_width="26dp"-->
-<!--        android:layout_height="26dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:src="@drawable/ic_dots"-->
-<!--        app:layout_constraintTop_toTopOf="@id/diary_viewer_toolbar"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/diary_viewer_toolbar"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
-
-
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -42,6 +23,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/diary_viewer_toolbar"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/diary_viewer_loading_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -59,7 +52,7 @@
                 android:id="@+id/diary_viewer_emotion_iv"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/emotion1"
+                android:src="@drawable/emotion0"
                 android:visibility="gone"
                 android:layout_marginTop="40dp"
                 app:layout_constraintTop_toTopOf="parent"
@@ -122,7 +115,9 @@
                 android:textSize="@dimen/diary_contents_font"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/handwriting_flower_smell"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/diary_viewer_date_tv"
                 app:layout_constraintStart_toStartOf="@id/diary_viewer_date_tv"/>
 

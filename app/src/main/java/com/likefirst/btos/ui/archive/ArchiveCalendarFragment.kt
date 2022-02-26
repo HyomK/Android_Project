@@ -21,18 +21,16 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
     val mCalendar: Calendar = GregorianCalendar.getInstance()
 
     companion object {
-        var pageIndexFlag = false
         var pageIndex = 0
         var datePickerFlag = true
     }
 
     override fun initAfterBinding() {
-        initCalendar(0)
+        initCalendar(0, false)
         setDatePicker()
-        Log.d("pageIndex", "$pageIndex, $pageIndexFlag")
     }
 
-    fun initCalendar(viewMode : Int){
+    fun initCalendar(viewMode : Int, reLoadFlag : Boolean){
         mCalendar.time = Date()
         val monthNames: Array<String> = resources.getStringArray(R.array.month)
         val MONTH_TODAY = mCalendar.get(Calendar.MONTH)
@@ -46,7 +44,8 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
         binding.archiveCalendarVp.apply {
             adapter = calendarAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-            if(pageIndexFlag){
+            offscreenPageLimit = 1
+            if(reLoadFlag){
                 setCurrentItem(Int.MAX_VALUE/2+ pageIndex, false)
             } else {
                 setCurrentItem(Int.MAX_VALUE/2, false)
@@ -130,12 +129,12 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
             Log.d("date", "$year, $month")
             when (checkedId){
                 R.id.archive_calendar_done_list_rb -> {
-                    initCalendar(0)
-                    setCalendar(year, month)
+                    initCalendar(0, true)
+//                    setCalendar(year, month)
                 }
                 R.id.archive_calendar_emotion_rb -> {
-                    initCalendar(1)
-                    setCalendar(year, month)
+                    initCalendar(1, true)
+//                    setCalendar(year, month)
                 }
             }
         }

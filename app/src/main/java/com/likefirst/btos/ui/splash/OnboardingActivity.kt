@@ -1,24 +1,27 @@
 package com.likefirst.btos.ui.splash
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,11 +33,11 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
-import com.likefirst.btos.data.entities.firebase.MessageDTO
 import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.service.FcmTokenService
+import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.service.AuthService
@@ -44,17 +47,14 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.getJwt
-import com.likefirst.btos.utils.saveJwt
-import com.likefirst.btos.utils.saveUserIdx
+import com.likefirst.btos.utils.*
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
-    SignUpView, GetProfileView, LoginView, PlantListView {
+    SignUpView, GetProfileView, LoginView, PlantListView ,FcmTokenView{
 
     val authService = AuthService()
     val plantService= PlantService()
+    val fcmTokenService= FcmTokenService()
     lateinit var email: String
     private var auth : FirebaseAuth? = null
 
@@ -65,50 +65,116 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     lateinit var mGoogleApiClient: GoogleApiClient
 
     private var userName: String? = null
-    private var movePose : String? = null
+    private var nickname: String? = null
+    private var textWatcher : TextWatcher? = null
+    private var checkName : Boolean = false
+    private var checkAge : Boolean = false
 
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
     private var mChildEventListener: ChildEventListener? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mAuth = FirebaseAuth.getInstance()
-        initFirebaseDatabase()
-        initFirebaseAuth()
 
+        val dialog = LoginDialogFragment()
+        dialog.show(supportFragmentManager, "")
+
+        mAuth = FirebaseAuth.getInstance()
+       // initFirebaseDatabase()
+        initFirebaseAuth()
+        initListener()
     }
 
-    override fun initAfterBinding() {
+    private fun initListener() {
+        textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString() == ""){
+                    checkName = false
+                    binding.nicknameError.visibility = View.VISIBLE
+                    binding.nicknameError.text = "닉네임을 입력해주세요."
+                }
+                else{
+                    checkName = true
+                    binding.nicknameError.visibility = View.GONE
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        }
+        binding.onboardingNameEt.addTextChangedListener(textWatcher)
 
-        val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        binding.onboardingNotageCb.setOnCheckedChangeListener { compoundButton, isChecked ->
+            var birth_string = binding.onboardingAgelist.text.toString()
+            if(!isChecked && birth_string == "선택안함"){
+                checkAge = false
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "나이를 선택해주세요.\n공개하고 싶지 않다면 아래를 클릭하세요!"
+            }else if(isChecked) {
+                checkAge = true
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "생년 정보가 반영되지 않습니다."
+            }else{
+                checkAge = true
+                binding.ageError.visibility = View.GONE
+            }
+        }
+
+        binding.onboardingAgelist.addTextChangedListener {
+            if(binding.onboardingAgelist.text.toString()!="선택안함"){
+                checkAge = true
+                binding.ageError.visibility = View.GONE
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun initAfterBinding() {
         val agelist = resources.getStringArray(R.array.onboarding_agelist)
         val arrayAdapter = ArrayAdapter(this, R.layout.onboarding_dropdown_item, agelist)
         binding.onboardingAgelist.setAdapter(arrayAdapter)
         binding.onboardingAgelist.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
-        binding.onboardingAgelist.dropDownHeight = 400
-
-        //나이 선택 시 키보드 내리기
-        binding.onboardingAgeTil.setOnClickListener {
-            imm.hideSoftInputFromWindow(binding.onboardingNameEt.windowToken, 0);
-        }
+        binding.onboardingAgelist.dropDownHeight = 800
+        binding.onboardingAgelist.getOffsetForPosition(0f,12f)
 
         binding.onboardingOkayTv.setOnClickListener {
-            // loginactivity에서 넘어온 email 받기
-            val intent = getIntent()
-            val bundle = intent.getBundleExtra("mypackage")
-            email = bundle?.getString("email").toString()
-            val nickname = binding.onboardingNameEt.text.toString()
-            val birth = binding.onboardingAgelist.text.toString().toInt()
-            Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
-            authService.setSignUpView(this)
-            authService.signUp(UserSign(email, nickname, birth))
+
+            var birth : Int? = 0
+            Log.e("회원가입","확인 누른 곳")
+            if(binding.onboardingNameEt.text.toString() == ""){
+                checkName = false
+                binding.nicknameError.visibility = View.VISIBLE
+                binding.nicknameError.text = "닉네임을 입력해주세요."
+            }
+            else if(!binding.onboardingNotageCb.isChecked && binding.onboardingAgelist.text.toString() == "선택안함"){
+                checkAge = false
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "나이를 선택해주세요.\n공개하고 싶지 않다면 아래를 클릭하세요!"
+            }
+            else if(checkName && checkAge){
+                // loginactivity에서 넘어온 email 받기
+                val intent = getIntent()
+                val bundle = intent.getBundleExtra("mypackage")
+                email = bundle?.getString("email").toString()
+                nickname = binding.onboardingNameEt.text.toString()
+
+                if(binding.onboardingNotageCb.isChecked) birth = null
+                else birth == binding.onboardingAgelist.text.toString().toInt()
+
+                Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
+                authService.setSignUpView(this)
+                authService.signUp(UserSign(email, nickname!!, birth))
+            }
         }
     }
 
     fun goToTutorial(){
-        startActivity(Intent(this, TutorialActivity::class.java))
+        binding.onboardingLoadingPb.visibility = View.GONE
+        val intent = Intent(this, TutorialActivity::class.java)
+        intent.putExtra("nickname",nickname)
+        startActivity(intent)
         finish()
     }
 
@@ -125,18 +191,16 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             }
             else{
                 updateProfile()
-                Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onSignUpLoading() {
-        binding.onboardingLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onSignUpSuccess(login: Login) {
-        binding.onboardingLoadingPb.visibility = View.GONE
-        Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+       // binding.onboardingLoadingPb.visibility = View.GONE
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
@@ -175,12 +239,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onLoginLoading() {
-        binding.onboardingLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onLoginSuccess(login: Login) {
-        binding.onboardingLoadingPb.visibility = View.GONE
-
         saveJwt(login.jwt!!)
         Log.e("LOGIN/JWT", getJwt()!!)
 
@@ -222,7 +284,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
                     plantDB?.plantDao()?.insert(i)
                 } else {
-                    plantDB?.plantDao()?.update(i)
+                    plantDB?.plantDao()?.setPlantInit(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
                 }
             }
         }  // 전체 화분 목록 DB 업데이트
@@ -256,7 +318,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
@@ -265,13 +326,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     Log.e("Firebase token : ", taskId.toString())
                     initValues()
                     updateProfile()
-
-                    Toast.makeText(this,"파이어베이스 토큰 생성 성공", Toast.LENGTH_SHORT).show()
-                    //  moveMainPage(task.result?.user)
+                    goToTutorial()
                 }else{
                     // 틀렸을 때
                     Log.e("Firebase",task.exception?.message.toString())
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
                 }
             }
     }
@@ -295,22 +353,18 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 Log.e("FIREBASE", msg)
                 userData.email = email.substring(0, email.indexOf('@'))
                 userData.fcmToken= token
-                val fcmDatabase = FCMDatabase.getInstance(this)!!
-                if(fcmDatabase.fcmDao().getData() ==null){
-                    fcmDatabase.fcmDao().insert(userData)
-                }else{
-                    fcmDatabase.fcmDao().update(userData)
-                }
 
+                fcmTokenService.setFcmTokenView(this)
+                fcmTokenService.postFcmToken(getUserIdx(),token)
+
+             /*
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
 
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
-                    .setValue(userData)
+                    .setValue(userData)*/
             })
-
         }
-        goToTutorial()
     }
 
 
@@ -320,7 +374,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
 
-    private fun initFirebaseDatabase() {
+  /*  private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
@@ -337,7 +391,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
-
+*/
     override fun onBackPressed() {
         super.onBackPressed()
         val gso = getGSO()
@@ -352,5 +406,31 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         super.onPause()
         mGoogleApiClient.stopAutoManage(this);
         mGoogleApiClient.disconnect();
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.onboardingNameEt.removeTextChangedListener(textWatcher)
+    }
+
+    override fun onLoadingFcmToken() {
+
+    }
+
+    override fun onSuccessFcmToken() {
+        Log.e("FCM-API - success","success")
+    }
+
+    override fun onFailureFcmToken(code : Int, msg: String) {
+        Log.e("FCM-API - fail","${code}= ${msg}")
+    }
+
+    fun setLoadingView(){
+        binding.onboardingLoadingPb.visibility=View.VISIBLE
+        binding.onboardingLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.likefirst.btos.ui.profile.setting
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,7 +54,7 @@ class SetFontFragment:BaseFragment<FragmentFontBinding>(FragmentFontBinding::inf
         binding.setFontLoadingPb.visibility = View.GONE
         val userDatabase = UserDatabase.getInstance(requireContext())!!
         userDatabase.userDao().updateFontIdx(fontSelect)
-        settingDialog(requireActivity(),this)
+        settingDialogRestart(requireActivity(),this, requireContext())
     }
 
     override fun onSetSettingUserViewFailure(code: Int, message: String) {

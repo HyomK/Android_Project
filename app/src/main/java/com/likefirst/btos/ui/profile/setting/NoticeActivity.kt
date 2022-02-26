@@ -29,11 +29,9 @@ class NoticeActivity: BaseActivity<ActivityNoticeBinding>(ActivityNoticeBinding:
     }
 
     override fun onNoticeAPISuccess(noticeList: ArrayList<NoticeDetailResponse>) {
-        var noticeArray = ArrayList<Pair<String, String>>()//body , date
-        noticeList.sortByDescending { it ->it.createdAt }
-        noticeList.forEach(){
-            it -> noticeArray.add(Pair(it.content, it.createdAt))
-        }
+        var noticeArray = ArrayList<Pair<NoticeDetailResponse, Boolean>>()//body , date
+        noticeList.sortByDescending { it ->it.noticeIdx}
+        noticeList.map{ i-> noticeArray.add(Pair(i,false))}
         val noticeAdapter=NoticeRVAdapter(noticeArray)
         binding.profileNoticeRv.adapter=noticeAdapter
 

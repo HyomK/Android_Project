@@ -3,7 +3,7 @@
     android:id="@+id/fr_report_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background"
     android:clickable="false"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
@@ -77,6 +77,7 @@
             android:gravity="start"
             android:textSize="14dp"
             android:maxLength="200"
+            android:theme="@style/EditTheme"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

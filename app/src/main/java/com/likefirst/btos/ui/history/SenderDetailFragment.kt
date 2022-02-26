@@ -1,12 +1,12 @@
 package com.likefirst.btos.ui.history
 
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Content
 import com.likefirst.btos.data.entities.PageInfo
 import com.likefirst.btos.data.remote.history.service.HistoryService
@@ -73,11 +73,14 @@ class SenderDetailFragment(private val userIdx : Int, private val senderNickName
             }
 
             override fun moveToHistoryList(userIdx: Int, type: String, typeIdx: Int) {
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fr_layout,HistoryDetailFragment(userIdx, type, typeIdx), "senderdetail")
-                    .addToBackStack(null)
-                    .commit()
+//                requireActivity().supportFragmentManager
+//                    .beginTransaction()
+//                    .replace(R.id.fr_layout,HistoryDetailFragment(userIdx, type, typeIdx), "senderdetail")
+//                    .addToBackStack(null)
+//                    .commit()
+                val intent = Intent(requireActivity(),HistoryDetailActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
             }
 
         })

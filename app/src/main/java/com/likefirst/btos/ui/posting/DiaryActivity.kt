@@ -2,13 +2,18 @@ package com.likefirst.btos.ui.posting
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Typeface
+import android.service.autofill.UserData
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,20 +21,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.entities.PostDiaryRequest
+import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.data.remote.posting.view.UpdateDiaryView
+import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
 import com.likefirst.btos.data.remote.viewer.response.UpdateDiaryRequest
 import com.likefirst.btos.databinding.ActivityDiaryBinding
 import com.likefirst.btos.databinding.ItemDiaryEmotionRvBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.splash.LoginActivity
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.getUserIdx
-import com.likefirst.btos.utils.removeJwt
-import com.likefirst.btos.utils.saveLastPostingDate
+import com.likefirst.btos.utils.*
+import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
@@ -37,15 +42,15 @@ import kotlin.system.exitProcess
 class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding::inflate), PostDiaryView, UpdateDiaryView {
 
     companion object{
-        var emotionIdx = 0
-        var doneLists = ArrayList<String>()
-        var contents = ""
+        var emotionIdx = -1  // 이모션 선택할 때마다 리사이클러뷰 어댑터에서 자동으로 설정해줌
+        var doneLists = ArrayList<String>()     // 입력할 때마다 리사이클러뷰 어댑터에서 자동으로 설정해줌
+        var contents = ""   // 입력할 때마다 edittextlistener달아서 자동으로 설정해줌
     }
     @SuppressLint("Recycle")
     override fun initAfterBinding() {
 
         // companion object 초기화
-        emotionIdx = 0
+        emotionIdx = -1
         doneLists = arrayListOf()
         contents = ""
 
@@ -78,11 +83,18 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         })
     }
 
+    fun setFont(fontIdx : Int){
+        val fontList = resources.getStringArray(R.array.fontEng)
+        val font = resources.getIdentifier(fontList[fontIdx], "font", this.packageName)
+        binding.diaryContentsEt.typeface = ResourcesCompat.getFont(this,font)
+        binding.diaryDoneListEt.typeface = ResourcesCompat.getFont(this,font)
+        binding.diaryDateTv.typeface = ResourcesCompat.getFont(this,font)
+    }
+
     fun initContents(){
         val userDB = UserDatabase.getInstance(this)!!.userDao()
-        if(userDB.getUser().premium == "free"){
-            binding.diaryEmotionsRv.visibility = View.GONE
-        }
+        setFont(userDB.getFontIdx()!!)
+
         // 일기 수정모드일 때 contents set
         if(intent.getBooleanExtra("editingMode", false) &&
             intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
@@ -91,6 +103,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             binding.diaryContentsEt.setText(intentDataset!!.contents)
             binding.diaryDateTv.text = intentDataset.diaryDate
         } else {
+            // 일기 수정모드가 아닐 때 contents 초기화
             binding.diaryDateTv.text = intent.getStringExtra("diaryDate")
         }
 
@@ -102,15 +115,25 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             onBackPressed()
         }
 
-        // 일기 수정모드일 때 토글버튼 set
-        if(intent.getBooleanExtra("editingMode", false) &&
-            intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
-            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
-            diaryToggleSwitcher(!intentDataset!!.isPublic)
-        }
-        binding.diaryToolbar.diaryToggleIv.setOnClickListener {
-            val isPublic = isPublic()
-            diaryToggleSwitcher(isPublic)
+        // 과거일기의 경우 공개비공개 설정 버튼 안보이게
+        val millisNow = System.currentTimeMillis()
+        val millisDiary = stringToDate(binding.diaryDateTv.text.toString()).time
+        if((millisNow-millisDiary) >= (1000*60*60*43)){
+            binding.diaryToolbar.diaryToggleSelector.visibility = View.GONE
+            binding.diaryToolbar.diaryToggleTv.visibility = View.GONE
+            binding.diaryToolbar.diaryToggleIv.visibility = View.GONE
+            diaryToggleSwitcher(true)
+        } else {
+            // 일기 수정모드일 때 토글버튼 set
+            if(intent.getBooleanExtra("editingMode", false) &&
+                intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
+                val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
+                diaryToggleSwitcher(!intentDataset!!.isPublic)
+            }
+            binding.diaryToolbar.diaryToggleIv.setOnClickListener {
+                val isPublic = isPublic()
+                diaryToggleSwitcher(isPublic)
+            }
         }
 
         binding.diaryToolbar.diaryCheckIv.setOnClickListener {
@@ -122,7 +145,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                     val dialog = CustomDialogFragment()
                     val data = arrayOf("취소", "확인")
                     dialog.arguments= bundleOf(
-                        "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 비공개로 전환 할 수 있습니다.",
+                        "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 공개작성된 일기는 내일 오후 7시 전까지만 비공개로 전환 할 수 있습니다.",
                         "btnData" to data
                     )
                     dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
@@ -152,13 +175,20 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun initDoneListRv(){
-        val doneListAdapter = DiaryDoneListRVAdapter("diary")
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        val doneListAdapter = DiaryDoneListRVAdapter("diary", this, userDB.getFontIdx()!!)
         binding.diaryDoneListRv.apply{
             adapter = doneListAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             itemAnimator = null
         }
+        doneListAdapter.setOnDoneListEnter(object : DiaryDoneListRVAdapter.ItemClickListener{
+            override fun onDoneListEnter(view : View) {
+                hideKeyboard(view)
+            }
+
+        })
 
         //doneList 엔터 입력 시 리사이클러뷰 갱신
         binding.diaryDoneListEt.imeOptions = EditorInfo.IME_ACTION_DONE
@@ -213,21 +243,22 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     fun initEmotionRv(){
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
         val emotionColorIds = ArrayList<Int>()
         val emotionGrayIds = ArrayList<Int>()
         val emotionNames = resources.getStringArray(com.likefirst.btos.R.array.emotionNames)
-        for (num in 1..8){
+        for (num in 0..7){
             val emotionColorId = resources.getIdentifier("emotion$num", "drawable", this.packageName)
             emotionColorIds.add(emotionColorId)
             val emotionGrayId = resources.getIdentifier("emotion$num"+"_gray", "drawable", this.packageName)
             emotionGrayIds.add(emotionGrayId)
         }
-        var emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, null)
+        var emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, null, this, userDB.getFontIdx()!!)
         // 수정모드일 때 emotion리사이클러뷰 하나 선택되어있는 상태의 어댑터로 변경
         if(intent.getBooleanExtra("editingMode", false) &&
             intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
             val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
-            emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, intentDataset!!.emotionIdx - 1)
+            emotionAdapter = DiaryEmotionRVAdapter(emotionColorIds, emotionGrayIds, emotionNames, intentDataset!!.emotionIdx, this, userDB.getFontIdx()!!)
             emotionIdx = intentDataset.emotionIdx
         }
         val emotionDecoration = DiaryEmotionRVItemDecoration()
@@ -252,6 +283,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     fun updateDiary(){
         val diaryDate = binding.diaryDateTv.text.toString()
         val diaryIdx = intent.getIntExtra("diaryIdx", 0)
+        Log.d("donelist", doneLists.toString())
         var isPublic = 0
         if(isPublic()){
             isPublic = 1
@@ -259,24 +291,24 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         val diaryService = DiaryService()
         diaryService.setUpdateDiaryView(this)
         diaryService.updateDiary(UpdateDiaryRequest(diaryIdx, getUserIdx(), emotionIdx, diaryDate, contents, isPublic, doneLists))
-
     }
 
     fun goToDiaryViewer(){
+        val selectedPosition = intent.getIntExtra("selectedPosition", -1)
         val diaryDate = binding.diaryDateTv.text.toString()
         val userDB = UserDatabase.getInstance(this)!!.userDao()
-        val intent = Intent(this, DiaryViewerActivity::class.java)
-        intent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
-        startActivity(intent)
+        val mIntent = Intent(this, DiaryViewerActivity::class.java)
+        mIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        mIntent.putExtra("selectedPosition", selectedPosition)
+        mIntent.putExtra("diaryIdx", intent.getIntExtra("diaryIdx", 0))
+        mIntent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
+        startActivity(mIntent)
     }
 
     fun diaryValidationCheck() : Boolean{
-        val userDB = UserDatabase.getInstance(this)!!.userDao()
-        if (userDB.getUser().premium == "premium"){
-            if (emotionIdx == 0) {
-                showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
-                return false
-            }
+        if (emotionIdx == -1) {
+            showOneBtnDialog("감정이모티콘을 하나 선택해 주세요.", "No Emotion Check")
+            return false
         }
         if (contents == "") {
             showOneBtnDialog("일기를 한 글자라도 작성해 주세요!!", "No Contents Check")
@@ -301,6 +333,25 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         }
     }
 
+    override fun onBackPressed() {
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("취소", "확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to  "일기 작성을 취소할까요?",
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked() {
+
+            }
+
+            override fun onButton2Clicked() {
+                finish()
+            }
+        })
+        dialog.show(this.supportFragmentManager, "Cancel Diary Writing dialog")
+    }
+
     override fun onDiaryPostLoading() {
         binding.diaryLoadingView.apply{
             setAnimation("sprout_loading.json")
@@ -312,7 +363,10 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     override fun onDiaryPostSuccess() {
         binding.diaryLoadingView.visibility = View.GONE
         goToDiaryViewer()
-        saveLastPostingDate(Date())
+        DiaryViewerActivity.diaryStateFlag = DiaryViewerActivity.CREATE
+        if (dateToString(Date()) == binding.diaryDateTv.text.toString()){
+            saveLastPostingDate(Date())
+        }
     }
 
     override fun onDiaryPostFailure(code: Int) {
@@ -345,10 +399,10 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                 })
                 dialog.show(this.supportFragmentManager, "onDiaryPostFailure Code:6000")
             }
-            6003 -> {
+            6009 -> {
                 showOneBtnDialog("해당 날짜에 이미 일기를 작성하셨습니다.", "onDiaryPostFailure Code:6003")
             }
-            6004 -> {
+            6010 -> {
                 showOneBtnDialog("오늘 작성한 일기만 공개설정하여 타인에게 전송할 수 있습니다.", "onDiaryPostFailure Code:6001")
             }
         }
@@ -363,10 +417,13 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
     }
 
     override fun onArchiveUpdateSuccess() {
-        finish()
+        binding.diaryLoadingView.visibility = View.GONE
+        goToDiaryViewer()
+        DiaryViewerActivity.diaryStateFlag = DiaryViewerActivity.UPDATE
     }
 
     override fun onArchiveUpdateFailure(code: Int) {
+        binding.diaryLoadingView.visibility = View.GONE
         when (code){
             4000 -> {
                 showOneBtnDialog("데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", "onDiaryPostFailure Code:4000")
