@@ -194,6 +194,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
     fun sendRegistrationToServer(token: String) {
         if(getUserIdx()!=0) {
             val fcmService= FcmTokenService()
+            fcmService.setFcmTokenView(this)
             fcmService.postFcmToken(getUserIdx(),token)
         }
     }

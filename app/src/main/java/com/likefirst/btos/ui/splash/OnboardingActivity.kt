@@ -169,6 +169,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     fun goToTutorial(){
+        binding.onboardingLoadingPb.visibility = View.GONE
         val intent = Intent(this, TutorialActivity::class.java)
         intent.putExtra("nickname",nickname)
         startActivity(intent)
@@ -197,7 +198,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onSignUpSuccess(login: Login) {
-        binding.onboardingLoadingPb.visibility = View.GONE
+       // binding.onboardingLoadingPb.visibility = View.GONE
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
@@ -240,8 +241,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onLoginSuccess(login: Login) {
-        binding.onboardingLoadingPb.visibility = View.GONE
-
         saveJwt(login.jwt!!)
         Log.e("LOGIN/JWT", getJwt()!!)
 

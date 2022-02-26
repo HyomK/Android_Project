@@ -32,6 +32,7 @@ import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo
@@ -49,6 +50,7 @@ import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.ui.history.HistoryUpdateFragment
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
+import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
 import com.likefirst.btos.utils.getUserIdx
@@ -62,10 +64,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     private val historyFragment = HistoryFragment()
     private val historyUpdateFragment = HistoryUpdateFragment()
     private val profileFragment= ProfileFragment()
+    private val plantFragment=PlantFragment()
     private var backPressedMillis : Long = 0
 
     var isDrawerOpen =true
     var isMailOpen=false
+    var isPlantOpen=false
+
 
     lateinit var noticeList :ArrayList<NoticeDetailResponse>
     var prevNoticeSize : Int =0
@@ -78,6 +83,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     interface onBackPressedListener {
         fun onBackPressed();
     }
+
+    fun onBottomNavHandler(id : Int){
+        binding.mainBnv.menu.findItem(id).isChecked = true
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -353,7 +364,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
 
     override fun onBackPressed() {
-        if(homeFragment.isVisible && !isMailOpen){
+        if(homeFragment.isVisible && !isMailOpen &&!isPlantOpen){
             if(System.currentTimeMillis() > backPressedMillis + 2000){
                 backPressedMillis = System.currentTimeMillis()
                 Snackbar.make(binding.frLayout, "진짜 갈꺼야...?", Snackbar.LENGTH_SHORT).show()
@@ -362,7 +373,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 finish()
             }
         } else {
-
             val fragmentList = supportFragmentManager.fragments
             for (fragment in fragmentList) {
                 if (fragment is onBackPressedListener) {
@@ -438,8 +448,19 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             "reply"->{
                 replyService.loadReply(getUserIdx(),"reply",item.reqParamIdx)
             }
+            "plant"->{
+                binding.mainBnv.menu.findItem(R.id.profileFragment).isChecked = true
+                isPlantOpen=true
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fr_layout, plantFragment, "plant_notice")
+                    .show(plantFragment)
+                    .setReorderingAllowed(true)
+                    .commitAllowingStateLoss()
+
+            }
 
         }
+
     }
 
     override fun onGetAlarmInfoFailure(code: Int, message: String) {
