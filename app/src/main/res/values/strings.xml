@@ -117,7 +117,7 @@
     <string name="onBoarding_guide_1">새로 도착한 편지는 \n우편함에서 확인할 수 있어요.</string>
     <string name="onBoarding_guide_2">일기를 작성하고, 화분을 키워보세요.</string>
     <string name="onBoarding_guide_3">작성 버튼으로 일기를 쓸 수 있어요.</string>
-    <string name="onBoarding_guide_4">시작하려면 아무곳이나 터치하세요.</string>
+    <string name="onBoarding_guide_4">&lt;&lt;&lt;시작하려면 아무곳이나 터치하세요.&gt;&gt;&gt;</string>
 
     <!--posting-->
     <string-array name="report_items">

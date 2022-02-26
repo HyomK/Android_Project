@@ -332,6 +332,25 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         }
     }
 
+    override fun onBackPressed() {
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("취소", "확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to  "일기 작성을 취소할까요?",
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked() {
+
+            }
+
+            override fun onButton2Clicked() {
+                finish()
+            }
+        })
+        dialog.show(this.supportFragmentManager, "Cancel Diary Writing dialog")
+    }
+
     override fun onDiaryPostLoading() {
         binding.diaryLoadingView.apply{
             setAnimation("sprout_loading.json")

@@ -197,7 +197,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         var plantStatus = ""
         if(userDB!!.getIsSad()) plantStatus="sad_"
-        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${3}.json")
+        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${currentLevel}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
