@@ -81,6 +81,7 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
     override fun onBackPressed() {
         val imm :InputMethodManager = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.profileSuggestDoneBtn.getWindowToken(), 0);
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
         requireActivity().supportFragmentManager.popBackStack()
     }
 
