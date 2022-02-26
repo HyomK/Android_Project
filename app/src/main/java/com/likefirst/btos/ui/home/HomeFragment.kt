@@ -186,7 +186,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             updateUserService.setUpdateIsSadView(this)
             updateUserService.updateIsSad(getUserIdx(), UserIsSad(true))
             userDB.updateIsSad(true)
-            initSadPot(animationView )
+            initSadPot(animationView)
         } else {
             initHappyPot(animationView)
         }

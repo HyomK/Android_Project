@@ -122,6 +122,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             binding.diaryToolbar.diaryToggleSelector.visibility = View.GONE
             binding.diaryToolbar.diaryToggleTv.visibility = View.GONE
             binding.diaryToolbar.diaryToggleIv.visibility = View.GONE
+            diaryToggleSwitcher(true)
         } else {
             // 일기 수정모드일 때 토글버튼 set
             if(intent.getBooleanExtra("editingMode", false) &&
