@@ -50,7 +50,11 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
         binding.birthList.dropDownHeight=300
         binding.birthList.setOnClickListener {
             binding.birthTill.isHintEnabled=false
+            binding.birthTill.visibility=View.GONE
+        }
+        binding.birthTill.setEndIconOnClickListener {
             binding.birthTill.hint=""
+            binding.birthList.showDropDown()
         }
 
 
