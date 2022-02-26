@@ -3,13 +3,11 @@ package com.likefirst.btos.ui.posting
 import android.content.Intent
 import android.view.*
 import android.widget.PopupMenu
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.DiaryViewerInfo

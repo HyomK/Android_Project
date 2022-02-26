@@ -21,6 +21,8 @@ import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.UserIsSad
@@ -36,12 +38,14 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
+import com.likefirst.btos.ui.splash.LoginActivity
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
 import com.likefirst.btos.utils.saveLastPostingDate
 import com.likefirst.btos.utils.*
 import java.time.LocalTime
 import java.util.*
+import kotlin.system.exitProcess
 
 
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
@@ -191,7 +195,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         } else {
             initHappyPot(animationView)
         }
-        // TODO: 서버 반영해서 유저가 선택한 화분에 따라서 표시되게 변경, 현재는 더미데이터일 뿐임
     }
 
     fun updatePot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
@@ -225,14 +228,14 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         animationView.setAnimation( "${plantName}/${plantName}_sad_${currentPlant.currentLevel}.json")
 
         MobileAds.initialize(requireContext())
-        val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
+//        val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
         MobileAds.setRequestConfiguration(
               RequestConfiguration.Builder()
-             .setTestDeviceIds(testDeviceIds)
+//             .setTestDeviceIds(testDeviceIds)
            .build()
            )
 
-          val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
+          val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3439488559531418/3923063443")
     // 테스트 기기 추가
     // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
           val adLoadCallback = object: RewardedAdLoadCallback() {
@@ -377,6 +380,33 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     }
 
     override fun onUpdateFailure(code: Int, message: String) {
-        // TODO: 에러처리
+        when (code){
+            2002, 2003 -> {
+                    // 로그아웃
+                    val dialog = CustomDialogFragment()
+                    val data = arrayOf("확인")
+                    dialog.arguments= bundleOf(
+                        "bodyContext" to  "유효하지 않은 회원정보입니다. 다시 로그인 해주세요.",
+                        "btnData" to data
+                    )
+                    dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+                        override fun onButton1Clicked() {
+                            val gso = getGSO()
+                            val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+                            googleSignInClient.signOut()
+                            removeJwt()
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            startActivity(intent)
+                            exitProcess(0)
+                        }
+
+                        override fun onButton2Clicked() {
+
+                        }
+                    })
+                    dialog.show(this.parentFragmentManager, "logoutDialog")
+            }
+            4000, 5016 -> Snackbar.make(requireView(), "데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
+        }
     }
 }

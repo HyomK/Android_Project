@@ -423,12 +423,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         binding.sidebarNotifyRv.adapter=adapter
     }
 
-
-
-    override fun onRestart() {
-        super.onRestart()
-        binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
-    }
+//    override fun onRestart() {
+//        super.onRestart()
+//        binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+//    }
 
     override fun onGetAlarmListSuccess(result: ArrayList<Alarm>) {
         val notificationDatabase = NotificationDatabase.getInstance(this)!!
