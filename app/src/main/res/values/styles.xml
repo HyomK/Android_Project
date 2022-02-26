@@ -90,7 +90,7 @@
         <item name="colorControlActivated">@color/green</item>
         <item name="colorControlNormal">@color/green</item>
         <item name="android:textSelectHandle">@color/green</item>
-        <item name="android:textColorHighlight">@color/beige</item>
+        <item name="android:textColorHighlight">@color/background</item>
         <item name="android:textCursorDrawable">@color/green</item>
         <item name="backgroundTint">@color/black</item>
     </style>
