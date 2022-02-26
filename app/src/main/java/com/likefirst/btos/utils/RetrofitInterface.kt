@@ -1,6 +1,7 @@
 package com.likefirst.btos.utils
 
 import com.likefirst.btos.data.entities.*
+import com.likefirst.btos.data.entities.firebase.FcmTokenRequest
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
 import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
@@ -238,6 +239,13 @@ interface RetrofitInterface {
         @Path("alarmIdx") alarmIdx : Int,
         @Query("userIdx") userIdx : Int
     ):Call<BaseResponse<AlarmInfo>>
+
+    //-----------fcm token-------------//
+    @PATCH("/auth/token")
+    fun postFcmToken(
+        @Query("userIdx") userIdx: Int,
+        @Body fcmRequest :String
+    ):Call<BaseResponse<String>>
 
 
     //---------------sendService----------//
