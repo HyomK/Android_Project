@@ -18,28 +18,26 @@
             android:id="@+id/home_main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg"
+            android:background="@drawable/bg_wall"
             tools:context=".ui.home.HomeFragment">
 
-
-            <ImageButton
-                android:id="@+id/home_write_btn"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginBottom="25dp"
-                android:layout_marginEnd="20dp"
-                android:scaleType="centerCrop"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_writediary_solid"  />
-
             <ImageView
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintHorizontal_bias="0.2"
+                android:id="@+id/home_floor"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/bg_floor"
+                />
+
+
+
+            <ImageView
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:src="@drawable/paper_bg"
                 />
@@ -56,17 +54,16 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_animation"
-                android:layout_width="330dp"
+                android:layout_width="325dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/home_floor"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.60"
+                android:layout_marginBottom="-55dp"
+                android:layout_marginStart="-15dp"
                 android:adjustViewBounds="true"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:lottie_autoPlay="true"
-                app:lottie_fileName="dicentra/dicentra_3.json"
+                app:lottie_fileName="alocasia/alocasia_0.json"
                 app:lottie_loop="true" />
 
             <ImageButton
@@ -80,7 +77,7 @@
                 app:layout_constraintBottom_toTopOf="@id/home_mail_btn"
                 android:background="@android:color/transparent"
                 android:layout_marginTop="40dp"
-                android:src="@drawable/ic_notification"
+                android:src="@drawable/notification"
 
                 />
 
@@ -92,12 +89,35 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginStart="30dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_mailbox"
+                android:src="@drawable/mailbox"
 
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/home_notification_btn" />
             <!--  -->
+            <ImageButton
+                android:id="@+id/home_write_btn"
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginBottom="25dp"
+                android:layout_marginEnd="20dp"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                android:src="@drawable/writediary"  />
 
+
+            <ImageButton
+                android:id="@+id/home_send_mail_btn"
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                app:layout_constraintBottom_toTopOf="@id/home_write_btn"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="20dp"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                android:src="@drawable/writeletter"  />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -111,6 +131,8 @@
             android:layout_gravity="center"
             tools:context=".ui.home.HomeFragment"
             />
+
+
 
     </FrameLayout>
 

@@ -51,3 +51,30 @@ fun saveUserIdx(userIdx : Int) {
 }
 
 fun getUserIdx() : Int = mSharedPreferences.getInt("userIdx", 0)
+
+fun saveUserName(name : String){
+    val editor = mSharedPreferences.edit()
+    editor.putString("UserName",name)
+    editor.apply()
+}
+
+fun getUserName():String?{
+    return mSharedPreferences.getString("UserName","undefine")
+}
+
+fun saveAlarmSound(isSound : Boolean){
+    val editor = mSharedPreferences.edit()
+    editor.putBoolean("AlarmState",isSound)
+    editor.apply()
+}
+
+fun getAlarmSound():Boolean{
+    return mSharedPreferences.getBoolean("AlarmState",true)
+}
+
+fun deleteUserInfo(){
+    val editor = mSharedPreferences.edit()
+    editor.remove("UserName")
+    editor.remove("AlarmState")
+    editor.apply()
+}

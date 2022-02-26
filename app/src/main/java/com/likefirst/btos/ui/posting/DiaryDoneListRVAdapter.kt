@@ -1,13 +1,17 @@
 package com.likefirst.btos.ui.posting
 
+import android.content.Context
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.likefirst.btos.R
 import com.likefirst.btos.databinding.ItemDiaryDoneListRvBinding
 
-class DiaryDoneListRVAdapter(private val start : String): RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHolder>() {
+class DiaryDoneListRVAdapter(private val start : String,
+                             val context : Context, val fontIdx : Int): RecyclerView.Adapter<DiaryDoneListRVAdapter.ViewHolder>() {
     val doneLists : ArrayList<String> = ArrayList()
     var doneListWatcher = ""
 
@@ -18,6 +22,9 @@ class DiaryDoneListRVAdapter(private val start : String): RecyclerView.Adapter<D
     inner class ViewHolder(val binding: ItemDiaryDoneListRvBinding): RecyclerView.ViewHolder(binding.root) {
         fun initView(doneList : String) {
             binding.itemDiaryDoneListTv.text = doneList
+            val fontList = context.resources.getStringArray(R.array.fontEng)
+            val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
+            binding.itemDiaryDoneListTv.typeface = ResourcesCompat.getFont(context,font)
         }
     }
 

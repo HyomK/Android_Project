@@ -19,7 +19,6 @@ import retrofit2.Response
 
 class DiaryService (){
 
-
     private lateinit var diaryView: MailDiaryView
     private lateinit var postDiaryView: PostDiaryView
     private lateinit var updateDiaryView: UpdateDiaryView
@@ -39,7 +38,7 @@ class DiaryService (){
         this.updateDiaryView = UpdateDiaryView
     }
 
-    fun deleteDiaryView(deleteDiaryView: DeleteDiaryView){
+    fun setDeleteDiaryView(deleteDiaryView: DeleteDiaryView){
         this.deleteDiaryView = deleteDiaryView
     }
 

@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.profile.setting
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.View
 import android.widget.ArrayAdapter
 import com.likefirst.btos.R
@@ -15,11 +16,18 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 
 import androidx.core.content.ContextCompat.getSystemService
+import com.google.android.material.snackbar.Snackbar
 import java.lang.Exception
+import android.widget.EditText
+
+import android.view.MotionEvent
+
+
+
 
 
 class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBinding::inflate),MainActivity.onBackPressedListener{
-    private var option = 0
+    private var option = -1
 
     override fun initAfterBinding() {
 
@@ -27,12 +35,16 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
         val adapter= ArrayAdapter(requireContext(), R.layout.menu_dropdown_left_item, menuItem)
         binding.profileSuggestList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.profileSuggestList.setAdapter(adapter)
-        binding.profileSuggestList.dropDownHeight=300
+       // binding.profileSuggestList.dropDownHeight=300
         binding.profileSuggestToolbar.toolbarTitleTv.text="개발자에게 건의하기"
 
        binding.profileSuggestDoneBtn.setOnClickListener {
-           sendEmail(option, binding.profileSuggestEdit.text.toString())
-           requireActivity().supportFragmentManager.popBackStack()
+           if(option ==-1){
+               Snackbar.make(requireView(),"카테고리를 선택해 주세요",Snackbar.LENGTH_SHORT).show()
+           }else{
+               sendEmail(option, binding.profileSuggestEdit.text.toString())
+               requireActivity().supportFragmentManager.popBackStack()
+           }
        }
         binding.profileSuggestToolbar.toolbarBackIc.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
@@ -46,10 +58,7 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun sendEmail(option:Int, content: String) {
-        if(option ==-1){
-            Toast.makeText(requireContext(),"카테고리를 선택해 주세요",Toast.LENGTH_SHORT).show()
-            return
-        }
+
         val menuItem = resources.getStringArray(R.array.suggest_item)
         val emailAddress = "beyondtheotherside00@gmail.com"
         val title = "건의사항 [${menuItem[option]}]"
@@ -74,4 +83,5 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
         imm.hideSoftInputFromWindow(binding.profileSuggestDoneBtn.getWindowToken(), 0);
         requireActivity().supportFragmentManager.popBackStack()
     }
+
 }

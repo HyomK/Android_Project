@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.history
 
+import android.os.Bundle
 import android.view.View
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentHistoryBinding
@@ -37,19 +38,25 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
             R.id.history_radiobutton_first->{
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.history_fragment,HistoryBasicFragment("sender"), "historysender")
+                    .replace(R.id.history_fragment,
+                        HistoryBasicFragment().apply { arguments = Bundle().apply { putString("filtering","sender") } },
+                        "historysender")
                     .commit()
             }
             R.id.history_radiobutton_second-> {
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.history_fragment, HistoryBasicFragment("diary"), "historydiary")
+                    .replace(R.id.history_fragment,
+                        HistoryBasicFragment().apply { arguments = Bundle().apply { putString("filtering","diary") } },
+                        "historydiary")
                     .commit()
             }
             R.id.history_radiobutton_third-> {
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.history_fragment, HistoryBasicFragment("letter"), "historymail")
+                    .replace(R.id.history_fragment,
+                        HistoryBasicFragment().apply { arguments = Bundle().apply { putString("filtering","letter") } },
+                        "historymail")
                     .commit()
             }
         }

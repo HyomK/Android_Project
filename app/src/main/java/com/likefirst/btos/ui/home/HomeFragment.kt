@@ -1,6 +1,5 @@
 package com.likefirst.btos.ui.home
 
-
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -22,14 +21,13 @@ import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.notify.view.SharedNotifyModel
-import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
+import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -37,10 +35,15 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
+import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveLastPostingDate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.util.*
 
@@ -54,30 +57,31 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         super.onViewCreated(view, savedInstanceState)
         sharedNotifyModel= ViewModelProvider(requireActivity()).get(SharedNotifyModel::class.java)
         sharedNotifyModel.getMsgLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
-            if(it) binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox_new)
-            else binding.homeMailBtn.setImageResource(R.drawable.ic_mailbox)
+            if(it) binding.homeMailBtn.setImageResource(R.drawable.mailbox_new)
+            else binding.homeMailBtn.setImageResource(R.drawable.mailbox)
         })
         sharedNotifyModel.getNoticeLiveData().observe(viewLifecycleOwner,Observer<Boolean>{
-            if(it) binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification_new)
-            else binding.homeNotificationBtn.setImageResource(R.drawable.ic_notification)
+            if(it) binding.homeNotificationBtn.setImageResource(R.drawable.notification_new)
+            else binding.homeNotificationBtn.setImageResource(R.drawable.notification)
         })
         sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
         sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
             val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
             val check = it.getString("plantName",null)
-            if(check!=null) updateHappyPot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
+            if(check!=null) updatePot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
         })
-
+    }
+    override fun initAfterBinding() {
         val mActivity = activity as MainActivity
-
+        val updateUserService = UpdateUserService()
+        binding.homeNotificationBtn.setOnClickListener {
+            if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
+        }
         binding.homeMailBtn.setOnClickListener {
-            Log.e("home","click mail")
             sharedNotifyModel.setMsgLiveData(false)
+            binding.homeMailBtn.setImageResource(R.drawable.mailbox)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
-            val spf = requireActivity().getSharedPreferences("notification", AppCompatActivity.MODE_PRIVATE)
-            spf.edit().putString("newMail","undefine").apply()
-
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .add(R.id.home_mailbox_layout, MailboxFragment(), "mailbox")
@@ -85,18 +89,9 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .show(MailboxFragment())
                 .commit()
         }
-
-    }
-    override fun initAfterBinding() {
-
-        val mActivity = activity as MainActivity
-
-        val updateUserService = UpdateUserService()
-        updateUserService.setUpdateIsSadView(this)
-        initFlowerPot()
-
-        binding.homeNotificationBtn.setOnClickListener {
-            if(!mActivity.mailOpenStatus())mActivity.notifyDrawerHandler("open")
+        binding.homeSendMailBtn.setOnClickListener {
+            val intent = Intent(requireContext(), MailWriteActivity::class.java)
+            startActivity(intent)
         }
 
         binding.homeWriteBtn.bringToFront()
@@ -107,6 +102,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             startActivity(intent)
         }
 
+        updateUserService.setUpdateIsSadView(this) // 처리 순서 변경
+        initFlowerPot()
 
     }
 
@@ -148,8 +145,11 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         // TODO: 서버 반영해서 유저가 선택한 화분에 따라서 표시되게 변경, 현재는 더미데이터일 뿐임
     }
 
-    fun updateHappyPot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
-        animationView.setAnimation("${plantName}/${plantName }_${currentLevel}.json")
+    fun updatePot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
+        val userDB = UserDatabase.getInstance(requireContext())?.userDao()
+        var plantStatus = ""
+        if(userDB!!.getIsSad()) plantStatus="sad_"
+        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${3}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
@@ -174,33 +174,35 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
         animationView.setAnimation( "${plantName}/${plantName}_sad_${currentPlant.currentLevel}.json")
-        //Google Admob 구현
+
         MobileAds.initialize(requireContext())
-        // 테스트 기기 추가
-        // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
         val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
         MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder()
-                .setTestDeviceIds(testDeviceIds)
-                .build()
-        )
-        // ca-app-pub-3439488559531418/3923063443
-        // ca-app-pub-3940256099942544/5224354917 -> test
-        val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
-        val adLoadCallback = object: RewardedAdLoadCallback() {
-            override fun onRewardedAdLoaded() {
-                // Ad successfully loaded.
-                Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
+              RequestConfiguration.Builder()
+             .setTestDeviceIds(testDeviceIds)
+           .build()
+           )
+
+          val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3940256099942544/5224354917")
+    // 테스트 기기 추가
+    // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
+          val adLoadCallback = object: RewardedAdLoadCallback() {
+              override fun onRewardedAdLoaded() {
+            // Ad successfully loaded.
+               Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
             }
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-                // Ad failed to load.로드하지
-                Log.e("rewardLoadError", adError.toString())
-            }
-        }
-        mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
-        animationView.setOnClickListener {
+            // Ad failed to load.
+              Log.e("rewardLoadError", adError.toString())
+              }
+          }
+          mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+          animationView.setOnClickListener {
             showUpdateSadPotDialog(mRewardedVideoAd)
-        }
+           }
+        //Google Admob 구현
+
+
     }
 
     fun getCurrentPlant():Plant{
@@ -227,7 +229,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 }
                 override fun onRewardedAdFailedToShow(adError: AdError) {
                     // Ad failed to display.
-                    Snackbar.make(requireView(), "광고를 로드하지 못하였습니다. 조금 있다 다시 시도해 주세요", Snackbar.LENGTH_SHORT).show()
                 }
             }
             mRewardedVideoAd.show(activityContext, adCallback)
@@ -257,8 +258,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     fun setWindowImage(){
         val current : LocalTime = LocalTime.now()
         val now = current.hour
-        Log.d("window", now.toString())
-
         if(now in 6..18){
             binding.windowIv.setImageResource(R.drawable.window_morning)
         }else if(now in 18..20) {

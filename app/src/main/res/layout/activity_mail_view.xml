@@ -3,8 +3,9 @@
     android:id="@+id/letterView_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_bg_received"
     android:orientation="vertical"
+    android:background="@drawable/mail_received_repeat_bg"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +25,7 @@
 
         <FrameLayout
             android:id="@+id/letterWrite_send_op"
-            android:layout_width="50dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,6 +48,7 @@
                 app:endIconTint="@android:color/black"
                 app:elevation="0dp"
                 android:outlineProvider="none"
+                android:visibility="gone"
                 >
 
                 <AutoCompleteTextView
@@ -79,7 +81,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:layout_gravity="start"
             android:background="@color/background" />
@@ -95,6 +97,7 @@
             android:src="@drawable/ic_dots"
             android:background="@color/transparent"
             android:contextClickable="false"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -107,6 +110,7 @@
             android:layout_marginEnd="70dp"
             android:src="@drawable/ic_send"
             android:background="@color/transparent"
+            android:visibility="gone"
             />
 
 
@@ -125,7 +129,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:text="bodydddddddd"
                 android:id="@+id/mailView_body_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +138,7 @@
                 android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
                 android:textColor="@color/black"
                 android:textSize="14dp"
-
+                android:lineHeight="23dp"
                 />
             <TextView
                 android:layout_marginTop="30dp"
@@ -148,6 +151,7 @@
                 android:textColor="@color/black"
                 android:textSize="14dp"
                 android:text="date"
+                android:lineHeight="23dp"
                 android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
                 />
             <TextView
@@ -156,6 +160,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="14dp"
+                android:layout_marginTop="5dp"
+                android:lineHeight="23dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mailView_date_tv"

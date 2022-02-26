@@ -1,7 +1,5 @@
 package com.likefirst.btos.ui.profile.setting
 
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
@@ -22,8 +20,10 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.EditDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.utils.deleteUserInfo
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.removeJwt
+import com.likefirst.btos.utils.saveAlarmSound
 import kotlin.system.exitProcess
 
 class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)
@@ -41,18 +41,29 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             requireActivity().supportFragmentManager.popBackStack()
         }
         binding.settingName.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fr_layout, SetNameFragment(),"setName")
-                .show(SetNameFragment())
-                .addToBackStack(null)
-                .commit()
+            val dialog = SettingNameDialog()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "bodyContext" to "변경할 닉네임을 입력해주세요",
+                "btnData" to btn
+            )
+            dialog.setButtonClickListener(object:SettingNameDialog.OnButtonClickListener{
+                override fun onButton1Clicked() {}
+                override fun onButton2Clicked() {}
+            })
+            dialog.show(requireActivity().supportFragmentManager, "SettingNameDialog")
         }
         binding.settingBirth.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fr_layout, SetBirthFragment(),"setBirth")
-                .show(SetBirthFragment())
-                .addToBackStack(null)
-                .commit()
+            val dialog = SettingBirthDialog()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "btnData" to btn
+            )
+            dialog.setButtonClickListener(object:SettingBirthDialog.OnButtonClickListener{
+                override fun onButton1Clicked() {}
+                override fun onButton2Clicked() {}
+            })
+            dialog.show(requireActivity().supportFragmentManager, "SettingBirthDialog")
 
         }
         binding.settingFont.setOnClickListener {
@@ -74,7 +85,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","로그아웃")
             dialog.arguments= bundleOf(
-                "bodyContext" to "로그아웃 하시겠습니까?\n 그동안 데이터는 연동되었던 계정에 보관됩니다",
+                "bodyContext" to "로그아웃 하시겠습니까?\n그동안의 데이터는 연동되었던 계정에 보관됩니다.",
                 "btnData" to btn
             )
             // 버튼 클릭 이벤트 설정
@@ -86,9 +97,11 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                     val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
                     googleSignInClient.signOut()
                     removeJwt()
+                    deleteUserInfo()
                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
                     val fcmDatabase=FCMDatabase.getInstance(requireContext())
                     fcmDatabase?.fcmDao()?.delete(fcmDatabase.fcmDao().getData())
+
                     //해당 앱의 루트 액티비티를 종료시킨다.
                     val mActivity = activity as MainActivity
                      if(Build.VERSION.SDK_INT >= 16){
@@ -118,10 +131,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
         binding.settingPush.setOnClickListener {
             btnPush=pushToggleSwitcher(btnPush)
             isPush = btnPush
-            val spf = requireActivity().getSharedPreferences("Alarm", FirebaseMessagingService.MODE_PRIVATE) // 기존에 있던 데
-            val editor= spf.edit()
-            editor.putBoolean("state",isPush)
-            editor.apply()
+            saveAlarmSound(isPush)
             settingService.setSettingUserView(this)
             settingService.setPushAlarm(userDatabase.userDao().getUserIdx(), UserPush(btnPush))
         }
@@ -164,6 +174,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                                 "btnData" to btn
                             )
                             isDeleted = true
+                            deleteUserInfo()
                             settingService.setSettingUserView(this@SettingFragment)
                             settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{
@@ -182,6 +193,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
                                     val fcmDatabase=FCMDatabase.getInstance(requireContext())
                                     fcmDatabase?.fcmDao()?.delete(fcmDatabase.fcmDao().getData())
+
                                     //해당 앱의 루트 액티비티를 종료시킨다.
                                     val mActivity = activity as MainActivity
                                     if(Build.VERSION.SDK_INT >= 16){

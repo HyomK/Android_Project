@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.likefirst.btos.ui.main.MainActivity
@@ -20,6 +21,7 @@ import com.likefirst.btos.utils.fcm.MyWorker
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
+import com.likefirst.btos.utils.getAlarmSound
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -29,6 +31,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.i("### msg : ", remoteMessage.toString());
+
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){
             sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body!!)
@@ -38,6 +41,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 handleNow();
             }
         }
+
         // 다른 기기에서 서버로 보냈을 때
         else if(remoteMessage.data.isNotEmpty()){
             val title = remoteMessage.data["title"]!!
@@ -96,7 +100,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
     fun sendNotification(title: String?, body: String) {
-        Log.e("fcm","sendNotification")
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // 액티비티 중복 생성 방지
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -148,13 +151,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 알림에 대한 UI 정보와 작업을 지정
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.emotion4)     // 아이콘 설정
+            .setSmallIcon(R.mipmap.ic_launcher)     // 아이콘 설정
             .setContentTitle(title)     // 제목
             .setContentText(body)     // 메시지 내용
             .setAutoCancel(true)
             .setSound(soundUri)     // 알림 소리
             .setContentIntent(pendingIntent)       // 알림 실행 시 Intent
             .setDefaults(Notification.DEFAULT_SOUND)
+
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -168,10 +172,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
 
-        saveMessage()
-
-        val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
-        if(spf.getBoolean("state",true)){
+       // saveMessage()
+        //TODO 알림 추후
+        if(getAlarmSound()){
            notificationManager.notify(uniId, notificationBuilder.build())
         }
 

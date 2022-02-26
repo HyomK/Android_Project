@@ -3,17 +3,20 @@ package com.likefirst.btos.ui.splash
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
@@ -31,6 +34,8 @@ import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.service.FcmTokenService
+import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.service.AuthService
@@ -40,18 +45,14 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.getJwt
-import com.likefirst.btos.utils.saveJwt
-import com.likefirst.btos.utils.saveUserIdx
-import java.util.regex.Pattern
+import com.likefirst.btos.utils.*
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
-    SignUpView, GetProfileView, LoginView, PlantListView {
+    SignUpView, GetProfileView, LoginView, PlantListView ,FcmTokenView{
 
     val authService = AuthService()
     val plantService= PlantService()
+    val fcmTokenService= FcmTokenService()
     lateinit var email: String
     private var auth : FirebaseAuth? = null
 
@@ -63,20 +64,68 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     private var userName: String? = null
     private var nickname: String? = null
+    private var textWatcher : TextWatcher? = null
+    private var checkName : Boolean = false
+    private var checkAge : Boolean = false
 
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
     private var mChildEventListener: ChildEventListener? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val dialog = LoginDialogFragment()
         dialog.show(supportFragmentManager, "")
+
         mAuth = FirebaseAuth.getInstance()
         initFirebaseDatabase()
         initFirebaseAuth()
+        initListener()
+    }
 
+    private fun initListener() {
+        textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString() == ""){
+                    checkName = false
+                    binding.nicknameError.visibility = View.VISIBLE
+                    binding.nicknameError.text = "닉네임을 입력해주세요."
+                }
+                else{
+                    checkName = true
+                    binding.nicknameError.visibility = View.GONE
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        }
+        binding.onboardingNameEt.addTextChangedListener(textWatcher)
+
+        binding.onboardingNotageCb.setOnCheckedChangeListener { compoundButton, isChecked ->
+            var birth_string = binding.onboardingAgelist.text.toString()
+            if(!isChecked && birth_string == "선택안함"){
+                checkAge = false
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "나이를 선택해주세요.\n공개하고 싶지 않다면 아래를 클릭하세요!"
+            }else if(isChecked) {
+                checkAge = true
+                binding.ageError.visibility = View.VISIBLE
+                binding.ageError.text = "생년 정보가 반영되지 않습니다."
+            }else{
+                checkAge = true
+                binding.ageError.visibility = View.GONE
+            }
+        }
+
+        binding.onboardingAgelist.addTextChangedListener {
+            if(binding.onboardingAgelist.text.toString()!="선택안함"){
+                checkAge = true
+                binding.ageError.visibility = View.GONE
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -86,65 +135,32 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         binding.onboardingAgelist.setAdapter(arrayAdapter)
         binding.onboardingAgelist.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
         binding.onboardingAgelist.dropDownHeight = 800
-
-        //나이 선택 시 키보드 내리기
-        binding.onboardingAgeTil.setOnClickListener {
-            hideKeyboard(it)
-        }
-        binding.onboardingAgelist.setOnClickListener {
-            hideKeyboard(it)
-        }
-
-        binding.onboardingNotageCb.setOnClickListener {
-            if(binding.onboardingNotageCb.isChecked){
-                binding.ageError.visibility = View.VISIBLE
-                binding.ageError.text = "생년 정보가 들어가지 않습니다."
-            }
-            else{
-                binding.ageError.visibility = View.GONE
-            }
-        }
+        binding.onboardingAgelist.getOffsetForPosition(0f,12f)
 
         binding.onboardingOkayTv.setOnClickListener {
 
-            var checkvali = false
             var birth : Int? = 0
-
-            // loginactivity에서 넘어온 email 받기
-            val intent = getIntent()
-            val bundle = intent.getBundleExtra("mypackage")
-            email = bundle?.getString("email").toString()
-            nickname = binding.onboardingNameEt.text.toString()
-            var birth_string = binding.onboardingAgelist.text.toString()
-
-
-            //닉네임 : 빈칸, 한글, 비속어 금지
-            // 생일 선택 여부
-
-            if(nickname == ""){
-                binding.ageError.visibility = View.GONE
+            Log.e("회원가입","확인 누른 곳")
+            if(binding.onboardingNameEt.text.toString() == ""){
+                checkName = false
                 binding.nicknameError.visibility = View.VISIBLE
                 binding.nicknameError.text = "닉네임을 입력해주세요."
             }
-            else if(!Pattern.matches("^[가-힣]*\$",nickname)){
-                binding.ageError.visibility = View.GONE
-                binding.nicknameError.visibility = View.VISIBLE
-                binding.nicknameError.text = "한글만 가능합니다."
-            }
-            else if(birth_string == "선택안함" && !binding.onboardingNotageCb.isChecked) {
-                binding.nicknameError.visibility = View.GONE
+            else if(!binding.onboardingNotageCb.isChecked && binding.onboardingAgelist.text.toString() == "선택안함"){
+                checkAge = false
                 binding.ageError.visibility = View.VISIBLE
                 binding.ageError.text = "나이를 선택해주세요.\n공개하고 싶지 않다면 아래를 클릭하세요!"
             }
-            else {
-                binding.nicknameError.visibility = View.GONE
-                binding.ageError.visibility = View.GONE
-                checkvali = true
+            else if(checkName && checkAge){
+                // loginactivity에서 넘어온 email 받기
+                val intent = getIntent()
+                val bundle = intent.getBundleExtra("mypackage")
+                email = bundle?.getString("email").toString()
+                nickname = binding.onboardingNameEt.text.toString()
+
                 if(binding.onboardingNotageCb.isChecked) birth = null
                 else birth == binding.onboardingAgelist.text.toString().toInt()
-            }
 
-            if(checkvali){
                 Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
                 authService.setSignUpView(this)
                 authService.signUp(UserSign(email, nickname!!, birth))
@@ -170,6 +186,9 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 firebaseAuthWithGoogle(result.signInAccount)
                 updateProfile()
             }
+            else{
+                updateProfile()
+            }
         }
     }
 
@@ -179,7 +198,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onSignUpSuccess(login: Login) {
         binding.onboardingLoadingPb.visibility = View.GONE
-        Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
@@ -304,14 +322,13 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
-                    Snackbar.make(binding.root,"파이어베이스 토큰 생성 성공",Snackbar.LENGTH_SHORT).show()
+                    Log.e("Firebase token : ", taskId.toString())
                     initValues()
                     updateProfile()
-                    goToTutorial() //TODO 위치 수정
-
+                    goToTutorial()
                 }else{
                     // 틀렸을 때
-                    Log.e("Firebase-login fail",task.exception?.message.toString())
+                    Log.e("Firebase",task.exception?.message.toString())
                 }
             }
     }
@@ -335,6 +352,10 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 Log.e("FIREBASE", msg)
                 userData.email = email.substring(0, email.indexOf('@'))
                 userData.fcmToken= token
+
+                fcmTokenService.setFcmTokenView(this)
+                fcmTokenService.postFcmToken(getUserIdx(),token)
+
                 val fcmDatabase = FCMDatabase.getInstance(this)!!
                 if(fcmDatabase.fcmDao().getData() ==null){
                     fcmDatabase.fcmDao().insert(userData)
@@ -343,6 +364,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 }
 
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
+
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
                     .setValue(userData)
@@ -362,7 +384,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                // child 내에 있는 데이터만큼 반복합니다.
+                Log.e("Firebase","child added")
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -370,11 +392,32 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
             override fun onCancelled(databaseError: DatabaseError) {}
         }
+
+
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
+    }
+
+    //edittext 이외의 화면 클릭시 키보드 내리기
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val view = currentFocus
+        if (view != null && (ev.action == MotionEvent.ACTION_UP || ev.action == MotionEvent.ACTION_MOVE) && view is EditText && !view.javaClass.name.startsWith(
+                "android.webkit.")
+        ) {
+            val scrcoords = IntArray(2)
+            view.getLocationOnScreen(scrcoords)
+            val x = ev.rawX + view.getLeft() - scrcoords[0]
+            val y = ev.rawY + view.getTop() - scrcoords[1]
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                hideKeyboard(view)
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
+        val gso = getGSO()
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
         val intent = Intent(this,LoginActivity::class.java)
         finish()
         startActivity(intent)
@@ -388,8 +431,18 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onDestroy() {
         super.onDestroy()
-        val gso = getGSO()
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        googleSignInClient.signOut()
+        binding.onboardingNameEt.removeTextChangedListener(textWatcher)
+    }
+
+    override fun onLoadingFcmToken() {
+
+    }
+
+    override fun onSuccessFcmToken() {
+        Log.e("FCM-API - success","success")
+    }
+
+    override fun onFailureFcmToken(code : Int, msg: String) {
+        Log.e("FCM-API - fail","${code}= ${msg}")
     }
 }
