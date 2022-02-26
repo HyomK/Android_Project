@@ -28,7 +28,11 @@ data class User (
 data class UserSign(
     @ColumnInfo(name = "email") var email: String="",
     @ColumnInfo(name = "nickName") var nickName: String="",
-    @ColumnInfo(name = "birth") var birth: Int = 0,
+    @ColumnInfo(name = "birth") var birth: Int? = 0,
+)
+
+data class UserEmail(
+    @ColumnInfo(name = "email") var email: String=""
 )
 
 data class UserIsSad(

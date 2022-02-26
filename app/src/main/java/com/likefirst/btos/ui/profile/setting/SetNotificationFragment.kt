@@ -4,18 +4,28 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserAge
 import com.likefirst.btos.data.entities.UserOther
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.users.response.BlackList
+import com.likefirst.btos.data.remote.users.response.BlockUser
+import com.likefirst.btos.data.remote.users.service.BlackListService
 import com.likefirst.btos.data.remote.users.service.SettingUserService
+import com.likefirst.btos.data.remote.users.view.BlackListView
+import com.likefirst.btos.data.remote.users.view.SetBlockView
 import com.likefirst.btos.data.remote.users.view.SetSettingUserView
+import com.likefirst.btos.data.remote.users.view.UnblockView
 import com.likefirst.btos.databinding.FragmentSetNotificationBinding
 import com.likefirst.btos.ui.BaseFragment
+import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.ui.main.EditDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.utils.toArrayList
 
 class SetNotificationFragment:BaseFragment<FragmentSetNotificationBinding>(FragmentSetNotificationBinding::inflate)
-    ,MainActivity.onBackPressedListener, SetSettingUserView {
+    ,MainActivity.onBackPressedListener, SetSettingUserView ,BlackListView ,UnblockView{
 
     private var isbtn1Touched : Boolean = false
     private var isbtn2Touched : Boolean = false
@@ -27,20 +37,12 @@ class SetNotificationFragment:BaseFragment<FragmentSetNotificationBinding>(Fragm
         btn1 = userDatabase.userDao().getRecOthers()!!
         btn2 = userDatabase.userDao().getRecSimilarAge()!!
         val settingService = SettingUserService()
-        val arraylist = arrayListOf<String>("user1","user2","user3")
-        val adapter = BlackListRVAdapter(arraylist)
 
-        adapter.setOnListener(object:BlackListRVAdapter.BlackListListener{
-            override fun onClick(userName : String) {
-                super.onClick(userName)
-                //api user이름 전달
-                Log.d("username",userName)
-            }
-            override fun removeUser(pos: Int) {
+        val blackListService= BlackListService()
+        blackListService.setBlackListView(this)
+        val userIdx = UserDatabase.getInstance(requireContext())!!.userDao().getUserIdx()!!
+        blackListService.getBlackList(userIdx)
 
-            }
-        })
-        binding.setNotifyRv.adapter=adapter
 
         //initToggle
         Log.e("NOTIFICATION Other Age",btn1.toString()+btn2.toString())
@@ -85,10 +87,42 @@ class SetNotificationFragment:BaseFragment<FragmentSetNotificationBinding>(Fragm
             bg.visibility = View.INVISIBLE
         } else {
             bg.visibility= View.VISIBLE
-           // bg.setImageResource(R.drawable.select_toggle)
+            // bg.setImageResource(R.drawable.select_toggle)
             btn.setImageResource(R.drawable.ic_toggle_true)
         }
         return !status
+    }
+
+    fun initBlackList(list : ArrayList<BlockUser>){
+        val arraylist = arrayListOf<String>("user1","user2","user3")
+        val adapter = BlackListRVAdapter(list)
+        val blackListService= BlackListService()
+        blackListService.setBlackListView(this)
+        blackListService.setUnBlockView(this)
+        val userIdx = UserDatabase.getInstance(requireContext())!!.userDao().getUserIdx()!!
+
+        adapter.setOnListener(object:BlackListRVAdapter.BlackListListener {
+            override fun removeUser(user: BlockUser,pos: Int) {
+
+                val dialog = CustomDialogFragment()
+                val btn = arrayOf("취소", "차단해제")
+                dialog.arguments = bundleOf(
+                    "bodyContext" to "차단을 해제하시겠습니까?",
+                    "btnData" to btn
+                )
+                // 버튼 클릭 이벤트 설정
+                dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+                    override fun onButton1Clicked() {}
+                    override fun onButton2Clicked() {
+                        blackListService.unBlock(user.blockIdx)
+                        adapter.removeItem(pos)
+                    }
+                })
+                dialog.show(requireActivity().supportFragmentManager, "notification")
+            }
+        })
+        binding.setNotifyRv.adapter=adapter
+
     }
 
     fun initToggle(status: Boolean , btn : ImageView, bg:ImageView) {
@@ -130,6 +164,23 @@ class SetNotificationFragment:BaseFragment<FragmentSetNotificationBinding>(Fragm
     override fun onSetSettingUserViewFailure(code: Int, message: String) {
         binding.setNotifyLoadingPb.visibility = View.GONE
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onUnBlockViewSuccess(result: String) {
+
+    }
+
+    override fun onUnBlockViewFailure(code: Int, message: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetBlockListViewSuccess(result: ArrayList<BlockUser>) {
+        Log.e("Blacklsit", result.toString())
+        initBlackList(result)
+    }
+
+    override fun onGetBlockListViewFailure(code: Int, message: String) {
+        Log.e("Blacklsit", "조회 실패")
     }
 
 }

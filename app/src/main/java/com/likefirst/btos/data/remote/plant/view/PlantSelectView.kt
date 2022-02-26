@@ -5,6 +5,7 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 
 interface PlantSelectView{
     fun onPlantSelectError(Dialog : CustomDialogFragment)
+    fun onPlantSelectLoading()
     fun onPlantSelectSuccess(plantIdx:Int ,request: PlantResponse)
     fun onPlantSelectFailure(code: Int, message: String)
 }

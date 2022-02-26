@@ -2,6 +2,7 @@ package com.likefirst.btos.data.remote.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
+import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.remote.users.response.GetProfileResponse
 import com.likefirst.btos.data.remote.users.response.LoginResponse
@@ -39,7 +40,7 @@ class AuthService {
         this.getprofileView = getprofileView
     }
 
-    fun login(email : String){
+    fun login(email : UserEmail){
 
         loginView.onLoginLoading()
 

@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.profile.setting
 
+import android.content.Context.MODE_PRIVATE
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,6 +14,7 @@ import com.likefirst.btos.databinding.FragmentNicknameBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.utils.saveUserName
 
 class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBinding::inflate),
     MainActivity.onBackPressedListener, SetSettingUserView {
@@ -50,6 +52,7 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
                 if(isSuccess){
                     settingService.setSettingUserView(this)
                     settingService.setName(userDB!!.getUserIdx(), UserName(binding.nicknameEdit.text.toString()))
+                    saveUserName(binding.nicknameEdit.text.toString())
                 }else{
 
                 }
@@ -60,6 +63,7 @@ class SetNameFragment:BaseFragment<FragmentNicknameBinding>(FragmentNicknameBind
         }
     }
     override fun onBackPressed() {
+
         requireActivity().supportFragmentManager.popBackStack()
     }
 

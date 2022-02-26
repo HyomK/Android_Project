@@ -2,6 +2,8 @@ package com.likefirst.btos.data.remote.posting.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass
+import com.likefirst.btos.data.remote.BaseResponse
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.utils.RetrofitInterface
@@ -18,22 +20,21 @@ class MailReplyService() {
         this.mailReplyView=mailReplyView
     }
 
-    fun loadReply(userId:Int, type:String, Idx:String){
+    fun loadReply(userId:Int, type:String, idx:Int){
 
-        mailReplyView.onReplyLoading()
 
-        ReplyService. loadReply(userId, type,Idx).enqueue(object: Callback<MailReplyResponse>{
-            override fun onResponse(call: Call<MailReplyResponse>, response: Response<MailReplyResponse>) {
-                val replyResponse :MailReplyResponse =response.body()!!
+        ReplyService. loadReply(userId, type, idx).enqueue(object: Callback<BaseResponse<MailInfoResponse>>{
+            override fun onResponse(call: Call<BaseResponse<MailInfoResponse>>, response: Response<BaseResponse<MailInfoResponse>>) {
+                val replyResponse :BaseResponse<MailInfoResponse> =response.body()!!
                 Log.e("Reply/API", replyResponse.toString())
 
                 when(replyResponse.code){
-                    1000->mailReplyView.onReplySuccess( replyResponse.result.content)
+                    1000->mailReplyView.onReplySuccess( replyResponse.result)
                     else->mailReplyView.onReplyFailure( replyResponse.code, replyResponse.message)
                 }
             }
 
-            override fun onFailure(call: Call<MailReplyResponse>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<MailInfoResponse>>, t: Throwable) {
                 mailReplyView.onReplyFailure(4000,"데이터베이스 연결에 실패하였습니다.")
                 mailReplyView.onReplyFailure(6006,"일기 복호화에 실패하였습니다.")
             }

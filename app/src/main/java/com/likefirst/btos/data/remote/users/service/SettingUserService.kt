@@ -94,6 +94,7 @@ class SettingUserService {
         })
     }
 
+
     fun leave(userIdx : Int, status : UserLeave){
         setSettingUserView.onSetSettingUserViewLoading()
         SettingUserService.leave(userIdx, status).enqueue(object: Callback<BaseResponse<String>> {
@@ -105,6 +106,7 @@ class SettingUserService {
             }
         })
     }
+
 
     fun baseResponseSuccess(response : Response<BaseResponse<String>>){
         val baseResponse: BaseResponse<String> = response.body()!!

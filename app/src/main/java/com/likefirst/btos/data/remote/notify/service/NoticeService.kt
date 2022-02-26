@@ -24,7 +24,6 @@ class NoticeService {
         NoticeService.loadNotice().enqueue(object: Callback<NoticeAPIResponse> {
             override fun onResponse(call: Call<NoticeAPIResponse>, response: Response<NoticeAPIResponse>) {
                 val noticeResponse: NoticeAPIResponse? =response.body()
-                Log.e("Notice/API",  noticeResponse.toString())
                 if(noticeResponse==null){
                     noticeView.onNoticeAPIError(errorDialog())
                     return

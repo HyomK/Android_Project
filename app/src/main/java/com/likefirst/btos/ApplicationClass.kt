@@ -4,12 +4,15 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.likefirst.btos.config.XAccessTokenInterceptor
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.SocketException
 import java.util.concurrent.TimeUnit
-
 
 
 
@@ -24,7 +27,6 @@ class ApplicationClass : Application() {
         const val BASE_URL: String = DEV_URL
 
         lateinit var mSharedPreferences: SharedPreferences
-
         lateinit var retrofit: Retrofit
     }
 
@@ -48,5 +50,27 @@ class ApplicationClass : Application() {
             .build()
 
         mSharedPreferences = applicationContext.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+
+        RxJavaPlugins.setErrorHandler{
+            var error = it
+            if(error is UndeliverableException){
+                error = it.cause
+            }
+            if( error is IOException || error is SocketException){
+                return@setErrorHandler
+            }
+            if(error is InterruptedException){
+                return@setErrorHandler
+            }
+            if(error is NullPointerException || error is IllegalArgumentException){
+                Thread.currentThread().uncaughtExceptionHandler
+                    .uncaughtException(Thread.currentThread(), error)
+            }
+            if(error is IllegalStateException){
+                Thread.currentThread().uncaughtExceptionHandler
+                    .uncaughtException(Thread.currentThread(), error)
+                return@setErrorHandler
+            }
+        }
     }
 }

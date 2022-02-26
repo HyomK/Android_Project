@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.archive
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,20 +17,20 @@ import java.util.*
 
 class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(FragmentArchiveCalendarBinding::inflate){
 
-    var pageIndex = 0
     lateinit var currentDate : Date
     val mCalendar: Calendar = GregorianCalendar.getInstance()
 
     companion object {
+        var pageIndex = 0
         var datePickerFlag = true
     }
 
     override fun initAfterBinding() {
-        initCalendar(0)
+        initCalendar(0, false)
         setDatePicker()
     }
 
-    fun initCalendar(viewMode : Int){
+    fun initCalendar(viewMode : Int, reLoadFlag : Boolean){
         mCalendar.time = Date()
         val monthNames: Array<String> = resources.getStringArray(R.array.month)
         val MONTH_TODAY = mCalendar.get(Calendar.MONTH)
@@ -43,7 +44,12 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
         binding.archiveCalendarVp.apply {
             adapter = calendarAdapter
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-            setCurrentItem(Int.MAX_VALUE/2, false)
+            offscreenPageLimit = 1
+            if(reLoadFlag){
+                setCurrentItem(Int.MAX_VALUE/2+ pageIndex, false)
+            } else {
+                setCurrentItem(Int.MAX_VALUE/2, false)
+            }
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
 
@@ -123,12 +129,12 @@ class ArchiveCalendarFragment : BaseFragment<FragmentArchiveCalendarBinding>(Fra
             Log.d("date", "$year, $month")
             when (checkedId){
                 R.id.archive_calendar_done_list_rb -> {
-                    initCalendar(0)
-                    setCalendar(year, month)
+                    initCalendar(0, true)
+//                    setCalendar(year, month)
                 }
                 R.id.archive_calendar_emotion_rb -> {
-                    initCalendar(1)
-                    setCalendar(year, month)
+                    initCalendar(1, true)
+//                    setCalendar(year, month)
                 }
             }
         }

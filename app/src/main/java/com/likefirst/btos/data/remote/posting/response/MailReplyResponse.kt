@@ -1,26 +1,21 @@
 package com.likefirst.btos.data.remote.posting.response
-
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.likefirst.btos.data.remote.response.MailReplyDetailResponse
-import com.likefirst.btos.data.remote.response.MailResultReply
+import kotlinx.android.parcel.Parcelize
 
-data class MailReplyDetailResponse(
+
+
+@Parcelize
+data class ReplyInfo(
     @SerializedName("replyIdx") val replyIdx : Int,
-    @SerializedName("replierIdx") val replierIdx : Int,
-    @SerializedName("receiverIdx") val receiverIdx : Int,
-    @SerializedName("content") val content :String
-)
+    @SerializedName("content") val content : String,
 
+):Parcelable
 
+@Parcelize
 data class MailReplyResponse(
-    @SerializedName("isSuccess") val isSuccess: Boolean,
-    @SerializedName("code") val code : Int,
-    @SerializedName("message") val message : String,
-    @SerializedName("result") val result : MailResultReply
-)
-
-data class MailResultReply(
-    @SerializedName("type") val type : String,
-    @SerializedName("content") val content : ArrayList<MailReplyDetailResponse>,
+    @SerializedName("mail") val mail :ReplyInfo,
+    @SerializedName("senderNickName") val senderNickName : String,
     @SerializedName("senderFontIdx") val senderFontIdx : Int,
-)
+):Parcelable
+

@@ -16,24 +16,20 @@ data class Diary(
     @SerializedName("diaryIdx") val diaryIdx : Int,
     @SerializedName("emotionIdx") val emotionIdx : Int,
     @SerializedName("diaryDate") val diaryDate : String,
-    @SerializedName("isPublic") val isPublic: Int,
     @SerializedName("content") val content :String,
     @SerializedName("doneList") val doneList :ArrayList<DoneList>,
-    @SerializedName("senderNickName") val senderNickName :String,
-    @SerializedName("senderFontIdx") val senderFontIdx :Int
+
 ):Parcelable
 
 
 data class MailDiaryResponse(
-    @SerializedName("isSuccess") val isSuccess: Boolean,
-    @SerializedName("code") val code : Int,
-    @SerializedName("message") val message : String,
-    @SerializedName("result") val result : ResultDiary
-)
-
-data class ResultDiary(
-    @SerializedName("type") val type : String,
-    @SerializedName("content") val content :  Diary
+    @SerializedName("diaryIdx") val diaryIdx : Int,
+    @SerializedName("emotionIdx") val emotionIdx : Int,
+    @SerializedName("diaryDate") val diaryDate : String,
+    @SerializedName("content") val content :String,
+    @SerializedName("doneList") val doneList :ArrayList<DoneList>,
+    @SerializedName("senderNickName") val senderNickName :String,
+    @SerializedName("senderFontIdx") val senderFontIdx :Int
 
 )
 

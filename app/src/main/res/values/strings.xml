@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BTOS</string>
+    <string name="app_name">저편너머</string>
     <string name="google_Admob_ID_test">"ca-app-pub-3940256099942544~3347511713"</string>
     <string name="google_Admob_ID_prod">"ca-app-pub-3439488559531418~5946591557"</string>
 
@@ -7,7 +7,7 @@
     <string name ="msg_token_fmt"> 파이어베이스 토큰: %s</string>
     <string name="btos_default_web_client_id" translatable="false">969188195320-ne8ipt9t7o9lgvp403r2afkn2sfvfc1n.apps.googleusercontent.com</string>
     <string name ="firebase_server_key">AAAA4ageO_g:APA91bGMNBpRuyibDVwa9RptTRXZb5wFmMXk1Z9VE_tVyb0zl5re63CGQUgudTuXBaJnXTQzP__2m-YwSQ7Mefca20Fo_OWaRK23NMGKUQhGtwtP3kblibvqHapWqlYaptwhYXIqqhBw</string>
-    <string name ="default_notification_channel_id">LinkedFirst_BTOS</string>
+    <string name ="default_notification_channel_id">LikeFirst_BTOS</string>
 
 
     <string-array name="onboarding_agelist">
@@ -113,6 +113,12 @@
         <item>1922</item>
     </string-array>
 
+    <!--onBoarding-->
+    <string name="onBoarding_guide_1">새로 도착한 편지는 \n우편함에서 확인할 수 있어요.</string>
+    <string name="onBoarding_guide_2">일기를 작성하고, 화분을 키워보세요.</string>
+    <string name="onBoarding_guide_3">작성 버튼으로 일기를 쓸 수 있어요.</string>
+    <string name="onBoarding_guide_4">&lt;&lt;&lt;시작하려면 아무곳이나 터치하세요.&gt;&gt;&gt;</string>
+
     <!--posting-->
     <string-array name="report_items">
         <item>삭제</item>
@@ -132,12 +138,16 @@ Ac turpis egestas sed tempus urna et pharetra pharetra massa. Velit ut tortor pr
 
 Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum tempus egestas sed. Laoreet suspendisse interdum consectetur libero. Eu augue ut lectus arcu bibendum at varius vel pharetra. Enim diam vulputate ut pharetra sit amet aliquam. In hendrerit gravida rutrum quisque non tellus orci ac auctor. Magna fermentum iaculis eu non diam. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis. Velit laoreet id donec ultrices tincidunt arcu non sodales. Fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien. Bibendum ut tristique et egestas quis ipsum. Faucibus vitae aliquet nec ullamcorper sit amet risus nullam eget. Egestas purus viverra accumsan in nisl nisi. Tristique senectus et netus et malesuada fames ac. Sed felis eget velit aliquet sagittis. Lobortis elementum nibh tellus molestie nunc non. Nunc sed id semper risus in. Odio morbi quis commodo odio aenean sed.</string>
 
+    <!--diary viewer-->
+    <string name="diary_viewer_option_delete">삭제</string>
+    
     <!--archive list-->
     <string name="archive_list_set_period">기간설정</string>
     <string name="archive_list_period_from">부터</string>
     <string name="archive_list_period_to">까지</string>
     <string name="archive_list_period_cancel">취소</string>
     <string name="archive_list_period_submit">완료</string>
+    <string name="archive_list_no_search_result">검색 결과가 없습니다.</string>
 
     <!--archive calendar-->
     <string name="archive_calendar_radio_done_list">DONE LIST</string>
@@ -160,14 +170,17 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string-array name="suggest_item">
         <item>버그 제보</item>
         <item>악성 유저 신고</item>
-        <item>추가되었으면 하는 기능</item>
+        <item>기능 추가</item>
         <item>기타</item>
     </string-array>
 
-    <string name="profile_notice">안녕하세요. 저편너머입니다 공지공지공지공지 공지공지공지공지 공지공지공지공지
-        공지공지공 공지공지공지공지 공지공지공지공지 공지공지공지공지  공지공지공지공지 공지공지공지공지 공지공지공지공지 </string>
 
     <string name="historydetail">부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.
     부족하면 부족한대로 채우고 충분하면 충분한대로 매력 발산하면서 멋지게 살자.</string>
+
+
+    <string name="opensource"></string>
+    <string name="undlerline_look"><u>보기</u></string>
+    <string name="commingsoon">Coming Soon…!</string>
 
 </resources>

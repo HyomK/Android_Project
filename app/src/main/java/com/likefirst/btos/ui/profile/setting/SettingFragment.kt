@@ -1,11 +1,16 @@
 package com.likefirst.btos.ui.profile.setting
 
-import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserLeave
 import com.likefirst.btos.data.entities.UserPush
@@ -17,10 +22,11 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.EditDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.ui.splash.LoginActivity
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.removeJwt
+import com.likefirst.btos.utils.*
 import kotlin.system.exitProcess
+import com.google.firebase.auth.FirebaseAuth
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
+
 
 class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)
     , MainActivity.onBackPressedListener, SetSettingUserView {
@@ -28,6 +34,15 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     val settingService = SettingUserService()
     var isDeleted : Boolean = false
     var isPush : Boolean = false
+    lateinit var mAuth: FirebaseAuth
+    lateinit var sharedSelectModel: SharedSelectModel
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mAuth = FirebaseAuth.getInstance()
+        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
+    }
 
     override fun initAfterBinding() {
         val userDatabase = UserDatabase.getInstance(requireContext())!!
@@ -37,18 +52,29 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             requireActivity().supportFragmentManager.popBackStack()
         }
         binding.settingName.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fr_layout, SetNameFragment(),"setName")
-                .show(SetNameFragment())
-                .addToBackStack(null)
-                .commit()
+            val dialog = SettingNameDialog()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "bodyContext" to "변경할 닉네임을 입력해주세요",
+                "btnData" to btn
+            )
+            dialog.setButtonClickListener(object:SettingNameDialog.OnButtonClickListener{
+                override fun onButton1Clicked() {}
+                override fun onButton2Clicked() {}
+            })
+            dialog.show(requireActivity().supportFragmentManager, "SettingNameDialog")
         }
         binding.settingBirth.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fr_layout, SetBirthFragment(),"setBirth")
-                .show(SetBirthFragment())
-                .addToBackStack(null)
-                .commit()
+            val dialog = SettingBirthDialog()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "btnData" to btn
+            )
+            dialog.setButtonClickListener(object:SettingBirthDialog.OnButtonClickListener{
+                override fun onButton1Clicked() {}
+                override fun onButton2Clicked() {}
+            })
+            dialog.show(requireActivity().supportFragmentManager, "SettingBirthDialog")
 
         }
         binding.settingFont.setOnClickListener {
@@ -70,7 +96,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","로그아웃")
             dialog.arguments= bundleOf(
-                "bodyContext" to "로그아웃 하시겠습니까?\n 그동안 데이터는 연동되었던 계정에 보관됩니다",
+                "bodyContext" to "로그아웃 하시겠습니까?\n그동안의 데이터는 연동되었던 계정에 보관됩니다.",
                 "btnData" to btn
             )
             // 버튼 클릭 이벤트 설정
@@ -78,13 +104,26 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
+                    mAuth.signOut() //Firebase SignOUT
+
                     val gso = getGSO()
                     val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
                     googleSignInClient.signOut()
                     removeJwt()
-                    val intent = Intent(requireContext(),LoginActivity::class.java)
-                    startActivity(intent)
-                    exitProcess(0)
+                    removeUserInfo()
+                    userDatabase.userDao().delete(userDatabase.userDao().getUser())
+
+                    sharedSelectModel.removeLiveData()
+
+                    //해당 앱의 루트 액티비티를 종료시킨다.
+                    val mActivity = activity as MainActivity
+                    if(Build.VERSION.SDK_INT >= 16){
+                        mActivity.finishAffinity()
+                    }else {
+                        ActivityCompat.finishAffinity(mActivity)
+                    }
+                    System.runFinalization() //현재 작업중인 쓰레드가 다 종료되면, 종료 시키라는 명령어
+                    exitProcess(0) // 현재 액티비티를 종료시킨다.
                 }
             })
             dialog.show(requireActivity().supportFragmentManager, "CustomDialog")
@@ -101,9 +140,11 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
         //initPushButton
         initToggle(btnPush, binding.settingToggleIv,  binding.settingToggleSelector)
         isPush = btnPush
+
         binding.settingPush.setOnClickListener {
             btnPush=pushToggleSwitcher(btnPush)
             isPush = btnPush
+            saveAlarmSound(isPush)
             settingService.setSettingUserView(this)
             settingService.setPushAlarm(userDatabase.userDao().getUserIdx(), UserPush(btnPush))
         }
@@ -111,6 +152,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
             checkSecession()
         }
     }
+
 
     fun checkSecession(){
         val secessionDialog = CustomDialogFragment()
@@ -146,6 +188,8 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                                 "btnData" to btn
                             )
                             isDeleted = true
+                            removeUserInfo()
+                            sharedSelectModel.removeLiveData()
                             settingService.setSettingUserView(this@SettingFragment)
                             settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{
@@ -156,8 +200,26 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                         }
                         dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                             override fun onButton1Clicked(){
-                                val mactivity = activity as MainActivity
-                                mactivity.finish()
+                                if(isDeleted){
+
+                                    mAuth?.currentUser?.delete()
+
+                                    val gso = getGSO()
+                                    val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+                                    googleSignInClient.signOut()
+                                    removeJwt()
+                                    userDatabase.userDao().delete(userDatabase.userDao().getUser())
+
+                                    //해당 앱의 루트 액티비티를 종료시킨다.
+                                    val mActivity = activity as MainActivity
+                                    if(Build.VERSION.SDK_INT >= 16){
+                                        mActivity.finishAffinity()
+                                    }else {
+                                        ActivityCompat.finishAffinity(mActivity)
+                                    }
+                                    System.runFinalization() //현재 작업중인 쓰레드가 다 종료되면, 종료 시키라는 명령어
+                                    exitProcess(0) // 현재 액티비티를 종료시킨다.
+                                }
                             }
                             override fun onButton2Clicked() {
                             }
@@ -199,7 +261,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     }
 
     override fun onSetSettingUserViewLoading() {
-        binding.setLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onSetSettingUserViewSuccess(result: String) {
@@ -234,6 +296,17 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     override fun onSetSettingUserViewFailure(code: Int, message: String) {
         binding.setLoadingPb.visibility = View.GONE
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+
+
+    fun setLoadingView(){
+        binding.setLoadingPb.visibility=View.VISIBLE
+        binding.setLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 
 }

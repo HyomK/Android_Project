@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">16sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">20sp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">75dp</dimen>
+
     <!-- Toolbar layout. -->
     <dimen name="toolbar_layout_height">60dp </dimen>
     <dimen name="toolbar_layout_title_size">18dp</dimen>
@@ -33,7 +37,7 @@
     <dimen name="profile_iv_radius">75dp</dimen>
     <dimen name="profile_level_textSize">14dp</dimen>
     <dimen name="profile_nickname_textSize">17dp</dimen>
-    <dimen name="profile_settingList_paddingVertical">18dp</dimen>
+    <dimen name="profile_settingList_paddingVertical">20dp</dimen>
 
     <!-- Flowerpot item -->
     <dimen name="flowerpot_layout_height">125dp </dimen>
@@ -76,6 +80,7 @@
     <dimen name="archive_calendar_year">14dp</dimen>
     <dimen name="archive_list_month">14dp</dimen>
     <dimen name="archive_list_year">14dp</dimen>
+    <dimen name="archive_list_no_search_result">12dp</dimen>
 
     <!--archive period-->
     <dimen name="archive_list_period_main">14dp</dimen>

@@ -2,6 +2,8 @@ package com.likefirst.btos.data.remote.posting.service
 
 import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
+import com.likefirst.btos.data.remote.BaseResponse
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
 import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.utils.RetrofitInterface
@@ -22,17 +24,17 @@ class MailLetterService(){
         this.mailLetterView=mailLetterView
     }
 
-    fun loadLetter(userId:Int,type:String, idx: String){
+    fun loadLetter(userId:Int,type:String, idx:Int){
         mailLetterView.onLetterLoading()
 
-        LetterService.loadLetter(userId,type,idx).enqueue(object:Callback<MailLetterResponse> {
-            override fun onResponse(call: Call<MailLetterResponse>, response: Response<MailLetterResponse>) {
-                val letterResponse: MailLetterResponse =response.body()!!
+        LetterService.loadLetter(userId,type,idx).enqueue(object:Callback<BaseResponse<MailInfoResponse>> {
+            override fun onResponse(call: Call<BaseResponse<MailInfoResponse>>, response: Response<BaseResponse<MailInfoResponse>>) {
+                val letterResponse: BaseResponse<MailInfoResponse> =response.body()!!
                 Log.d("Letter/APIe",  letterResponse.toString())
                 Log.d("Letter/API",letterResponse.code.toString())
                 when( letterResponse.code){
                     1000->{
-                        mailLetterView.onLetterSuccess( letterResponse.result.content)
+                        mailLetterView.onLetterSuccess( letterResponse.result)
                         return
                     }
                     else->   mailLetterView.onLetterFailure( letterResponse.code,  letterResponse.message)
@@ -40,7 +42,7 @@ class MailLetterService(){
 
             }
 
-            override fun onFailure(call: Call<MailLetterResponse>, t: Throwable) {
+            override fun onFailure(call: Call<BaseResponse<MailInfoResponse>>, t: Throwable) {
 
             }
 

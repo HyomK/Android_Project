@@ -3,7 +3,6 @@
     android:id="@+id/MailWrite_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -81,7 +80,7 @@
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="start"
-            android:background="@color/white" />
+            android:background="@color/background" />
 
         <ImageView
             android:id="@+id/MailReply_menu_btn"
@@ -108,7 +107,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="70dp"
             android:src="@drawable/ic_write"
-            android:background="@color/white"
+            android:background="@color/background"
             android:visibility="invisible"
             />
 
@@ -121,7 +120,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_check"
-            android:background="@color/white"
+            android:background="@color/background"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -134,7 +133,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_bg_sent"
+        android:src="@drawable/ic_bg_received"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -153,8 +152,22 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@null"
         android:inputType="textMultiLine"
+        android:visibility="gone"
+        style="@style/EditTheme"
         />
 
+
+    <TextView
+        android:id="@+id/MailReply_body_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+        android:layout_marginVertical="@dimen/mail_view_marginVertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@null"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

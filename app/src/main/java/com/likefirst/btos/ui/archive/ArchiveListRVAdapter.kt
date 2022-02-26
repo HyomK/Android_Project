@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
@@ -12,10 +13,9 @@ import com.likefirst.btos.databinding.ItemArchiveListRvDiaryBinding
 import com.likefirst.btos.databinding.ItemArchiveListRvMonthBinding
 import java.lang.RuntimeException
 
-class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveListRVAdapter(val context : Context, val fontIdx : Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val DIARY_TYPE = 0
     private val MONTH_TYPE = 1
-    private val LOADING_TYPE = 2
     private var diaryList = arrayListOf<Any>()
 
     inner class DiaryViewHolder(val binding : ItemArchiveListRvDiaryBinding): RecyclerView.ViewHolder(binding.root) {
@@ -23,13 +23,15 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
             var leafImg = 0
             binding.archiveListPreviewContentsTv.text = diaryInfo.content
             binding.archiveListPreviewDateTv.text = diaryInfo.diaryDate
+            val fontList = context.resources.getStringArray(R.array.fontEng)
+            val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
+            binding.archiveListPreviewContentsTv.typeface = ResourcesCompat.getFont(context, font)
+            binding.archiveListPreviewDateTv.typeface = ResourcesCompat.getFont(context, font)
+
             // emotionImg 바인딩
-            if (diaryInfo.emotionIdx == 0){
-                binding.archiveListPreviewEmotionIv.visibility = View.INVISIBLE
-            } else {
-                val emotionRes = context.resources.getIdentifier("emotion${diaryInfo.emotionIdx}", "drawable", context.packageName)
-                binding.archiveListPreviewEmotionIv.setImageResource(emotionRes)
-            }
+            val emotionRes = context.resources.getIdentifier("emotion${diaryInfo.emotionIdx}", "drawable", context.packageName)
+            binding.archiveListPreviewEmotionIv.setImageResource(emotionRes)
+
             // doneListImg 바인딩
             when (diaryInfo.doneListNum) {
                 in 0..2 -> {
@@ -63,27 +65,25 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
         }
     }
 
-    inner class LoadingViewHolder(val binding : ItemArchiveListRvMonthBinding) : RecyclerView.ViewHolder(binding.root){
-        fun initView(){
-            binding.itemArchiveListLoading.visibility = View.VISIBLE
-            binding.itemArchiveListLoading.setAnimation("sprout_loading.json")
-            binding.itemArchiveListMonthTv.visibility = View.GONE
-            binding.itemArchiveListYearTv.visibility = View.GONE
-        }
-    }
-
     override fun getItemViewType(position: Int): Int {
         return when {
             diaryList[position] is String -> {
                 MONTH_TYPE
             }
-            diaryList[position] is ArchiveListDiaryList -> {
+            else -> {
                 DIARY_TYPE
             }
-            else -> {
-                LOADING_TYPE
-            }
         }
+    }
+
+    interface DiarySelectedListener {
+        fun onDiarySelect(diaryIdx : Int, position: Int)
+    }
+
+    lateinit var mDiarySelectedListener : DiarySelectedListener
+
+    fun setDiarySelectedListener(diarySelectedListener: DiarySelectedListener){
+        this.mDiarySelectedListener = diarySelectedListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -96,10 +96,6 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
                 val binding = ItemArchiveListRvMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 MonthViewHolder(binding)
             }
-            LOADING_TYPE -> {
-                val binding = ItemArchiveListRvMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                LoadingViewHolder(binding)
-            }
             else -> {
                 throw RuntimeException("Unknown ViewType Error in ArchiveListRVAdapter")
             }
@@ -110,12 +106,12 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
         when (holder){
             is DiaryViewHolder -> {
                 holder.initView(diaryList[position] as ArchiveListDiaryList)
+                holder.itemView.setOnClickListener {
+                    mDiarySelectedListener.onDiarySelect((diaryList[position] as ArchiveListDiaryList).diaryIdx, position)
+                }
             }
             is MonthViewHolder -> {
                 holder.initView(diaryList[position] as String)
-            }
-            is LoadingViewHolder -> {
-                holder.initView()
             }
         }
     }
@@ -128,11 +124,6 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
         diaryList.addAll(dataList)
     }
 
-    fun deleteLoading(){
-        diaryList.removeAt(itemCount - 1)
-        Log.d("itemcount", itemCount.toString())
-    }
-
     fun clearList(){
         diaryList = arrayListOf()
         notifyDataSetChanged()
@@ -140,5 +131,12 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
 
     fun isDiaryEmpty() : Boolean{
         return diaryList == ArrayList<String>()
+    }
+
+    fun updateList(position : Int, doneListNum : Int, emotionIdx : Int, content : String) {
+        (diaryList[position] as ArchiveListDiaryList).doneListNum = doneListNum
+        (diaryList[position] as ArchiveListDiaryList).emotionIdx = emotionIdx
+        (diaryList[position] as ArchiveListDiaryList).content = content
+        notifyItemChanged(position)
     }
 }

@@ -1,5 +1,6 @@
 package com.likefirst.btos.ui.posting
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -7,19 +8,30 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import com.likefirst.btos.R
+import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
+import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
+import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
+import com.likefirst.btos.data.remote.posting.response.ReplyInfo
 import com.likefirst.btos.databinding.ActivityMailReplyBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 
 class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate){
     override fun initAfterBinding() {
-
+        val bundle : Bundle = intent.getBundleExtra("MailReply")!!
+        val reply: MailInfoResponse? =bundle.getParcelable("reply")
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.MailReplyMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailReplyMenuList.setAdapter(adapter)
         binding.MailReplyHideView.visibility=View.VISIBLE
+        binding.MailReplyMenuSp.visibility=View.GONE
+        binding.MailReplyBodyTv.text = reply?.content
+        initListener()
 
+    }
+
+    fun initListener(){
         binding.MailReplyToolbar.toolbarBackIc.setOnClickListener {
             onBackPressed()
         }
@@ -43,13 +55,14 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
+            binding.MailReplyMenuSp.visibility=View.VISIBLE
         }
 
         binding.MailReplyWriteBtn.setOnClickListener {
             binding.MailReplyMenuBtn.visibility= View.INVISIBLE
             binding.MailReplyWriteBtn.visibility=View.INVISIBLE
             binding.MailReplyCheckBtn.visibility=View.VISIBLE
-         //   binding.MailReplyHideView.visibility=View.VISIBLE
+            //   binding.MailReplyHideView.visibility=View.VISIBLE
         }
 
         binding.MailReplyMenuList.setOnItemClickListener { adapterView, view, i, l ->
@@ -91,7 +104,6 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                 }
             }
         })
-
 
     }
 }

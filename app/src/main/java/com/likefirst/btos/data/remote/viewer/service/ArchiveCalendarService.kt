@@ -25,9 +25,11 @@ class ArchiveCalendarService {
     fun getCalendar(userIdx : Int, date : String, type : String){
         archiveCalendarView.onArchiveCalendarLoading()
         // API 호출
+        Log.e("DairyResponse-요청", "${userIdx} .${date},${type}")
         archiveCalendarService.getCalendar(userIdx, date, type).enqueue(object : Callback<BaseResponse<ArrayList<ArchiveCalendar>>> {
             override fun onResponse(call: Call<BaseResponse<ArrayList<ArchiveCalendar>>>, response: Response<BaseResponse<ArrayList<ArchiveCalendar>>>) {
                 val resp = response.body()!!
+                Log.e("DairyResponse", resp.toString())
                 when (resp.code){
                     1000 -> archiveCalendarView.onArchiveCalendarSuccess(resp.result)
                     else -> archiveCalendarView.onArchiveCalendarFailure(resp.code)

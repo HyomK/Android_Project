@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ArchiveCalendar(
     @SerializedName("diaryDate") val diaryDate : String?,
+    @SerializedName("diaryIdx") val diaryIdx : Int?,
     val dateInt : Int = 0,
     @SerializedName("doneListNum") val doneListNum : Int?,
     @SerializedName("emotionIdx") val emotionIdx : Int?,
@@ -24,10 +25,10 @@ data class ArchiveListResult(
 
 data class ArchiveListDiaryList(
     @SerializedName("diaryIdx") val diaryIdx : Int,
-    @SerializedName("doneListNum") val doneListNum : Int,
-    @SerializedName("emotionIdx") val emotionIdx : Int,
+    @SerializedName("doneListNum") var doneListNum : Int,
+    @SerializedName("emotionIdx") var emotionIdx : Int,
     @SerializedName("diaryDate") val diaryDate : String,
-    @SerializedName("content") val content : String,
+    @SerializedName("content") var content : String,
     )
 
 data class ArchiveListPageInfo(
@@ -35,5 +36,17 @@ data class ArchiveListPageInfo(
     @SerializedName("currentPage") val currentPage : Int,
     @SerializedName("startPage") val startPage : Int,
     @SerializedName("endPage") val endPage : Int,
-    @SerializedName("dataPerPage") val dataPerPage : Int,
+    @SerializedName("dataNumPerPage") val dataNumPerPage : Int,
+    @SerializedName("dataNum_currentPage") val dataNum_currentPage : Int,
+    @SerializedName("dataNum_total") val dataNum_total : Int
+    )
+
+// 일기 조회
+data class ArchiveDiaryResult(
+    @SerializedName("diaryIdx") val diaryIdx : Int,
+    @SerializedName("emotionIdx") val emotionIdx : Int,
+    @SerializedName("diaryDate") val diaryDate : String,
+    @SerializedName("isPublic") val isPublic : Int,
+    @SerializedName("content") val content : String,
+    @SerializedName("doneList") val doneList : ArrayList<String>
     )

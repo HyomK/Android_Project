@@ -55,4 +55,14 @@
         app:fontWeight="400"
         app:font="@font/kotra_songeulssi"
         tools:ignore="UnusedAttribute"/>
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/uhbee_queen_j"
+        android:fontWeight="400"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/uhbee_queen_j"
+        tools:ignore="UnusedAttribute"/>
+
 </font-family>
