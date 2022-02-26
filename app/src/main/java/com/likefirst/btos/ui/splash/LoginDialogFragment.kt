@@ -44,14 +44,20 @@ class LoginDialogFragment(): DialogFragment() {
       binding.loginDialogPrivacy.loginDialogItemTitle.text="[필수] 개인정보 수집 동의"
       binding.loginDialogUse.loginDialogItemTitle.text="[필수] 서비스 이용약관"
 
-      binding.loginDialogPrivacy.loginDialogCheckbox.setOnClickListener{
+      binding.loginDialogPrivacy.checkboxCl.setOnClickListener{
+          val isChecked = binding.loginDialogPrivacy.loginDialogCheckbox.isChecked
+          binding.loginDialogPrivacy.loginDialogCheckbox.isChecked = !isChecked
          onCheckChanged( "single")
       }
 
-      binding.loginDialogUse.loginDialogCheckbox.setOnClickListener{
+      binding.loginDialogUse.checkboxCl.setOnClickListener{
+          val isChecked = binding.loginDialogUse.loginDialogCheckbox.isChecked
+          binding.loginDialogUse.loginDialogCheckbox.isChecked = !isChecked
           onCheckChanged("single")
       }
-      binding.loginDialogAllCheck.loginDialogCheckbox.setOnClickListener{
+      binding.loginDialogAllCheck.checkboxCl.setOnClickListener{
+          val isChecked = binding.loginDialogAllCheck.loginDialogCheckbox.isChecked
+          binding.loginDialogAllCheck.loginDialogCheckbox.isChecked = !isChecked
           onCheckChanged("all")
       }
 
