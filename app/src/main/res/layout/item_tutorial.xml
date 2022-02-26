@@ -42,7 +42,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/onboarding_okay_box"
             android:gravity="center"
-            android:letterSpacing="0.11"
+            android:letterSpacing="0.05"
             android:text="확인!"
             android:textAlignment="center"
             android:textColor="@color/black"
