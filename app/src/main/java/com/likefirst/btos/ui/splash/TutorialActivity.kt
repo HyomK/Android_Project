@@ -53,6 +53,8 @@ class TutorialActivity : BaseActivity<ActivityTutorialBinding>(ActivityTutorialB
         TabLayoutMediator(tablayout, viewpager) { tab, position ->
         }.attach()
 
+        viewpager.setCurrentItem(0,true)
+
         imageAdapter.setOnItemClickListener(object: TutorialViewPagerAdapter.OnItemClickListener{
             override fun onItemClick(v: View, pos: Int) {
                 val intent = Intent(this@TutorialActivity,MainActivity::class.java)
