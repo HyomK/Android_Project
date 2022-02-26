@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.home
 
 import android.content.Intent
+import android.system.Os.remove
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -59,6 +60,20 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         Log.d("Mailbox","destroy")
         val mActivity = activity as MainActivity
         mActivity.isMailOpen=false
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        val mActivity = activity as MainActivity
+        mActivity.isMailOpen=true
+    }
+
+
+    override fun onBackPressed() {
+        val mActivity = activity as MainActivity
+        if(!mActivity.isMailOpen) mActivity.isMailOpen= true
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
 
 
@@ -153,7 +168,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         }
 
         binding.mailboxBackBtn.setOnClickListener{
-            mActivity.supportFragmentManager.popBackStack()
+            if(!mActivity.isMailOpen) mActivity.isMailOpen= true
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
             mActivity.isMailOpen=false
         }
     }
@@ -217,18 +233,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onReplyFailure(code: Int, message: String) {
         Log.e("ReplyAPI",message)
         binding.setMailboxLoadingPb.visibility= View.GONE
-    }
-
-    override fun onBackPressed() {
-        val mActivity = activity as MainActivity
-        mActivity.supportFragmentManager.popBackStack()
-       // mActivity.isMailOpen=false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val mActivity = activity as MainActivity
-        mActivity.isMailOpen=true
     }
 
 
