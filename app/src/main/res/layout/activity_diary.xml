@@ -141,7 +141,6 @@
                 android:textSize="@dimen/diary_contents_font"
                 android:lineHeight="23dp"
                 android:maxLength="1500"
-                android:theme="@style/EditTheme"
                 android:layout_marginBottom="30dp"
                 android:fontFamily="@font/uhbee_queen_j"
                 android:layout_marginTop="15dp"

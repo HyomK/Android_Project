@@ -1,7 +1,6 @@
 package com.likefirst.btos.ui.splash
 
 import android.content.Intent
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -49,6 +48,7 @@ class TutorialActivity : BaseActivity<ActivityTutorialBinding>(ActivityTutorialB
         viewpager = binding.tutorialVp
         viewpager.adapter = imageAdapter
         viewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        viewpager.overScrollMode = View.OVER_SCROLL_NEVER
 
         val tablayout = binding.tutorialTablayout
         TabLayoutMediator(tablayout, viewpager) { tab, position ->
