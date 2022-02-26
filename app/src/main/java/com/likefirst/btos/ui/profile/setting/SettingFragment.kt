@@ -14,7 +14,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserLeave
 import com.likefirst.btos.data.entities.UserPush
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.users.service.SettingUserService
 import com.likefirst.btos.data.remote.users.view.SetSettingUserView
@@ -113,8 +112,6 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                     removeJwt()
                     removeUserInfo()
                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
-                    val fcmDatabase=FCMDatabase.getInstance(requireContext())
-                    fcmDatabase?.fcmDao()?.delete(fcmDatabase.fcmDao().getData())
 
                     sharedSelectModel.removeLiveData()
 
@@ -212,8 +209,6 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                                     googleSignInClient.signOut()
                                     removeJwt()
                                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
-                                    val fcmDatabase=FCMDatabase.getInstance(requireContext())
-                                    fcmDatabase?.fcmDao()?.delete(fcmDatabase.fcmDao().getData())
 
                                     //해당 앱의 루트 액티비티를 종료시킨다.
                                     val mActivity = activity as MainActivity
@@ -266,7 +261,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     }
 
     override fun onSetSettingUserViewLoading() {
-        binding.setLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onSetSettingUserViewSuccess(result: String) {
@@ -301,6 +296,17 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     override fun onSetSettingUserViewFailure(code: Int, message: String) {
         binding.setLoadingPb.visibility = View.GONE
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+
+
+    fun setLoadingView(){
+        binding.setLoadingPb.visibility=View.VISIBLE
+        binding.setLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 
 }

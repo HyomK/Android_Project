@@ -79,9 +79,11 @@
         android:layout_marginTop="20dp"
         >
         <EditText
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/profile_suggest_edit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:theme="@style/EditTheme"
             android:inputType="textMultiLine"
             android:paddingHorizontal="20dp"

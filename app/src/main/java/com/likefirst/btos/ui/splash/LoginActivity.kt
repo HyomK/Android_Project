@@ -28,14 +28,12 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
 import com.google.firebase.messaging.FirebaseMessaging
 import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
-import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FcmTokenService
@@ -154,7 +152,7 @@ class LoginActivity
     }
 
     override fun onLoginLoading() {
-        binding.loginLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onLoginSuccess(login: Login) {
@@ -189,7 +187,7 @@ class LoginActivity
     }
 
     override fun onAutoLoginLoading() {
-        binding.loginLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onAutoLoginSuccess(login : Login) {
@@ -207,7 +205,7 @@ class LoginActivity
     }
 
     override fun onGetProfileViewLoading() {
-        binding.loginLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
 
     }
 
@@ -289,7 +287,6 @@ class LoginActivity
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
-        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
@@ -312,7 +309,6 @@ class LoginActivity
             //TODO 비로그인 상태 일때 처리
             Log.e("FIREBASE", "실패! 비로그인 상태입니다")
         }else{
-            var userData = UserDTO()
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
                     task-> if(!task.isSuccessful){
                 Log.w(ApplicationClass.TAG,"FetchingFCM registration token failed", task.exception)
@@ -321,18 +317,11 @@ class LoginActivity
                 val token = task.result
                 val msg = getString(R.string.msg_token_fmt, token)
                 Log.e("FIREBASE", msg)
-             /*   userData.email = email.substring(0, email.indexOf('@'))
-                userData.fcmToken= token*/
 
                 fcmTokenService.setFcmTokenView(this)
                 fcmTokenService.postFcmToken(getUserIdx(),token)
 
-             /*   val fcmDatabase = FCMDatabase.getInstance(this)!!
-                if(fcmDatabase.fcmDao().getData()==null){
-                    fcmDatabase.fcmDao().insert(userData)
-                }else{
-                    fcmDatabase.fcmDao().update(userData)
-                }
+             /*
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
@@ -412,5 +401,12 @@ class LoginActivity
     override fun onFailureFcmToken(code : Int, msg: String) {
         Log.e("FCM-API - fail","${code}= ${msg}")
     }
-
+    fun setLoadingView(){
+        binding.loginLoadingPb.visibility=View.VISIBLE
+        binding.loginLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+    }
 }

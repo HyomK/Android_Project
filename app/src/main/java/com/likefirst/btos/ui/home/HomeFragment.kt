@@ -194,10 +194,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         // TODO: 서버 반영해서 유저가 선택한 화분에 따라서 표시되게 변경, 현재는 더미데이터일 뿐임
     }
 
-    fun updatePot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
+    fun updatePot(animationView: LottieAnimationView, plantName : String, currentLevel : Int){
+
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         var plantStatus = ""
         if(userDB!!.getIsSad()) plantStatus="sad_"
+        Log.d("updatePot"," ${plantName}_ ${ plantStatus }_${currentLevel}")
         animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${currentLevel}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
