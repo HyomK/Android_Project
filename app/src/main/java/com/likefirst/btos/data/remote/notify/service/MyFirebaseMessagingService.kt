@@ -20,17 +20,20 @@ import com.likefirst.btos.R
 import com.likefirst.btos.utils.fcm.MyWorker
 import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import com.likefirst.btos.utils.getAlarmSound
+import com.likefirst.btos.utils.getUserIdx
+import com.likefirst.btos.utils.saveNotification
 
 
-class MyFirebaseMessagingService : FirebaseMessagingService() {
-    val TAG = "Firebase"
+class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
+    val TAG = "MSG_Firebase"
     lateinit var listener : NoticeAPIView
 
     // 메세지가 수신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.i("### msg : ", remoteMessage.toString());
+        Log.i(TAG, remoteMessage.toString());
 
         // 서버에서 직접 보냈을 때
         if(remoteMessage.notification != null){
@@ -44,8 +47,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 다른 기기에서 서버로 보냈을 때
         else if(remoteMessage.data.isNotEmpty()){
-            val title = remoteMessage.data["title"]!!
-            val message = remoteMessage.data["body"]!!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 sendMessageNotification(remoteMessage.data )
             }
@@ -80,7 +81,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // 메세지가 서버로 전송 성공 했을때 호출
     override fun onMessageSent(p0: String) {
         super.onMessageSent(p0)
-        Log.e("Firebase", "sending success ")
+        Log.e(TAG, "sending success ")
     }
 
     // 메세지가 서버로 전송 실패 했을때 호출
@@ -100,6 +101,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
     fun sendNotification(title: String?, body: String) {
+        Log.e(TAG,"sendNotification")
+        val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // 액티비티 중복 생성 방지
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -107,34 +110,39 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle(title) // 제목
-            .setContentText(body) // 내용
+            .setSmallIcon(R.mipmap.ic_launcher)     // 아이콘 설정
+            .setContentTitle(title)     // 제목
+            .setContentText(body)     // 메시지 내용
             .setAutoCancel(true)
-            .setSmallIcon(R.drawable.emotion2) // d알림영역에 노출될 아이콘
-            .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
+            .setSound(defaultSoundUri)     // 알림 소리
+            .setContentIntent(pendingIntent)       // 알림 실행 시 Intent
+            .setDefaults(Notification.DEFAULT_SOUND)
+
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // 오레오 버전 예외처리
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+        // 오레오 버전 이후에는 채널이 필요
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channel = NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
+            channel.apply {
+                setShowBadge(false)
+            }
         }
-        saveMessage()
-        showNotificationMessage(title,body)
-        val spf = getSharedPreferences("Alarm", MODE_PRIVATE) // 기존에 있던 데
-        if(spf.getBoolean("state",true)){
-            notificationManager.notify(0, notificationBuilder.build())
+
+        if(getAlarmSound()){
+            notificationManager.notify(uniId, notificationBuilder.build())
         }
+        Log.e(TAG,"title: ${title} body: ${body}")
+        saveNotification(title!!)
+
     }
 
     private fun sendMessageNotification( Message : Map<String, String>){
-        Log.e("fcm","sendMessageNotification")
+        Log.e(TAG,"sendMessageNotification")
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         val title = Message["title"]!!
         val body = Message["body"]!!
@@ -160,6 +168,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setDefaults(Notification.DEFAULT_SOUND)
 
 
+
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -172,18 +181,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
 
-       // saveMessage()
         //TODO 알림 추후
         if(getAlarmSound()){
            notificationManager.notify(uniId, notificationBuilder.build())
         }
-
-
+        //saveMessage(title!!)
+        Log.e(TAG,"title: ${title} body: ${body}")
+        saveNotification(title!!)
     }
 
     // 받은 토큰을 서버로 전송
     fun sendRegistrationToServer(token: String) {
-
+        if(getUserIdx()!=0) {
+            val fcmService= FcmTokenService()
+            fcmService.setFcmTokenView(this)
+            fcmService.postFcmToken(getUserIdx(),token)
+        }
     }
 
 
@@ -196,28 +209,28 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Looper.loop()
     }
 
-    /**
-     * 수신받은 메시지를 Toast로 보여줌
-     * @param msgTitle
-     * @param msgContent
-     */
     fun showNotificationMessage(msgTitle: String?, msgContent: String?) {
         Log.i("### noti msgTitle : ", msgTitle.toString())
         Log.i("### noti msgContent : ", msgContent.toString())
-        val toastText =
-            String.format("[Notification 메시지] title: %s => content: %s", msgTitle, msgContent)
+        val toastText = String.format("[Notification 메시지] title: %s => content: %s", msgTitle, msgContent)
         Looper.prepare()
         Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
         Looper.loop()
     }
 
-    fun saveMessage(){
+    fun saveMessage(title: String){
         val spf = getSharedPreferences("notification",MODE_PRIVATE)
         val editor = spf.edit()
         editor.putString("newNotification","new")
-        editor.putString("newMail","new")
+        if(!title.contains("공지사항") || !title.contains("화분"))editor.putString("newMail","new")
         editor.apply()
     }
+
+    override fun onLoadingFcmToken() {}
+
+    override fun onSuccessFcmToken() {}
+
+    override fun onFailureFcmToken(code: Int, msg: String) {}
 
 
 }

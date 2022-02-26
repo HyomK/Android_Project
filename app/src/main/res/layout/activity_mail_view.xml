@@ -141,7 +141,7 @@
                 android:lineHeight="23dp"
                 />
             <TextView
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:id="@+id/mailView_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

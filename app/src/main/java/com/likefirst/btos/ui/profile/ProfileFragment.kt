@@ -3,6 +3,7 @@ package com.likefirst.btos.ui.profile
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,7 @@ import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
 
-class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
+class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate){
     var isSettingOpen = false
     var isFetch=true
     lateinit var  sharedSelectModel : SharedSelectModel
@@ -129,6 +130,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         if(plant.maxLevel!=plant.currentLevel)binding.profileMaxTv.visibility= View.GONE
     }
 
+
     fun cleanUpFragment(  fragments: Array<String>){
         fragments.forEach { fragment ->
             requireActivity().supportFragmentManager.commit {
@@ -155,9 +157,10 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         }
     }
 
-  fun updateProfile() {
+    fun updateProfile() {
         initProfile()
     }
+
 
 
 }

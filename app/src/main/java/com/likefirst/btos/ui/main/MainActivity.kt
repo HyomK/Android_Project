@@ -31,6 +31,8 @@ import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo
@@ -48,24 +50,27 @@ import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.ui.history.HistoryUpdateFragment
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailReplyActivity
+import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
 import com.likefirst.btos.utils.getUserIdx
+import com.likefirst.btos.utils.removeNotice
 
 
 class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),AlarmInfoView,AlarmListView,MailDiaryView, MailLetterView, MailReplyView{
-
-    private var auth : FirebaseAuth? = null
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
     private val historyUpdateFragment = HistoryUpdateFragment()
     private val profileFragment= ProfileFragment()
+    private val plantFragment=PlantFragment()
     private var backPressedMillis : Long = 0
 
     var isDrawerOpen =true
     var isMailOpen=false
+    var isPlantOpen=false
+
 
     lateinit var noticeList :ArrayList<NoticeDetailResponse>
     var prevNoticeSize : Int =0
@@ -79,11 +84,15 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         fun onBackPressed();
     }
 
+    fun onBottomNavHandler(id : Int){
+        binding.mainBnv.menu.findItem(id).isChecked = true
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
         setNotificationIcon()
-
     }
 
     fun setNotificationIcon(){
@@ -97,7 +106,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             return
 
         }
-        val spf = getSharedPreferences("notification", MODE_PRIVATE) // 기존에 있던 데이터
+        val spf = getSharedPreferences("BTOS-APP" , MODE_PRIVATE) // 기존에 있던 데이터
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference.getString("newNotification", "undefine")
             .observe(this, Observer<String> { result ->
@@ -130,8 +139,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             override fun onDrawerOpened(drawerView: View) {
                 alarmService.getAlarmList(getUserIdx())
                 sharedNotifyModel.setNoticeLiveData(false)
-                val spf = getSharedPreferences("notification", MODE_PRIVATE)
-                spf.edit().putString("newNotification","undefine").apply()
+                removeNotice()
+               /* val spf = getSharedPreferences("notification", MODE_PRIVATE)
+                spf.edit().putString("newNotification","undefine").apply()*/
             }
             override fun onDrawerClosed(drawerView: View) {}
             override fun onDrawerStateChanged(newState: Int) {}
@@ -363,7 +373,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
 
     override fun onBackPressed() {
-        if(homeFragment.isVisible && !isMailOpen){
+        if(homeFragment.isVisible && !isMailOpen &&!isPlantOpen){
             if(System.currentTimeMillis() > backPressedMillis + 2000){
                 backPressedMillis = System.currentTimeMillis()
                 Snackbar.make(binding.frLayout, "진짜 갈꺼야...?", Snackbar.LENGTH_SHORT).show()
@@ -372,7 +382,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 finish()
             }
         } else {
-
             val fragmentList = supportFragmentManager.fragments
             for (fragment in fragmentList) {
                 if (fragment is onBackPressedListener) {
@@ -448,8 +457,19 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             "reply"->{
                 replyService.loadReply(getUserIdx(),"reply",item.reqParamIdx)
             }
+            "plant"->{
+                binding.mainBnv.menu.findItem(R.id.profileFragment).isChecked = true
+                isPlantOpen=true
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fr_layout, plantFragment, "plant_notice")
+                    .show(plantFragment)
+                    .setReorderingAllowed(true)
+                    .commitAllowingStateLoss()
+
+            }
 
         }
+
     }
 
     override fun onGetAlarmInfoFailure(code: Int, message: String) {

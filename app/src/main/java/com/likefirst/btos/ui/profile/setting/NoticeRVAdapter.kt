@@ -36,18 +36,21 @@ class NoticeRVAdapter(var items:  ArrayList<Pair<NoticeDetailResponse, Boolean>>
     }
 
     override fun onBindViewHolder(holder:ViewHolder, position: Int) {
-        holder.title.text=items[position].first.title
-        holder.body.text=items[position].first.content
-        val date= items[position].first.createdAt.split(".")
+        val pos = getItemViewType(position)
+        holder.title.text=items[pos].first.title
+        holder.body.text=items[pos].first.content
+        val date= items[pos].first.createdAt.split(".")
         holder.date.text="${date[0]}.${date[1]}.${date[2]}"
 
         holder.layout.setOnClickListener{
-            val show = toggleLayout(!items[position].second, holder.arrow,holder.layoutExpand)
-            items[position]=Pair(items[position].first, show)
+            val show = toggleLayout(!items[pos].second, holder.arrow,holder.layoutExpand)
+            items[pos]=Pair(items[pos].first, show)
+            notifyItemChanged(0,itemCount)
         }
         holder.arrow.setOnClickListener{
-            val show = toggleLayout(!items[position].second, holder.arrow,holder.layoutExpand)
-            items[position]=Pair(items[position].first, show)
+            val show = toggleLayout(!items[pos].second, holder.arrow,holder.layoutExpand)
+            items[pos]=Pair(items[pos].first, show)
+            notifyItemChanged(0,itemCount)
         }
     }
 
@@ -65,4 +68,9 @@ class NoticeRVAdapter(var items:  ArrayList<Pair<NoticeDetailResponse, Boolean>>
     override fun getItemCount(): Int {
         return items.size
     }
+
+    override fun getItemViewType( position : Int) : Int{
+        return position
+    }
+
 }

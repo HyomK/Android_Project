@@ -134,7 +134,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
 
-   fun  loadData() : ArrayList<Plant> {
+    fun  loadData() : ArrayList<Plant> {
         val plantDB = PlantDatabase.getInstance(requireContext()!!)
         var list =plantDB?.plantDao()?.getPlants()!!
         list  =list.sortedWith(ComparePlant)
@@ -167,7 +167,19 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
 
     override fun onBackPressed() {
+        val mainActivity = activity as MainActivity
+        if(mainActivity.isPlantOpen){
+            mainActivity.onBottomNavHandler(R.id.homeFragment)
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            return
+        }
         requireActivity().supportFragmentManager.popBackStack()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val mainActivity = activity as MainActivity
+        mainActivity.isPlantOpen=false
     }
 
     override fun onPlantBuyError(Dialog: CustomDialogFragment) {
@@ -252,4 +264,3 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     }
 
 }
-

@@ -75,7 +75,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
         binding.homeMailBtn.setOnClickListener {
             sharedNotifyModel.setMsgLiveData(false)
-            binding.homeMailBtn.setImageResource(R.drawable.mailbox)
+            removeMessage()
+           // binding.homeMailBtn.setImageResource(R.drawable.mailbox)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
             requireActivity().supportFragmentManager

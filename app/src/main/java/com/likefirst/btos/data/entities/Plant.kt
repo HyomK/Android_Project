@@ -11,7 +11,6 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "PlantTable")
 data class Plant(
     @PrimaryKey(autoGenerate = false)
-
     @ColumnInfo(name = "plantIdx")
     @SerializedName("plantIdx") val plantIdx: Int,
 

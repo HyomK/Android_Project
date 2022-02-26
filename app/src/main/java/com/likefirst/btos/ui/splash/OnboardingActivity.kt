@@ -79,7 +79,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         dialog.show(supportFragmentManager, "")
 
         mAuth = FirebaseAuth.getInstance()
-        initFirebaseDatabase()
+       // initFirebaseDatabase()
         initFirebaseAuth()
         initListener()
     }
@@ -169,6 +169,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     fun goToTutorial(){
+        binding.onboardingLoadingPb.visibility = View.GONE
         val intent = Intent(this, TutorialActivity::class.java)
         intent.putExtra("nickname",nickname)
         startActivity(intent)
@@ -197,7 +198,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onSignUpSuccess(login: Login) {
-        binding.onboardingLoadingPb.visibility = View.GONE
+       // binding.onboardingLoadingPb.visibility = View.GONE
         Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
@@ -240,8 +241,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onLoginSuccess(login: Login) {
-        binding.onboardingLoadingPb.visibility = View.GONE
-
         saveJwt(login.jwt!!)
         Log.e("LOGIN/JWT", getJwt()!!)
 
@@ -283,7 +282,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
                     plantDB?.plantDao()?.insert(i)
                 } else {
-                    plantDB?.plantDao()?.update(i)
+                    plantDB?.plantDao()?.setPlantInit(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
                 }
             }
         }  // 전체 화분 목록 DB 업데이트
@@ -356,7 +355,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 fcmTokenService.setFcmTokenView(this)
                 fcmTokenService.postFcmToken(getUserIdx(),token)
 
-                val fcmDatabase = FCMDatabase.getInstance(this)!!
+             /*   val fcmDatabase = FCMDatabase.getInstance(this)!!
                 if(fcmDatabase.fcmDao().getData() ==null){
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
@@ -367,7 +366,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
-                    .setValue(userData)
+                    .setValue(userData)*/
             })
         }
     }
@@ -379,7 +378,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
 
-    private fun initFirebaseDatabase() {
+  /*  private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         mDatabaseReference = mFirebaseDatabase?.getReference("users")
         mChildEventListener = object : ChildEventListener {
@@ -396,7 +395,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
-
+*/
     override fun onBackPressed() {
         super.onBackPressed()
         val gso = getGSO()

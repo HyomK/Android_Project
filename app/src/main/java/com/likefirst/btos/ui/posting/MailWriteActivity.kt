@@ -69,8 +69,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
                     binding.MailWriteMenuSp.visibility= View.VISIBLE
-                    //TODO 임시 테스트 위치
-                    sendNotification()
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
