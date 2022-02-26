@@ -55,9 +55,10 @@
                 style="@style/settingListStyle"
                 android:text="수신 설정"
                 android:paddingVertical="@dimen/profile_settingList_paddingVertical"
-
+                android:visibility="gone"
                 />
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/setting_notification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -72,6 +73,7 @@
                     android:layout_height="wrap_content"
                     style="@style/settingListStyle"
                     android:text="푸시 알림"
+                    android:visibility="gone"
                     />
 
 
@@ -83,7 +85,9 @@
                     app:layout_constraintTop_toTopOf="@id/setting_toggle_iv"
                     app:layout_constraintEnd_toEndOf="@id/setting_toggle_iv"
                     app:layout_constraintStart_toStartOf="@id/setting_toggle_iv"
-                    app:layout_constraintBottom_toBottomOf="@id/setting_toggle_iv"/>
+                    app:layout_constraintBottom_toBottomOf="@id/setting_toggle_iv"
+                    android:visibility="gone"
+                    />
 
                 <ImageView
                     android:id="@+id/setting_toggle_iv"
@@ -93,7 +97,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/setting_push"
                     android:src="@drawable/ic_toggle_true"
-                    android:layout_marginEnd="35dp" />
+                    android:layout_marginEnd="35dp"
+                    android:visibility="gone"
+                    />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -134,17 +140,17 @@
         </LinearLayout>
 
     </ScrollView>
-
-
-    <ProgressBar
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/set_loading_pb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

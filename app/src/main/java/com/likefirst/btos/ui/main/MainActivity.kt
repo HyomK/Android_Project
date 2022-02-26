@@ -423,10 +423,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         binding.sidebarNotifyRv.adapter=adapter
     }
 
-//    override fun onRestart() {
-//        super.onRestart()
-//        binding.mainLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
-//    }
+
+
 
     override fun onGetAlarmListSuccess(result: ArrayList<Alarm>) {
         val notificationDatabase = NotificationDatabase.getInstance(this)!!
@@ -455,7 +453,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             "reply"->{
                 replyService.loadReply(getUserIdx(),"reply",item.reqParamIdx)
             }
-            "plant"->{
+           /* "plant"->{
                 binding.mainBnv.menu.findItem(R.id.profileFragment).isChecked = true
                 isPlantOpen=true
                 supportFragmentManager.beginTransaction()
@@ -464,7 +462,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     .setReorderingAllowed(true)
                     .commitAllowingStateLoss()
 
-            }
+            }*/
 
         }
 

@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.splash
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -8,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
@@ -17,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
@@ -31,7 +34,6 @@ import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FcmTokenService
@@ -194,7 +196,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onSignUpLoading() {
-        binding.onboardingLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onSignUpSuccess(login: Login) {
@@ -237,7 +239,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onLoginLoading() {
-        binding.onboardingLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onLoginSuccess(login: Login) {
@@ -355,13 +357,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 fcmTokenService.setFcmTokenView(this)
                 fcmTokenService.postFcmToken(getUserIdx(),token)
 
-             /*   val fcmDatabase = FCMDatabase.getInstance(this)!!
-                if(fcmDatabase.fcmDao().getData() ==null){
-                    fcmDatabase.fcmDao().insert(userData)
-                }else{
-                    fcmDatabase.fcmDao().update(userData)
-                }
-
+             /*
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
 
                 mFireDatabase.getReference("users")
@@ -427,5 +423,14 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
 
     override fun onFailureFcmToken(code : Int, msg: String) {
         Log.e("FCM-API - fail","${code}= ${msg}")
+    }
+
+    fun setLoadingView(){
+        binding.onboardingLoadingPb.visibility=View.VISIBLE
+        binding.onboardingLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 }

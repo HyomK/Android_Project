@@ -78,11 +78,11 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     fun initClickListener(){
         val mActivity = activity as MainActivity
         binding.profileCd.setOnClickListener {
-          mActivity.supportFragmentManager.beginTransaction()
+        /*  mActivity.supportFragmentManager.beginTransaction()
                 .add(R.id.fr_layout,  PlantFragment(), "plantrv")
                 .addToBackStack("profile-save")
                 .commit()
-            //TODO 배포 클릭 방지
+            //TODO 배포 클릭 방지*/
         }
 
         binding.profilePremiumTv.setOnClickListener {

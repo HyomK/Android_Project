@@ -159,7 +159,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onMailboxLoading() {
-        binding.setMailboxLoadingPb.visibility= View.VISIBLE
+        setLoadingView()
     }
 
     override fun onMailboxSuccess(mailboxList: ArrayList<Mailbox>) {
@@ -174,7 +174,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onLetterLoading() {
-        binding.setMailboxLoadingPb.visibility= View.VISIBLE
+        setLoadingView()
     }
 
     override fun onLetterSuccess(letter: MailInfoResponse) {
@@ -190,7 +190,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onDiaryLoading() {
-        binding.setMailboxLoadingPb.visibility= View.VISIBLE
+        setLoadingView()
     }
 
     override fun onDiarySuccess(diary:MailInfoResponse) {
@@ -206,7 +206,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onReplyLoading() {
-        binding.setMailboxLoadingPb.visibility= View.VISIBLE
+        setLoadingView()
     }
 
     override fun onReplySuccess(reply: MailInfoResponse){
@@ -232,6 +232,14 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
 
+    fun setLoadingView(){
+        binding.setMailboxLoadingPb.visibility= View.VISIBLE
+        binding.setMailboxLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+    }
 
 
 

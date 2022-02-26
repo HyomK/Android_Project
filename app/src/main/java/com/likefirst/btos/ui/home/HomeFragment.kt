@@ -197,10 +197,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
     }
 
-    fun updatePot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
+    fun updatePot(animationView: LottieAnimationView, plantName : String, currentLevel : Int){
+
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         var plantStatus = ""
         if(userDB!!.getIsSad()) plantStatus="sad_"
+        Log.d("updatePot"," ${plantName}_ ${ plantStatus }_${currentLevel}")
         animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${currentLevel}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART

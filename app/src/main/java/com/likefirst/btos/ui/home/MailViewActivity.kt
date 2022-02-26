@@ -3,6 +3,7 @@ package com.likefirst.btos.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -22,8 +23,14 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
         val bundle : Bundle = intent.getBundleExtra("MailView")!!
         val mail : MailInfoResponse? =bundle.getParcelable("mail")
         binding.mailViewBodyTv.text= mail?.content
-        binding.mailViewDateTv.text=mail?.sendAt
-        binding.mailViewSenderTv.text=mail?.senderNickName
+
+        if(mail?.senderNickName =="저편너머"){
+            binding.mailViewDateTv.visibility= View.GONE
+            binding.mailViewSenderTv.visibility=View.GONE
+        }else{
+            binding.mailViewDateTv.text=mail?.sendAt
+            binding.mailViewSenderTv.text=mail?.senderNickName
+        }
         setFont(mail?.senderFontIdx!!)
 
         val menuItem = resources.getStringArray(R.array.report_items)

@@ -18,7 +18,6 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FCMService
 import com.likefirst.btos.data.remote.posting.response.SendLetterRequest
@@ -122,21 +121,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                 }
             }
         })
-    }
-
-    fun sendNotification(){
-        val sendService = SendService()
-        sendService.setSendLetterView(this)
-        sendService.sendLetter(SendLetterRequest(getUserIdx(),binding.MailWriteBodyEt.text.toString()))
-        val fcmDatabase = FCMDatabase.getInstance(this)!!
-        val userData = fcmDatabase.fcmDao().getData()
-        if(userData == null ||userData.fcmToken ==" "){
-            Log.e("Firebase", "토큰이 비었습니다")
-            return
-        }
-        val toMe = userData.fcmToken
-        FCMService().sendPostToFCM(toMe, userData,userData.email+"님의 편지가 도착했습니다")
-
     }
 
     override fun onSendLetterLoading() {

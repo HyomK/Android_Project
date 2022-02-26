@@ -6,20 +6,16 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.graphics.drawable.IconCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.likefirst.btos.ui.main.MainActivity
 import android.os.Looper
 import android.util.Log
-
 import android.widget.Toast
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.likefirst.btos.R
 import com.likefirst.btos.utils.fcm.MyWorker
-import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import com.likefirst.btos.utils.getAlarmSound
@@ -93,9 +89,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG,"Refreshed token : $token")
-        val FirebaseDB =FCMDatabase.getInstance(this)!!.fcmDao()
-        val prev = FirebaseDB.getData()
-        if(prev!= null )FirebaseDB.update(UserDTO(prev.email, token))
         sendRegistrationToServer(token)
     }
 
