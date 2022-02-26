@@ -30,10 +30,10 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
         }
         // 하나만 이미 선택되어 있는 상태
         fun initSelectedView(emotionColorId : Int, emotionGrayId: Int, position: Int, emotionSelectedIdx: Int, emotionName : String){
+            val fontList = context.resources.getStringArray(R.array.fontEng)
+            val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
+            binding.itemDiaryEmotionTv.typeface = ResourcesCompat.getFont(context,font) // 폰트지정
             if (position == emotionSelectedIdx){
-                val fontList = context.resources.getStringArray(R.array.fontEng)
-                val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
-                binding.itemDiaryEmotionTv.typeface = ResourcesCompat.getFont(context,font) // 폰트지정
                 binding.itemDiaryEmotionIv.setImageResource(emotionColorId)
                 binding.itemDiaryEmotionIv.visibility = View.VISIBLE
                 binding.itemDiaryEmotionTv.visibility = View.VISIBLE
@@ -63,7 +63,8 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
+        val position = getItemViewType(pos)
         Log.d("onBindViewHolder", "bind!!!")
         if(defaultSelectedIdx != null){
             holder.initSelectedView(emotionColorIds[position], emotionGrayIds[position], position, defaultSelectedIdx!!, emotionNames[position])
@@ -106,5 +107,9 @@ class DiaryEmotionRVAdapter(val emotionColorIds : ArrayList<Int>,
 
     override fun getItemCount(): Int {
         return emotionColorIds.size
+    }
+
+    override fun getItemViewType( position : Int) : Int{
+        return position
     }
 }

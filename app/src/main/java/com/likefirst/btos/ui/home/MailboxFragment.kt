@@ -45,20 +45,20 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     }
 
-
     override fun onStart() {
         super.onStart()
+        Log.d("Mailbox","start")
         val mActivity = activity as MainActivity
         mActivity.isDrawerOpen=false
-
+        mActivity.isMailOpen=true
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d("Mailbox","pause")
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Mailbox","destroy")
         val mActivity = activity as MainActivity
         mActivity.isMailOpen=false
-
     }
 
 
@@ -153,8 +153,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         }
 
         binding.mailboxBackBtn.setOnClickListener{
-            mActivity.isMailOpen=false
             mActivity.supportFragmentManager.popBackStack()
+            mActivity.isMailOpen=false
         }
     }
 
@@ -230,5 +230,9 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val mActivity = activity as MainActivity
         mActivity.isMailOpen=true
     }
+
+
+
+
 
 }
