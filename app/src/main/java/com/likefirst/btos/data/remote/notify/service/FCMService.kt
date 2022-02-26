@@ -5,8 +5,6 @@ import android.provider.Settings.Global.getString
 import android.util.Log
 import com.google.firebase.database.*
 import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.ui.main.MainActivity
-import okhttp3.internal.notify
 import org.json.JSONObject
 import java.io.BufferedInputStream
 import java.io.InputStream

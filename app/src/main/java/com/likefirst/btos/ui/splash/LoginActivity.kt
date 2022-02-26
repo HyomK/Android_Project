@@ -174,11 +174,9 @@ class LoginActivity
 
         when(code){
             4000 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
             }
             5003 -> {
-                Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
                 Log.e("LOGIN/FAIL", message)
                 val intent = Intent(this, OnboardingActivity::class.java)
                 val bundle = Bundle()

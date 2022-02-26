@@ -40,6 +40,7 @@ android {
     kotlinOptions {
 
     }
+
     compileSdkVersion 31
     buildToolsVersion '30.0.2'
 }
@@ -50,12 +51,14 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-    implementation 'com.google.firebase:firebase-database:19.2.1'
+    implementation 'com.google.firebase:firebase-database:20.0.3'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha03"
+
+
 
 
 
@@ -68,18 +71,18 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
 
     //okHttp
-    implementation "com.squareup.okhttp3:okhttp:$okHttp_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okHttp_version"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.4"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.4"
 
     //Glide
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "com.github.bumptech.glide:glide:4.13.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.13.0"
 
     //viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     //Indicator
-    implementation 'me.relex:circleindicator:2.1.4'
+    implementation 'me.relex:circleindicator:2.1.6'
 
     //RoomDB
     implementation "androidx.room:room-runtime:$roomdb_version"
@@ -87,7 +90,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomdb_version"
 
     // optional - RxJava2 support for Room
-    implementation "androidx.room:room-rxjava2:2.4.0"
+    implementation 'androidx.room:room-rxjava2:2.4.0'
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.9'
@@ -101,7 +104,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:4.2.2"
 
     //spinner custom
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.5.0'
 
 
     //FireBase
@@ -109,15 +112,17 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
-    implementation 'com.google.firebase:firebase-messaging:12.0.1'
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
 
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     kapt('com.github.bumptech.glide:compiler:4.13.0')
 
+
     //Google Login
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
+
 
     //Google Admob
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
@@ -133,11 +138,11 @@ dependencies {
 
 
     // Log
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.4'
 
     //LiveSharedPreference
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     //History_search observable
     implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
