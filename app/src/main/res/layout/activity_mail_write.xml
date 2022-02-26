@@ -155,7 +155,7 @@
             android:inputType="textMultiLine"
             android:textSize="14dp"
             android:lineHeight="23dp"
-            style="@style/EditTheme"
+            android:theme="@style/EditTheme"
             />
 
         <ProgressBar
