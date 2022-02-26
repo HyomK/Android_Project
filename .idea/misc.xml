@@ -64,6 +64,7 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/radio_selected_layer_list_short.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/select_bnv_archive.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/select_bnv_history.xml" value="0.25333333333333335" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/select_diary_public.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/selector_bnv_home.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/selector_bnv_profile.xml" value="0.25333333333333335" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/drawable/selector_checkbox.xml" value="0.25333333333333335" />
@@ -80,7 +81,7 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_main.xml" value="0.21203703703703702" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_onboarding.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/activity_tutorial.xml" value="0.24114583333333334" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/custom_dialog_layout.xml" value="0.21666666666666667" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/custom_dialog_layout.xml" value="0.4" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/custom_edit_dialog.xml" value="0.1265625" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_archive_calendar_period.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/dialog_archive_list_period.xml" value="0.24114583333333334" />
@@ -123,7 +124,7 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_tutorialimage.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/onboarding_dropdown_item.xml" value="0.21666666666666667" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_archive.xml" value="0.2" />
-        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_diary.xml" value="0.2361111111111111" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_diary.xml" value="0.72" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_diary_viewer.xml" value="0.264" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_history.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/toolbar_history_detail.xml" value="0.24114583333333334" />

@@ -34,6 +34,7 @@ import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.splash.LoginActivity
 import com.likefirst.btos.utils.*
+import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
@@ -114,15 +115,24 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
             onBackPressed()
         }
 
-        // 일기 수정모드일 때 토글버튼 set
-        if(intent.getBooleanExtra("editingMode", false) &&
-            intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
-            val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
-            diaryToggleSwitcher(!intentDataset!!.isPublic)
-        }
-        binding.diaryToolbar.diaryToggleIv.setOnClickListener {
-            val isPublic = isPublic()
-            diaryToggleSwitcher(isPublic)
+        // 과거일기의 경우 공개비공개 설정 버튼 안보이게
+        val millisNow = System.currentTimeMillis()
+        val millisDiary = stringToDate(binding.diaryDateTv.text.toString()).time
+        if((millisNow-millisDiary) >= (1000*60*60*43)){
+            binding.diaryToolbar.diaryToggleSelector.visibility = View.GONE
+            binding.diaryToolbar.diaryToggleTv.visibility = View.GONE
+            binding.diaryToolbar.diaryToggleIv.visibility = View.GONE
+        } else {
+            // 일기 수정모드일 때 토글버튼 set
+            if(intent.getBooleanExtra("editingMode", false) &&
+                intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo") != null){
+                val intentDataset = intent.getParcelableExtra<DiaryViewerInfo>("diaryInfo")
+                diaryToggleSwitcher(!intentDataset!!.isPublic)
+            }
+            binding.diaryToolbar.diaryToggleIv.setOnClickListener {
+                val isPublic = isPublic()
+                diaryToggleSwitcher(isPublic)
+            }
         }
 
         binding.diaryToolbar.diaryCheckIv.setOnClickListener {
@@ -134,7 +144,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
                     val dialog = CustomDialogFragment()
                     val data = arrayOf("취소", "확인")
                     dialog.arguments= bundleOf(
-                        "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 보낸 일기는 오후 7시 전까지만 비공개로 전환 할 수 있습니다.",
+                        "bodyContext" to "일기를 공개로 작성할까요? 일기를 공개로 작성하면 랜덤한 사람에게 보내집니다. 공개작성된 일기는 내일 오후 7시 전까지만 비공개로 전환 할 수 있습니다.",
                         "btnData" to data
                     )
                     dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener{
