@@ -55,6 +55,8 @@ class PlantService {
     }
 
     fun selectPlant(request: PlantRequest){
+        plantSelectView.onPlantSelectLoading()
+
         PlantService.selectPlant(request).enqueue(object:Callback<PlantResponse>{
             override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
                 val plantResponse: PlantResponse? = response.body()

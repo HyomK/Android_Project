@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="emotionNames">
-        <item> </item>
         <item>동글이</item>
         <item>빵긋이</item>
         <item>나른이</item>

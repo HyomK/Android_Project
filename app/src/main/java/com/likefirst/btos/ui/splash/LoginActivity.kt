@@ -36,9 +36,10 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.FCMDatabase
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.service.FcmTokenService
+import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.service.AuthService
@@ -49,16 +50,13 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.utils.getGSO
-import com.likefirst.btos.utils.getJwt
-import com.likefirst.btos.utils.saveJwt
-import com.likefirst.btos.utils.saveUserIdx
+import com.likefirst.btos.utils.*
 
 
 class LoginActivity
     : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
     LoginView, AutoLoginView, GetProfileView,
-    PlantListView{
+    PlantListView,FcmTokenView{
 
     val G_SIGN_IN : Int = 1
     private var GOOGLE_LOGIN_CODE = 9001
@@ -71,6 +69,7 @@ class LoginActivity
 
     val authService = AuthService()
     val plantService= PlantService()
+    val fcmTokenService = FcmTokenService()
 
     val fireStore = Firebase.firestore
     lateinit var mAuth: FirebaseAuth
@@ -121,16 +120,16 @@ class LoginActivity
 
         val gso = getGSO()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
         binding.loginGoogleLoginTv.setOnClickListener{
             var signInIntent : Intent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, G_SIGN_IN)
         }
 
+
     }
 
-    override fun onConnectionFailed(p0: ConnectionResult) {
-    }
+    override fun onConnectionFailed(p0: ConnectionResult) {}
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == G_SIGN_IN){
@@ -209,6 +208,7 @@ class LoginActivity
 
     override fun onGetProfileViewLoading() {
         binding.loginLoadingPb.visibility = View.VISIBLE
+
     }
 
     override fun onGetProfileViewSuccess(user: User) {
@@ -252,7 +252,7 @@ class LoginActivity
                 if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
                     plantDB?.plantDao()?.insert(i)
                 } else {
-                    plantDB?.plantDao()?.update(i)
+                    plantDB?.plantDao()?.setPlantInit(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
                 }
             }
         }  // 전체 화분 목록 DB 업데이트
@@ -289,12 +289,12 @@ class LoginActivity
 
     fun firebaseAuthWithGoogle(account : GoogleSignInAccount?){
         var credential = GoogleAuthProvider.getCredential(account?.idToken,null)
+        Log.e("Tokent -> ", account?.idToken.toString())
         mAuth?.signInWithCredential(credential)
             ?.addOnCompleteListener{
                     task ->
                 if(task.isSuccessful){
                     // 아이디, 비밀번호 맞을 때
-                    Snackbar.make(binding.root,"파이어베이스 토큰 생성 성공", Snackbar.LENGTH_SHORT).show()
                     updateProfile()
                     moveMainPage(task.result?.user)
                 }else{
@@ -321,10 +321,13 @@ class LoginActivity
                 val token = task.result
                 val msg = getString(R.string.msg_token_fmt, token)
                 Log.e("FIREBASE", msg)
-                userData.email = email.substring(0, email.indexOf('@'))
-                userData.fcmToken= token
+             /*   userData.email = email.substring(0, email.indexOf('@'))
+                userData.fcmToken= token*/
 
-                val fcmDatabase = FCMDatabase.getInstance(this)!!
+                fcmTokenService.setFcmTokenView(this)
+                fcmTokenService.postFcmToken(getUserIdx(),token)
+
+             /*   val fcmDatabase = FCMDatabase.getInstance(this)!!
                 if(fcmDatabase.fcmDao().getData()==null){
                     fcmDatabase.fcmDao().insert(userData)
                 }else{
@@ -333,7 +336,7 @@ class LoginActivity
                 val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
                 mFireDatabase.getReference("users")
                     .child(userData.email.toString())
-                    .setValue(userData)
+                    .setValue(userData)*/
             })
 
         }
@@ -344,6 +347,7 @@ class LoginActivity
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+/*
     private fun initFirebaseDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         mDatabaseReference = mFirebaseDatabase?.getReference("users")
@@ -361,19 +365,17 @@ class LoginActivity
         }
         mDatabaseReference?.addChildEventListener( mChildEventListener!!)
     }
+*/
 
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             //TODO 이용약관 동의 다이얼로그
             Log.e("count", "non null ${++count} " )
-
-            val fcmDatabase = FCMDatabase.getInstance(this)!!
-            Log.e("count", "non null ${fcmDatabase.fcmDao().getData()} " )
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
             Log.e("count", "null ${++count} " )
-            initFirebaseDatabase()
+            //initFirebaseDatabase()
             firbaseSignIn()
         }
     }
@@ -397,6 +399,18 @@ class LoginActivity
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
         stop=true
+    }
+
+    override fun onLoadingFcmToken() {
+
+    }
+
+    override fun onSuccessFcmToken() {
+        Log.e("FCM-API - success","success")
+    }
+
+    override fun onFailureFcmToken(code : Int, msg: String) {
+        Log.e("FCM-API - fail","${code}= ${msg}")
     }
 
 }

@@ -95,7 +95,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/emotion1"
+            android:src="@drawable/emotion0"
             app:layout_constraintBottom_toBottomOf="@+id/item_history_date"
             app:layout_constraintEnd_toStartOf="@id/item_history_date"
             app:layout_constraintTop_toTopOf="@id/item_history_date" />
@@ -105,7 +105,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/emotion5"
+            android:src="@drawable/emotion4"
             app:layout_constraintBottom_toBottomOf="@+id/item_history_emotion"
             app:layout_constraintEnd_toStartOf="@id/item_history_emotion"
             app:layout_constraintTop_toTopOf="@id/item_history_emotion" />

@@ -12,28 +12,36 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.snackbar.Snackbar
+import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
 import com.likefirst.btos.data.local.FCMDatabase
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FCMService
+import com.likefirst.btos.data.remote.posting.response.SendLetterRequest
+import com.likefirst.btos.data.remote.posting.service.SendService
+import com.likefirst.btos.data.remote.posting.view.SendLetterView
 import com.likefirst.btos.databinding.ActivityMailWriteBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.utils.getUserIdx
 
 
-class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWriteBinding::inflate) {
+class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWriteBinding::inflate),SendLetterView {
 
 
     override fun initAfterBinding() {
-
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.MailWriteMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailWriteMenuList.setAdapter(adapter)
         binding.MailWriteCheckBtn.visibility=View.GONE
-
+        setFont(userDB.getFontIdx()!!)
         binding.MailWriteToolbar.toolbarBackIc.setOnClickListener {
             onBackPressed()
         }
@@ -61,8 +69,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
                     binding.MailWriteMenuSp.visibility= View.VISIBLE
-                    //TODO 임시 테스트 위치
-                    sendNotification()
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -119,20 +125,37 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
     }
 
     fun sendNotification(){
-
+        val sendService = SendService()
+        sendService.setSendLetterView(this)
+        sendService.sendLetter(SendLetterRequest(getUserIdx(),binding.MailWriteBodyEt.text.toString()))
         val fcmDatabase = FCMDatabase.getInstance(this)!!
         val userData = fcmDatabase.fcmDao().getData()
         if(userData == null ||userData.fcmToken ==" "){
             Log.e("Firebase", "토큰이 비었습니다")
             return
         }
-        //TODO : token에 상대방의 token을 넣고 message는 알림에서 보여질 세부 내용 ... 이외 custom은 service에서 가능 ->MessageDTO CUSTOM
-        // smaple token
-        val token ="cMN2diC7S1aiRCJFiJ3JCH:APA91bH4Utd8Y8AY2mK5keVmYRfbVvN1GD7nVx8KQZMNeW0r77rB9QZa7v9G49C7WNsnZf9IxOJ8FofZalzlKPsq4R4blMxT91AXpzptQf18bJ9dbHa-L9kTE2XTPBznlUFFhVjktisM"
         val toMe = userData.fcmToken
         FCMService().sendPostToFCM(toMe, userData,userData.email+"님의 편지가 도착했습니다")
 
     }
 
+    override fun onSendLetterLoading() {
+        binding.mailWriteLoadingPb.visibility=View.VISIBLE
+    }
 
+    override fun onSendLetterSuccess() {
+        binding.mailWriteLoadingPb.visibility=View.GONE
+
+    }
+
+    override fun onSendLetterFailure(code: Int, message: String) {
+        Log.e(TAG, "${code} ${message}")
+    }
+
+    fun setFont(idx:Int){
+        val fonts= resources.getStringArray(R.array.fontEng)
+        val fontId= resources.getIdentifier(fonts[idx],"font", packageName)
+        binding.MailWriteBodyEt.typeface=ResourcesCompat.getFont(this,fontId)
+
+    }
 }

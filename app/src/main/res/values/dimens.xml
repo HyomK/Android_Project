@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="design_bottom_navigation_text_size" tools:override="true">16sp</dimen>
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">20sp</dimen>
-    <dimen name="design_bottom_navigation_height" tools:override="true">70dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">75dp</dimen>
 
     <!-- Toolbar layout. -->
     <dimen name="toolbar_layout_height">60dp </dimen>
@@ -37,7 +37,7 @@
     <dimen name="profile_iv_radius">75dp</dimen>
     <dimen name="profile_level_textSize">14dp</dimen>
     <dimen name="profile_nickname_textSize">17dp</dimen>
-    <dimen name="profile_settingList_paddingVertical">18dp</dimen>
+    <dimen name="profile_settingList_paddingVertical">20dp</dimen>
 
     <!-- Flowerpot item -->
     <dimen name="flowerpot_layout_height">125dp </dimen>

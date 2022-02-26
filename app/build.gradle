@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id "com.google.android.gms.oss-licenses-plugin"
 }
 
 apply plugin: 'com.android.application'
@@ -20,7 +21,7 @@ android {
         minSdk 23
         targetSdk 31
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -59,6 +60,8 @@ dependencies {
 
 
 
+
+
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -85,6 +88,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomdb_version"
     implementation "androidx.room:room-ktx:$roomdb_version"
     kapt "androidx.room:room-compiler:$roomdb_version"
+
     // optional - RxJava2 support for Room
     implementation 'androidx.room:room-rxjava2:2.4.0'
 
@@ -108,21 +112,21 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
-    implementation 'com.google.firebase:firebase-messaging:23.0.0'
-
+    implementation 'com.google.firebase:firebase-messaging:12.0.0'
 
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt('com.github.bumptech.glide:compiler:4.11.0')
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    kapt('com.github.bumptech.glide:compiler:4.13.0')
 
 
     //Google Login
-    implementation 'com.google.android.gms:play-services-auth:20.0.1'
+    implementation 'com.google.android.gms:play-services-auth:20.1.0'
 
 
     //Google Admob
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
     //LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
@@ -134,14 +138,19 @@ dependencies {
 
 
     // Log
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.4'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
 
     //LiveSharedPreference
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
     //History_search observable
     implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 
+    //Image blur
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
 
+
+    //Open Source License
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 }

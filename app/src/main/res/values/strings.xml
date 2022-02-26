@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BTOS</string>
+    <string name="app_name">저편너머</string>
     <string name="google_Admob_ID_test">"ca-app-pub-3940256099942544~3347511713"</string>
     <string name="google_Admob_ID_prod">"ca-app-pub-3439488559531418~5946591557"</string>
 
@@ -113,6 +113,12 @@
         <item>1922</item>
     </string-array>
 
+    <!--onBoarding-->
+    <string name="onBoarding_guide_1">새로 도착한 편지는 \n우편함에서 확인할 수 있어요.</string>
+    <string name="onBoarding_guide_2">일기를 작성하고, 화분을 키워보세요.</string>
+    <string name="onBoarding_guide_3">작성 버튼으로 일기를 쓸 수 있어요.</string>
+    <string name="onBoarding_guide_4">&lt;&lt;&lt;시작하려면 아무곳이나 터치하세요.&gt;&gt;&gt;</string>
+
     <!--posting-->
     <string-array name="report_items">
         <item>삭제</item>
@@ -164,7 +170,7 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
     <string-array name="suggest_item">
         <item>버그 제보</item>
         <item>악성 유저 신고</item>
-        <item>추가되었으면 하는 기능</item>
+        <item>기능 추가</item>
         <item>기타</item>
     </string-array>
 
@@ -174,8 +180,7 @@ Volutpat sed cras ornare arcu dui vivamus. Vitae turpis massa sed elementum temp
 
 
     <string name="opensource"></string>
-
-    <string name="noresult">검색 결과가 없습니다.</string>
     <string name="undlerline_look"><u>보기</u></string>
+    <string name="commingsoon">Coming Soon…!</string>
 
 </resources>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customDialog_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:gravity="center"
+        android:background="@drawable/mail_popup_bg">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/birth_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:text="생년"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/birth_till"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/birth_till"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconTint="@android:color/black"
+                app:elevation="0dp"
+                android:outlineProvider="none"
+                app:endIconDrawable="@drawable/ic_dropdown"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/birth_tv"
+                android:textSize="14sp"
+                android:minHeight="0dp"
+                app:errorEnabled="false"
+                app:placeholderTextColor="@color/black"
+                android:layout_marginStart="20dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/birth_list"
+                    android:layout_width="125dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="3dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:paddingHorizontal="0dp"
+                    android:paddingVertical="0dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:layout_width="110dp"
+                android:layout_height="2dp"
+                android:background="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/birth_till"
+                app:layout_constraintStart_toStartOf="@id/birth_till"
+                app:layout_constraintEnd_toEndOf="@id/birth_till"/>
+
+            <TextView
+                android:id="@+id/birth_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="중복된 닉네임입니다"
+                android:textColor="@color/notice_red"
+                android:textSize="11dp"
+                android:visibility="invisible"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="@id/birth_till"
+                app:layout_constraintTop_toBottomOf="@id/birth_till"
+                android:layout_marginTop="10dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            >
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/popup_btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/btn_rectangle"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:gravity="center"
+                android:paddingHorizontal="20dp"
+                android:text="확인"
+                android:textSize="14dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/notosanskr_bold"
+
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/popup_btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@drawable/btn_rectangle"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="20dp"
+                style="@style/TextAppearance.AppCompat.Button"
+                android:text="취소"
+                android:textSize="14dp"
+                android:fontFamily="@font/notosanskr_bold"
+                />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/birth_loading_pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+</androidx.cardview.widget.CardView>

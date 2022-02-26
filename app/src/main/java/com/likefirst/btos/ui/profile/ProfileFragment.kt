@@ -3,10 +3,10 @@ package com.likefirst.btos.ui.profile
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,13 +18,13 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.ui.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.main.MainActivity
-import com.likefirst.btos.data.remote.plant.view.SharedSelectModel
+import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
-import com.likefirst.btos.utils.LiveSharedPreferences
+import com.likefirst.btos.utils.Model.LiveSharedPreferences
 
-class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
+class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate){
     var isSettingOpen = false
     var isFetch=true
     lateinit var  sharedSelectModel : SharedSelectModel
@@ -32,7 +32,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
-        val spf = requireActivity().getSharedPreferences("EditName",MODE_PRIVATE)
+        val spf = requireActivity().getSharedPreferences("BTOS-APP",MODE_PRIVATE)
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference
             .getString("UserName", "undefine")
@@ -78,10 +78,11 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     fun initClickListener(){
         val mActivity = activity as MainActivity
         binding.profileCd.setOnClickListener {
-            mActivity.supportFragmentManager.beginTransaction()
+        /*  mActivity.supportFragmentManager.beginTransaction()
                 .add(R.id.fr_layout,  PlantFragment(), "plantrv")
                 .addToBackStack("profile-save")
                 .commit()
+            //TODO 배포 클릭 방지*/
         }
 
         binding.profilePremiumTv.setOnClickListener {
@@ -129,6 +130,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         if(plant.maxLevel!=plant.currentLevel)binding.profileMaxTv.visibility= View.GONE
     }
 
+
     fun cleanUpFragment(  fragments: Array<String>){
         fragments.forEach { fragment ->
             requireActivity().supportFragmentManager.commit {
@@ -141,10 +143,10 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (isHidden && isAdded) {
-            val fragments = arrayOf("premium", "plantrv","plantItem")
+            val fragments = arrayOf("premium", "plantrv","plantItem","suggestion")
             cleanUpFragment(fragments)
             if (isSettingOpen) {
-                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo","setNotify")
+                val fragments = arrayOf("setName", "setBirth", "setFont", "setAppinfo","setNotify","setAppDetail")
                 cleanUpFragment(fragments)
                 isSettingOpen=false
             }
@@ -155,9 +157,10 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
         }
     }
 
-  fun updateProfile() {
+    fun updateProfile() {
         initProfile()
     }
+
 
 
 }
