@@ -31,7 +31,6 @@ import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import android.widget.RadioGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo
@@ -138,6 +137,15 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             override fun onDrawerStateChanged(newState: Int) {}
         })
 
+       if(intent.getBooleanExtra("isNewUser", false)){
+           val bundle = Bundle()
+           bundle.putBoolean("isNewUser", true)
+           homeFragment.arguments = bundle
+           supportFragmentManager.beginTransaction()
+               .replace(R.id.fr_layout, homeFragment, "home")
+               .setReorderingAllowed(true)
+               .commitNowAllowingStateLoss()
+       }
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
             .setReorderingAllowed(true)
@@ -171,7 +179,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .hide(profileFragment)
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -181,7 +189,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(profileFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -195,12 +203,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
                     editor.clear()
                     editor.commit()
-                    if(historyFragment.isAdded){
+                    if(historyUpdateFragment.isAdded){
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(homeFragment)
                             .hide(profileFragment)
-                            .show(historyFragment)
+                            .show(historyUpdateFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
                         Log.d("historyClick", "added")
@@ -209,8 +217,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                             .hide(homeFragment)
                             .hide(archiveFragment)
                             .hide(profileFragment)
-                            .add(R.id.fr_layout, historyFragment, "history")
-                            .show(historyFragment)
+                            .add(R.id.fr_layout, historyUpdateFragment, "history")
+                            .show(historyUpdateFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
                         Log.d("historyClick", "noadded")
@@ -227,7 +235,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (archiveFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .hide(profileFragment)
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -237,7 +245,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(profileFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .add(R.id.fr_layout, archiveFragment, "archive")
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -251,7 +259,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (profileFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .hide(archiveFragment)
                             .show(profileFragment)
                             .setReorderingAllowed(true)
@@ -261,7 +269,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(archiveFragment)
-                            .hide(historyFragment)
+                            .hide(historyUpdateFragment)
                             .add(R.id.fr_layout, profileFragment, "profile")
                             .show(profileFragment)
                             .setReorderingAllowed(true)

@@ -48,7 +48,8 @@ class ArchiveListFragment : BaseFragment<FragmentArchiveListBinding>(FragmentArc
     ArchiveDiaryView, ArchiveListView{
 
     val mAdapter : ArchiveListRVAdapter by lazy {
-        ArchiveListRVAdapter(requireContext())
+        val userDB = UserDatabase.getInstance(requireContext())!!.userDao()
+        ArchiveListRVAdapter(requireContext(), userDB.getFontIdx()!!)
     }
     var selectedPosition = 0
 

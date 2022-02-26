@@ -82,7 +82,6 @@
             android:id="@+id/profile_suggest_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@null"
             android:theme="@style/EditTheme"
             android:inputType="textMultiLine"
             android:paddingHorizontal="20dp"
@@ -90,8 +89,7 @@
             android:hint="건의 내용을 입력해 주세요"
             android:gravity="start"
             android:textSize="14dp"
-            android:maxLength="200"
-            />
+            android:maxLength="200" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

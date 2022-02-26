@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.viewer.response.ArchiveListDiaryList
@@ -12,7 +13,7 @@ import com.likefirst.btos.databinding.ItemArchiveListRvDiaryBinding
 import com.likefirst.btos.databinding.ItemArchiveListRvMonthBinding
 import java.lang.RuntimeException
 
-class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveListRVAdapter(val context : Context, val fontIdx : Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val DIARY_TYPE = 0
     private val MONTH_TYPE = 1
     private var diaryList = arrayListOf<Any>()
@@ -22,6 +23,10 @@ class ArchiveListRVAdapter(val context : Context) : RecyclerView.Adapter<Recycle
             var leafImg = 0
             binding.archiveListPreviewContentsTv.text = diaryInfo.content
             binding.archiveListPreviewDateTv.text = diaryInfo.diaryDate
+            val fontList = context.resources.getStringArray(R.array.fontEng)
+            val font = context.resources.getIdentifier(fontList[fontIdx], "font", context.packageName)
+            binding.archiveListPreviewContentsTv.typeface = ResourcesCompat.getFont(context, font)
+            binding.archiveListPreviewDateTv.typeface = ResourcesCompat.getFont(context, font)
 
             // emotionImg 바인딩
             val emotionRes = context.resources.getIdentifier("emotion${diaryInfo.emotionIdx}", "drawable", context.packageName)

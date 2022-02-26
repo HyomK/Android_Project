@@ -1,7 +1,9 @@
 package com.likefirst.btos.ui.profile.setting
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentAppinfoBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -21,8 +23,9 @@ class AppInfoFragment: BaseFragment<FragmentAppinfoBinding>(FragmentAppinfoBindi
         binding.appInfoPrivacyPolicy.setOnClickListener { 
             goToDetail("개인정보 정책")
         }
-        binding.appInfoOpensource.setOnClickListener { 
-            goToDetail("오픈소스 라이센스")
+        binding.appInfoOpensource.setOnClickListener {
+            startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
+//            goToDetail("오픈소스 라이센스")
         }
     }
     
