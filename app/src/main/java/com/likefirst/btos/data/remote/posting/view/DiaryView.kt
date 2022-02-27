@@ -1,6 +1,7 @@
 package com.likefirst.btos.data.remote.posting.view
 import com.likefirst.btos.data.remote.posting.response.MailDiaryResponse
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
+import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
 
 
 interface MailDiaryView {
@@ -11,7 +12,7 @@ interface MailDiaryView {
 
 interface PostDiaryView{
     fun onDiaryPostLoading()
-    fun onDiaryPostSuccess()
+    fun onDiaryPostSuccess(result: PostDiaryResponse)
     fun onDiaryPostFailure(code : Int)
 }
 

@@ -49,7 +49,7 @@ class DiaryService (){
                 val resp = response.body()!!
                 Log.d("debug", resp.toString())
                 when (resp.code){
-                    1000 -> postDiaryView.onDiaryPostSuccess()
+                    1000 -> postDiaryView.onDiaryPostSuccess(resp.result)
                     else -> postDiaryView.onDiaryPostFailure(resp.code)
                 }
             }

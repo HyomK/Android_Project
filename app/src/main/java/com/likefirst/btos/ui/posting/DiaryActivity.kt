@@ -23,6 +23,7 @@ import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.entities.PostDiaryRequest
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.posting.response.PostDiaryResponse
 import com.likefirst.btos.data.remote.posting.service.DiaryService
 import com.likefirst.btos.data.remote.posting.view.PostDiaryView
 import com.likefirst.btos.data.remote.posting.view.UpdateDiaryView
@@ -293,14 +294,14 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         diaryService.updateDiary(UpdateDiaryRequest(diaryIdx, getUserIdx(), emotionIdx, diaryDate, contents, isPublic, doneLists))
     }
 
-    fun goToDiaryViewer(){
+    fun goToDiaryViewer(newDiaryIdx : Int){
         val selectedPosition = intent.getIntExtra("selectedPosition", -1)
         val diaryDate = binding.diaryDateTv.text.toString()
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         val mIntent = Intent(this, DiaryViewerActivity::class.java)
         mIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         mIntent.putExtra("selectedPosition", selectedPosition)
-        mIntent.putExtra("diaryIdx", intent.getIntExtra("diaryIdx", 0))
+        mIntent.putExtra("diaryIdx", intent.getIntExtra("diaryIdx", newDiaryIdx))
         mIntent.putExtra("diaryInfo", DiaryViewerInfo(userDB.getNickName()!!, emotionIdx, diaryDate, contents, isPublic(), doneLists))
         startActivity(mIntent)
     }
@@ -360,9 +361,9 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
         }
     }
 
-    override fun onDiaryPostSuccess() {
+    override fun onDiaryPostSuccess(result : PostDiaryResponse) {
         binding.diaryLoadingView.visibility = View.GONE
-        goToDiaryViewer()
+        goToDiaryViewer(result.diaryIdx)
         DiaryViewerActivity.diaryStateFlag = DiaryViewerActivity.CREATE
         if (dateToString(Date()) == binding.diaryDateTv.text.toString()){
             saveLastPostingDate(Date())
@@ -418,7 +419,7 @@ class DiaryActivity() : BaseActivity<ActivityDiaryBinding>(ActivityDiaryBinding:
 
     override fun onArchiveUpdateSuccess() {
         binding.diaryLoadingView.visibility = View.GONE
-        goToDiaryViewer()
+        goToDiaryViewer(0)
         DiaryViewerActivity.diaryStateFlag = DiaryViewerActivity.UPDATE
     }
 

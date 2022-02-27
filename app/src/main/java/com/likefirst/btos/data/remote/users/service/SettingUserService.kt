@@ -34,6 +34,7 @@ class SettingUserService {
 
     fun setBirth(userIdx : Int, birth : UserBirth){
         setSettingUserView.onSetSettingUserViewLoading()
+        Log.d("userBirth", birth.toString())
         SettingUserService.setBirth(userIdx, birth).enqueue(object: Callback<BaseResponse<String>> {
             override fun onResponse(call: Call<BaseResponse<String>>, response: Response<BaseResponse<String>>) {
                 baseResponseSuccess(response)
