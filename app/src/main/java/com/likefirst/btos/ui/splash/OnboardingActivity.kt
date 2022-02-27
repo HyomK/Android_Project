@@ -1,17 +1,13 @@
 package com.likefirst.btos.ui.splash
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -19,13 +15,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
 import com.google.firebase.messaging.FirebaseMessaging
 import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.R
@@ -161,7 +155,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 nickname = binding.onboardingNameEt.text.toString()
 
                 if(binding.onboardingNotageCb.isChecked) birth = null
-                else birth == binding.onboardingAgelist.text.toString().toInt()
+                else birth = binding.onboardingAgelist.text.toString().toInt()
 
                 Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
                 authService.setSignUpView(this)
