@@ -31,8 +31,6 @@ import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import android.widget.RadioGroup
-import android.widget.Toast
-import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo

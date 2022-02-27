@@ -161,7 +161,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 nickname = binding.onboardingNameEt.text.toString()
 
                 if(binding.onboardingNotageCb.isChecked) birth = null
-                else birth == binding.onboardingAgelist.text.toString().toInt()
+                else birth =binding.onboardingAgelist.text.toString().toInt()
 
                 Log.e("SIGNUP", "email:$email\nnickname:$nickname\nbirth:$birth")
                 authService.setSignUpView(this)
