@@ -27,54 +27,66 @@ class LoginDialogFragment(): DialogFragment() {
     }
 
     fun initDialog(){
-      binding.loginDialogAllCheck.loginDialogItemTitle.text="모두 동의합니다"
-      binding.loginDialogAllCheck.loginDialogItemLook.visibility=View.GONE
+        binding.loginDialogAllCheck.loginDialogItemTitle.text="모두 동의합니다"
+        binding.loginDialogAllCheck.loginDialogItemLook.visibility=View.GONE
 
-      binding.loginDialogNextBtn.setOnClickListener{
-          if(binding.loginDialogAllCheck.loginDialogCheckbox.isChecked) {
-              isnextClicked = true
-              dismiss()
-          }
-          else {
-              //필수 약관에 동의 error 문자 표시
-              Toast.makeText(requireContext(), "필수 약관에 동의해주세요", Toast.LENGTH_SHORT).show()
-              isnextClicked = false
-          }
-      }
-      binding.loginDialogPrivacy.loginDialogItemTitle.text="[필수] 개인정보 수집 동의"
-      binding.loginDialogUse.loginDialogItemTitle.text="[필수] 서비스 이용약관"
+        binding.loginDialogNextBtn.setOnClickListener{
+            if(binding.loginDialogAllCheck.loginDialogCheckbox.isChecked) {
+                isnextClicked = true
+                dismiss()
+            }
+            else {
+                //필수 약관에 동의 error 문자 표시
+                Toast.makeText(requireContext(), "필수 약관에 동의해주세요", Toast.LENGTH_SHORT).show()
+                isnextClicked = false
+            }
+        }
+        binding.loginDialogPrivacy.loginDialogItemTitle.text="[필수] 개인정보 수집 동의"
+        binding.loginDialogUse.loginDialogItemTitle.text="[필수] 서비스 이용약관"
 
-      binding.loginDialogPrivacy.checkboxCl.setOnClickListener{
-          val isChecked = binding.loginDialogPrivacy.loginDialogCheckbox.isChecked
-          binding.loginDialogPrivacy.loginDialogCheckbox.isChecked = !isChecked
-         onCheckChanged( "single")
-      }
+        binding.loginDialogPrivacy.loginDialogCheckbox.setOnClickListener {
+            onCheckChanged( "single")
+        }
 
-      binding.loginDialogUse.checkboxCl.setOnClickListener{
-          val isChecked = binding.loginDialogUse.loginDialogCheckbox.isChecked
-          binding.loginDialogUse.loginDialogCheckbox.isChecked = !isChecked
-          onCheckChanged("single")
-      }
-      binding.loginDialogAllCheck.checkboxCl.setOnClickListener{
-          val isChecked = binding.loginDialogAllCheck.loginDialogCheckbox.isChecked
-          binding.loginDialogAllCheck.loginDialogCheckbox.isChecked = !isChecked
-          onCheckChanged("all")
-      }
+        binding.loginDialogUse.loginDialogCheckbox.setOnClickListener {
+            onCheckChanged("single")
+        }
 
-      binding.loginDialogUse.loginDialogItemLook.setOnClickListener {
+        binding.loginDialogAllCheck.loginDialogCheckbox.setOnClickListener {
+            onCheckChanged("all")
+        }
+
+        binding.loginDialogPrivacy.checkboxCl.setOnClickListener{
+              val isChecked = binding.loginDialogPrivacy.loginDialogCheckbox.isChecked
+              binding.loginDialogPrivacy.loginDialogCheckbox.isChecked = !isChecked
+             onCheckChanged( "single")
+        }
+
+        binding.loginDialogUse.checkboxCl.setOnClickListener{
+              val isChecked = binding.loginDialogUse.loginDialogCheckbox.isChecked
+              binding.loginDialogUse.loginDialogCheckbox.isChecked = !isChecked
+              onCheckChanged("single")
+        }
+        binding.loginDialogAllCheck.checkboxCl.setOnClickListener{
+              val isChecked = binding.loginDialogAllCheck.loginDialogCheckbox.isChecked
+              binding.loginDialogAllCheck.loginDialogCheckbox.isChecked = !isChecked
+              onCheckChanged("all")
+        }
+
+        binding.loginDialogUse.loginDialogItemLook.setOnClickListener {
           val dialog = LoginDetailDialogFragment()
           val bundle = bundleOf("content" to getString("term.text"))
           dialog.arguments=bundle
           Log.e("LOGINDIALOG",dialog.arguments.toString())
           dialog.show(requireActivity().supportFragmentManager, "")
-      }
-      binding.loginDialogPrivacy.loginDialogItemLook.setOnClickListener {
+        }
+        binding.loginDialogPrivacy.loginDialogItemLook.setOnClickListener {
           val dialog = LoginDetailDialogFragment()
           val bundle = bundleOf("content" to getString("privacy_policy.text"))
           dialog.arguments=bundle
           Log.e("LOGINDIALOG",dialog.arguments.toString())
           dialog.show(requireActivity().supportFragmentManager, "")
-      }
+        }
 
     }
     private fun getString(file:String): String? {
