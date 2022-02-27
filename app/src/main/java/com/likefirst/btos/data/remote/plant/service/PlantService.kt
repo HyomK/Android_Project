@@ -37,6 +37,7 @@ class PlantService {
     fun loadPlantList(userId:String){
         plantView.onPlantListLoading()
 
+        Log.d("userId", userId)
         PlantService.loadPlantList(userId).enqueue(object:Callback<PlantResponse>{
             override fun onResponse(call: Call<PlantResponse>, response: Response<PlantResponse>) {
                 val plantResponse: PlantResponse =response.body()!!
@@ -49,6 +50,7 @@ class PlantService {
             }
 
             override fun onFailure(call: Call<PlantResponse>, t: Throwable) {
+                Log.d("PlantListFailure", t.toString())
             }
 
         })
