@@ -6,23 +6,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
-import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.utils.ViewModel.SharedBuyModel
 import com.likefirst.btos.databinding.CustomDialogLayoutBinding
 import com.likefirst.btos.utils.errorDialog
 
 class PlantDialog:DialogFragment(){
     private var _binding: CustomDialogLayoutBinding? = null
     private val binding get() = _binding!!
-    lateinit var   sharedBuyModel: SharedBuyModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding =  CustomDialogLayoutBinding.inflate(inflater, container, false)
         val view = binding.root
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        sharedBuyModel= ViewModelProvider(requireActivity()).get(SharedBuyModel::class.java)
         initDialog()
         return view
     }

@@ -14,10 +14,13 @@ import android.util.Log
 import android.widget.Toast
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.likefirst.btos.BuildConfig
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.utils.fcm.MyWorker
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
+import com.likefirst.btos.utils.ViewModel.PlantViewModel
 import com.likefirst.btos.utils.getAlarmSound
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveNotification
@@ -101,7 +104,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT) // 일회성
 
-        val channelId = getString(R.string.default_notification_channel_id)
+        val channelId = BuildConfig.DEFAULT_NOTIFICATION_CHANNEL_ID
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 소리
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
@@ -125,12 +128,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
                 setShowBadge(false)
             }
         }
-
+        filterNotification(title!!,body)
         if(getAlarmSound()){
             notificationManager.notify(uniId, notificationBuilder.build())
         }
         Log.e(TAG,"title: ${title} body: ${body}")
-        saveNotification(title!!)
+
 
     }
 
@@ -145,7 +148,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
         val pendingIntent = PendingIntent.getActivity(this, uniId, intent, PendingIntent.FLAG_ONE_SHOT)
 
         // 알림 채널 이름
-        val channelId = getString(R.string.default_notification_channel_id)
+        val channelId = BuildConfig.DEFAULT_NOTIFICATION_CHANNEL_ID
 
         // 알림 소리
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -173,14 +176,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
                 setShowBadge(false)
             }
         }
-
+        filterNotification(title,body)
         //TODO 알림 추후
         if(getAlarmSound()){
            notificationManager.notify(uniId, notificationBuilder.build())
         }
-        //saveMessage(title!!)
         Log.e(TAG,"title: ${title} body: ${body}")
-        saveNotification(title!!)
+
     }
 
     // 받은 토큰을 서버로 전송
@@ -211,13 +213,27 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
         Looper.loop()
     }
 
-    fun saveMessage(title: String){
-        val spf = getSharedPreferences("notification",MODE_PRIVATE)
-        val editor = spf.edit()
-        editor.putString("newNotification","new")
-        if(!title.contains("공지사항") || !title.contains("화분"))editor.putString("newMail","new")
-        editor.apply()
+    fun filterNotification(title: String , content: String){
+
+        if("식물" in title || "화분" in title){
+            val plantViewModel = PlantViewModel(application)
+            val plant = plantViewModel.getSelectedPlant()
+            val newLevel = Character.getNumericValue(title[title.indexOf("단계")-1])
+            if(newLevel>=0)plantViewModel.setInitPlant(plant.plantIdx,plant.plantStatus,newLevel.toInt(),plant.isOwn)
+            saveNotification("plant")
+            Log.e(TAG,"FILTER plant")
+            return
+        }else if("신고" in title){
+
+        } else if(title.contains("공지사항")){
+            saveNotification("notice")
+        }// 편지, 일기 처리
+        else{
+            saveNotification("mail")
+        }
+        Log.e(TAG,"FILTER else ")
     }
+
 
     override fun onLoadingFcmToken() {}
 

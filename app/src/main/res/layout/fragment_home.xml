@@ -108,7 +108,6 @@
 
             <ImageButton
                 android:id="@+id/home_send_mail_btn"
-                android:visibility="gone"
                 android:layout_width="92dp"
                 android:layout_height="92dp"
                 app:layout_constraintBottom_toTopOf="@id/home_write_btn"

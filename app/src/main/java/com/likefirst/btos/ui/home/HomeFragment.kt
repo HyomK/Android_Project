@@ -12,6 +12,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
@@ -29,7 +30,6 @@ import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
-import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -43,6 +43,7 @@ import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getLastPostingDate
 import com.likefirst.btos.utils.saveLastPostingDate
 import com.likefirst.btos.utils.*
+import com.likefirst.btos.utils.ViewModel.PlantViewModel
 import java.time.LocalTime
 import java.util.*
 import kotlin.system.exitProcess
@@ -51,7 +52,8 @@ import kotlin.system.exitProcess
 public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
     var isMailboxOpen =false
     lateinit var  sharedNotifyModel : SharedNotifyModel
-    lateinit var sharedSelectModel: SharedSelectModel
+    private val plantModel: PlantViewModel by viewModels()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,11 +66,12 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             if(it) binding.homeNotificationBtn.setImageResource(R.drawable.notification_new)
             else binding.homeNotificationBtn.setImageResource(R.drawable.notification)
         })
-        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
-        sharedSelectModel.getLiveData().observe(viewLifecycleOwner, Observer<Bundle>{
-            val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
-            val check = it.getString("plantName",null)
-            if(check!=null) updatePot(binding.lottieAnimation, plantIndex[it.getInt("plantIdx",1)-1],it.getInt("level",0))
+        val plantName= requireContext().resources.getStringArray(R.array.plantEng)
+        plantModel.getCurrentPlant().observe(viewLifecycleOwner,Observer{
+                it-> run {
+            updatePot(binding.lottieAnimation,plantName[it.plantIdx-1],it.currentLevel)
+            Log.e("plant_changed_profile",it.toString())
+           }
         })
     }
     override fun initAfterBinding() {
@@ -80,7 +83,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         binding.homeMailBtn.setOnClickListener {
             sharedNotifyModel.setMsgLiveData(false)
             removeMessage()
-           // binding.homeMailBtn.setImageResource(R.drawable.mailbox)
             mActivity.isMailOpen = true
             mActivity.notifyDrawerHandler("lock")
             requireActivity().supportFragmentManager

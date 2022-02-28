@@ -2,8 +2,6 @@ package com.likefirst.btos.ui.profile.plant
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,30 +12,22 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.utils.ViewModel.SharedBuyModel
-import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.request.RequestOptions
-import jp.wasabeef.glide.transformations.BlurTransformation;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
-class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : SharedSelectModel, val buyModel : SharedBuyModel, val context : Context) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
+class PlantRVAdapter(val context : Context) : RecyclerView.Adapter<PlantRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: PlantItemClickListener
-    val sharedBuyModel = buyModel
-    val sharedSelectModel =selectModel
+    private var dataSet= ArrayList<Pair<Plant,Int>>()
 
 
 
     interface PlantItemClickListener{
         fun onClickInfoItem(plant : Plant)
         fun onClickSelectItem(plant : Plant, position:Int)
-        fun onClickBuyItem(plant : Pair<Plant,Int>, position : Int)
+        fun onClickBuyItem(plant : Plant)
     }
 
     fun setMyItemCLickLister(itemClickLister: PlantItemClickListener){
@@ -45,7 +35,7 @@ class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : 
     }
 
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val plantName : TextView = view.findViewById(R.id.flowerpot_name_tv)
         val plantLevel : TextView = view.findViewById(R.id.flowerpot_level_tv)
         val plantImage : ImageView = view.findViewById(R.id.flowerpot_iv)
@@ -78,7 +68,7 @@ class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : 
            holder.selectBtn.text=won
            holder.maxIv.setBackgroundResource(R.drawable.ic_max_gray_bg)
            holder.selectBtn.setOnClickListener{
-               mItemClickLister.onClickBuyItem(dataSet[position] ,position)
+               mItemClickLister.onClickBuyItem(dataSet[position].first)
            }
        }else {
            holder.layout.setBackgroundResource(R.drawable.profile_bg)
@@ -107,24 +97,14 @@ class PlantRVAdapter(var dataSet :ArrayList<Pair<Plant,Int>>, val selectModel : 
        return dataSet.size
     }
 
-
-    fun buyItem(position :Int , buyPlant : Pair<Plant, Int>){
-        dataSet[position] =buyPlant
-        reset(dataSet)  // 재정렬한다
+    @SuppressLint("NotifyDataSetChanged")
+    fun initData (initData :ArrayList<Pair<Plant,Int>>){
+        dataSet.clear()
+        dataSet.addAll(initData)
+        notifyDataSetChanged()
     }
 
 
-    fun selectItem(position: Int){
-        for ((index, plant) in  dataSet.withIndex()) {
-            if (plant.first.plantStatus == "selected") {
-                dataSet[index].first.plantStatus = "active"
-                dataSet[position].first.plantStatus="selected"
-                if( dataSet[position].first.currentLevel==-1)  dataSet[position].first.currentLevel=0
-                break
-            }
-        }
-        reset(dataSet)
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun reset(origin:ArrayList<Pair<Plant,Int>>){

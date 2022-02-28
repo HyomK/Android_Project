@@ -1,25 +1,29 @@
 package com.likefirst.btos.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.likefirst.btos.data.entities.Plant
 
 
 @Dao
 interface PlantDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(plant: Plant)
 
     @Update
-    fun update(plant: Plant)
+    fun update(plant:Plant)
 
     @Delete
     fun delete(plant:Plant)
 
     @Query("SELECT * FROM PlantTable")
-    fun getPlants(): List<Plant>
+    fun getPlants(): LiveData<List<Plant>>
 
     @Query("SELECT * FROM PlantTable where plantIdx = :id")
-    fun getPlant(id: Int): Plant?
+    fun getPlant(id: Int): Plant
+
+    @Query("SELECT * FROM PlantTable where plantStatus = :status")
+    fun getCurrentPlant(status: String ="selected"): LiveData<Plant>
 
     @Query("UPDATE PlantTable SET plantStatus= :status WHERE plantIdx = :id")
     fun setPlantStatus(id: Int, status : String)

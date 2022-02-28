@@ -1,32 +1,20 @@
 package com.likefirst.btos.ui.posting
 
-import android.app.Activity
-import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.widget.addTextChangedListener
-import com.google.android.material.snackbar.Snackbar
-import com.likefirst.btos.ApplicationClass.Companion.TAG
 import com.likefirst.btos.R
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.remote.notify.service.FCMService
 import com.likefirst.btos.data.remote.posting.response.SendLetterRequest
 import com.likefirst.btos.data.remote.posting.service.SendService
 import com.likefirst.btos.data.remote.posting.view.SendLetterView
 import com.likefirst.btos.databinding.ActivityMailWriteBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.getUserIdx
 
 
@@ -68,6 +56,10 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
                     binding.MailWriteMenuSp.visibility= View.VISIBLE
+
+                    val sendService = SendService()
+                    sendService.setSendLetterView(this@MailWriteActivity)
+                    sendService.sendLetter(SendLetterRequest(getUserIdx(),binding.MailWriteBodyEt.text.toString()))
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -129,11 +121,11 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
 
     override fun onSendLetterSuccess() {
         binding.mailWriteLoadingPb.visibility=View.GONE
-
+        Log.e("SENDING", "success")
     }
 
     override fun onSendLetterFailure(code: Int, message: String) {
-        Log.e(TAG, "${code} ${message}")
+        Log.e("SENDING", "${code} ${message}")
     }
 
     fun setFont(idx:Int){

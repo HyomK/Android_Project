@@ -10,6 +10,10 @@ import android.util.Log.d
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -31,6 +35,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.likefirst.btos.ApplicationClass
+import com.likefirst.btos.BuildConfig
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
@@ -50,6 +55,9 @@ import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.*
+import com.likefirst.btos.utils.ViewModel.PlantViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class LoginActivity
@@ -76,13 +84,13 @@ class LoginActivity
     lateinit var mGoogleApiClient: GoogleApiClient
     private var userName: String? = null
     private var movePose : String? = null
+    private val FIREBASE_CLIENT_KEY = BuildConfig.BTOS_DEFAULT_WEB_CLIENT_ID
 
-    private var mFirebaseDatabase: FirebaseDatabase? = null
-    private var mDatabaseReference: DatabaseReference? = null
-    private var mChildEventListener: ChildEventListener? = null
+    lateinit var plantModel : PlantViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        plantModel = ViewModelProvider(this).get(PlantViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
         initFirebaseAuth()
         initValues()
@@ -244,7 +252,7 @@ class LoginActivity
     }
 
     override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
-        val plantDB = PlantDatabase.getInstance(this)
+       /* val plantDB = PlantDatabase.getInstance(this)
         Log.d("PlantList/API",plantList.toString())
         plantList.forEach { i ->
             run {
@@ -254,7 +262,18 @@ class LoginActivity
                     plantDB?.plantDao()?.setPlantInit(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
                 }
             }
-        }  // 전체 화분 목록 DB 업데이트
+        }  // 전체 화분 목록 DB 업데이트*/
+        lifecycleScope.launch(Dispatchers.IO){
+            plantList.forEach { i ->
+                run {
+                    if (plantModel.getPlant(i.plantIdx) == null) {
+                        plantModel.insert(i)
+                    } else {
+                        plantModel.setInitPlant(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
+                    }
+                }
+            }  // 전체 화분 목록 DB 업데이트
+        }
     }
 
 
@@ -267,7 +286,7 @@ class LoginActivity
 
     private fun initFirebaseAuth() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.btos_default_web_client_id))
+                .requestIdToken(FIREBASE_CLIENT_KEY)
             .requestEmail()
             .build()
         mGoogleApiClient = GoogleApiClient.Builder(this)

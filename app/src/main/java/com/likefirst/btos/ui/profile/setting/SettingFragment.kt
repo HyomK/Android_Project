@@ -2,15 +2,12 @@ package com.likefirst.btos.ui.profile.setting
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.firebase.messaging.FirebaseMessagingService
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserLeave
 import com.likefirst.btos.data.entities.UserPush
@@ -25,7 +22,6 @@ import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.*
 import kotlin.system.exitProcess
 import com.google.firebase.auth.FirebaseAuth
-import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 
 
 class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)
@@ -35,13 +31,10 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
     var isDeleted : Boolean = false
     var isPush : Boolean = false
     lateinit var mAuth: FirebaseAuth
-    lateinit var sharedSelectModel: SharedSelectModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        sharedSelectModel= ViewModelProvider(requireActivity()).get(SharedSelectModel::class.java)
     }
 
     override fun initAfterBinding() {
@@ -113,7 +106,6 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                     removeUserInfo()
                     userDatabase.userDao().delete(userDatabase.userDao().getUser())
 
-                    sharedSelectModel.removeLiveData()
 
                     //해당 앱의 루트 액티비티를 종료시킨다.
                     val mActivity = activity as MainActivity
@@ -189,7 +181,7 @@ class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBindin
                             )
                             isDeleted = true
                             removeUserInfo()
-                            sharedSelectModel.removeLiveData()
+
                             settingService.setSettingUserView(this@SettingFragment)
                             settingService.leave(userDatabase.userDao().getUserIdx(), UserLeave("deleted"))
                         }else{

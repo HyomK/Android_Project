@@ -9,6 +9,9 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,6 +25,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.likefirst.btos.ApplicationClass
+import com.likefirst.btos.BuildConfig
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
@@ -42,6 +46,9 @@ import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.*
+import com.likefirst.btos.utils.ViewModel.PlantViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
     SignUpView, GetProfileView, LoginView, PlantListView ,FcmTokenView{
@@ -57,6 +64,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     lateinit var mAuth: FirebaseAuth
     private var mAuthListener: FirebaseAuth.AuthStateListener? = null
     lateinit var mGoogleApiClient: GoogleApiClient
+    private val FIREBASE_CLIENT_KEY = BuildConfig.BTOS_DEFAULT_WEB_CLIENT_ID
 
     private var userName: String? = null
     private var nickname: String? = null
@@ -64,13 +72,11 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     private var checkName : Boolean = false
     private var checkAge : Boolean = false
 
-    private var mFirebaseDatabase: FirebaseDatabase? = null
-    private var mDatabaseReference: DatabaseReference? = null
-    private var mChildEventListener: ChildEventListener? = null
+    lateinit var plantModel : PlantViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        plantModel = ViewModelProvider(this).get(PlantViewModel::class.java)
         val dialog = LoginDialogFragment()
         dialog.show(supportFragmentManager, "")
 
@@ -271,7 +277,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
-        val plantDB = PlantDatabase.getInstance(this)
+       /* val plantDB = PlantDatabase.getInstance(this)
         Log.d("Plant/API",plantList.toString())
         plantList.forEach { i ->
             run {
@@ -281,7 +287,19 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                     plantDB?.plantDao()?.setPlantInit(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
                 }
             }
-        }  // 전체 화분 목록 DB 업데이트
+        }  // 전체 화분 목록 DB 업데이트*/
+
+        lifecycleScope.launch(Dispatchers.IO){
+            plantList.forEach { i ->
+                run {
+                    if (plantModel.getPlant(i.plantIdx) == null) {
+                        plantModel.insert(i)
+                    } else {
+                        plantModel.setInitPlant(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
+                    }
+                }
+            }  // 전체 화분 목록 DB 업데이트
+        }
     }
 
 
@@ -291,7 +309,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
     private fun initFirebaseAuth() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.btos_default_web_client_id))
+            .requestIdToken(FIREBASE_CLIENT_KEY)
             .requestEmail()
             .build()
         mGoogleApiClient = GoogleApiClient.Builder(this)

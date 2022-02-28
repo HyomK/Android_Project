@@ -7,7 +7,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.likefirst.btos.ApplicationClass.Companion.mSharedPreferences
 import com.likefirst.btos.R
+import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.utils.ViewModel.PlantViewModel
 import java.util.*
 
 fun saveJwt(jwtToken: String) {
@@ -81,10 +83,18 @@ fun removeUserInfo(){
     editor.apply()
 }
 
-fun saveNotification(title:String){
+fun saveNotification(option:String){
     val editor = mSharedPreferences.edit()
-    editor.putString("newNotification","new")
-    if(!title.contains("공지사항") && !title.contains("화분"))editor.putString("newMail","new")
+    when(option){
+        "mail"->{
+            editor.putString("newMail","new")
+            editor.putString("newNotification","new")
+        }
+        else ->{
+            editor.putString("newNotification","new")
+        }
+
+    }
     editor.apply()
 }
 
