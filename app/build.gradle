@@ -4,10 +4,16 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id "com.google.android.gms.oss-licenses-plugin"
+    id "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
+
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+
 
 android {
     compileSdk 31
@@ -23,8 +29,13 @@ android {
         versionCode 1
         versionName "0.0.1"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BTOS_DEFAULT_WEB_CLIENT_ID", properties['btos_default_web_client_id']
+        buildConfigField "String", "FIREBASE_SERVER_KEY", properties['firebase_server_key']
+        buildConfigField "String", "DEFAULT_NOTIFICATION_CHANNEL_ID", properties['default_notification_channel_id']
+        buildConfigField "String", "GOOGLE_ADMOB_ID_TEST" ,  properties['google_Admob_ID_test']
+        buildConfigField "String", "GOOGLE_ADMOB_ID_PROD" ,  properties['google_Admob_ID_prod']
 
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
