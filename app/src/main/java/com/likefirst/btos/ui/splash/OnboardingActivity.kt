@@ -81,7 +81,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         dialog.show(supportFragmentManager, "")
 
         mAuth = FirebaseAuth.getInstance()
-       // initFirebaseDatabase()
         initFirebaseAuth()
         initListener()
     }
@@ -200,8 +199,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
     }
 
     override fun onSignUpSuccess(login: Login) {
-       // binding.onboardingLoadingPb.visibility = View.GONE
-        Log.e("PLANT_INIT/DONE","DONE")
         authService.setLoginView(this)
         authService.login(UserEmail(email))
     }
@@ -351,8 +348,7 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         mAuth = FirebaseAuth.getInstance()
         val user =  mAuth?.currentUser
         if(user == null) {
-            //TODO 비로그인 상태 일때 처리
-            Log.e("FIREBASE", "실패! 비로그인 상태입니다")
+
         }else{
             var userData = UserDTO()
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
@@ -369,12 +365,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
                 fcmTokenService.setFcmTokenView(this)
                 fcmTokenService.postFcmToken(getUserIdx(),token)
 
-             /*
-                val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
-
-                mFireDatabase.getReference("users")
-                    .child(userData.email.toString())
-                    .setValue(userData)*/
             })
         }
     }
@@ -385,25 +375,6 @@ class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnbo
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-
-  /*  private fun initFirebaseDatabase() {
-        mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("users")
-        mChildEventListener = object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                Log.e("Firebase","child added")
-            }
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-            }
-            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
-            override fun onCancelled(databaseError: DatabaseError) {}
-        }
-
-
-        mDatabaseReference?.addChildEventListener( mChildEventListener!!)
-    }
-*/
     override fun onBackPressed() {
         super.onBackPressed()
         val gso = getGSO()

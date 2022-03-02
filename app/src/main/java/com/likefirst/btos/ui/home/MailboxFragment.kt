@@ -84,45 +84,38 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val userID= userDao.getUser()!!.userIdx!!
         adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
             override fun onClickItem(mail:Mailbox, position: Int) {
+
                 CoroutineScope(Dispatchers.Main).launch {
-                    binding.setMailboxLoadingPb.visibility= View.VISIBLE
+                    setLoadingView()
                     binding.mailboxRv.isClickable=false
                     CoroutineScope(Dispatchers.IO).async {
                         when(mail.type){
                             "letter"->{
-                                saveMail(mail)
                                 val letterService= MailLetterService()
                                 letterService.setLetterView(this@MailboxFragment)
                                 letterService.loadLetter(userID,"letter",mail.idx)
                             }
                             "diary"->{
-                                saveMail(mail)
                                 val diaryService= DiaryService()
                                 diaryService.setDiaryView(this@MailboxFragment)
                                 diaryService.loadDiary(userID,"diary",mail.idx)
                             }
                             "reply"->{
-                                saveMail(mail)
                                 val replyService= MailReplyService()
                                 replyService.setReplyView(this@MailboxFragment)
                                 replyService.loadReply(userID,"reply",mail.idx)
                             }
                         }
                     }.await()
+                    val mActivity = activity as MainActivity
+                    mActivity.notifyDrawerHandler("unlock")
                     adapter.removeItem(position)
                 }
             }
         })
     }
 
-    fun saveMail(mail:Mailbox) {
-        Log.d("Letter/API-MAIL",mail.toString())
-        val spf= requireActivity().getSharedPreferences("MailBox",
-            AppCompatActivity.MODE_PRIVATE)
-        val editor=spf.edit()
-        editor.putString("sendAt",mail.sendAt)
-        editor.commit()
-    }
+
 
     fun getDiary(diary: MailInfoResponse){
         var name : String="(알 수 없음)"
@@ -175,7 +168,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onMailboxLoading() {
-        setLoadingView()
     }
 
     override fun onMailboxSuccess(mailboxList: ArrayList<Mailbox>) {
@@ -190,7 +182,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onLetterLoading() {
-        setLoadingView()
+
     }
 
     override fun onLetterSuccess(letter: MailInfoResponse) {

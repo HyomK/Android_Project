@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/MailWrite_main_layout"
+    android:id="@+id/MailReply_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,22 +15,15 @@
 
         <include
             android:id="@+id/MailReply_toolbar"
-            layout="@layout/toolbar_layout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
+            layout="@layout/toolbar_layout"/>
 
         <FrameLayout
             android:id="@+id/MailReply_send_op"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+
             >
 
             <com.google.android.material.textfield.TextInputLayout
@@ -69,8 +62,6 @@
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-
         </FrameLayout>
         <View
             android:id="@+id/MailReply_hide_view"
@@ -96,21 +87,6 @@
             android:visibility="invisible"
             />
 
-
-
-        <ImageButton
-            android:id="@+id/MailReply_write_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="70dp"
-            android:src="@drawable/ic_write"
-            android:background="@color/background"
-            android:visibility="invisible"
-            />
-
         <ImageButton
             android:id="@+id/MailReply_check_btn"
             android:layout_width="wrap_content"
@@ -124,51 +100,74 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-<androidx.constraintlayout.widget.ConstraintLayout
-    app:layout_constraintTop_toBottomOf="@+id/MailReply_toolbar_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_bg_received"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+   <androidx.constraintlayout.widget.ConstraintLayout
+       app:layout_constraintTop_toBottomOf="@id/MailReply_toolbar_layout"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
 
-        />
+       <androidx.core.widget.NestedScrollView
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="1"
+           android:fadingEdge="none"
+           android:fillViewport="true"
+           android:overScrollMode="never"
+           android:scrollbars="none"
+           android:background="@drawable/mail_reply_repeat_bg"
+         >
+           <LinearLayout
 
-    <EditText
-        android:id="@+id/MailReply_body_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
-        android:layout_marginVertical="@dimen/mail_view_marginVertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@null"
-        android:inputType="textMultiLine"
-        android:visibility="gone"
-        style="@style/EditTheme"
-        />
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
+               <EditText
+                   android:id="@+id/MailReply_body_et"
+                   style="@style/EditTheme"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="50dp"
+                   android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+                   android:background="@null"
+                   android:inputType="textMultiLine"
+                   android:lineHeight="23dp"
+                   android:text="  이곳에서는 오늘 일어난 일어난 지극히 일상적인, 혹은 특별할지도 모르는 일들을 다른 사람들과 공유할 수 있어요.
+"
+                   android:textColor="@color/black"
+                   android:textSize="14dp"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent" />
+
+           <TextView
+               android:id="@+id/mail_reply_date_tv"
+               android:textSize="14dp"
+               android:lineHeight="23dp"
+               android:layout_marginTop="10dp"
+               android:layout_marginBottom="50dp"
+               android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+           </LinearLayout>
+
+       </androidx.core.widget.NestedScrollView>
+       <com.airbnb.lottie.LottieAnimationView
+           android:id="@+id/mail_reply_loading_pb"
+           android:layout_width="50dp"
+           android:layout_height="50dp"
+           android:visibility="gone"
+           app:lottie_autoPlay="true"
+           app:lottie_loop="true"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-    <TextView
-        android:id="@+id/MailReply_body_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
-        android:layout_marginVertical="@dimen/mail_view_marginVertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@null"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

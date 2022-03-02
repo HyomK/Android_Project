@@ -37,6 +37,7 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryActivity
+import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.ui.splash.LoginActivity
 import com.likefirst.btos.utils.dateToString
@@ -93,7 +94,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .commit()
         }
         binding.homeSendMailBtn.setOnClickListener {
-            val intent = Intent(requireContext(), MailWriteActivity::class.java)
+            val intent = Intent(requireContext(), MailReplyActivity::class.java)
             startActivity(intent)
         }
 

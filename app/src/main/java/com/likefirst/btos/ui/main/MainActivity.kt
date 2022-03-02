@@ -8,8 +8,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
@@ -87,7 +85,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setNotificationIcon()
@@ -138,8 +135,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                 alarmService.getAlarmList(getUserIdx())
                 sharedNotifyModel.setNoticeLiveData(false)
                 removeNotice()
-               /* val spf = getSharedPreferences("notification", MODE_PRIVATE)
-                spf.edit().putString("newNotification","undefine").apply()*/
             }
             override fun onDrawerClosed(drawerView: View) {}
             override fun onDrawerStateChanged(newState: Int) {}

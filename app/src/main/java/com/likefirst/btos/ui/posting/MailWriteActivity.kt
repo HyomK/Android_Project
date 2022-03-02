@@ -27,7 +27,8 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.MailWriteMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailWriteMenuList.setAdapter(adapter)
-        binding.MailWriteCheckBtn.visibility=View.GONE
+        binding.MailWriteCheckBtn.visibility=View.VISIBLE
+
         setFont(userDB.getFontIdx()!!)
         binding.MailWriteToolbar.toolbarBackIc.setOnClickListener {
             onBackPressed()
@@ -52,7 +53,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                 }
                 override fun onButton2Clicked() {
                     binding.MailWriteMenuBtn.visibility= View.VISIBLE
-                    binding.MailWriteWriteBtn.visibility=View.VISIBLE
                     binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
                     binding.MailWriteMenuSp.visibility= View.VISIBLE
@@ -90,14 +90,13 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         }
 
 
-        binding.MailWriteWriteBtn.setOnClickListener {
+ /*       binding.MailWriteCheckBtn.setOnClickListener {
             binding.MailWriteMenuBtn.visibility= View.GONE
             binding.MailWriteMenuSp.visibility= View.GONE
-            binding.MailWriteWriteBtn.visibility=View.INVISIBLE
             binding.MailWriteCheckBtn.visibility=View.VISIBLE
             //   binding.MailReplyHideView.visibility=View.VISIBLE
         }
-
+*/
 
         binding.MailWriteBodyEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

@@ -254,4 +254,9 @@ interface RetrofitInterface {
         @Body request : SendLetterRequest
     ):Call<BaseResponse<String>>
 
+    @POST("/replies")
+    fun sendReply(
+        @Body request : SendReplyRequest
+    ):Call<BaseResponse<SendReplyResponse>>
+
 }

@@ -195,33 +195,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
     }
 
 
-    fun showDataMessage(msgTitle: String?, msgContent: String?) {
-        Log.i("### data msgTitle : ", msgTitle.toString())
-        Log.i("### data msgContent : ", msgContent.toString())
-        val toastText = msgContent.toString()
-        Looper.prepare()
-        Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
-        Looper.loop()
-    }
-
-    fun showNotificationMessage(msgTitle: String?, msgContent: String?) {
-        Log.i("### noti msgTitle : ", msgTitle.toString())
-        Log.i("### noti msgContent : ", msgContent.toString())
-        val toastText = String.format("[Notification 메시지] title: %s => content: %s", msgTitle, msgContent)
-        Looper.prepare()
-        Toast.makeText(applicationContext, toastText, Toast.LENGTH_LONG).show()
-        Looper.loop()
-    }
-
     fun filterNotification(title: String , content: String){
-
         if("식물" in title || "화분" in title){
             val plantViewModel = PlantViewModel(application)
             val plant = plantViewModel.getSelectedPlant()
             val newLevel = Character.getNumericValue(title[title.indexOf("단계")-1])
             if(newLevel>=0)plantViewModel.setInitPlant(plant.plantIdx,plant.plantStatus,newLevel.toInt(),plant.isOwn)
             saveNotification("plant")
-            Log.e(TAG,"FILTER plant")
             return
         }else if("신고" in title){
 
@@ -231,7 +211,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
         else{
             saveNotification("mail")
         }
-        Log.e(TAG,"FILTER else ")
     }
 
 

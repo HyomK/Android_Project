@@ -252,17 +252,6 @@ class LoginActivity
     }
 
     override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
-       /* val plantDB = PlantDatabase.getInstance(this)
-        Log.d("PlantList/API",plantList.toString())
-        plantList.forEach { i ->
-            run {
-                if (plantDB?.plantDao()?.getPlant(i.plantIdx) == null) {
-                    plantDB?.plantDao()?.insert(i)
-                } else {
-                    plantDB?.plantDao()?.setPlantInit(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
-                }
-            }
-        }  // 전체 화분 목록 DB 업데이트*/
         lifecycleScope.launch(Dispatchers.IO){
             plantList.forEach { i ->
                 run {
@@ -326,8 +315,7 @@ class LoginActivity
         mAuth = FirebaseAuth.getInstance()
         val user =  mAuth?.currentUser
         if(user == null) {
-            //TODO 비로그인 상태 일때 처리
-            Log.e("FIREBASE", "실패! 비로그인 상태입니다")
+
         }else{
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener {
                     task-> if(!task.isSuccessful){
@@ -340,12 +328,6 @@ class LoginActivity
 
                 fcmTokenService.setFcmTokenView(this)
                 fcmTokenService.postFcmToken(getUserIdx(),token)
-
-             /*
-                val mFireDatabase =  FirebaseDatabase.getInstance(Firebase.app)
-                mFireDatabase.getReference("users")
-                    .child(userData.email.toString())
-                    .setValue(userData)*/
             })
 
         }
@@ -356,30 +338,9 @@ class LoginActivity
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-/*
-    private fun initFirebaseDatabase() {
-        mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference("users")
-        mChildEventListener = object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                // child 내에 있는 데이터만큼 반복합니다.
-            }
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
-                Log.e("Firebase","child changed: ${dataSnapshot.key} / ${s} ")
-            }
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-            }
-            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
-            override fun onCancelled(databaseError: DatabaseError) {}
-        }
-        mDatabaseReference?.addChildEventListener( mChildEventListener!!)
-    }
-*/
-
     fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
             //TODO 이용약관 동의 다이얼로그
-            Log.e("count", "non null ${++count} " )
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
@@ -410,13 +371,9 @@ class LoginActivity
         stop=true
     }
 
-    override fun onLoadingFcmToken() {
+    override fun onLoadingFcmToken() {}
 
-    }
-
-    override fun onSuccessFcmToken() {
-        Log.e("FCM-API - success","success")
-    }
+    override fun onSuccessFcmToken() {}
 
     override fun onFailureFcmToken(code : Int, msg: String) {
         Log.e("FCM-API - fail","${code}= ${msg}")

@@ -15,13 +15,14 @@ data class Mailbox(
 
 @Parcelize
 data class MailInfoResponse(
-    @SerializedName("firstHistoryType") val firstHistoryType :String?,
+    @SerializedName("firstHistoryType") val firstHistoryType :String,
     @SerializedName("type") val type: String,
     @SerializedName("typeIdx") val typeIdx : Int,
     @SerializedName("content") val content : String?,
     @SerializedName("emotionIdx") val emotionIdx : Int,
     @SerializedName("doneList") val doneList :ArrayList<String>?,
     @SerializedName("sendAt") val sendAt : String,
+    @SerializedName("senderIdx") val senderIdx : Int,
     @SerializedName("senderNickName") val senderNickName :String,
     @SerializedName("senderActive") val senderActive :Boolean,
     @SerializedName("senderFontIdx") val senderFontIdx :Int

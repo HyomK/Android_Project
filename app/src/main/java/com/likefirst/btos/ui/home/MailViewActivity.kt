@@ -10,6 +10,11 @@ import androidx.core.os.bundleOf
 import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
+import com.likefirst.btos.data.remote.users.response.BlackList
+import com.likefirst.btos.data.remote.users.response.BlockUser
+import com.likefirst.btos.data.remote.users.service.BlackListService
+import com.likefirst.btos.data.remote.users.view.BlackListView
+import com.likefirst.btos.data.remote.users.view.SetBlockView
 import com.likefirst.btos.databinding.ActivityMailViewBinding
 
 import com.likefirst.btos.ui.BaseActivity
@@ -17,12 +22,15 @@ import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.posting.MailReplyActivity
 
 
-class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewBinding::inflate) {
+class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewBinding::inflate),SetBlockView{
 
     override fun initAfterBinding() {
         val bundle : Bundle = intent.getBundleExtra("MailView")!!
         val mail : MailInfoResponse? =bundle.getParcelable("mail")
+        val blockService = BlackListService()
+        blockService.setBlockView(this)
         binding.mailViewBodyTv.text= mail?.content
+
 
         if(mail?.senderNickName =="저편너머"){
             binding.mailViewDateTv.visibility= View.GONE
@@ -52,7 +60,9 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
-                    startNextActivity(MailReplyActivity::class.java)
+                    val intent = Intent(this@MailViewActivity,MailReplyActivity::class.java)
+                    intent.putExtra("reply",mail)
+                    startActivity(intent)
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -82,7 +92,6 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                     val intent = Intent(this,ReportActivity::class.java)
                     intent.putExtra("type",mail.type)
                     intent.putExtra("typeIdx",mail?.typeIdx)
-                    Log.e("ReportIntent",intent.toString())
                     startActivity(intent)
                 }
                 //차단
@@ -108,6 +117,7 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                             checkDialog.setButtonClickListener(object:
                                 CustomDialogFragment.OnButtonClickListener {
                                 override fun onButton1Clicked() {
+                                    blockService.setBlock(BlackList(mail?.typeIdx,mail?.senderIdx))
                                 }
                                 override fun onButton2Clicked() {
                                 }
@@ -133,4 +143,14 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
         binding.mailViewDateTv.typeface = ResourcesCompat.getFont(this,fontId)
         binding.mailViewSenderTv.typeface= ResourcesCompat.getFont(this,fontId)
     }
+
+    override fun onSetBlockViewSuccess(result: Int) {
+
+    }
+
+    override fun onSetBlockViewFailure(code: Int, message: String) {
+
+    }
+
+
 }

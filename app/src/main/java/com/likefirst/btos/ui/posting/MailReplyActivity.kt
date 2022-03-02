@@ -1,40 +1,59 @@
 package com.likefirst.btos.ui.posting
 
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
-import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
-import com.likefirst.btos.data.remote.posting.response.MailLetterResponse
-import com.likefirst.btos.data.remote.posting.response.MailReplyResponse
-import com.likefirst.btos.data.remote.posting.response.ReplyInfo
+import com.likefirst.btos.data.remote.posting.response.*
+import com.likefirst.btos.data.remote.posting.service.SendService
+import com.likefirst.btos.data.remote.posting.view.SendReplyView
 import com.likefirst.btos.databinding.ActivityMailReplyBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.utils.dateToString
+import com.likefirst.btos.utils.getUserIdx
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.util.*
 
-class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate){
+class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView{
+
+    private val replyService = SendService()
+    lateinit var reply : MailInfoResponse
+    private var isSuccesss= false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        reply= intent.getParcelableExtra<MailInfoResponse>("reply")!!
+    }
+
+
     override fun initAfterBinding() {
-        val bundle : Bundle = intent.getBundleExtra("MailReply")!!
-        val reply: MailInfoResponse? =bundle.getParcelable("reply")
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.MailReplyMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.MailReplyMenuList.setAdapter(adapter)
         binding.MailReplyHideView.visibility=View.VISIBLE
         binding.MailReplyMenuSp.visibility=View.GONE
-        binding.MailReplyBodyTv.text = reply?.content
+        binding.mailReplyDateTv.text = dateToString(Date())
+        replyService.setSendReplyView(this)
         initListener()
 
     }
 
     fun initListener(){
         binding.MailReplyToolbar.toolbarBackIc.setOnClickListener {
-            onBackPressed()
+          onBackPressed()
         }
+
         binding.MailReplyCheckBtn.setOnClickListener {
             val dialog = CustomDialogFragment()
             val btn= arrayOf("취소","확인")
@@ -48,22 +67,23 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                 override fun onButton1Clicked() {
                 }
                 override fun onButton2Clicked() {
-                    binding.MailReplyMenuBtn.visibility= View.VISIBLE
-                    binding.MailReplyWriteBtn.visibility=View.VISIBLE
-                    binding.MailReplyHideView.visibility=View.VISIBLE
-                    binding.MailReplyCheckBtn.visibility=View.GONE
+                    CoroutineScope(Dispatchers.Main).launch {
+                        setLoadingView()
+                        CoroutineScope(Dispatchers.IO).async {
+                           replyService.sendReply(SendReplyRequest(getUserIdx(),reply.senderIdx,reply.firstHistoryType,reply.typeIdx,binding.MailReplyBodyEt.text.toString()))
+                        }.await()
+                        binding.mailReplyLoadingPb.visibility=View.GONE
+                        binding.MailReplyMenuSp.visibility=View.VISIBLE
+                        binding.MailReplyMenuBtn.visibility= View.VISIBLE
+                        binding.MailReplyHideView.visibility=View.VISIBLE
+                        binding.MailReplyCheckBtn.visibility=View.GONE
+                    }
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
-            binding.MailReplyMenuSp.visibility=View.VISIBLE
+
         }
 
-        binding.MailReplyWriteBtn.setOnClickListener {
-            binding.MailReplyMenuBtn.visibility= View.INVISIBLE
-            binding.MailReplyWriteBtn.visibility=View.INVISIBLE
-            binding.MailReplyCheckBtn.visibility=View.VISIBLE
-            //   binding.MailReplyHideView.visibility=View.VISIBLE
-        }
 
         binding.MailReplyMenuList.setOnItemClickListener { adapterView, view, i, l ->
             val dialog = CustomDialogFragment()
@@ -106,4 +126,40 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         })
 
     }
+
+    override fun onBackPressed() {
+        when(isSuccesss){
+            true->finish()
+            false->{
+                val dialog = CustomDialogFragment()
+                val btn= arrayOf("취소","확인")
+                dialog.arguments= bundleOf(
+                    "bodyContext" to "작성을 취소할까요?\n작성중이던 내용이 사라집니다",
+                    "btnData" to btn
+                )
+                dialog.setButtonClickListener(object:
+                    CustomDialogFragment.OnButtonClickListener {
+                    override fun onButton1Clicked() {  }
+                    override fun onButton2Clicked() { finish() } })
+                dialog.show(supportFragmentManager,"")
+            }
+        }
+    }
+    fun setLoadingView(){
+        binding.mailReplyLoadingPb.visibility= View.VISIBLE
+        binding.mailReplyLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+    }
+    override fun onSendReplyLoading() {}
+
+    override fun onSendReplySuccess(result: SendReplyResponse) {
+        Log.e("Reply-api",result.toString())
+        binding.mailReplyLoadingPb.visibility=View.GONE
+        Snackbar.make(binding.MailReplyMainLayout,"편지가 발송되었습니다.",Snackbar.LENGTH_SHORT)
+        isSuccesss=true
+    }
+    override fun onSendReplyFailure(code: Int, message: String) {}
 }

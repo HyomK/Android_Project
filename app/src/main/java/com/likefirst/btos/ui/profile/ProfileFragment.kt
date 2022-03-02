@@ -29,7 +29,6 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-     //   sharedPlantSelectModel=ViewModelProvider(requireActivity()).get(SharedPlantSelectModel::class.java)
         val spf = requireActivity().getSharedPreferences("BTOS-APP",MODE_PRIVATE)
         val liveSharedPreference = LiveSharedPreferences(spf)
         liveSharedPreference

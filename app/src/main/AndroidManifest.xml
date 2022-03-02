@@ -9,10 +9,6 @@
     <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
          See README(https://goo.gl/l4GJaQ) for more. -->
 
-    <meta-data
-        android:name="com.google.firebase.messaging.default_notification_channel_id"
-        android:value="${default_notification_channel_id}"/>
-
     <uses-permission android:name = "android.permission.VIBRATE"/>
     <uses-permission android:name = "android.permission.USE_FULL_SCRENN_INTENT"/>
 
@@ -62,7 +58,7 @@
 
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_channel_id"
-        android:value="${btos_default_web_client_id}"/>
+        android:value="${default_notification_channel_id}"/>
     <meta-data
         android:name="firebase_messaging_auto_init_enabled"
         android:value="false" />

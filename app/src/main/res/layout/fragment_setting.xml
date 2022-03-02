@@ -55,7 +55,7 @@
                 style="@style/settingListStyle"
                 android:text="수신 설정"
                 android:paddingVertical="@dimen/profile_settingList_paddingVertical"
-                android:visibility="gone"
+               
                 />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:visibility="gone"
