@@ -13,7 +13,7 @@ import com.likefirst.btos.ui.main.MainActivity
 class AppInfoFragment: BaseFragment<FragmentAppinfoBinding>(FragmentAppinfoBinding::inflate), MainActivity.onBackPressedListener   {
     override fun initAfterBinding() {
         binding.appInfoToolbar.toolbarBackIc.setOnClickListener{
-            requireActivity().supportFragmentManager.popBackStack()
+            onBackPressed()
         }
 
         binding.appInfoToolbar.toolbarTitleTv.text="앱 정보"
@@ -42,6 +42,6 @@ class AppInfoFragment: BaseFragment<FragmentAppinfoBinding>(FragmentAppinfoBindi
     }
 
     override fun onBackPressed() {
-        requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
 }

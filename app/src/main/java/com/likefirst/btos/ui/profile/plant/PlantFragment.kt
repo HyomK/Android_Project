@@ -143,7 +143,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             return
         }
-        requireActivity().supportFragmentManager.popBackStack()
+        mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
     }
 
     override fun onDestroy() {

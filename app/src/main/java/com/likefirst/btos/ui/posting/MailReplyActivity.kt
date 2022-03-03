@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
@@ -26,9 +27,9 @@ import java.util.*
 
 class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView{
 
-    private val replyService = SendService()
+
     lateinit var reply : MailInfoResponse
-    private var isSuccesss= false
+    private var isSuccess= false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +45,6 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         binding.MailReplyHideView.visibility=View.VISIBLE
         binding.MailReplyMenuSp.visibility=View.GONE
         binding.mailReplyDateTv.text = dateToString(Date())
-        replyService.setSendReplyView(this)
         initListener()
 
     }
@@ -67,17 +67,12 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                 override fun onButton1Clicked() {
                 }
                 override fun onButton2Clicked() {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        setLoadingView()
-                        CoroutineScope(Dispatchers.IO).async {
-                           replyService.sendReply(SendReplyRequest(getUserIdx(),reply.senderIdx,reply.firstHistoryType,reply.typeIdx,binding.MailReplyBodyEt.text.toString()))
-                        }.await()
-                        binding.mailReplyLoadingPb.visibility=View.GONE
-                        binding.MailReplyMenuSp.visibility=View.VISIBLE
-                        binding.MailReplyMenuBtn.visibility= View.VISIBLE
-                        binding.MailReplyHideView.visibility=View.VISIBLE
-                        binding.MailReplyCheckBtn.visibility=View.GONE
-                    }
+                    val replyService = SendService()
+                    replyService.setSendReplyView(this@MailReplyActivity)
+
+                    val request = SendReplyRequest(getUserIdx(),reply.senderIdx,reply.firstHistoryType,reply.typeIdx,binding.MailReplyBodyEt.text.toString())
+                    replyService.sendReply(request)
+                    Log.e("Reply-api-done","$isSuccess")
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -117,8 +112,6 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
 
             }
             override fun afterTextChanged(p0: Editable?) {
-                Log.d("MailSelection", binding.MailReplyBodyEt.selectionStart.toString())
-                Log.d("MailLength", binding.MailReplyBodyEt.text.length.toString())
                 if (null !=  binding.MailReplyBodyEt.layout && binding.MailReplyBodyEt.layout.lineCount > 50) {
                     binding.MailReplyBodyEt.text.delete( binding.MailReplyBodyEt.selectionStart - 1, binding.MailReplyBodyEt.selectionStart)
                 }
@@ -128,23 +121,24 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
     }
 
     override fun onBackPressed() {
-        when(isSuccesss){
-            true->finish()
-            false->{
-                val dialog = CustomDialogFragment()
-                val btn= arrayOf("취소","확인")
-                dialog.arguments= bundleOf(
-                    "bodyContext" to "작성을 취소할까요?\n작성중이던 내용이 사라집니다",
-                    "btnData" to btn
-                )
-                dialog.setButtonClickListener(object:
-                    CustomDialogFragment.OnButtonClickListener {
-                    override fun onButton1Clicked() {  }
-                    override fun onButton2Clicked() { finish() } })
-                dialog.show(supportFragmentManager,"")
-            }
+        Log.e("Reply-api","$isSuccess")
+        if(isSuccess) finish()
+        else{
+            val dialog = CustomDialogFragment()
+            val btn= arrayOf("취소","확인")
+            dialog.arguments= bundleOf(
+                "bodyContext" to "작성을 취소할까요?\n작성중이던 내용이 사라집니다",
+                "btnData" to btn
+            )
+            dialog.setButtonClickListener(object:
+                CustomDialogFragment.OnButtonClickListener {
+                override fun onButton1Clicked() {  }
+                override fun onButton2Clicked() { finish() } })
+            dialog.show(supportFragmentManager,"")
         }
     }
+
+
     fun setLoadingView(){
         binding.mailReplyLoadingPb.visibility= View.VISIBLE
         binding.mailReplyLoadingPb.apply {
@@ -153,13 +147,25 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
             playAnimation()
         }
     }
-    override fun onSendReplyLoading() {}
-
-    override fun onSendReplySuccess(result: SendReplyResponse) {
-        Log.e("Reply-api",result.toString())
-        binding.mailReplyLoadingPb.visibility=View.GONE
-        Snackbar.make(binding.MailReplyMainLayout,"편지가 발송되었습니다.",Snackbar.LENGTH_SHORT)
-        isSuccesss=true
+    override fun onSendReplyLoading() {
+        setLoadingView()
     }
-    override fun onSendReplyFailure(code: Int, message: String) {}
+
+    override fun onSendReplySuccess(result: String) {
+        Log.e("Reply-api",result.toString())
+        isSuccess=true
+        binding.mailReplyLoadingPb.visibility=View.GONE
+        binding.MailReplyMenuSp.visibility=View.VISIBLE
+        binding.MailReplyMenuBtn.visibility= View.VISIBLE
+        binding.MailReplyHideView.visibility=View.VISIBLE
+        binding.MailReplyCheckBtn.visibility=View.GONE
+        binding.MailReplyBodyEt.isFocusable=false
+        binding.MailReplyBodyEt.isClickable=false
+        binding.MailReplyBodyEt.isFocusableInTouchMode=false // 입력막기
+        Toast.makeText(this,"편지가 발송되었습니다.",Toast.LENGTH_SHORT)
+
+    }
+    override fun onSendReplyFailure(code: Int, message: String) {
+        Log.e("Reply-api-fail",message.toString())
+    }
 }

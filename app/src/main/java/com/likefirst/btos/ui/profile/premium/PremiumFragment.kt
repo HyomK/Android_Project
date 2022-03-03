@@ -23,7 +23,7 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
 
         val mActivity = activity as MainActivity
         binding.premiumToolbar.toolbarBackIc.setOnClickListener {
-            mActivity.supportFragmentManager.popBackStack()
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
         }
         val data = arrayListOf(R.drawable.alocasia_no_result)
         val adapter = PremiumVPAdapter(data)
@@ -64,7 +64,7 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
 
 
     override fun onBackPressed() {
-        requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
 
 }

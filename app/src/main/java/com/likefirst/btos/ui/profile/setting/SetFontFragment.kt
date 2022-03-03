@@ -23,7 +23,7 @@ class SetFontFragment:BaseFragment<FragmentFontBinding>(FragmentFontBinding::inf
         val userDatabase = UserDatabase.getInstance(requireContext())!!
 
         binding.fontToolbar.toolbarBackIc.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
         }
         binding.fontToolbar.toolbarTitleTv.text="폰트"
 
@@ -43,7 +43,7 @@ class SetFontFragment:BaseFragment<FragmentFontBinding>(FragmentFontBinding::inf
     }
 
     override fun onBackPressed() {
-        requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
 
     override fun onSetSettingUserViewLoading() {

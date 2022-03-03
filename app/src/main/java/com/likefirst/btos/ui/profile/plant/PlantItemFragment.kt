@@ -43,9 +43,8 @@ class PlantItemFragment:BaseFragment<FragmentPlantinfoBinding>(FragmentPlantinfo
 
 
         binding.plantinfoBackIc.setOnClickListener{
-            mActivity.supportFragmentManager.popBackStack()
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
         }
     }
-
 
 }

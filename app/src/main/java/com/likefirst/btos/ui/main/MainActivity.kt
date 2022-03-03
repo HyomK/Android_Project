@@ -446,7 +446,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             "reply"->{
                 replyService.loadReply(getUserIdx(),"reply",item.reqParamIdx)
             }
-           /* "plant"->{
+            "plant"->{
                 binding.mainBnv.menu.findItem(R.id.profileFragment).isChecked = true
                 isPlantOpen=true
                 supportFragmentManager.beginTransaction()
@@ -455,7 +455,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     .setReorderingAllowed(true)
                     .commitAllowingStateLoss()
 
-            }*/
+            }
 
         }
 

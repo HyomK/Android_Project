@@ -79,6 +79,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     fun setMailView(mailboxList: ArrayList<Mailbox>){
         val adapter = MailRVAdapter(mailboxList)
+        val mActivity = activity as MainActivity
         binding.mailboxRv.adapter= adapter
         val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
         val userID= userDao.getUser()!!.userIdx!!
@@ -107,7 +108,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
                             }
                         }
                     }.await()
-                    val mActivity = activity as MainActivity
                     mActivity.notifyDrawerHandler("unlock")
                     adapter.removeItem(position)
                 }

@@ -38,6 +38,6 @@ class AppInfoDetailFragment: BaseFragment<FragmentAppinfoDetailBinding>(Fragment
     }
 
     override fun onBackPressed() {
-        requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
 }

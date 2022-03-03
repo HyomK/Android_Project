@@ -94,7 +94,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
                 .commit()
         }
         binding.homeSendMailBtn.setOnClickListener {
-            val intent = Intent(requireContext(), MailReplyActivity::class.java)
+            val intent = Intent(requireContext(), MailWriteActivity::class.java)
             startActivity(intent)
         }
 

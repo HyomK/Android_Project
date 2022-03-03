@@ -35,7 +35,6 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
         val adapter= ArrayAdapter(requireContext(), R.layout.menu_dropdown_left_item, menuItem)
         binding.profileSuggestList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
         binding.profileSuggestList.setAdapter(adapter)
-       // binding.profileSuggestList.dropDownHeight=300
         binding.profileSuggestToolbar.toolbarTitleTv.text="개발자에게 건의하기"
 
        binding.profileSuggestDoneBtn.setOnClickListener {
@@ -43,11 +42,11 @@ class SuggestionFragment:BaseFragment<FragmentSuggestBinding>(FragmentSuggestBin
                Snackbar.make(requireView(),"카테고리를 선택해 주세요",Snackbar.LENGTH_SHORT).show()
            }else{
                sendEmail(option, binding.profileSuggestEdit.text.toString())
-               requireActivity().supportFragmentManager.popBackStack()
+               requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
            }
        }
         binding.profileSuggestToolbar.toolbarBackIc.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
         }
 
        binding.profileSuggestList.setOnItemClickListener { adapterView, view, i, l ->

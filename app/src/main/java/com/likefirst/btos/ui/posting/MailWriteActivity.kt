@@ -25,9 +25,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
-        binding.MailWriteMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
-        binding.MailWriteMenuList.setAdapter(adapter)
-        binding.MailWriteCheckBtn.visibility=View.VISIBLE
 
         setFont(userDB.getFontIdx()!!)
         binding.MailWriteToolbar.toolbarBackIc.setOnClickListener {
@@ -52,11 +49,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                 override fun onButton1Clicked() {
                 }
                 override fun onButton2Clicked() {
-                    binding.MailWriteMenuBtn.visibility= View.VISIBLE
-                    binding.MailWriteHideView.visibility=View.VISIBLE
                     binding.MailWriteCheckBtn.visibility=View.GONE
-                    binding.MailWriteMenuSp.visibility= View.VISIBLE
-
                     val sendService = SendService()
                     sendService.setSendLetterView(this@MailWriteActivity)
                     sendService.sendLetter(SendLetterRequest(getUserIdx(),binding.MailWriteBodyEt.text.toString()))
@@ -65,7 +58,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
             dialog.show(supportFragmentManager, "CustomDialog")
         }
 
-        binding.MailWriteMenuList.setOnItemClickListener { adapterView, view, i, l ->
+       /* binding.MailWriteMenuList.setOnItemClickListener { adapterView, view, i, l ->
             val dialog = CustomDialogFragment()
             binding.MailWriteHideView.visibility=View.VISIBLE
             when (i) {
@@ -88,15 +81,8 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
                 }
             }
         }
-
-
- /*       binding.MailWriteCheckBtn.setOnClickListener {
-            binding.MailWriteMenuBtn.visibility= View.GONE
-            binding.MailWriteMenuSp.visibility= View.GONE
-            binding.MailWriteCheckBtn.visibility=View.VISIBLE
-            //   binding.MailReplyHideView.visibility=View.VISIBLE
-        }
 */
+
 
         binding.MailWriteBodyEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -115,11 +101,15 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
     }
 
     override fun onSendLetterLoading() {
-        binding.mailWriteLoadingPb.visibility=View.VISIBLE
+        setLoadingView()
     }
 
     override fun onSendLetterSuccess() {
         binding.mailWriteLoadingPb.visibility=View.GONE
+        binding.MailWriteBodyEt.isFocusableInTouchMode=false
+        binding.MailWriteBodyEt.isFocusable=false
+        binding.MailWriteBodyEt.isClickable=false
+        binding.MailWriteBodyEt.isCursorVisible=false
         Log.e("SENDING", "success")
     }
 
@@ -132,5 +122,13 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         val fontId= resources.getIdentifier(fonts[idx],"font", packageName)
         binding.MailWriteBodyEt.typeface=ResourcesCompat.getFont(this,fontId)
 
+    }
+    fun setLoadingView(){
+        binding.mailWriteLoadingPb.visibility= View.VISIBLE
+        binding.mailWriteLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 }
