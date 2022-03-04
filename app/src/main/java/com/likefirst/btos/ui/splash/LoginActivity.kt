@@ -276,8 +276,8 @@ class LoginActivity
     private fun initFirebaseAuth() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(FIREBASE_CLIENT_KEY)
-            .requestEmail()
-            .build()
+                .requestEmail()
+               .build()
         mGoogleApiClient = GoogleApiClient.Builder(this)
             .enableAutoManage(this){}
             .addApi(Auth.GOOGLE_SIGN_IN_API, gso)

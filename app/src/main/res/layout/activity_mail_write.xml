@@ -24,7 +24,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
 
-        <FrameLayout
+      <!--  <FrameLayout
             android:id="@+id/MailWrite_send_op"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
@@ -95,21 +95,7 @@
             android:background="@color/transparent"
             android:contextClickable="false"
             />
-
-
-
-        <ImageButton
-            android:id="@+id/MailWrite_write_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="70dp"
-            android:src="@drawable/ic_write"
-            android:background="@color/background"
-
-            />
+-->
 
         <ImageButton
             android:id="@+id/MailWrite_check_btn"
@@ -121,41 +107,52 @@
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_check"
             android:background="@color/background"
-            android:visibility="invisible"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         app:layout_constraintTop_toBottomOf="@+id/MailReply_toolbar_layout"
+        android:background="@drawable/mail_reply_repeat_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/MailWrite_body_et"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
-            android:layout_marginVertical="@dimen/mail_view_marginVertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@null"
-            android:inputType="textMultiLine"
-            android:textSize="14dp"
-            android:lineHeight="23dp"
-            android:theme="@style/EditTheme"
-            />
+            android:layout_height="match_parent">
 
-        <ProgressBar
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/MailWrite_body_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/mail_view_marginHorizontal"
+                    android:layout_marginVertical="@dimen/mail_view_marginVertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@null"
+                    android:inputType="textMultiLine"
+                    android:textSize="14dp"
+                    android:lineHeight="23dp"
+                    android:theme="@style/EditTheme"
+                    />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/mail_write_loading_pb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

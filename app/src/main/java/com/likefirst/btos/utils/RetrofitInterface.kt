@@ -257,6 +257,11 @@ interface RetrofitInterface {
     @POST("/replies")
     fun sendReply(
         @Body request : SendReplyRequest
-    ):Call<BaseResponse<SendReplyResponse>>
+    ):Call<BaseResponse<String>>
+
+    @PATCH("/replies/{replyIdx}")
+    fun deleteReply(
+        @Path("replyIdx")  replyIdx :Int
+    ):Call<BaseResponse<String>>
 
 }

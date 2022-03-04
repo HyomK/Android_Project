@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.posting.service.SendService
+import com.likefirst.btos.data.remote.posting.view.DeleteReplyView
 import com.likefirst.btos.data.remote.posting.view.SendReplyView
 import com.likefirst.btos.databinding.ActivityMailReplyBinding
 import com.likefirst.btos.ui.BaseActivity
@@ -25,15 +26,17 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
 
-class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView{
+class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView,DeleteReplyView{
 
 
     lateinit var reply : MailInfoResponse
     private var isSuccess= false
+    private val replyService = SendService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         reply= intent.getParcelableExtra<MailInfoResponse>("reply")!!
+
     }
 
 
@@ -67,16 +70,20 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                 override fun onButton1Clicked() {
                 }
                 override fun onButton2Clicked() {
-                    val replyService = SendService()
                     replyService.setSendReplyView(this@MailReplyActivity)
-
                     val request = SendReplyRequest(getUserIdx(),reply.senderIdx,reply.firstHistoryType,reply.typeIdx,binding.MailReplyBodyEt.text.toString())
-                    replyService.sendReply(request)
-                    Log.e("Reply-api-done","$isSuccess")
+                    CoroutineScope(Dispatchers.Main).launch {
+                        setLoadingView()
+                        CoroutineScope(Dispatchers.IO).async {
+                            replyService.sendReply(request)
+                        }.await()
+                        binding.mailReplyLoadingPb.visibility=View.GONE
+                        if(isSuccess) setReplySuccessView()
+
+                    }
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
-
         }
 
 
@@ -95,6 +102,12 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                     dialog.setButtonClickListener(object:
                         CustomDialogFragment.OnButtonClickListener {
                         override fun onButton1Clicked() {
+                            replyService.setDeleteReplyView(this@MailReplyActivity)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                setLoadingView()
+                                replyService.deleteReply(reply.typeIdx)
+
+                            }
                         }
                         override fun onButton2Clicked() {
                         }
@@ -138,6 +151,17 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         }
     }
 
+    fun setReplySuccessView(){
+        binding.MailReplyMenuSp.visibility=View.VISIBLE
+        binding.MailReplyMenuBtn.visibility= View.VISIBLE
+        binding.MailReplyHideView.visibility=View.VISIBLE
+        binding.MailReplyCheckBtn.visibility=View.GONE
+        binding.MailReplyBodyEt.isFocusable=false
+        binding.MailReplyBodyEt.isClickable=false
+        binding.MailReplyBodyEt.isFocusableInTouchMode=false // 입력막기
+        Snackbar.make(binding.mailReplyContentLayout,"편지가 발송되었습니다.",Snackbar.LENGTH_SHORT).show()
+    }
+
 
     fun setLoadingView(){
         binding.mailReplyLoadingPb.visibility= View.VISIBLE
@@ -148,24 +172,23 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         }
     }
     override fun onSendReplyLoading() {
-        setLoadingView()
+
     }
 
     override fun onSendReplySuccess(result: String) {
         Log.e("Reply-api",result.toString())
         isSuccess=true
-        binding.mailReplyLoadingPb.visibility=View.GONE
-        binding.MailReplyMenuSp.visibility=View.VISIBLE
-        binding.MailReplyMenuBtn.visibility= View.VISIBLE
-        binding.MailReplyHideView.visibility=View.VISIBLE
-        binding.MailReplyCheckBtn.visibility=View.GONE
-        binding.MailReplyBodyEt.isFocusable=false
-        binding.MailReplyBodyEt.isClickable=false
-        binding.MailReplyBodyEt.isFocusableInTouchMode=false // 입력막기
-        Toast.makeText(this,"편지가 발송되었습니다.",Toast.LENGTH_SHORT)
-
     }
     override fun onSendReplyFailure(code: Int, message: String) {
         Log.e("Reply-api-fail",message.toString())
+    }
+
+    override fun onDeleteReplySuccess() {
+        binding.mailReplyLoadingPb.visibility=View.GONE
+        Snackbar.make(binding.mailReplyContentLayout,"편지가 삭제되었습니다.",Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onDeleteReplyFailure(code: Int, message: String) {
+        binding.mailReplyLoadingPb.visibility=View.GONE
     }
 }

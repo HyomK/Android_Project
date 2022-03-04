@@ -102,6 +102,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
    <androidx.constraintlayout.widget.ConstraintLayout
+       android:id="@+id/mail_reply_content_layout"
        app:layout_constraintTop_toBottomOf="@id/MailReply_toolbar_layout"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
@@ -127,7 +128,7 @@
                android:orientation="vertical">
                <EditText
                    android:id="@+id/MailReply_body_et"
-                   style="@style/EditTheme"
+                   android:theme="@style/EditTheme"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginTop="50dp"
