@@ -259,6 +259,7 @@ interface RetrofitInterface {
         @Body request : SendReplyRequest
     ):Call<BaseResponse<String>>
 
+    //오류 수정 필요
     @PATCH("/replies/{replyIdx}")
     fun deleteReply(
         @Path("replyIdx")  replyIdx :Int
