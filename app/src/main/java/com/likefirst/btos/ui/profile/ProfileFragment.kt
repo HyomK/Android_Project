@@ -20,7 +20,7 @@ import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.profile.setting.SettingFragment
 import com.likefirst.btos.ui.profile.setting.SuggestionFragment
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
-import com.likefirst.btos.utils.ViewModel.PlantViewModel
+import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
 
 class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate){
     var isSettingOpen = false

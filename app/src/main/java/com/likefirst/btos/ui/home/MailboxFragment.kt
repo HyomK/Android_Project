@@ -1,12 +1,12 @@
 package com.likefirst.btos.ui.home
 
 import android.content.Intent
-import android.system.Os.remove
+import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.*
@@ -23,9 +23,11 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
-import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
-import com.likefirst.btos.utils.toArrayList
+import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
+import com.likefirst.btos.data.remote.posting.viewmodel.MailViewModel
+import com.likefirst.btos.ui.profile.plant.PlantRVAdapter
+import com.likefirst.btos.utils.getUserIdx
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -36,15 +38,45 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     MailboxView, MailLetterView,MailReplyView,
     MailDiaryView , MainActivity.onBackPressedListener{
 
+    lateinit var  notifyViewModel : NotifyViewModel
+    lateinit var mailViewModel : MailViewModel
+    private val mailboxService= MailboxService()
+    lateinit var mailBoxAdapter : MailRVAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecyclerView()
+        mailViewModel=ViewModelProvider(requireActivity()).get(MailViewModel::class.java)
+        mailViewModel.mailList.observe(viewLifecycleOwner, Observer {
+            Log.e("mailbox-init","init")
+            mailBoxAdapter.initData(it)
+        })
+        mailViewModel.loadMailList(this, getUserIdx())
+
+        notifyViewModel= ViewModelProvider(requireActivity()).get(NotifyViewModel::class.java)
+        notifyViewModel.getMsgLiveData().observe(viewLifecycleOwner, Observer<Boolean>{
+            if(it){
+                mailViewModel.loadMailList(this, getUserIdx())
+            }
+        })
+        initAfterBinding()
+    }
+
     override fun initAfterBinding() {
-        val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
-        val userID= userDao.getUser()!!.userIdx!!
+
+        initRecyclerView()
         setClickListener()
-        val mailboxService= MailboxService()
-        mailboxService.setMailboxView(this)
-        mailboxService.loadMailbox(userID)
+
+      /*  mailboxService.setMailboxView(this)
+        mailboxService.loadMailbox(userID)*/
 
     }
+
+    fun initRecyclerView(){
+        mailBoxAdapter= MailRVAdapter()
+        binding.mailboxRv.adapter=mailBoxAdapter
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -78,14 +110,13 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
 
     fun setMailView(mailboxList: ArrayList<Mailbox>){
-        val adapter = MailRVAdapter(mailboxList)
+
         val mActivity = activity as MainActivity
-        binding.mailboxRv.adapter= adapter
+        binding.mailboxRv.adapter= mailBoxAdapter
         val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
         val userID= userDao.getUser()!!.userIdx!!
-        adapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
+        mailBoxAdapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
             override fun onClickItem(mail:Mailbox, position: Int) {
-
                 CoroutineScope(Dispatchers.Main).launch {
                     setLoadingView()
                     binding.mailboxRv.isClickable=false
@@ -109,7 +140,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
                         }
                     }.await()
                     mActivity.notifyDrawerHandler("unlock")
-                    adapter.removeItem(position)
+                    //adapter.removeItem(position)
                 }
             }
         })
@@ -165,6 +196,26 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
             requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
             mActivity.isMailOpen=false
         }
+
+
+        mailBoxAdapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
+            override fun onClickItem(mail:Mailbox, position: Int) {
+                setLoadingView()
+                when(mail.type){
+                    "letter"->{
+                        mailViewModel.loadLetter(this@MailboxFragment, getUserIdx(),mail.idx)
+                    }
+                    "diary"->{
+                        mailViewModel.loadDiary(this@MailboxFragment, getUserIdx(),mail.idx)
+                    }
+                    "reply"->{
+                        mailViewModel.loadReply(this@MailboxFragment, getUserIdx(),mail.idx)
+                    }
+                }
+                mActivity.notifyDrawerHandler("unlock")
+                mailBoxAdapter.removeItem(position)
+            }
+        })
     }
 
     override fun onMailboxLoading() {
@@ -173,7 +224,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onMailboxSuccess(mailboxList: ArrayList<Mailbox>) {
         binding.setMailboxLoadingPb.visibility= View.GONE
         Log.d("MailBox/API : Success",mailboxList.toString())
-        setMailView(mailboxList)
+       // setMailView(mailboxList)
     }
 
     override fun onMailboxFailure(code: Int, message: String) {
@@ -214,7 +265,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onReplyLoading() {
-        setLoadingView()
+       // setLoadingView()
     }
 
     override fun onReplySuccess(reply: MailInfoResponse){

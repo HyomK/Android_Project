@@ -1,15 +1,7 @@
 package com.likefirst.btos.utils
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.provider.Settings.Global.getString
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.messaging.FirebaseMessagingService
 import com.likefirst.btos.ApplicationClass.Companion.mSharedPreferences
-import com.likefirst.btos.R
-import com.likefirst.btos.data.local.PlantDatabase
-import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.utils.ViewModel.PlantViewModel
 import java.util.*
 
 fun saveJwt(jwtToken: String) {

@@ -22,7 +22,6 @@ class MailReplyService() {
 
     fun loadReply(userId:Int, type:String, idx:Int){
 
-
         ReplyService. loadReply(userId, type, idx).enqueue(object: Callback<BaseResponse<MailInfoResponse>>{
             override fun onResponse(call: Call<BaseResponse<MailInfoResponse>>, response: Response<BaseResponse<MailInfoResponse>>) {
                 val replyResponse :BaseResponse<MailInfoResponse> =response.body()!!

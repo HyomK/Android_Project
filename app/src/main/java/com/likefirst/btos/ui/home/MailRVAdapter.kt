@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.posting.response.Mailbox
 
-class MailRVAdapter (private val dataSet:  ArrayList<Mailbox>) : RecyclerView.Adapter<MailRVAdapter.ViewHolder>() {
+class MailRVAdapter () : RecyclerView.Adapter<MailRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickLister: MailItemClickListener
+    private var dataSet=  ArrayList<Mailbox>()
+
     interface MailItemClickListener{
         fun onClickItem(data:Mailbox, position: Int)
     }
@@ -58,6 +60,13 @@ class MailRVAdapter (private val dataSet:  ArrayList<Mailbox>) : RecyclerView.Ad
     fun removeItem(position : Int){
         dataSet.removeAt(position)
         notifyDataSetChanged()
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun initData( data:  ArrayList<Mailbox>){
+        dataSet.clear()
+        dataSet.addAll(data)
     }
 
     override fun getItemCount() = dataSet.size

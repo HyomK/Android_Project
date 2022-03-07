@@ -72,6 +72,34 @@ interface RetrofitInterface {
         @Query("typeIdx")idx:Int
     ): Call<BaseResponse<MailInfoResponse>>
 
+
+    @GET("/mailboxes")
+    suspend fun getMailbox(
+        @Query("userIdx") id: Int
+    ): Call<MailboxResponse>
+
+    @GET("/mailboxes/mail")
+    suspend fun getDiary(
+        @Query("userIdx")userIdx: Int,
+        @Query("type") type: String = "diary",
+        @Query("typeIdx")idx:Int
+    ): Call<BaseResponse<MailInfoResponse>>
+
+    @GET("/mailboxes/mail")
+    suspend fun getLetter(
+        @Query("userIdx")  userIdx: Int,
+        @Query("type") type: String = "letter",
+        @Query("typeIdx")idx:Int
+    ): Call<BaseResponse<MailInfoResponse>>
+
+
+    @GET("/mailboxes/mail")
+    suspend fun getReply(
+        @Query("userIdx") userIdx: Int,
+        @Query("type") type: String = "reply",
+        @Query("typeIdx")idx:Int
+    ): Call<BaseResponse<MailInfoResponse>>
+
     // -------------------PlantList-------------------------- //
 
     @GET("/plants/{userId}")

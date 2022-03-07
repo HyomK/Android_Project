@@ -1,4 +1,4 @@
-package com.likefirst.btos.utils.ViewModel
+package com.likefirst.btos.data.remote.notify.viewmodel
 
 import android.os.Bundle
 import android.util.Log
@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SharedNotifyModel: ViewModel() {
+class NotifyViewModel: ViewModel() {
     private var isNewMessage = MutableLiveData<Boolean>()
     private var isNewNotice = MutableLiveData<Boolean>()
 

@@ -1,24 +1,14 @@
 package com.likefirst.btos.ui.splash
 
-import android.annotation.SuppressLint
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.util.Log.d
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -46,7 +36,6 @@ import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
-import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FcmTokenService
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
@@ -61,16 +50,11 @@ import com.likefirst.btos.databinding.ActivityLoginBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.MainActivity
 import com.likefirst.btos.utils.*
-import com.likefirst.btos.utils.ViewModel.PlantViewModel
+import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.net.NetworkInfo
-import android.util.AttributeSet
-import androidx.annotation.RequiresPermission
-import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import java.lang.Thread.sleep
 import kotlin.system.exitProcess
 
 
@@ -107,7 +91,6 @@ class LoginActivity
         val networkConnect = NetworkConnection(this)
         networkConnect.observe(this) { isConnected ->
             run {
-                Log.e("nnetowork", isConnected)
                 if (isConnected == "false" || isConnected == "null") {
                     GlobalScope.launch {
                         Snackbar.make(binding.root,

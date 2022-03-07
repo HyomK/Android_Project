@@ -15,7 +15,7 @@ import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.plant.view.PlantBuyView
 import com.likefirst.btos.data.remote.plant.view.PlantSelectView
 import com.likefirst.btos.ui.main.CustomDialogFragment
-import com.likefirst.btos.utils.ViewModel.PlantViewModel
+import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.toArrayList
 import kotlinx.coroutines.CoroutineScope

@@ -1,12 +1,10 @@
 package com.likefirst.btos.ui.main
 
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -15,7 +13,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationBarView
-import com.google.firebase.auth.FirebaseAuth
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.firebase.NotificationDTO
 import com.likefirst.btos.data.local.NotificationDatabase
@@ -45,10 +42,9 @@ import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.ui.history.HistoryUpdateFragment
 import com.likefirst.btos.ui.posting.DiaryViewerActivity
-import com.likefirst.btos.ui.posting.MailReplyActivity
 import com.likefirst.btos.ui.profile.plant.PlantFragment
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
-import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
+import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.removeNotice
 
@@ -70,7 +66,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     lateinit var noticeList :ArrayList<NoticeDetailResponse>
     var prevNoticeSize : Int =0
-    lateinit var  sharedNotifyModel: SharedNotifyModel
+    lateinit var  notifyViewModel: NotifyViewModel
     lateinit var alarmService: AlarmService
     lateinit var diaryService : DiaryService
     lateinit var letterService : MailLetterService
@@ -91,12 +87,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     }
 
     fun setNotificationIcon(){
-        sharedNotifyModel= ViewModelProvider(this).get(SharedNotifyModel::class.java)
+        notifyViewModel= ViewModelProvider(this).get(NotifyViewModel::class.java)
         val isNewUser = intent.getBooleanExtra("isNewUser",false)
         Log.e("isNewUser",isNewUser.toString())
         if(isNewUser){
-            sharedNotifyModel.setMsgLiveData(true)
-            sharedNotifyModel.setNoticeLiveData(false)
+            notifyViewModel.setMsgLiveData(true)
+            notifyViewModel.setNoticeLiveData(false)
             intent.removeExtra("isNewUser")
             return
 
@@ -106,17 +102,17 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         liveSharedPreference.getString("newNotification", "undefine")
             .observe(this, Observer<String> { result ->
                 if( result!="undefine"){
-                    sharedNotifyModel.setNoticeLiveData(true)
+                    notifyViewModel.setNoticeLiveData(true)
                 }else{
-                    sharedNotifyModel.setNoticeLiveData(false)
+                    notifyViewModel.setNoticeLiveData(false)
                 }
             })
         liveSharedPreference.getString("newMail", "undefine")
             .observe(this, Observer<String> { result ->
                 if( result!="undefine"){
-                    sharedNotifyModel.setMsgLiveData(true)
+                    notifyViewModel.setMsgLiveData(true)
                 }else{
-                    sharedNotifyModel.setMsgLiveData(false)
+                    notifyViewModel.setMsgLiveData(false)
                 }
             })
 
@@ -133,7 +129,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {
                 alarmService.getAlarmList(getUserIdx())
-                sharedNotifyModel.setNoticeLiveData(false)
+                notifyViewModel.setNoticeLiveData(false)
                 removeNotice()
             }
             override fun onDrawerClosed(drawerView: View) {}

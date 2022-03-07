@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.Auth
@@ -32,7 +31,6 @@ import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
 import com.likefirst.btos.data.entities.firebase.UserDTO
-import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FcmTokenService
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
@@ -46,7 +44,7 @@ import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.*
-import com.likefirst.btos.utils.ViewModel.PlantViewModel
+import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

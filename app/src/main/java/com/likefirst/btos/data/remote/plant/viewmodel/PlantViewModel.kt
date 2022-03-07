@@ -1,4 +1,4 @@
-package com.likefirst.btos.utils.ViewModel
+package com.likefirst.btos.data.remote.plant.viewmodel
 
 import android.app.Application
 import androidx.coordinatorlayout.widget.CoordinatorLayout
