@@ -38,14 +38,11 @@
                 style="@style/customDropMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 app:boxBackgroundColor="@android:color/white"
-                app:endIconDrawable="@drawable/ic_dots"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:endIconTint="@android:color/black"
                 app:elevation="0dp"
                 android:outlineProvider="none"
 
@@ -68,12 +65,6 @@
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <View
-                android:layout_gravity="start"
-                android:background="@color/white"
-                android:layout_width="27dp"
-                android:layout_height="60dp"/>
         </FrameLayout>
 
         <View
@@ -94,6 +85,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="25dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="5dp"
             android:src="@drawable/ic_dots"
             android:background="@color/transparent"
             android:contextClickable="false"
@@ -103,14 +96,15 @@
             android:id="@+id/letterView_send_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="65dp"
+            android:background="@color/transparent"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="10dp"
+            android:src="@drawable/ic_send"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="70dp"
-            android:src="@drawable/ic_send"
-            android:background="@color/transparent"
-
-            />
+            app:layout_constraintVertical_bias="0.521" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

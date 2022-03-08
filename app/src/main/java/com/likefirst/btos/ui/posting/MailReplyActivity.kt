@@ -9,21 +9,22 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.posting.service.SendService
 import com.likefirst.btos.data.remote.posting.view.DeleteReplyView
 import com.likefirst.btos.data.remote.posting.view.SendReplyView
+import com.likefirst.btos.data.remote.posting.viewmodel.MailViewModel
+import com.likefirst.btos.data.remote.posting.viewmodel.MailViewModelFactory
+import com.likefirst.btos.data.remote.posting.viewmodel.MailboxRepository
 import com.likefirst.btos.databinding.ActivityMailReplyBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getUserIdx
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 
 class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView,DeleteReplyView{
@@ -32,11 +33,12 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
     lateinit var reply : MailInfoResponse
     private var isSuccess= false
     private val replyService = SendService()
+    lateinit var mailViewModel : MailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         reply= intent.getParcelableExtra<MailInfoResponse>("reply")!!
-
+        mailViewModel= ViewModelProvider(this, MailViewModelFactory(MailboxRepository())).get(MailViewModel::class.java)
     }
 
 
@@ -73,14 +75,13 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                     replyService.setSendReplyView(this@MailReplyActivity)
                     val request = SendReplyRequest(getUserIdx(),reply.senderIdx,reply.firstHistoryType,reply.typeIdx,binding.MailReplyBodyEt.text.toString())
                     CoroutineScope(Dispatchers.Main).launch {
-                        setLoadingView()
-                        CoroutineScope(Dispatchers.IO).async {
+                        val job = async{
                             replyService.sendReply(request)
-                        }.await()
+                        }
+                        job.await()
                         binding.mailReplyLoadingPb.visibility=View.GONE
-                        if(isSuccess) setReplySuccessView()
-
                     }
+
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -152,6 +153,7 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
     }
 
     fun setReplySuccessView(){
+        isSuccess=true
         binding.MailReplyMenuSp.visibility=View.VISIBLE
         binding.MailReplyMenuBtn.visibility= View.VISIBLE
         binding.MailReplyHideView.visibility=View.VISIBLE
@@ -172,12 +174,12 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         }
     }
     override fun onSendReplyLoading() {
-
+        setLoadingView()
     }
 
     override fun onSendReplySuccess(result: String) {
         Log.e("Reply-api",result.toString())
-        isSuccess=true
+        setReplySuccessView()
     }
     override fun onSendReplyFailure(code: Int, message: String) {
         Log.e("Reply-api-fail",message.toString())

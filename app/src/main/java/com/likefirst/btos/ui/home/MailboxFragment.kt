@@ -26,6 +26,8 @@ import com.likefirst.btos.ui.posting.DiaryViewerActivity
 import com.likefirst.btos.ui.posting.MailWriteActivity
 import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
 import com.likefirst.btos.data.remote.posting.viewmodel.MailViewModel
+import com.likefirst.btos.data.remote.posting.viewmodel.MailViewModelFactory
+import com.likefirst.btos.data.remote.posting.viewmodel.MailboxRepository
 import com.likefirst.btos.ui.profile.plant.PlantRVAdapter
 import com.likefirst.btos.utils.getUserIdx
 import kotlinx.coroutines.CoroutineScope
@@ -46,17 +48,25 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        mailViewModel=ViewModelProvider(requireActivity()).get(MailViewModel::class.java)
+        mailViewModel=ViewModelProvider(requireActivity(),MailViewModelFactory(MailboxRepository())).get(MailViewModel::class.java)
         mailViewModel.mailList.observe(viewLifecycleOwner, Observer {
-            Log.e("mailbox-init","init")
-            mailBoxAdapter.initData(it)
+                it-> run {
+                        Log.e("mailbox-init","$it")
+                        mailBoxAdapter.initData(it)
+                        mailBoxAdapter.notifyDataSetChanged()
+                    }
         })
         mailViewModel.loadMailList(this, getUserIdx())
 
         notifyViewModel= ViewModelProvider(requireActivity()).get(NotifyViewModel::class.java)
         notifyViewModel.getMsgLiveData().observe(viewLifecycleOwner, Observer<Boolean>{
+            Log.e("notify-init","$it")
             if(it){
+                Log.e("notify-init","$it")
                 mailViewModel.loadMailList(this, getUserIdx())
+                mailBoxAdapter.initData(mailViewModel.mailList.value!!)
+                mailBoxAdapter.notifyDataSetChanged()
+                notifyViewModel.setMsgLiveData(false)
             }
         })
         initAfterBinding()
