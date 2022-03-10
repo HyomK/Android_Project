@@ -26,6 +26,7 @@ import com.likefirst.btos.ui.home.MailViewActivity
 import com.likefirst.btos.ui.profile.ProfileFragment
 import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import android.widget.RadioGroup
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.entities.DiaryViewerInfo
@@ -76,8 +77,11 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         fun onBackPressed();
     }
 
-    fun onBottomNavHandler(id : Int){
+    fun onBottomNavHandler(prevFragment : String, id : Int){
         binding.mainBnv.menu.findItem(id).isChecked = true
+        supportFragmentManager.commit {
+           supportFragmentManager.findFragmentByTag(prevFragment)?.let { remove(it) }
+        }
     }
 
 

@@ -132,7 +132,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (isHidden && isAdded) {
-            val fragments = arrayOf("premium","plantItem","suggestion")
+            val fragments = arrayOf("plantItem","suggestion","plantrv")
             cleanUpFragment(fragments)
             if (isSettingOpen) { val fragments = arrayOf("setName", "setBirth", "setAppinfo","setNotify","setAppDetail")
                 cleanUpFragment(fragments)

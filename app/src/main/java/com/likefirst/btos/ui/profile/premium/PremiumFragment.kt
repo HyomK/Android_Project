@@ -64,7 +64,9 @@ class PremiumFragment : BaseFragment <FragmentPremiumBinding>(FragmentPremiumBin
 
 
     override fun onBackPressed() {
-        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+       // requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+        val mainActivity = activity as MainActivity
+        mainActivity.onBottomNavHandler("premium",R.id.homeFragment)
     }
 
 }

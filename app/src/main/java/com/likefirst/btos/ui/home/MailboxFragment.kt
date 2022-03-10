@@ -60,7 +60,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
         notifyViewModel= ViewModelProvider(requireActivity()).get(NotifyViewModel::class.java)
         notifyViewModel.getMsgLiveData().observe(viewLifecycleOwner, Observer<Boolean>{
-            Log.e("notify-init","$it")
             if(it){
                 Log.e("notify-init","$it")
                 mailViewModel.loadMailList(this, getUserIdx())
@@ -73,13 +72,8 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun initAfterBinding() {
-
         initRecyclerView()
         setClickListener()
-
-      /*  mailboxService.setMailboxView(this)
-        mailboxService.loadMailbox(userID)*/
-
     }
 
     fun initRecyclerView(){
@@ -117,45 +111,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         if(!mActivity.isMailOpen) mActivity.isMailOpen= true
         requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
-
-
-    fun setMailView(mailboxList: ArrayList<Mailbox>){
-
-        val mActivity = activity as MainActivity
-        binding.mailboxRv.adapter= mailBoxAdapter
-        val userDao = UserDatabase.getInstance(requireContext())!!.userDao()
-        val userID= userDao.getUser()!!.userIdx!!
-        mailBoxAdapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
-            override fun onClickItem(mail:Mailbox, position: Int) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    setLoadingView()
-                    binding.mailboxRv.isClickable=false
-                    CoroutineScope(Dispatchers.IO).async {
-                        when(mail.type){
-                            "letter"->{
-                                val letterService= MailLetterService()
-                                letterService.setLetterView(this@MailboxFragment)
-                                letterService.loadLetter(userID,"letter",mail.idx)
-                            }
-                            "diary"->{
-                                val diaryService= DiaryService()
-                                diaryService.setDiaryView(this@MailboxFragment)
-                                diaryService.loadDiary(userID,"diary",mail.idx)
-                            }
-                            "reply"->{
-                                val replyService= MailReplyService()
-                                replyService.setReplyView(this@MailboxFragment)
-                                replyService.loadReply(userID,"reply",mail.idx)
-                            }
-                        }
-                    }.await()
-                    mActivity.notifyDrawerHandler("unlock")
-                    //adapter.removeItem(position)
-                }
-            }
-        })
-    }
-
 
 
     fun getDiary(diary: MailInfoResponse){
@@ -234,7 +189,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onMailboxSuccess(mailboxList: ArrayList<Mailbox>) {
         binding.setMailboxLoadingPb.visibility= View.GONE
         Log.d("MailBox/API : Success",mailboxList.toString())
-       // setMailView(mailboxList)
+
     }
 
     override fun onMailboxFailure(code: Int, message: String) {
@@ -271,7 +226,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     override fun onDiaryFailure(code: Int, message: String) {
         Log.d("Diary/API : Fail", message.toString())
         binding.setMailboxLoadingPb.visibility= View.GONE
-
     }
 
     override fun onReplyLoading() {

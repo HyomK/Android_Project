@@ -54,4 +54,15 @@ class NetworkConnection( private val context: Context): LiveData<String>() {
             postValue(activeNetwork?.isConnected.toString())
         }
     }
+
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
+    fun getConnectionState() : String{
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return connectivityManager.isDefaultNetworkActive.toString()
+        }
+        else {
+            val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+            return activeNetwork?.isConnected.toString()
+        }
+    }
 }

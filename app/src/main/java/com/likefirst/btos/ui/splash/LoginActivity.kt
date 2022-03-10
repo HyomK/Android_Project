@@ -91,6 +91,7 @@ class LoginActivity
         val networkConnect = NetworkConnection(this)
         networkConnect.observe(this) { isConnected ->
             run {
+                Log.e("network connection",isConnected)
                 if (isConnected == "false" || isConnected == "null") {
                     GlobalScope.launch {
                         Snackbar.make(binding.root,

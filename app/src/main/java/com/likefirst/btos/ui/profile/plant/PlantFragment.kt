@@ -1,11 +1,14 @@
 package com.likefirst.btos.ui.profile.plant
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresPermission
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -16,13 +19,13 @@ import com.likefirst.btos.data.remote.plant.view.PlantBuyView
 import com.likefirst.btos.data.remote.plant.view.PlantSelectView
 import com.likefirst.btos.ui.main.CustomDialogFragment
 import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
+import com.likefirst.btos.utils.NetworkConnection
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.toArrayList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.Comparator
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBinding:: inflate), MainActivity.onBackPressedListener  ,
     PlantSelectView, PlantBuyView {
@@ -32,10 +35,24 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     val plantBuyView: PlantBuyView =this
     private val plantModel: PlantViewModel by viewModels()
     lateinit var plantAdapter : PlantRVAdapter
-
+    lateinit var networkConnect : NetworkConnection
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        networkConnect = NetworkConnection(requireContext())
+        networkConnect.observe(viewLifecycleOwner) { isConnected ->
+            run {
+                if (isConnected == "false" || isConnected == "null") {
+                    Log.e("network-msg",isConnected)
+                     GlobalScope.launch {
+                        Snackbar.make(binding.root,
+                            "인터넷 연결을 확인해 주세요.", Snackbar.LENGTH_SHORT).show()
+                       //TODO 네트워크 장애 처리
+                    }
+                }
+            }
+        }
+
         plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
         initRecyclerView()
         plantModel.getPlantList().observe(viewLifecycleOwner,Observer{
@@ -65,11 +82,18 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
             }
 
+            @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
             override fun onClickSelectItem(plant : Plant,position:Int) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    binding.setPlantLoadingPb.visibility= View.VISIBLE
-                    binding.flowerpotRv.isClickable=false
-                    plantModel.selectPlant(plantSelectView, getUserIdx(),plant.plantIdx).await()
+                if( networkConnect.getConnectionState() == "true"){
+                    CoroutineScope(Dispatchers.Main).launch {
+                        setLoadingView()
+                        binding.flowerpotRv.isClickable=false
+                        plantModel.selectPlant(plantSelectView, getUserIdx(),plant.plantIdx).await()
+                    }
+
+                }else{
+                    Snackbar.make(binding.root,
+                        "인터넷 연결을 확인해 주세요.", Snackbar.LENGTH_SHORT).show()
                 }
 
             }
@@ -86,13 +110,23 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 buyDialog.arguments=bundle
                 buyDialog.setButtonClickListener(object:PlantDialog.OnButtonClickListener{
                     override fun onButton1Clicked() { checking = false}
+
+                    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
                     override fun onButton2Clicked(){
-                        CoroutineScope(Dispatchers.Main).launch {
-                            binding.setPlantLoadingPb.visibility= View.VISIBLE
-                            binding.flowerpotRv.isClickable=false
-                            plantModel.buyPlant(plantBuyView,getUserIdx(),plant.plantIdx).await()
+                        if( networkConnect.getConnectionState() == "true"){
+                            CoroutineScope(Dispatchers.Main).launch {
+                                setLoadingView()
+                                binding.flowerpotRv.isClickable=false
+                                plantModel.buyPlant(plantBuyView,getUserIdx(),plant.plantIdx).await()
+                                buyDialog.dismiss()
+                            }
+
+                        }else{
                             buyDialog.dismiss()
+                            Snackbar.make(binding.root,
+                                "인터넷 연결을 확인해 주세요.", Snackbar.LENGTH_SHORT).show()
                         }
+
                     }
                 })
                 buyDialog.show(requireActivity().supportFragmentManager, "PlantDialog")
@@ -139,7 +173,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
     override fun onBackPressed() {
         val mainActivity = activity as MainActivity
         if(mainActivity.isPlantOpen){
-            mainActivity.onBottomNavHandler(R.id.homeFragment)
+            mainActivity.onBottomNavHandler("prantrv",R.id.homeFragment)
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             return
         }
@@ -198,6 +232,15 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
             7010-> Log.e( code.toString(),"화분 상태 변경에 실패하였습니다.")
             else ->Log.e( code.toString(),"이미 선택된 화분입니다.")
+        }
+    }
+
+    fun setLoadingView(){
+        binding.setPlantLoadingPb.visibility= View.VISIBLE
+        binding.setPlantLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
         }
     }
 
