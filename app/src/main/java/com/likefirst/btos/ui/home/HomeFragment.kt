@@ -26,6 +26,8 @@ import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
+import com.likefirst.btos.data.remote.notify.service.NoticeService
+import com.likefirst.btos.data.remote.notify.view.SystemPushAlarmView
 import com.likefirst.btos.utils.ViewModel.SharedNotifyModel
 import com.likefirst.btos.utils.ViewModel.SharedSelectModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
@@ -44,7 +46,7 @@ import java.time.LocalTime
 import java.util.*
 
 
-public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
+public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView, SystemPushAlarmView {
     var isMailboxOpen =false
     lateinit var  sharedNotifyModel : SharedNotifyModel
     lateinit var sharedSelectModel: SharedSelectModel
@@ -104,6 +106,9 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
         if(arguments!=null && requireArguments().getBoolean("isNewUser", false)){
             playGuideAnim()
+            val systemPushService = NoticeService()
+            systemPushService.setSystemPushView(this)
+            systemPushService.loadSystemPushAlarm(getUserIdx())
         }
     }
 
@@ -377,5 +382,14 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
     override fun onUpdateFailure(code: Int, message: String) {
         // TODO: 에러처리
+    }
+
+    override fun onSystemPushAlarmLoading() {
+    }
+
+    override fun onSystemPushAlarmSuccess() {
+    }
+
+    override fun onSystemPushAlarmFailure(code: Int) {
     }
 }

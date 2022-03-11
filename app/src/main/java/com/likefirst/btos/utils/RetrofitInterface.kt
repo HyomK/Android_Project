@@ -247,6 +247,10 @@ interface RetrofitInterface {
         @Body fcmRequest :String
     ):Call<BaseResponse<String>>
 
+    @POST("/users/{userIdx}/fcm")
+    fun getSystemPushAlarm(
+        @Path("userIdx") userIdx : Int
+    ):Call<BaseResponse<String>>
 
     //---------------sendService----------//
     @POST("/letters")
