@@ -62,7 +62,7 @@
         android:value="false" />
 
         <activity
-            android:name=".ui.splash.LoginActivity"
+            android:name=".presentation.View.splash.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -71,39 +71,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".presentation.View.main.MainActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
 
         </activity>
-        <activity android:name=".ui.posting.DiaryActivity"
+        <activity android:name=".presentation.View.posting.DiaryActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.posting.DiaryViewerActivity"
+        <activity android:name=".presentation.View.posting.DiaryViewerActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.splash.OnboardingActivity"
+            android:name=".presentation.View.splash.OnboardingActivity"
             android:screenOrientation="portrait">
         </activity>
 
     <activity
-        android:name=".ui.history.HistoryDetailActivity"
+        android:name=".presentation.View.history.HistoryDetailActivity"
         android:screenOrientation="portrait">
     </activity>
 
-        <activity android:name=".ui.posting.MailWriteActivity"
+        <activity android:name=".presentation.View.posting.MailWriteActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.posting.MailReplyActivity"
+        <activity android:name=".presentation.View.posting.MailReplyActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.splash.TutorialActivity"
+        <activity android:name=".presentation.View.splash.TutorialActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.home.MailViewActivity"
+        <activity android:name=".presentation.View.home.MailViewActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.home.ReportActivity"
+        <activity android:name=".presentation.View.home.ReportActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.profile.setting.NoticeActivity"
+        <activity android:name=".presentation.View.profile.setting.NoticeActivity"
             android:screenOrientation="portrait"/>
 
     </application>

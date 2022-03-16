@@ -1,8 +1,7 @@
 package com.likefirst.btos.data.remote.plant.view
 
-import com.likefirst.btos.data.remote.plant.response.PlantRequest
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.presentation.View.main.CustomDialogFragment
 
 
 interface PlantBuyView{

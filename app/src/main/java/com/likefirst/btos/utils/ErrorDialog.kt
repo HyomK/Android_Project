@@ -1,7 +1,7 @@
 package com.likefirst.btos.utils
 
 import androidx.core.os.bundleOf
-import com.likefirst.btos.ui.main.CustomDialogFragment
+import com.likefirst.btos.presentation.View.main.CustomDialogFragment
 
 
 fun errorDialog(): CustomDialogFragment {

@@ -1,8 +1,8 @@
 package com.likefirst.btos.data.remote.history.view
 
 import com.likefirst.btos.data.entities.*
-import com.likefirst.btos.ui.history.HistoryBasicRecyclerViewAdapter
-import com.likefirst.btos.ui.history.HistoryDetailRecyclerViewAdapter
+import com.likefirst.btos.presentation.View.history.HistoryBasicRecyclerViewAdapter
+import com.likefirst.btos.presentation.View.history.HistoryDetailRecyclerViewAdapter
 
 interface HistorySenderView {
     fun onHistorySenderLoading()

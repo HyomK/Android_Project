@@ -1,12 +1,10 @@
 package com.likefirst.btos.data.remote.viewer.service
 
 import android.util.Log
-import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.remote.viewer.response.ArchiveList
-import com.likefirst.btos.data.remote.viewer.view.ArchiveCalendarView
 import com.likefirst.btos.data.remote.viewer.view.ArchiveListView
-import com.likefirst.btos.ui.archive.ArchiveListRVAdapter
+import com.likefirst.btos.presentation.View.archive.ArchiveListRVAdapter
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Response

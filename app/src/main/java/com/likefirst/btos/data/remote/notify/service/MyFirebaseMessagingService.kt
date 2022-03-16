@@ -8,7 +8,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.likefirst.btos.ui.main.MainActivity
+import com.likefirst.btos.presentation.View.main.MainActivity
 import android.util.Log
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager

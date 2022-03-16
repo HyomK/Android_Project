@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.likefirst.btos.config.XAccessTokenInterceptor
+import dagger.hilt.android.HiltAndroidApp
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import okhttp3.OkHttpClient
@@ -15,7 +16,7 @@ import java.net.SocketException
 import java.util.concurrent.TimeUnit
 
 
-
+@HiltAndroidApp
 class ApplicationClass : Application() {
     companion object{
         const val X_ACCESS_TOKEN: String = "x-access-token"         // JWT Token Key
