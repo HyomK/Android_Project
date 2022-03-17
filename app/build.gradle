@@ -11,10 +11,10 @@ plugins {
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+
+
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-
 
 android {
     compileSdk 31
@@ -29,6 +29,7 @@ android {
         targetSdk 31
         versionCode 1
         versionName "0.0.1"
+
 
         buildConfigField "String", "BTOS_DEFAULT_WEB_CLIENT_ID", properties['btos_default_web_client_id']
         buildConfigField "String", "FIREBASE_SERVER_KEY", properties['firebase_server_key']
@@ -75,6 +76,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha03"
+
+
+
+ /*   //hilt
+    implementation 'com.google.dagger:hilt-android:2.41'
+    kapt 'com.google.dagger:hilt-compiler:2.41'*/
+
+    implementation "com.google.dagger:hilt-android:2.41"
+    kapt "com.google.dagger:hilt-android-compiler:2.41"
+
 
 
     //Retrofit
@@ -170,11 +181,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
 
-    //hilt
-    implementation 'com.google.dagger:hilt-android:2.41'
-    kapt 'com.google.dagger:hilt-compiler:2.41'
 }
 
-kapt {
-    correctErrorTypes true
-}

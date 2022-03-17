@@ -1,7 +1,7 @@
 package com.likefirst.btos.data.remote.plant.view
 
 import com.likefirst.btos.data.remote.plant.response.PlantResponse
-import com.likefirst.btos.presentation.View.main.CustomDialogFragment
+import com.likefirst.btos.presentation.view.main.CustomDialogFragment
 
 interface PlantSelectView{
     fun onPlantSelectError(Dialog : CustomDialogFragment)

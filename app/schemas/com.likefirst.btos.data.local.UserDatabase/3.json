@@ -1,0 +1,94 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "bd9b96fb9aafafc565d9dbd5f9a7fd25",
+    "entities": [
+      {
+        "tableName": "UserTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userIdx` INTEGER, `email` TEXT NOT NULL, `nickName` TEXT NOT NULL, `birth` INTEGER NOT NULL, `selectedPlantIdx` INTEGER, `isPremium` TEXT, `recOthers` INTEGER, `recSimilarAge` INTEGER, `fontIdx` INTEGER, `pushAlarm` INTEGER, `isSad` INTEGER, PRIMARY KEY(`userIdx`))",
+        "fields": [
+          {
+            "fieldPath": "userIdx",
+            "columnName": "userIdx",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nickName",
+            "columnName": "nickName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "birth",
+            "columnName": "birth",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "selectedPlantIdx",
+            "columnName": "selectedPlantIdx",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "premium",
+            "columnName": "isPremium",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "recOthers",
+            "columnName": "recOthers",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "recSimilarAge",
+            "columnName": "recSimilarAge",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fontIdx",
+            "columnName": "fontIdx",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pushAlarm",
+            "columnName": "pushAlarm",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sad",
+            "columnName": "isSad",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "userIdx"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bd9b96fb9aafafc565d9dbd5f9a7fd25')"
+    ]
+  }
+}

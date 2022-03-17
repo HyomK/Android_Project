@@ -1,0 +1,76 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "025b643cb150bc1de3737fde6311aa0b",
+    "entities": [
+      {
+        "tableName": "PlantTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`plantIdx` INTEGER NOT NULL, `plantName` TEXT NOT NULL, `plantInfo` TEXT NOT NULL, `plantPrice` INTEGER NOT NULL, `maxLevel` INTEGER NOT NULL, `currentLevel` INTEGER NOT NULL, `plantStatus` TEXT NOT NULL, `isOwn` INTEGER NOT NULL, PRIMARY KEY(`plantIdx`))",
+        "fields": [
+          {
+            "fieldPath": "plantIdx",
+            "columnName": "plantIdx",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plantName",
+            "columnName": "plantName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plantInfo",
+            "columnName": "plantInfo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plantPrice",
+            "columnName": "plantPrice",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxLevel",
+            "columnName": "maxLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentLevel",
+            "columnName": "currentLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plantStatus",
+            "columnName": "plantStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isOwn",
+            "columnName": "isOwn",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "plantIdx"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '025b643cb150bc1de3737fde6311aa0b')"
+    ]
+  }
+}
