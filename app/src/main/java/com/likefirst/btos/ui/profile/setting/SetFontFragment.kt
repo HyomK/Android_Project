@@ -47,7 +47,7 @@ class SetFontFragment:BaseFragment<FragmentFontBinding>(FragmentFontBinding::inf
     }
 
     override fun onSetSettingUserViewLoading() {
-        binding.setFontLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onSetSettingUserViewSuccess(result: String) {
@@ -60,6 +60,15 @@ class SetFontFragment:BaseFragment<FragmentFontBinding>(FragmentFontBinding::inf
     override fun onSetSettingUserViewFailure(code: Int, message: String) {
         binding.setFontLoadingPb.visibility = View.GONE
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun setLoadingView(){
+        binding.setFontLoadingPb.visibility=View.VISIBLE
+        binding.setFontLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
     }
 
 }

@@ -90,6 +90,7 @@ class AuthService {
     fun signUp(user: UserSign){
         signupView.onSignUpLoading()
 
+        Log.d("userINfo", user.toString())
         AuthService.signUp(user).enqueue(object : Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 val signUpResponse: LoginResponse = response.body()!!

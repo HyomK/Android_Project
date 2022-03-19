@@ -78,6 +78,7 @@
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_list_rv_diary.xml" value="0.264" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_archive_list_rv_month.xml" value="0.264" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_diary_emotion_rv.xml" value="0.23743589743589744" />
+        <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_history.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_history_detail.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_history_nosender.xml" value="0.24114583333333334" />
         <entry key="..\:/Project_Android/BTOS/app/src/main/res/layout/item_mailbox_rv.xml" value="0.23743589743589744" />
@@ -156,7 +157,7 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_archive_list_search.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_birth.xml" value="0.3333333333333333" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.22" />
-        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_font.xml" value="0.25" />
+        <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_font.xml" value="0.2" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_history.xml" value="0.28802083333333334" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_history_basic.xml" value="0.333786231884058" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/fragment_history_diary.xml" value="0.17617753623188406" />

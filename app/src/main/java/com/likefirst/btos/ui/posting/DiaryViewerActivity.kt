@@ -106,9 +106,7 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId){
                     R.id.diary_viewer_option_delete -> {
-                        val diaryService = DiaryService()
-                        diaryService.setDeleteDiaryView(this@DiaryViewerActivity)
-                        diaryService.deleteDiary(intent.getIntExtra("diaryIdx", 0), getUserIdx())
+                        showDeleteDialog()
                         return@setOnMenuItemClickListener true
                     }
                     else -> {
@@ -139,6 +137,27 @@ class DiaryViewerActivity: BaseActivity<ActivityDiaryViewerBinding>(ActivityDiar
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         }
+    }
+
+    fun showDeleteDialog(){
+        val dialog = CustomDialogFragment()
+        val data = arrayOf("취소", "확인")
+        dialog.arguments= bundleOf(
+            "bodyContext" to  "해당 일기를 삭제할까요?",
+            "btnData" to data
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked() {
+
+            }
+
+            override fun onButton2Clicked() {
+                val diaryService = DiaryService()
+                diaryService.setDeleteDiaryView(this@DiaryViewerActivity)
+                diaryService.deleteDiary(intent.getIntExtra("diaryIdx", 0), getUserIdx())
+            }
+        })
+        dialog.show(this.supportFragmentManager, "DeleteDiaryDialog")
     }
 
     fun showLogoutDialog(message : String, tag : String){

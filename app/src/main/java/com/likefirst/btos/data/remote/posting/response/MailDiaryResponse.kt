@@ -34,7 +34,5 @@ data class MailDiaryResponse(
 )
 
 data class PostDiaryResponse(
-    @SerializedName("type") val type : String,
-    @SerializedName("status") val status : String,
-    @SerializedName("levelChanged") val levelChanged : Boolean
+    @SerializedName("diaryIdx") val diaryIdx : Int
 )
