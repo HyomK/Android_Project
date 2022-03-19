@@ -49,11 +49,11 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
         binding.birthList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.onboarding_age_box))
         binding.birthList.dropDownHeight=300
         binding.birthList.setOnClickListener {
-            binding.birthTill.hint=""
+            binding.birthTill.isHintEnabled=false
             binding.birthList.showDropDown()
         }
         binding.birthTill.setEndIconOnClickListener {
-            binding.birthTill.hint=""
+            binding.birthTill.isHintEnabled=false
             binding.birthList.showDropDown()
         }
 

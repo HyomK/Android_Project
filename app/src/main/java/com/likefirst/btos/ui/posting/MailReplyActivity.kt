@@ -27,7 +27,7 @@ import com.likefirst.btos.utils.getUserIdx
 import kotlinx.coroutines.*
 import java.util.*
 
-class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView,DeleteReplyView{
+class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView{
 
 
     lateinit var reply : MailInfoResponse
@@ -45,10 +45,6 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
     override fun initAfterBinding() {
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
-        binding.MailReplyMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
-        binding.MailReplyMenuList.setAdapter(adapter)
-        binding.MailReplyHideView.visibility=View.VISIBLE
-        binding.MailReplyMenuSp.visibility=View.GONE
         binding.mailReplyDateTv.text = dateToString(Date())
         initListener()
 
@@ -88,36 +84,7 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         }
 
 
-        binding.MailReplyMenuList.setOnItemClickListener { adapterView, view, i, l ->
-            val dialog = CustomDialogFragment()
-            binding.MailReplyHideView.visibility=View.VISIBLE
-            when (i) {
-                //삭제
-                0 -> {
-                    val btn= arrayOf("확인","취소")
-                    dialog.arguments= bundleOf(
-                        "bodyContext" to "정말 삭제하시겠습니까?",
-                        "btnData" to btn
-                    )
-                    // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object:
-                        CustomDialogFragment.OnButtonClickListener {
-                        override fun onButton1Clicked() {
-                            replyService.setDeleteReplyView(this@MailReplyActivity)
-                            CoroutineScope(Dispatchers.Main).launch {
-                                setLoadingView()
-                                replyService.deleteReply(reply.typeIdx)
 
-                            }
-                        }
-                        override fun onButton2Clicked() {
-                        }
-                    })
-                    dialog.show(supportFragmentManager, "CustomDialog")
-                }
-            }
-
-        }
 
         binding.MailReplyBodyEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -154,9 +121,6 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
 
     fun setReplySuccessView(){
         isSuccess=true
-        binding.MailReplyMenuSp.visibility=View.VISIBLE
-        binding.MailReplyMenuBtn.visibility= View.VISIBLE
-        binding.MailReplyHideView.visibility=View.VISIBLE
         binding.MailReplyCheckBtn.visibility=View.GONE
         binding.MailReplyBodyEt.isFocusable=false
         binding.MailReplyBodyEt.isClickable=false
@@ -185,12 +149,4 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         Log.e("Reply-api-fail",message.toString())
     }
 
-    override fun onDeleteReplySuccess() {
-        binding.mailReplyLoadingPb.visibility=View.GONE
-        Snackbar.make(binding.mailReplyContentLayout,"편지가 삭제되었습니다.",Snackbar.LENGTH_SHORT).show()
-    }
-
-    override fun onDeleteReplyFailure(code: Int, message: String) {
-        binding.mailReplyLoadingPb.visibility=View.GONE
-    }
 }
