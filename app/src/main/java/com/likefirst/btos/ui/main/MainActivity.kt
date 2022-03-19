@@ -407,7 +407,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         adapter.setMyItemCLickLister(object:AlarmRVAdapter.AlarmItemClickListener{
             override fun onClickItem(alarm: Alarm, position: Int) {
                 val notificationDatabase = NotificationDatabase.getInstance(this@MainActivity)!!
-                notificationDatabase.NotificationDao().setIsChecked(alarm.alarmIdx)
+                notificationDatabase.NotificationDao().deleteNotifications(alarm.alarmIdx)
                 alarmService.getAlarmInfo(alarm.alarmIdx, getUserIdx())
                 binding.mainLayout.closeDrawers()
                 adapter.remove(position)
@@ -424,6 +424,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         result.map { i->run{
             notificationDatabase.NotificationDao().insert(NotificationDTO(i.alarmIdx,i.content,i.createdAt,false))
         } }
+        if(notificationDatabase.NotificationDao().itemCount() > 100){
+            val prev = notificationDatabase.NotificationDao().getNotifications()
+            val subList = prev.subList(0,prev.size - 100 -1)
+            subList.forEach {
+                notificationDatabase.NotificationDao().delete(it)
+            }
+        }
         initAlarmAdapter(result)
     }
 

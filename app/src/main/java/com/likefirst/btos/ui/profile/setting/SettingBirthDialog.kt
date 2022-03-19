@@ -58,9 +58,6 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
         }
 
 
-
-
-
         val btnBundle = arguments?.getStringArray("btnData")
 
         binding.popupBtn1.setOnClickListener {

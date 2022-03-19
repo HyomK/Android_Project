@@ -15,6 +15,9 @@ interface NotificationDao {
     @Delete
     fun delete (notification: NotificationDTO)
 
+    @Query("DELETE  FROM NotificationTable WHERE alarmIdx=:Idx")
+    fun deleteNotifications(Idx: Int)
+
     @Query("SELECT * FROM NotificationTable ORDER BY createAt DESC")
     fun getNotifications(): List<NotificationDTO>
 
