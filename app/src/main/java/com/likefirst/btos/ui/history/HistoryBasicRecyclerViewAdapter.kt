@@ -18,7 +18,7 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
     val dlItems = ArrayList<Content>()
 
     interface MyItemClickListener{
-        fun moveToSenderDetail(userIdx : Int, sender : String)
+        fun moveToSenderDetail(sender : String)
         fun moveToHistoryList(userIdx : Int, type : String, typeIdx : Int)
     }
 
@@ -42,8 +42,7 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
             holder.senderBind(senderItems[position])
             holder.binding.itemHistoryLayout.setOnClickListener {
                 senderItems[position].firstContent.senderNickName?.let { it1 ->
-                    mItemClickListener.moveToSenderDetail(userIdx,
-                        it1)
+                    mItemClickListener.moveToSenderDetail(it1)
                 }
             }
         }

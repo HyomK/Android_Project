@@ -16,7 +16,6 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
             // 검색 버튼을 누른 경우
             binding.historyToolbar.historySearchEt.visibility = View.VISIBLE
             binding.historyToolbar.historyBackIv.visibility = View.VISIBLE
-            binding.historyToolbar.historySearchIv.isClickable = false
             if(binding.historyToolbar.historySearchEt.text.toString() != "") {
                 binding.historyToolbar.historySearchEt.setText("")
             }
@@ -71,7 +70,6 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
     fun checkView(){
         binding.historyToolbar.historySearchEt.visibility = View.GONE
         binding.historyToolbar.historyBackIv.visibility = View.GONE
-        binding.historyToolbar.historySearchIv.isClickable = true
     }
 
     override fun onStart() {
