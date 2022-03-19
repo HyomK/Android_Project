@@ -4,7 +4,7 @@ import android.util.Log
 import com.likefirst.btos.ApplicationClass.Companion.retrofit
 import com.likefirst.btos.data.remote.viewer.response.ArchiveList
 import com.likefirst.btos.data.remote.viewer.view.ArchiveListView
-import com.likefirst.btos.presentation.view.archive.ArchiveListRVAdapter
+import com.likefirst.btos.ui.view.archive.ArchiveListRVAdapter
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Response

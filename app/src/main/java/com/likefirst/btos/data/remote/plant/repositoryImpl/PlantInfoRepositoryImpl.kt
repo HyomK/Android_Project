@@ -1,31 +1,27 @@
 package com.likefirst.btos.data.remote.plant.repositoryImpl
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.room.Database
 import com.likefirst.btos.data.module.Plant
 import com.likefirst.btos.data.local.PlantInfoDao
-import com.likefirst.btos.data.module.ApiInterface
 import com.likefirst.btos.data.module.PlantRequest
 import com.likefirst.btos.data.module.PlantResponse
-import com.likefirst.btos.data.remote.plant.dataSource.PlantInfoDataSource
-import com.likefirst.btos.data.remote.plant.repository.PlantInfoRepository
-import io.reactivex.Observable.fromIterable
-import io.reactivex.Single
-import java.util.*
+import com.likefirst.btos.data.remote.plant.dataSource.PlantInfoRemoteDataSource
+import com.likefirst.btos.domain.repository.PlantInfoRepository
+import retrofit2.Response
 import javax.inject.Inject
 
-class PlantInfoRepositoryImpl @Inject constructor(private val dataSource : PlantInfoDataSource, private val mPlantDao: PlantInfoDao) : PlantInfoRepository {
-    override fun loadPlantList(id:Int): Single<PlantResponse> {
-        return dataSource.loadPlantList(id)
+class PlantInfoRepositoryImpl @Inject constructor(private val remoteDataSource : PlantInfoRemoteDataSource, private val mPlantDao: PlantInfoDao) :
+    PlantInfoRepository {
+    override suspend fun loadPlantList(id:Int): Response<PlantResponse> {
+        return remoteDataSource.loadPlantList(id)
     }
 
-    override fun selectPlant(request: PlantRequest): Single<PlantResponse> {
-       return dataSource.selectPlant(request)
+    override suspend fun selectPlant(request: PlantRequest): Response<PlantResponse> {
+       return remoteDataSource.selectPlant(request)
     }
 
-    override fun buyPlant(request: PlantRequest): Single<PlantResponse> {
-        return dataSource.buyPlant(request)
+    override suspend fun buyPlant(request: PlantRequest): Response<PlantResponse> {
+        return remoteDataSource.buyPlant(request)
     }
 
 
@@ -34,7 +30,6 @@ class PlantInfoRepositoryImpl @Inject constructor(private val dataSource : Plant
     }
 
     override suspend fun insert(plant : Plant) {
-        Log.e("HILT_TEST",plant.toString())
         mPlantDao.insert(plant)
     }
 

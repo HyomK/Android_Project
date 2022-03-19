@@ -11,8 +11,8 @@ import com.likefirst.btos.data.remote.history.view.HistoryDetailView
 import com.likefirst.btos.data.remote.history.view.HistoryDiaryandLetterView
 import com.likefirst.btos.data.remote.history.view.HistorySenderView
 import com.likefirst.btos.data.remote.history.view.SenderDetailView
-import com.likefirst.btos.presentation.view.history.HistoryBasicRecyclerViewAdapter
-import com.likefirst.btos.presentation.view.history.HistoryDetailRecyclerViewAdapter
+import com.likefirst.btos.ui.view.history.HistoryBasicRecyclerViewAdapter
+import com.likefirst.btos.ui.view.history.HistoryDetailRecyclerViewAdapter
 import com.likefirst.btos.utils.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback

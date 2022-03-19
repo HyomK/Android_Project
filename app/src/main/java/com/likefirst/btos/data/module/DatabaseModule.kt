@@ -16,7 +16,7 @@ import javax.inject.Singleton
 //리소스가 많이 소비되기 때문에 db를 싱글톤으로 만들으라는 room 규칙에 들어맞음.
 @Module // (UserDataBase) 추상 클래스는 바로 inject 해서 쓸 수 없다. hilt가 추상 클래스가 어디에 구현되어 있는지 모르기 때문
 //따라서 Module을 만들어서 구현해야 hilt가 구현부를 찾아 갈 수 있다.
-//hilt야 UserDatabase 여기 모듈에 구현되어있어 라고 말하는 너낌
+//hilt야 Database 여기 모듈에 구현되어있어 라고 말하는 너낌
 class DatabaseModule {
     @Provides //Moudle을 구현하는 방법에는 Provides와 Bidns 두가지가 있다. 외부라이브러리에는 Binds를 못쓴다.
     @Singleton //module을 싱글톤으로 만들겠다.

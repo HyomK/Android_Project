@@ -1,7 +1,7 @@
 package com.likefirst.btos.data.remote.notify.view
 
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
-import com.likefirst.btos.presentation.view.main.CustomDialogFragment
+import com.likefirst.btos.ui.view.main.CustomDialogFragment
 
 interface NoticeAPIView {
     fun onNoticeAPIError(Dialog : CustomDialogFragment)

@@ -1,9 +1,5 @@
 package com.likefirst.btos.data.module
 
-import com.likefirst.btos.data.remote.plant.dataSource.PlantInfoDataSource
-import com.likefirst.btos.data.remote.plant.repository.PlantInfoRepository
-import com.likefirst.btos.data.remote.plant.repository.PlantRepository
-import com.likefirst.btos.data.remote.plant.repositoryImpl.PlantInfoRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,10 +11,8 @@ import javax.inject.Singleton
 class ApiModule {
     @Singleton
     @Provides
-    fun provideApiService(): ApiInterface {
-        return ApiInterface.create()
+    fun provideApiService(): PlantApiInterface {
+        return PlantApiInterface.create()
     }
-
-
 
 }

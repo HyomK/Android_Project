@@ -8,8 +8,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.likefirst.btos.presentation.view.main.MainActivity
+import com.likefirst.btos.ui.view.main.MainActivity
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.likefirst.btos.BuildConfig
@@ -17,17 +18,25 @@ import com.likefirst.btos.R
 import com.likefirst.btos.utils.fcm.MyWorker
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
+import com.likefirst.btos.data.remote.plant.repositoryImpl.PlantInfoRepositoryImpl
+import com.likefirst.btos.data.remote.plant.repositoryImpl.PlantNotificationRepositoryImpl
 import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
+import com.likefirst.btos.domain.repository.PlantInfoRepository
+import com.likefirst.btos.ui.viewModel.PlantInfoViewModel
 import com.likefirst.btos.utils.getAlarmSound
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveNotification
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
     val TAG = "MSG_Firebase"
     lateinit var listener : NoticeAPIView
-
-    // 메세지가 수신되면 호출
+    @Inject
+    lateinit var repository : PlantNotificationRepositoryImpl
+    // 메세지가 수g신되면 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.i(TAG, remoteMessage.toString());
 
@@ -194,10 +203,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
 
     fun filterNotification(title: String , content: String){
         if("식물" in title || "화분" in title){
-            val plantViewModel = PlantViewModel(application)
-            val plant = plantViewModel.getSelectedPlant()
+
+            val plant =  repository.getSelectedPlant()
             val newLevel = Character.getNumericValue(title[title.indexOf("단계")-1])
-            if(newLevel>=0)plantViewModel.setInitPlant(plant.plantIdx,plant.plantStatus,newLevel.toInt(),plant.isOwn)
+            if(newLevel>=0) repository.setInitPlant(plant.plantIdx,plant.plantStatus,newLevel.toInt(),plant.isOwn)
             saveNotification("plant")
             return
         }else if("신고" in title){

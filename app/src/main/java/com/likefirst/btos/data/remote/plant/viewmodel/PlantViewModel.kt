@@ -17,7 +17,7 @@ class PlantViewModel(application: Application): AndroidViewModel(application) {
     private val repository: PlantRepository
     private val allPlant : LiveData<List<Plant>>
     private val currentPlant : LiveData<Plant>
-    private val plantService = PlantService()
+
 
     init {
         repository = PlantRepository(application)
@@ -44,16 +44,6 @@ class PlantViewModel(application: Application): AndroidViewModel(application) {
    fun setPlantStatus(idx:Int, status :String){
         return repository.setPlantStatus(idx,status)
    }
-
-   fun selectPlant(view: PlantSelectView,userIdx : Int, plantIdx: Int)= CoroutineScope(Dispatchers.IO).async{
-           plantService.setPlantSelectView(view)
-           plantService.selectPlant(PlantRequest(userIdx,plantIdx))
-   }
-
-    fun buyPlant(view: PlantBuyView, userIdx : Int, plantIdx: Int)= CoroutineScope(Dispatchers.IO).async {
-        plantService.setPlantBuyView(view)
-        plantService.buyPlant(PlantRequest(userIdx,plantIdx))
-    }
 
     fun getPlant(idx: Int) : Plant? {return repository.getPlant(idx)}
 

@@ -1,7 +1,7 @@
 package com.likefirst.btos.utils.Model
 
 import android.content.SharedPreferences
-import com.likefirst.btos.utils.ViewModel.LivePreferenceModel
+import com.likefirst.btos.ui.viewModel.LivePreferenceModel
 import io.reactivex.subjects.PublishSubject
 
 class LiveSharedPreferences constructor(private val preferences: SharedPreferences) {

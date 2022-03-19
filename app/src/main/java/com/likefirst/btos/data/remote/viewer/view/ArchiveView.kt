@@ -1,7 +1,7 @@
 package com.likefirst.btos.data.remote.viewer.view
 
 import com.likefirst.btos.data.remote.viewer.response.*
-import com.likefirst.btos.presentation.view.archive.ArchiveListRVAdapter
+import com.likefirst.btos.ui.view.archive.ArchiveListRVAdapter
 
 interface ArchiveCalendarView {
     fun onArchiveCalendarLoading()

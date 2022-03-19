@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_wall"
-            tools:context=".presentation.view.home.HomeFragment">
+            tools:context=".ui.view.home.HomeFragment">
 
             <ImageView
                 android:id="@+id/home_floor"
@@ -239,7 +239,7 @@
             android:layout_height="match_parent"
             android:background="@color/transparent"
             android:layout_gravity="center"
-            tools:context=".presentation.view.home.HomeFragment"
+            tools:context=".ui.view.home.HomeFragment"
             />
 
 
