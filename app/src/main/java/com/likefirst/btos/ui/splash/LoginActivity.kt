@@ -8,6 +8,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.Auth
@@ -86,23 +87,22 @@ class LoginActivity
 
     lateinit var plantModel : PlantViewModel
 
+
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val networkConnect = NetworkConnection(this)
-        networkConnect.observe(this) { isConnected ->
-            run {
-                Log.e("network connection",isConnected)
-                if (isConnected == "false" || isConnected == "null") {
-                    GlobalScope.launch {
-                        Snackbar.make(binding.root,
-                            "인터넷 연결 후 재접속 해주세요.\n어플리케이션을 종료합니다.",Snackbar.LENGTH_INDEFINITE).show()
-                        delay(5000)
-                        overridePendingTransition( R.anim.fade_in, R.anim.fade_out);
-                        exitProcess(0)
-                    }
-                }
+        Log.e("network connection ",networkConnect.getConnectionState())
+        if (networkConnect.getConnectionState()!= "true") {
+            GlobalScope.launch {
+                Snackbar.make(binding.root,
+                    "인터넷 연결 후 재접속 해주세요.\n어플리케이션을 종료합니다.",Snackbar.LENGTH_INDEFINITE).show()
+                delay(5000)
+                overridePendingTransition( R.anim.fade_in, R.anim.fade_out);
+                exitProcess(0)
             }
         }
+
         plantModel = ViewModelProvider(this).get(PlantViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
         initFirebaseAuth()
@@ -149,18 +149,6 @@ class LoginActivity
 
 
     }
-
-
-/*    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
-    fun checkIsNetworkSuccess()
-    {
-       Log.e("why why why","worked")
-        if(!isNetworkAvailable(this)){
-            Snackbar.make(binding.root, "인터넷 연결을 확인해주세요.  \r\n어플리케이션을 종료합니다.", Snackbar.LENGTH_LONG).show()
-            System.runFinalization() //현재 작업중인 쓰레드가 다 종료되면, 종료 시키라는 명령어
-            exitProcess(0) // 현재 액티비티를 종료시킨다.
-        }
-    }*/
 
 
     override fun onConnectionFailed(p0: ConnectionResult) {}

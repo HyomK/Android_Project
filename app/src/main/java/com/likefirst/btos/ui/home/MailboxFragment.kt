@@ -114,9 +114,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
 
     fun getDiary(diary: MailInfoResponse){
-        var name : String="(알 수 없음)"
-        if(diary.senderNickName !=null)
-            name=diary.senderNickName
+
         val Diary = DiaryViewerInfo( diary.senderNickName, diary.emotionIdx, diary.sendAt, diary.content!!, true, diary.doneList!!)
         val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo",Diary)
@@ -165,7 +163,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
         mailBoxAdapter.setMyItemCLickLister(object: MailRVAdapter.MailItemClickListener {
             override fun onClickItem(mail:Mailbox, position: Int) {
-                setLoadingView()
+
                 when(mail.type){
                     "letter"->{
                         mailViewModel.loadLetter(this@MailboxFragment, getUserIdx(),mail.idx)
@@ -198,7 +196,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onLetterLoading() {
-
+        setLoadingView()
     }
 
     override fun onLetterSuccess(letter: MailInfoResponse) {
@@ -229,7 +227,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
     }
 
     override fun onReplyLoading() {
-       // setLoadingView()
+        setLoadingView()
     }
 
     override fun onReplySuccess(reply: MailInfoResponse){
