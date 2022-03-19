@@ -140,11 +140,15 @@
         </LinearLayout>
 
     </LinearLayout>
-    <ProgressBar
+
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/birth_loading_pb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="8dp"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:layout_gravity="center"/>
+
 </androidx.cardview.widget.CardView>

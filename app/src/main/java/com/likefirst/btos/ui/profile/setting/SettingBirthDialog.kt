@@ -90,7 +90,7 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
     }
 
     override fun onSetSettingUserViewLoading() {
-        binding.birthLoadingPb.visibility = View.VISIBLE
+        setLoadingView()
     }
 
     override fun onSetSettingUserViewSuccess(result: String) {
@@ -127,7 +127,14 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
         fun onButton2Clicked()
 
     }
-
+    fun setLoadingView(){
+        binding.birthLoadingPb.visibility= View.VISIBLE
+        binding.birthLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+    }
     override fun onStart() {
         super.onStart();
         val lp : WindowManager.LayoutParams  =  WindowManager.LayoutParams()

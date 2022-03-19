@@ -10,6 +10,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -72,6 +73,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
            }
         })
     }
+
+    @RequiresPermission(android.Manifest.permission.INTERNET)
     override fun initAfterBinding() {
         val mActivity = activity as MainActivity
         val updateUserService = UpdateUserService()
@@ -177,6 +180,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         },3000)
     }
 
+
+    @RequiresPermission(android.Manifest.permission.INTERNET)
     fun initFlowerPot(){
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         val animationView: LottieAnimationView = binding.lottieAnimation
@@ -224,45 +229,44 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         }
     }
 
+    @RequiresPermission(android.Manifest.permission.INTERNET)
     fun initSadPot(animationView: LottieAnimationView){
         val currentPlant = getCurrentPlant()
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
         animationView.setAnimation( "${plantName}/${plantName}_sad_${currentPlant.currentLevel}.json")
-
         MobileAds.initialize(requireContext())
 //        val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
         MobileAds.setRequestConfiguration(
-              RequestConfiguration.Builder()
+            RequestConfiguration.Builder()
 //             .setTestDeviceIds(testDeviceIds)
-           .build()
-           )
+                .build()
+        )
 
-          val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3439488559531418/3923063443")
-    // 테스트 기기 추가
-    // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
-          val adLoadCallback = object: RewardedAdLoadCallback() {
-              override fun onRewardedAdLoaded() {
-            // Ad successfully loaded.
-               Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
+        val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3439488559531418/3923063443")
+        // 테스트 기기 추가
+        // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
+        val adLoadCallback = object: RewardedAdLoadCallback() {
+            override fun onRewardedAdLoaded() {
+                // Ad successfully loaded.
+                Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
             }
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-            // Ad failed to load.
-              Log.e("rewardLoadError", adError.toString())
-              }
-          }
-          mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
-          animationView.setOnClickListener {
+                // Ad failed to load.
+                Log.e("rewardLoadError", adError.toString())
+            }
+        }
+        mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+        animationView.setOnClickListener {
             showUpdateSadPotDialog(mRewardedVideoAd)
-           }
+        }
         //Google Admob 구현
 
 
     }
 
     fun getCurrentPlant():Plant{
-        val plantDB = PlantDatabase.getInstance(requireContext())?.plantDao()
-        val currentPlant = plantDB?.getSelectedPlant()!!
+        val currentPlant = plantModel.getSelectedPlant()
         return currentPlant
     }
 
@@ -370,6 +374,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         // TODO: 로딩애니메이션 구현
     }
 
+    @RequiresPermission(android.Manifest.permission.INTERNET)
     override fun onUpdateSuccess(isSad : UserIsSad) {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         userDB!!.updateIsSad(isSad.sad!!)

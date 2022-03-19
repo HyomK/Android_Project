@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.SendLetterRequest
@@ -58,32 +59,6 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
             dialog.show(supportFragmentManager, "CustomDialog")
         }
 
-       /* binding.MailWriteMenuList.setOnItemClickListener { adapterView, view, i, l ->
-            val dialog = CustomDialogFragment()
-            binding.MailWriteHideView.visibility=View.VISIBLE
-            when (i) {
-                //삭제
-                0 -> {
-                    val btn= arrayOf("확인","취소")
-                    dialog.arguments= bundleOf(
-                        "bodyContext" to "정말 삭제하시겠습니까?",
-                        "btnData" to btn
-                    )
-                    // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object:
-                        CustomDialogFragment.OnButtonClickListener {
-                        override fun onButton1Clicked() {
-                        }
-                        override fun onButton2Clicked() {
-                        }
-                    })
-                    dialog.show(supportFragmentManager, "CustomDialog")
-                }
-            }
-        }
-*/
-
-
         binding.MailWriteBodyEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
@@ -110,6 +85,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         binding.MailWriteBodyEt.isFocusable=false
         binding.MailWriteBodyEt.isClickable=false
         binding.MailWriteBodyEt.isCursorVisible=false
+        Snackbar.make(binding.root,"편지가 발송되었습니다!",Snackbar.LENGTH_SHORT)
         Log.e("SENDING", "success")
     }
 

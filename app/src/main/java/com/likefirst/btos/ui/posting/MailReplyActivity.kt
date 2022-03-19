@@ -8,10 +8,12 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.posting.service.SendService
 import com.likefirst.btos.data.remote.posting.view.DeleteReplyView
@@ -46,6 +48,8 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.mailReplyDateTv.text = dateToString(Date())
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        setFont(userDB.getFontIdx()!!)
         initListener()
 
     }
@@ -77,7 +81,6 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                         job.await()
                         binding.mailReplyLoadingPb.visibility=View.GONE
                     }
-
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
@@ -126,6 +129,13 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         binding.MailReplyBodyEt.isClickable=false
         binding.MailReplyBodyEt.isFocusableInTouchMode=false // 입력막기
         Snackbar.make(binding.mailReplyContentLayout,"편지가 발송되었습니다.",Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun setFont(idx:Int){
+        val fonts= resources.getStringArray(R.array.fontEng)
+        val fontId= resources.getIdentifier(fonts[idx],"font", packageName)
+        binding.MailReplyBodyEt.typeface = ResourcesCompat.getFont(this,fontId)
+        binding.mailReplyDateTv.typeface = ResourcesCompat.getFont(this,fontId)
     }
 
 

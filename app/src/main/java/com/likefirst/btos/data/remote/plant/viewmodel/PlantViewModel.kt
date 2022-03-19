@@ -37,7 +37,6 @@ class PlantViewModel(application: Application): AndroidViewModel(application) {
    }
 
    fun getSelectedPlant():Plant{
-
       return  repository.getSelectedPlant()
    }
 
