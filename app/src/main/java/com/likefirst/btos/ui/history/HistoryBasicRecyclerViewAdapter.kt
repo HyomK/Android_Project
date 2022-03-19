@@ -2,6 +2,7 @@ package com.likefirst.btos.ui.history
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,9 +62,9 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
     }
 
     inner class ViewHolder(val binding : ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root){
-
         @SuppressLint("SetTextI18n")
         fun senderBind(item : SenderList){
+            Log.e("HISTORYBASICRECYCLER",item.firstContent.toString())
             if(item.firstContent.type == "diary"){
                 binding.itemHistoryBg.setImageResource(R.drawable.ic_bg_diary)
             }
@@ -85,6 +86,7 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
             }
         }
         fun dlBind(item : Content){
+            Log.e("HISTORYBASICRECYCLER",item.type+item.senderNickName)
             if(item.type == "diary"){
                 binding.itemHistoryBg.setImageResource(R.drawable.ic_bg_diary)
             }
@@ -109,12 +111,10 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
     }
 
     fun setSenderItems(items: ArrayList<SenderList>){
-//        this.senderItems.clear()
         this.senderItems.addAll(items)
     }
 
     fun setdlItems(items: ArrayList<Content>){
-//        this.dlItems.clear()
         this.dlItems.addAll(items)
     }
 

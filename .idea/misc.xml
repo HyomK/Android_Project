@@ -212,20 +212,41 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/toolbar_layout.xml" value="0.33" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/menu/overflow_menu.xml" value="0.19074074074074074" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/archive_date_picker_dialog_style.xml" value="0.3416666666666667" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/history_repeat_bg.xml" value="0.23981481481481481" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/ic_bg_diary.xml" value="0.23981481481481481" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/ic_bg_received.xml" value="0.23981481481481481" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/ic_dropdown.xml" value="0.2671875" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/tutorial_indicator.xml" value="0.2671875" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/tutorial_indicator_default_dot.xml" value="0.2671875" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/tutorial_indicator_selected_dot.xml" value="0.2671875" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.264" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/activity_history_list.xml" value="0.25104166666666666" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/activity_login.xml" value="0.24307692307692308" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/activity_main.xml" value="0.19907407407407407" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/activity_onboarding.xml" value="0.264" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/activity_tutorial.xml" value="0.264" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/dialog_archive_calendar_period.xml" value="0.30092592592592593" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/dialog_archive_list_period.xml" value="0.25" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/fragment_archive_calendar.xml" value="0.30092592592592593" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/fragment_archive_list.xml" value="0.30092592592592593" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/fragment_history.xml" value="0.4" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/fragment_history_basic.xml" value="0.264" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/fragment_history_list.xml" value="0.25104166666666666" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/fragment_history_sender_detail.xml" value="0.4" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/fragment_mailbox.xml" value="0.25104166666666666" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/item_archive_list_rv_diary.xml" value="0.30092592592592593" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/item_history.xml" value="0.264" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/item_history_detail_diary.xml" value="0.19907407407407407" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/item_history_detail_letter.xml" value="0.19907407407407407" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/item_login_dialog.xml" value="0.246875" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/item_tutorial.xml" value="0.264" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/login_detail_dialog.xml" value="0.264" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/login_dialog.xml" value="0.4" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/toolbar_archive.xml" value="0.30092592592592593" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/toolbar_history.xml" value="0.19907407407407407" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/toolbar_history_detail.xml" value="0.11614583333333334" />
+        <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/layout/toolbar_history_senderdetail.xml" value="0.19907407407407407" />
       </map>
     </option>
   </component>
