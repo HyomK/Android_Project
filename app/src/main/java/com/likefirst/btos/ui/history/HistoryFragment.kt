@@ -50,6 +50,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
     override fun initAfterBinding() {
         userDatabase = UserDatabase.getInstance(requireContext())!!
         recyclerViewAdapter = HistoryBasicRecyclerViewAdapter(requireActivity(), filtering, userDatabase.userDao().getUserIdx())
+        search = binding.historyToolbar.historySearchEt
         binding.historyBasicLoadingPb.bringToFront()
         binding.historyBasicRv.bringToFront()
 
@@ -160,7 +161,6 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
     private fun initSearch() {
         val mActivity = activity as MainActivity
         val back : ImageView = binding.historyToolbar.historyBackIv
-        search = binding.historyToolbar.historySearchEt
         val searchiv = binding.historyToolbar.historySearchIv
 
         searchiv.setOnClickListener {
