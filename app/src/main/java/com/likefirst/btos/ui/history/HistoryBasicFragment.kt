@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
@@ -34,6 +35,7 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
     lateinit var recyclerViewAdapter : HistoryBasicRecyclerViewAdapter
     lateinit var toolbar : Toolbar
     lateinit var search : EditText
+    var liveSearching = MutableLiveData<String>()
 
     var searchText : String ?= null
     val watcher by lazy{
@@ -54,7 +56,7 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
 
     override fun initAfterBinding() {
         userDatabase = UserDatabase.getInstance(requireContext())!!
-        recyclerViewAdapter = HistoryBasicRecyclerViewAdapter(requireActivity(), filtering, userDatabase.userDao().getUserIdx())
+        recyclerViewAdapter = HistoryBasicRecyclerViewAdapter(requireActivity(),  userDatabase.userDao().getUserIdx(),liveSearching)
         toolbar = requireActivity().findViewById(R.id.history_toolbar)
         search = toolbar.findViewById(R.id.history_search_et)
 
@@ -99,6 +101,7 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
                     startActivity(intent)
                 }
             })
+
         }
 
         requiredPageNum = 1
@@ -129,6 +132,8 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
                 }
             }
         })
+
+
         loadHistoryList(requiredPageNum, recyclerViewAdapter)
     }
 
@@ -166,12 +171,12 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
         binding.historyBasicNoResultIv.visibility = View.GONE
         binding.historyBasicNoResultTv.visibility = View.GONE
         val result = response.list
-        if(searchText!=null) {
-            recyclerViewAdapter.clearSenderItems()
-            recyclerViewAdapter.notifyDataSetChanged()
-        }
+       /* if(searchText!=null) {
+           recyclerViewAdapter.clearSenderItems()
+           // recyclerViewAdapter.notifyDataSetChanged()
+        }*/
         recyclerViewAdapter.setSenderItems(result)
-        recyclerViewAdapter.notifyItemRangeInserted((requiredPageNum-1)*20,(requiredPageNum-1)*20+pageInfo.dataNum_currentPage!!)
+       // recyclerViewAdapter.notifyItemRangeInserted((requiredPageNum-1)*20,(requiredPageNum-1)*20+pageInfo.dataNum_currentPage!!)
         if (pageInfo.hasNext!!){
             requiredPageNum++
         } else {
@@ -184,7 +189,7 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
             6018 ->{
                 //검색결과 없음
                 recyclerViewAdapter.clearSenderItems()
-                recyclerViewAdapter.notifyDataSetChanged()
+                //recyclerViewAdapter.notifyDataSetChanged()
                 binding.historyBasicNoResultIv.visibility = View.VISIBLE
                 binding.historyBasicNoResultTv.visibility = View.VISIBLE
             }
@@ -211,12 +216,11 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
         binding.historyBasicNoResultIv.visibility = View.GONE
         binding.historyBasicNoResultTv.visibility = View.GONE
         val result = response.list
-        if(searchText!=null) {
-            recyclerViewAdapter.cleardlItems()
-            recyclerViewAdapter.notifyDataSetChanged()
-        }
+       /* if(searchText!=null) {
+          recyclerViewAdapter.cleardlItems()
+        }*/
         recyclerViewAdapter.setdlItems(result)
-        recyclerViewAdapter.notifyItemRangeInserted((requiredPageNum-1)*20,(requiredPageNum-1)*20+pageInfo.dataNum_currentPage!!)
+      //  recyclerViewAdapter.notifyItemRangeInserted((requiredPageNum-1)*20,(requiredPageNum-1)*20+pageInfo.dataNum_currentPage!!)
         if (pageInfo.hasNext!!){
             requiredPageNum++
         } else {
@@ -230,7 +234,7 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
             6018 ->{
                 //검색결과 없음
                 recyclerViewAdapter.cleardlItems()
-                recyclerViewAdapter.notifyDataSetChanged()
+                //recyclerViewAdapter.notifyDataSetChanged()
                 binding.historyBasicNoResultIv.visibility = View.VISIBLE
                 binding.historyBasicNoResultTv.visibility = View.VISIBLE
             }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.data.entities.Content
@@ -28,6 +29,7 @@ class SenderDetailFragment(private val senderNickName : String)
     lateinit var userDatabase : UserDatabase
     lateinit var recyclerViewAdapter : HistoryBasicRecyclerViewAdapter
     lateinit var searchet : EditText
+    var liveSearching = MutableLiveData<String>("senderDetail")
 
     val watcher by lazy{
         object: TextWatcher {
@@ -49,7 +51,8 @@ class SenderDetailFragment(private val senderNickName : String)
         requiredPageNum = 1
         binding.itemHistorySenderTitle.text = senderNickName
         userDatabase = UserDatabase.getInstance(requireContext())!!
-        recyclerViewAdapter = HistoryBasicRecyclerViewAdapter(requireContext(), "senderDetail", userDatabase.userDao().getUserIdx())
+        liveSearching.postValue("senderDetail")
+        recyclerViewAdapter = HistoryBasicRecyclerViewAdapter(requireContext(), userDatabase.userDao().getUserIdx(),liveSearching)
 
         binding.historyBasicLoadingPb.bringToFront()
 

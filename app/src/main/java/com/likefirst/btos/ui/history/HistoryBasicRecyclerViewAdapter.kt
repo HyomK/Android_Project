@@ -2,20 +2,28 @@ package com.likefirst.btos.ui.history
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.Content
 import com.likefirst.btos.data.entities.SenderList
 import com.likefirst.btos.databinding.ItemHistoryBinding
 
-class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val filtering : String, private val userIdx : Int)
+class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val userIdx : Int, val filtering: LiveData<String>)
     : RecyclerView.Adapter<HistoryBasicRecyclerViewAdapter.ViewHolder>(){
 
-    val senderItems = ArrayList<SenderList>()
-    val dlItems = ArrayList<Content>()
+    inner class DataSet(){
+        var senderItems = ArrayList<SenderList>()
+        var dlItems = ArrayList<Content>()
+    }
+
+    var filter = filtering.value
+    val data = DataSet()
+
 
     interface MyItemClickListener{
         fun moveToSenderDetail(sender : String)
@@ -36,32 +44,43 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: HistoryBasicRecyclerViewAdapter.ViewHolder, position: Int) {
-
-        if(senderItems.isNotEmpty()){
-            holder.senderBind(senderItems[position])
+    override fun onBindViewHolder(holder: HistoryBasicRecyclerViewAdapter.ViewHolder, pos: Int) {
+        var position =pos
+        if(data.senderItems.isNotEmpty()){
+            holder.senderBind(data.senderItems[position])
             holder.binding.itemHistoryLayout.setOnClickListener {
-                senderItems[position].firstContent.senderNickName?.let { it1 ->
+                data.senderItems[position].firstContent.senderNickName?.let { it1 ->
                     mItemClickListener.moveToSenderDetail(it1)
                 }
             }
         }
-        if(dlItems.isNotEmpty()){
-            dlItems[position].let { holder.dlBind(it) }
+        if(data.dlItems.isNotEmpty()){
+            data.dlItems[position].let { holder.dlBind(it) }
             holder.binding.itemHistoryLayout.setOnClickListener {
-                dlItems[position].let { it1 ->
-                    dlItems[position].let { it2 ->
+                data.dlItems[position].let { it1 ->
+                    data.dlItems[position].let { it2 ->
                         mItemClickListener.moveToHistoryList(userIdx, it2.type, it1.typeIdx) } }
+
             }
+
         }
     }
 
+
+    override fun getItemViewType( position : Int) : Int{
+        return position
+    }
+
+
     override fun getItemCount(): Int {
-        return if(filtering == "sender") senderItems.size else dlItems.size
+        if("sender"== filtering.value){
+            return   data.senderItems.size
+        }else{
+            return data.dlItems.size
+        }
     }
 
     inner class ViewHolder(val binding : ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root){
-
         @SuppressLint("SetTextI18n")
         fun senderBind(item : SenderList){
             if(item.firstContent.type == "diary"){
@@ -83,10 +102,14 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
             }else{
                 binding.itemHistoryDone.visibility = View.GONE
             }
+
         }
         fun dlBind(item : Content){
+
             if(item.type == "diary"){
                 binding.itemHistoryBg.setImageResource(R.drawable.ic_bg_diary)
+            }else{
+                binding.itemHistoryBg.setBackgroundResource(R.drawable.history_repeat_bg)
             }
             binding.itemHistoryArrow.visibility = View.GONE
             binding.itemHistorySenderTitle.visibility = View.GONE
@@ -108,30 +131,41 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
         }
     }
 
+
+    @SuppressLint("NotifyDataSetChanged")
     fun setSenderItems(items: ArrayList<SenderList>){
-//        this.senderItems.clear()
-        this.senderItems.addAll(items)
+        data.senderItems=items
+        data.dlItems.clear()
+        notifyDataSetChanged()
+        Log.e("history-senderlist",data.senderItems.toString())
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setdlItems(items: ArrayList<Content>){
-//        this.dlItems.clear()
-        this.dlItems.addAll(items)
+        this.data.dlItems = items
+        this.data.senderItems.clear()
+        notifyDataSetChanged()
+        Log.e("history-list",data.dlItems.toString())
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun clearSenderItems(){
-        this.senderItems.clear()
+        this.data.senderItems.clear()
+        notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun cleardlItems(){
-        this.dlItems.clear()
+        this.data.dlItems.clear()
+        notifyDataSetChanged()
     }
 
     fun isSenderEmpty() : Boolean{
-        return senderItems.isEmpty()
+        return data.senderItems.isEmpty()
     }
 
     fun isDLEmpty() : Boolean{
-        return dlItems.isEmpty()
+        return data.dlItems.isEmpty()
     }
 
 }
