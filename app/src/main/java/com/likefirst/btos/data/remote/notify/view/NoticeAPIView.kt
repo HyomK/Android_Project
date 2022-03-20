@@ -14,3 +14,9 @@ interface NoticeAPIView {
 interface NotificationListener{
     fun onPushNow()
 }
+
+interface SystemPushAlarmView {
+    fun onSystemPushAlarmLoading()
+    fun onSystemPushAlarmSuccess()
+    fun onSystemPushAlarmFailure(code : Int)
+}

@@ -35,6 +35,7 @@ import com.likefirst.btos.ui.profile.setting.NoticeActivity
 import com.likefirst.btos.data.remote.notify.response.Alarm
 import com.likefirst.btos.data.remote.notify.response.AlarmInfo
 import com.likefirst.btos.data.remote.notify.service.AlarmService
+import com.likefirst.btos.data.remote.notify.service.NoticeService
 import com.likefirst.btos.data.remote.notify.view.*
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.service.DiaryService
@@ -52,7 +53,8 @@ import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.removeNotice
 
 
-class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),AlarmInfoView,AlarmListView,MailDiaryView, MailLetterView, MailReplyView{
+class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),AlarmInfoView,AlarmListView,MailDiaryView,
+    MailLetterView, MailReplyView{
 
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
@@ -147,10 +149,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
            val bundle = Bundle()
            bundle.putBoolean("isNewUser", true)
            homeFragment.arguments = bundle
-           supportFragmentManager.beginTransaction()
-               .replace(R.id.fr_layout, homeFragment, "home")
-               .setReorderingAllowed(true)
-               .commitNowAllowingStateLoss()
        }
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
@@ -179,6 +177,9 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
         override fun onNavigationItemSelected(it: MenuItem): Boolean {
+            Log.e("fragments", supportFragmentManager.fragments.toString())
+
+
             when (it.itemId) {
                 R.id.homeFragment -> {
                     isDrawerOpen=true

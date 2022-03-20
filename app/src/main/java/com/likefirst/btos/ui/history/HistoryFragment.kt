@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -152,7 +153,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
                 searchText=""
                 requireActivity().supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fr_layout,
+                    .add(R.id.fr_layout,
                         SenderDetailFragment(sender),
                         "senderdetail")
                     .addToBackStack(null)
@@ -283,7 +284,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         recyclerViewAdapter.setSenderItems(result)
         liveSenderResponse.postValue(result)
         livePageInfo.postValue(pageInfo)
-
+        search.removeTextChangedListener(watcher)
         if (pageInfo.hasNext!!){
             requiredPageNum++
         } else {
@@ -325,6 +326,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         val result = response.list
         liveResponse.postValue(result)
         livePageInfo.postValue(pageInfo)
+        search.removeTextChangedListener(watcher)
 
         Log.e("HISTORYRECYCLER","required"+requiredPageNum+"current"+pageInfo.dataNum_currentPage+"data -> "+recyclerViewAdapter.DataSet().dlItems.toString())
 
@@ -351,7 +353,13 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         super.onHiddenChanged(hidden)
         if(!hidden ){
             checkView()
-        }else if(hidden &&isAdded) search.removeTextChangedListener(watcher)
+            search.addTextChangedListener(watcher)
+        }else if(hidden &&isAdded){
+            search.removeTextChangedListener(watcher)
+            requireActivity().supportFragmentManager.commit {
+                requireActivity().supportFragmentManager.findFragmentByTag("senderdetail")?.let { remove(it) }
+            }
+        }
     }
 
 }

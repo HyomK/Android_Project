@@ -218,9 +218,11 @@
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/activity_mail_reply.xml" value="0.19635416666666666" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/custom_dialog_layout.xml" value="0.19635416666666666" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/custom_edit_dialog.xml" value="0.19635416666666666" />
+        <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/fragment_flowerpot.xml" value="0.10081053698074975" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/fragment_history.xml" value="0.1796875" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/fragment_history_basic.xml" value="0.1796875" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/fragment_history_sender_detail.xml" value="0.1796875" />
+        <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/item_flowerpot.xml" value="0.10081053698074975" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/item_history.xml" value="0.14130434782608695" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/item_history_detail_letter.xml" value="0.14130434782608695" />
         <entry key="..\:/UMC/BTOS_RE/app/src/main/res/layout/setting_birth_dialog.xml" value="0.19635416666666666" />

@@ -135,7 +135,8 @@ class SenderDetailFragment(private val senderNickName : String)
     }
 
     override fun onBackPressed() {
-        requireActivity().supportFragmentManager.popBackStack()
+        //requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
     }
 
     override fun onSenderDetailLoading() {

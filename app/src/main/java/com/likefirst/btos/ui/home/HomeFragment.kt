@@ -31,6 +31,8 @@ import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
+import com.likefirst.btos.data.remote.notify.service.NoticeService
+import com.likefirst.btos.data.remote.notify.view.SystemPushAlarmView
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
@@ -50,7 +52,7 @@ import java.util.*
 import kotlin.system.exitProcess
 
 
-public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView {
+public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate), UpdateIsSadView, SystemPushAlarmView {
     var isMailboxOpen =false
     lateinit var   notifyViewModel : NotifyViewModel
     private val plantModel: PlantViewModel by viewModels()
@@ -112,6 +114,9 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
         if(arguments!=null && requireArguments().getBoolean("isNewUser", false)){
             playGuideAnim()
+            val systemPushService = NoticeService()
+            systemPushService.setSystemPushView(this)
+            systemPushService.loadSystemPushAlarm(getUserIdx())
         }
     }
 
@@ -197,19 +202,18 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             updateUserService.setUpdateIsSadView(this)
             updateUserService.updateIsSad(getUserIdx(), UserIsSad(true))
             userDB.updateIsSad(true)
-            initSadPot(animationView)
+            initSadPot(animationView )
         } else {
             initHappyPot(animationView)
         }
+        // TODO: 서버 반영해서 유저가 선택한 화분에 따라서 표시되게 변경, 현재는 더미데이터일 뿐임
     }
 
-    fun updatePot(animationView: LottieAnimationView, plantName : String, currentLevel : Int){
-
+    fun updatePot(animationView: LottieAnimationView,plantName : String, currentLevel : Int){
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         var plantStatus = ""
         if(userDB!!.getIsSad()) plantStatus="sad_"
-        Log.d("updatePot"," ${plantName}_ ${ plantStatus }_${currentLevel}")
-        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${currentLevel}.json")
+        animationView.setAnimation("${plantName}/${plantName}_${plantStatus}${3}.json")
         animationView.repeatCount = LottieDrawable.INFINITE
         animationView.repeatMode = LottieDrawable.RESTART
         animationView.playAnimation()
@@ -235,6 +239,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val plantIndex = requireContext().resources.getStringArray(R.array.plantEng)
         val plantName =plantIndex[currentPlant.plantIdx-1]
         animationView.setAnimation( "${plantName}/${plantName}_sad_${currentPlant.currentLevel}.json")
+
         MobileAds.initialize(requireContext())
 //        val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
         MobileAds.setRequestConfiguration(
@@ -374,7 +379,6 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         // TODO: 로딩애니메이션 구현
     }
 
-    @RequiresPermission(android.Manifest.permission.INTERNET)
     override fun onUpdateSuccess(isSad : UserIsSad) {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         userDB!!.updateIsSad(isSad.sad!!)
@@ -416,5 +420,14 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
             }
             4000, 5016 -> Snackbar.make(requireView(), "데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onSystemPushAlarmLoading() {
+    }
+
+    override fun onSystemPushAlarmSuccess() {
+    }
+
+    override fun onSystemPushAlarmFailure(code: Int) {
     }
 }
