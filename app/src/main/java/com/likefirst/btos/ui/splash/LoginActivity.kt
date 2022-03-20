@@ -39,6 +39,7 @@ import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FcmTokenService
+import com.likefirst.btos.data.remote.notify.service.MyFirebaseMessagingService
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.plant.service.PlantService
 import com.likefirst.btos.data.remote.plant.view.PlantListView
@@ -103,6 +104,7 @@ class LoginActivity
             }
         }
 
+        MyFirebaseMessagingService().handleIntent(this.intent)
         plantModel = ViewModelProvider(this).get(PlantViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
         initFirebaseAuth()

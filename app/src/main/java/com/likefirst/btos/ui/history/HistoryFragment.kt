@@ -1,6 +1,7 @@
 package com.likefirst.btos.ui.history
 
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -178,7 +179,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
     }
 
-    fun initHistoryList(recyclerViewAdapter : HistoryBasicRecyclerViewAdapter){
+    fun initHistoryList(recycler : HistoryBasicRecyclerViewAdapter){
         binding.historyBasicRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             var isEmpty = true
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -273,7 +274,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         binding.historyBasicNoResultTv.visibility = View.GONE
     }
 
-    override fun onHistorySenderSuccess(response: BasicHistory<SenderList>, pageInfo: PageInfo, recyclerViewAdapter : HistoryBasicRecyclerViewAdapter) {
+    override fun onHistorySenderSuccess(response: BasicHistory<SenderList>, pageInfo: PageInfo, recycler : HistoryBasicRecyclerViewAdapter) {
         binding.historyBasicLoadingPb.visibility = View.GONE
         binding.historyBasicNoResultIv.visibility = View.GONE
         binding.historyBasicNoResultTv.visibility = View.GONE
@@ -289,7 +290,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
             requiredPageNum = 0
         }
     }
-    override fun onHistorySenderFailure(code: Int, message: String, recyclerViewAdapter : HistoryBasicRecyclerViewAdapter) {
+    override fun onHistorySenderFailure(code: Int, message: String, recycler : HistoryBasicRecyclerViewAdapter) {
         binding.historyBasicLoadingPb.visibility = View.GONE
         when(code){
             6018 ->{
@@ -334,7 +335,7 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         }
     }
 
-    override fun onHistoryDiaryFailure(code: Int, message: String, recyclerViewAdapter: HistoryBasicRecyclerViewAdapter) {
+    override fun onHistoryDiaryFailure(code: Int, message: String, recycler: HistoryBasicRecyclerViewAdapter) {
         binding.historyBasicLoadingPb.visibility = View.GONE
         when(code){
             6018 ->{
