@@ -45,7 +45,7 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
     }
 
     override fun onBindViewHolder(holder: HistoryBasicRecyclerViewAdapter.ViewHolder, pos: Int) {
-        var position =pos
+        var position =getItemViewType(pos)
         if(data.senderItems.isNotEmpty()){
             holder.senderBind(data.senderItems[position])
             holder.binding.itemHistoryLayout.setOnClickListener {
@@ -106,7 +106,7 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
         }
         fun dlBind(item : Content){
 
-            if(item.type == "diary"){
+            if(filtering.value== "diary"){
                 binding.itemHistoryBg.setImageResource(R.drawable.ic_bg_diary)
             }else{
                 binding.itemHistoryBg.setBackgroundResource(R.drawable.history_repeat_bg)
