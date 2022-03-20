@@ -92,9 +92,9 @@ class LoginActivity
     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val networkConnect = NetworkConnection(this)
-        Log.e("network connection ",networkConnect.getConnectionState())
-        if (networkConnect.getConnectionState()!= "true") {
+      /*  val networkConnect = NetworkConnection(this)
+        Log.e("network connection ",networkConnect.value.toString())
+        if (networkConnect.value== "false") {
             GlobalScope.launch {
                 Snackbar.make(binding.root,
                     "인터넷 연결 후 재접속 해주세요.\n어플리케이션을 종료합니다.",Snackbar.LENGTH_INDEFINITE).show()
@@ -103,7 +103,7 @@ class LoginActivity
                 exitProcess(0)
             }
         }
-
+*/
         MyFirebaseMessagingService().handleIntent(this.intent)
         plantModel = ViewModelProvider(this).get(PlantViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()

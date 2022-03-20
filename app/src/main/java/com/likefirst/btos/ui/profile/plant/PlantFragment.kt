@@ -45,8 +45,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                 if (isConnected == "false" || isConnected == "null") {
                     Log.e("network-msg",isConnected)
                      GlobalScope.launch {
-                        Snackbar.make(binding.root,
-                            "인터넷 연결을 확인해 주세요.", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "인터넷 연결을 확인해 주세요.", Snackbar.LENGTH_SHORT).show()
                        //TODO 네트워크 장애 처리
                     }
                 }
@@ -84,7 +83,8 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
             @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
             override fun onClickSelectItem(plant : Plant,position:Int) {
-                if( networkConnect.getConnectionState() == "true"){
+                Log.e("network",networkConnect.value.toString() )
+                if(  networkConnect.value == "true"){
                     CoroutineScope(Dispatchers.Main).launch {
                         setLoadingView()
                         binding.flowerpotRv.isClickable=false
@@ -113,7 +113,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
                     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
                     override fun onButton2Clicked(){
-                        if( networkConnect.getConnectionState() == "true"){
+                        if( networkConnect.value == "true"){
                             CoroutineScope(Dispatchers.Main).launch {
                                 setLoadingView()
                                 binding.flowerpotRv.isClickable=false
