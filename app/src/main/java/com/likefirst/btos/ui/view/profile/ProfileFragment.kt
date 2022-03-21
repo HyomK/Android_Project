@@ -9,7 +9,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.likefirst.btos.R
-import com.likefirst.btos.data.local.PlantDatabase
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.databinding.FragmentProfileBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -20,7 +19,6 @@ import com.likefirst.btos.ui.view.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.view.profile.setting.SettingFragment
 import com.likefirst.btos.ui.view.profile.setting.SuggestionFragment
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
-import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
 import com.likefirst.btos.ui.viewModel.PlantInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

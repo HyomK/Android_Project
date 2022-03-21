@@ -27,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
 import com.likefirst.btos.data.entities.UserIsSad
 import com.likefirst.btos.data.local.UserDatabase
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
 import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
@@ -260,7 +260,7 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
 
 
     }
-    fun getCurrentPlant(): Plant{
+    fun getCurrentPlant(): Plant {
         val currentPlant = plantModel.getSelectedPlant()
         return currentPlant!!
     }

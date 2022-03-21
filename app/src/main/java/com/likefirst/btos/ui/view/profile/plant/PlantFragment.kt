@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.module.PlantRequest
 import com.likefirst.btos.databinding.FragmentFlowerpotBinding
 import com.likefirst.btos.ui.BaseFragment
@@ -104,7 +104,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
             }
 
             @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
-            override fun onClickSelectItem(plant : Plant,position:Int) {
+            override fun onClickSelectItem(plant : Plant, position:Int) {
                 if( networkConnect.getConnectionState() == "true"){
                     binding.flowerpotRv.isClickable=false
                     plantViewModel.selectPlantItem(PlantRequest( getUserIdx(),plant.plantIdx))
@@ -132,19 +132,12 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
                     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
                     override fun onButton2Clicked(){
                         if( networkConnect.getConnectionState() == "true"){
-                           /* CoroutineScope(Dispatchers.Main).launch {
-                                setLoadingView()
-                                binding.flowerpotRv.isClickable=false
-                                plantModel.buyPlant(plantBuyView,getUserIdx(),plant.plantIdx).await()
-                                buyDialog.dismiss()
-                            }*/
                             binding.flowerpotRv.isClickable=false
                             runBlocking {
                                 val job =  plantViewModel.buyPlantItem(PlantRequest(getUserIdx(),plant.plantIdx))
                                 job.join()
                             }
                             buyDialog.dismiss()
-
                         }else{
                             buyDialog.dismiss()
                             Snackbar.make(binding.root,
@@ -210,55 +203,6 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
         mainActivity.isPlantOpen=false
     }
 
-   /* override fun onPlantBuyError(Dialog: CustomDialogFragment) {
-        Dialog.show(requireActivity().supportFragmentManager,"plantError")
-    }
-
-    override fun onPlantBuySuccess(plantIdx: Int, response : PlantResponse) {
-        binding.setPlantLoadingPb.visibility= View.GONE
-        binding.flowerpotRv.isClickable=true
-        val plant = plantModel.getPlant(plantIdx)
-        if(plant!=null){
-            plantModel.setInitPlant(plantIdx,"active",0,true)
-        }
-    }
-
-
-    override fun onPlantBuyFailure(code: Int, message: String) {
-        when(code){
-            1000-> Log.e( code.toString(),"화분 상태 변경에 실패하였습니다.")
-            7011-> Log.e( code.toString(),"화분 선택에 실패하였습니다.")
-            else ->Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다")
-        }
-    }
-
-
-    override fun onPlantSelectError(Dialog: CustomDialogFragment) {
-        Dialog.show(requireActivity().supportFragmentManager,"plantError")
-    }
-
-    override fun onPlantSelectLoading() {
-
-    }
-
-    override fun onPlantSelectSuccess(plantIdx: Int, request: PlantResponse) {
-       *//* binding.setPlantLoadingPb.visibility= View.GONE
-        binding.flowerpotRv.isClickable=true
-        Log.d("Plantselect/API",request.isSuccess.toString()) // acitve -> selected 변경
-        val selected = plantModel.getSelectedPlant()
-        plantModel.setPlantStatus(selected.plantIdx,"active")
-        plantModel.setPlantStatus(plantIdx,"selected")*//*
-
-    }
-
-    override fun onPlantSelectFailure(code: Int, message: String) {
-        when(code){
-            4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
-            7010-> Log.e( code.toString(),"화분 상태 변경에 실패하였습니다.")
-            else ->Log.e( code.toString(),"이미 선택된 화분입니다.")
-        }
-    }
-*/
     fun setLoadingView(){
         binding.setPlantLoadingPb.visibility= View.VISIBLE
         binding.setPlantLoadingPb.apply {
@@ -270,7 +214,7 @@ class PlantFragment :BaseFragment<FragmentFlowerpotBinding>(FragmentFlowerpotBin
 
     class ComparePlant {
         companion object : Comparator<Plant> {
-            override fun compare(a:Plant, b:Plant): Int {
+            override fun compare(a: Plant, b: Plant): Int {
                 var p1=0
                 var p2=0
                 when(a.plantStatus){

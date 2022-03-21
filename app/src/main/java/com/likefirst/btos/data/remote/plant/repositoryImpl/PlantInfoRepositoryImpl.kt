@@ -1,7 +1,7 @@
 package com.likefirst.btos.data.remote.plant.repositoryImpl
 
 import androidx.lifecycle.LiveData
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.local.PlantInfoDao
 import com.likefirst.btos.data.module.PlantRequest
 import com.likefirst.btos.data.module.PlantResponse
@@ -33,7 +33,7 @@ class PlantInfoRepositoryImpl @Inject constructor(private val remoteDataSource :
         mPlantDao.insert(plant)
     }
 
-    override  fun getPlant(idx: Int) : Plant{
+    override  fun getPlant(idx: Int) : Plant {
         return mPlantDao.getPlant(idx)
     }
 
@@ -41,7 +41,7 @@ class PlantInfoRepositoryImpl @Inject constructor(private val remoteDataSource :
         return mPlantDao.getCurrentPlant()
     }
 
-    override  fun getSelectedPlant():Plant{
+    override  fun getSelectedPlant(): Plant {
         return mPlantDao.getSelectedPlant("selected")!!
     }
 

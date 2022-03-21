@@ -7,8 +7,6 @@ import com.likefirst.btos.data.remote.history.response.HistoryBaseResponse
 import com.likefirst.btos.data.remote.history.response.HistoryDetailResponse
 import com.likefirst.btos.data.remote.history.response.HistorySenderDetailResponse
 import com.likefirst.btos.data.remote.notify.response.*
-import com.likefirst.btos.data.remote.plant.response.PlantRequest
-import com.likefirst.btos.data.remote.plant.response.PlantResponse
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.response.BlockUser
@@ -83,7 +81,7 @@ interface RetrofitInterface {
 
     // -------------------PlantList-------------------------- //
 
-    @GET("/plants/{userId}")
+ /*   @GET("/plants/{userId}")
     fun loadPlantList(
         @Path("userId") id: String
     ): Call<PlantResponse>
@@ -98,7 +96,7 @@ interface RetrofitInterface {
     fun buyPlant(
         @Body PlantBuyRequest : PlantRequest
     ): Call<PlantResponse>
-
+*/
     // -------------------Notice-------------------------- //
     @GET("/notices")
     fun loadNotice(): Call<NoticeAPIResponse>

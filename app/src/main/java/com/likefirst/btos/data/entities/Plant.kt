@@ -1,4 +1,5 @@
 package com.likefirst.btos.data.entities
+
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,7 +9,8 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-@Entity(tableName = "PlantTable")
+@Entity(tableName = "PlantInfoTable")
+
 data class Plant(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "plantIdx")

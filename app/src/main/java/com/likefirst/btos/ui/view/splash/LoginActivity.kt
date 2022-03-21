@@ -10,8 +10,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -35,14 +33,11 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.BuildConfig
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FcmTokenService
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
-import com.likefirst.btos.data.remote.plant.service.PlantService
-import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.ui.viewModel.PlantInfoViewModel
 import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
@@ -52,10 +47,8 @@ import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.view.main.MainActivity
 import com.likefirst.btos.utils.*
-import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
 import com.likefirst.btos.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -64,8 +57,7 @@ import kotlin.system.exitProcess
 @AndroidEntryPoint
 class LoginActivity
     : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), OnConnectionFailedListener,
-    LoginView, AutoLoginView, GetProfileView,
-    PlantListView,FcmTokenView{
+    LoginView, AutoLoginView, GetProfileView, FcmTokenView{
 
     val G_SIGN_IN : Int = 1
     private var GOOGLE_LOGIN_CODE = 9001
@@ -77,7 +69,6 @@ class LoginActivity
     var count = 0
 
     val authService = AuthService()
-    val plantService= PlantService()
     val fcmTokenService = FcmTokenService()
 
     val fireStore = Firebase.firestore
@@ -223,7 +214,6 @@ class LoginActivity
 
     override fun onAutoLoginSuccess(login : Login) {
         binding.loginLoadingPb.visibility = View.GONE
-
         //프로필 정보 가져와서 userdb에 저장
         authService.setGetProfileView(this)
         authService.getProfile(login.userIdx)
@@ -264,7 +254,6 @@ class LoginActivity
     fun updatePlantDB(){
         val userDB= UserDatabase.getInstance(this)!!
         val USERIDX=userDB.userDao().getUser().userIdx!!
-
         val result =  plantViewModel.getPlantList()
         result.observe(this, Observer {
             Log.e("HILT_TEST",it.toString())
@@ -272,30 +261,6 @@ class LoginActivity
         plantViewModel.loadPlantItemList(USERIDX)
     }
 
-    override fun onPlantListLoading() {
-
-    }
-
-    override fun onPlantListSuccess(plantList: ArrayList<Plant>) {
-        plantList.forEach { i ->
-            run {
-                if (  plantViewModel.getPlant(i.plantIdx) == null) {
-                    val plant : com.likefirst.btos.data.module.Plant = com.likefirst.btos.data.module.Plant(i.plantIdx, i.plantName, i.plantInfo, i.plantPrice, i.maxLevel, i.currentLevel, i.plantStatus, i.isOwn)
-                    plantViewModel.insert(plant)
-                } else {
-                    plantViewModel.setInitPlant(i.plantIdx,i.plantStatus,i.currentLevel,i.isOwn)
-                }
-            }
-        }  // 전
-    }
-
-
-
-    override fun onPlantListFailure(code: Int, message: String) {
-        when(code){
-            4000-> Log.e( code.toString(),"데이터베이스 연결에 실패하였습니다.")
-        }
-    }
 
     private fun initFirebaseAuth() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

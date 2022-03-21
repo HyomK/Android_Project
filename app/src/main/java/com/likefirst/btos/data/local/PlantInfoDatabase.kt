@@ -2,7 +2,7 @@ package com.likefirst.btos.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 
 @Database(
     entities = [

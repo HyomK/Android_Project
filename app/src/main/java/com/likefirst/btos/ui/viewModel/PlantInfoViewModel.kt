@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.module.PlantRequest
 import com.likefirst.btos.data.module.PlantResponse
 import com.likefirst.btos.domain.repository.PlantInfoRepository

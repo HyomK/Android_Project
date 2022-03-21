@@ -1,6 +1,8 @@
 package com.likefirst.btos.data.module
 
 import com.google.gson.annotations.SerializedName
+import com.likefirst.btos.ApplicationClass
+import com.likefirst.btos.data.entities.Plant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -41,9 +43,7 @@ interface PlantApiInterface {
     ):Response<PlantResponse>
 
     companion object {
-        private const val DEV_URL: String = "https://dev.euna.shop";       // 테스트 서버 주소
-        private  const val PROD_URL: String = "https://prod.euna.shop"    // 실서버 주소
-        private const val BASE_URL: String = DEV_URL
+        private const val BASE_URL: String = ApplicationClass.BASE_URL
 
         fun create(): PlantApiInterface {
             val logger = HttpLoggingInterceptor().apply {

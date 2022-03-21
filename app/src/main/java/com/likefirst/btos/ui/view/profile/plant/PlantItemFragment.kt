@@ -1,11 +1,11 @@
 package com.likefirst.btos.ui.view.profile.plant
 
-import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.databinding.FragmentPlantinfoBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.view.main.MainActivity
 import android.view.View.GONE
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.Plant
 import java.text.NumberFormat
 import java.util.*
 

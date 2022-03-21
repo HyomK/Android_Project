@@ -11,8 +11,6 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -28,7 +26,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.likefirst.btos.ApplicationClass
 import com.likefirst.btos.BuildConfig
 import com.likefirst.btos.R
-import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.entities.User
 import com.likefirst.btos.data.entities.UserEmail
 import com.likefirst.btos.data.entities.UserSign
@@ -36,8 +33,6 @@ import com.likefirst.btos.data.entities.firebase.UserDTO
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.notify.service.FcmTokenService
 import com.likefirst.btos.data.remote.notify.view.FcmTokenView
-import com.likefirst.btos.data.remote.plant.service.PlantService
-import com.likefirst.btos.data.remote.plant.view.PlantListView
 import com.likefirst.btos.data.remote.service.AuthService
 import com.likefirst.btos.data.remote.users.response.Login
 import com.likefirst.btos.data.remote.users.view.GetProfileView
@@ -46,16 +41,12 @@ import com.likefirst.btos.data.remote.users.view.SignUpView
 import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.*
-import com.likefirst.btos.data.remote.plant.viewmodel.PlantViewModel
 import com.likefirst.btos.ui.viewModel.PlantInfoViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
     SignUpView, GetProfileView, LoginView, FcmTokenView{
 
     val authService = AuthService()
-    val plantService= PlantService()
     val fcmTokenService= FcmTokenService()
     lateinit var email: String
     private var auth : FirebaseAuth? = null

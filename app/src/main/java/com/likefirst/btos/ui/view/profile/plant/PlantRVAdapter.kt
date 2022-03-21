@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.likefirst.btos.R
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList

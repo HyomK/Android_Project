@@ -2,7 +2,7 @@ package com.likefirst.btos.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 
 
 @Dao

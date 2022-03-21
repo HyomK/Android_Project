@@ -1,6 +1,6 @@
 package com.likefirst.btos.domain.repository
 
-import com.likefirst.btos.data.module.Plant
+import com.likefirst.btos.data.entities.Plant
 
 interface PlantNotificationRepository {
     fun getSelectedPlant(): Plant
