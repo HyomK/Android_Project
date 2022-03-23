@@ -221,7 +221,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
     fun filterNotification(title: String , content: String){
         if("식물" in title || "화분" in title){
             val plant =  repository.getSelectedPlant()
-            val newLevel = Character.getNumericValue(title[title.indexOf("단계")-1])
+            val newLevel = Character.getNumericValue(content[content.indexOf("단계")-1])
             if(newLevel>=0) repository.setInitPlant(plant.plantIdx,plant.plantStatus,newLevel.toInt(),plant.isOwn)
             saveNotification("plant")
             return

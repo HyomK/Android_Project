@@ -85,7 +85,7 @@ class MailWriteActivity:BaseActivity<ActivityMailWriteBinding>(ActivityMailWrite
         binding.MailWriteBodyEt.isFocusable=false
         binding.MailWriteBodyEt.isClickable=false
         binding.MailWriteBodyEt.isCursorVisible=false
-        Snackbar.make(binding.root,"편지가 발송되었습니다!",Snackbar.LENGTH_SHORT)
+        Snackbar.make(binding.root,"편지가 발송되었습니다!",Snackbar.LENGTH_SHORT).show()
         Log.e("SENDING", "success")
     }
 

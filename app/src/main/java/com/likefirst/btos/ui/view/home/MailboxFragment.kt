@@ -87,6 +87,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         Log.d("Mailbox","destroy")
         val mActivity = activity as MainActivity
         mActivity.isMailOpen=false
+        mActivity.notifyDrawerHandler("unlock")
     }
 
 
@@ -101,11 +102,11 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
         val mActivity = activity as MainActivity
         if(!mActivity.isMailOpen) mActivity.isMailOpen= true
         requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+        onDestroy()
     }
 
 
     fun getDiary(diary: MailInfoResponse){
-
         val Diary = DiaryViewerInfo( diary.senderNickName, diary.emotionIdx, diary.sendAt, diary.content!!, true, diary.doneList!!)
         val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
         intent.putExtra("diaryInfo",Diary)
@@ -138,7 +139,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
             dialog.setButtonClickListener(object: CustomDialogFragment.OnButtonClickListener {
                 override fun onButton1Clicked() {}
                 override fun onButton2Clicked() {
-                    mActivity.notifyDrawerHandler("lock")
                     mActivity.startNextActivity(MailWriteActivity::class.java)
                 }
             })
@@ -149,6 +149,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
             if(!mActivity.isMailOpen) mActivity.isMailOpen= true
             requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
             mActivity.isMailOpen=false
+            onDestroy()
         }
 
 
@@ -166,7 +167,6 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
                         mailViewModel.loadReply(this@MailboxFragment, getUserIdx(),mail.idx)
                     }
                 }
-                mActivity.notifyDrawerHandler("unlock")
                 mailBoxAdapter.removeItem(position)
             }
         })

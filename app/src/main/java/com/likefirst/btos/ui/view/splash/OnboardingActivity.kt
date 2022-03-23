@@ -42,7 +42,9 @@ import com.likefirst.btos.databinding.ActivityOnboardingBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.utils.*
 import com.likefirst.btos.ui.viewModel.PlantInfoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingActivity :BaseActivity<ActivityOnboardingBinding> ( ActivityOnboardingBinding::inflate),
     SignUpView, GetProfileView, LoginView, FcmTokenView{
 

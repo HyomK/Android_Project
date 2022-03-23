@@ -26,10 +26,11 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
         blockService.setBlockView(this)
         binding.mailViewBodyTv.text= mail?.content
 
-
         if(mail?.senderNickName =="저편너머"){
             binding.mailViewDateTv.visibility= View.GONE
             binding.mailViewSenderTv.visibility=View.GONE
+            binding.letterViewSendBtn.visibility=View.GONE
+            binding.letterWriteSendOp.visibility=View.GONE
         }else{
             binding.mailViewDateTv.text=mail?.sendAt
             binding.mailViewSenderTv.text=mail?.senderNickName

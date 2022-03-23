@@ -74,7 +74,7 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                 }
                 override fun onButton2Clicked() {
                     replyService.setSendReplyView(this@MailReplyActivity)
-                    val request = SendReplyRequest(getUserIdx(),reply.senderIdx,reply.firstHistoryType,reply.typeIdx,binding.MailReplyBodyEt.text.toString())
+                    val request = SendReplyRequest(getUserIdx(),reply.senderIdx,reply.firstHistoryType!!,reply.typeIdx,binding.MailReplyBodyEt.text.toString())
                     CoroutineScope(Dispatchers.Main).launch {
                         val job = async{
                             replyService.sendReply(request)
