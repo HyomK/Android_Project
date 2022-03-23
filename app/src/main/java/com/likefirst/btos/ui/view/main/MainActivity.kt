@@ -31,7 +31,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.data.remote.notify.response.Alarm
 import com.likefirst.btos.data.remote.notify.response.AlarmInfo
 import com.likefirst.btos.data.remote.notify.service.AlarmService
-import com.likefirst.btos.data.remote.notify.service.NoticeService
 import com.likefirst.btos.data.remote.notify.view.*
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.service.DiaryService
@@ -46,7 +45,7 @@ import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
 import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
-import com.likefirst.btos.ui.profile.plant.PlantFragment
+import com.likefirst.btos.ui.view.profile.plant.PlantFragment
 import com.likefirst.btos.ui.view.main.AlarmRVAdapter
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.removeNotice
@@ -66,7 +65,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     var isMailOpen=false
     var isPlantOpen=false
 
-
     lateinit var noticeList :ArrayList<NoticeDetailResponse>
     var prevNoticeSize : Int =0
     lateinit var  notifyViewModel: NotifyViewModel
@@ -78,18 +76,24 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     interface onBackPressedListener {
         fun onBackPressed();
     }
+    interface BottomHandler{
+        fun onBottomNavHandler(fragmentTag : String,NavId: Int )
+    }
 
     fun onBottomNavHandler(prevFragment : String, id : Int){
+        Log.e("Handler",id.toString())
         binding.mainBnv.menu.findItem(id).isChecked = true
         supportFragmentManager.commit {
-           supportFragmentManager.findFragmentByTag(prevFragment)?.let { remove(it) }
+            supportFragmentManager.findFragmentByTag(prevFragment)?.let { remove(it) }
         }
     }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setNotificationIcon()
+
     }
 
     fun setNotificationIcon(){
@@ -174,6 +178,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     inner class BottomNavView :NavigationBarView.OnItemSelectedListener {
         override fun onNavigationItemSelected(it: MenuItem): Boolean {
+            if(plantFragment.isAdded && !plantFragment.isHidden)
+                supportFragmentManager.beginTransaction().remove(plantFragment).commit()
             when (it.itemId) {
                 R.id.homeFragment -> {
                     isDrawerOpen=true
@@ -450,6 +456,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
             }
             "reply"->{
                 replyService.loadReply(getUserIdx(),"reply",item.reqParamIdx)
+
             }
             "plant"->{
                 binding.mainBnv.menu.findItem(R.id.profileFragment).isChecked = true

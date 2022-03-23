@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.view.children
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -204,8 +205,9 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
         requiredPageNum = 1
         Log.e("RADIOBUTTON",filtering)
         liveSearching.postValue(filtering)
-        /*binding.historyToolbar.historySearchEt.setText("")*/
-      //  initRecyclerView()
+        binding.historyBasicNoResultIv.visibility=View.GONE
+
+
     }
 
 
@@ -323,6 +325,9 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
     fun setApiFailView(){
         binding.historyBasicLoadingPb.visibility = View.GONE
+        for (i in 0 until  binding.historyRadiogroup.childCount) {
+            binding.historyRadiogroup.getChildAt(i).isEnabled=true
+        }
         recyclerViewAdapter.clearSenderItems()
         recyclerViewAdapter.cleardlItems()
         recyclerViewAdapter.notifyDataSetChanged()
@@ -331,6 +336,9 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
     fun setApiSuccessView(){
         binding.historyBasicLoadingPb.visibility = View.GONE
+        for (i in 0 until  binding.historyRadiogroup.childCount) {
+            binding.historyRadiogroup.getChildAt(i).isEnabled=true
+        }
         binding.historyBasicNoResultIv.visibility = View.GONE
         binding.historyBasicNoResultTv.visibility = View.GONE
         binding.historyBasicRv.visibility = View.VISIBLE
@@ -338,6 +346,9 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
     fun setLoadingView(){
         binding.historyBasicLoadingPb.visibility = View.VISIBLE
+        for (i in 0 until  binding.historyRadiogroup.childCount) {
+            binding.historyRadiogroup.getChildAt(i).isEnabled=false
+        }
         binding.historyBasicLoadingPb.apply {
             setAnimation("sprout_loading.json")
             visibility = View.VISIBLE

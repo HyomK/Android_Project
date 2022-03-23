@@ -171,12 +171,8 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
         binding.historyBasicNoResultIv.visibility = View.GONE
         binding.historyBasicNoResultTv.visibility = View.GONE
         val result = response.list
-       /* if(searchText!=null) {
-           recyclerViewAdapter.clearSenderItems()
-           // recyclerViewAdapter.notifyDataSetChanged()
-        }*/
+
         recyclerViewAdapter.setSenderItems(result)
-       // recyclerViewAdapter.notifyItemRangeInserted((requiredPageNum-1)*20,(requiredPageNum-1)*20+pageInfo.dataNum_currentPage!!)
         if (pageInfo.hasNext!!){
             requiredPageNum++
         } else {
@@ -189,7 +185,6 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
             6018 ->{
                 //검색결과 없음
                 recyclerViewAdapter.clearSenderItems()
-                //recyclerViewAdapter.notifyDataSetChanged()
                 binding.historyBasicNoResultIv.visibility = View.VISIBLE
                 binding.historyBasicNoResultTv.visibility = View.VISIBLE
             }

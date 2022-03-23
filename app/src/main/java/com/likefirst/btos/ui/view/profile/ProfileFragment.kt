@@ -13,7 +13,7 @@ import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.databinding.FragmentProfileBinding
 import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.view.main.MainActivity
-import com.likefirst.btos.ui.profile.plant.PlantFragment
+import com.likefirst.btos.ui.view.profile.plant.PlantFragment
 import com.likefirst.btos.ui.view.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.view.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.view.profile.setting.SettingFragment

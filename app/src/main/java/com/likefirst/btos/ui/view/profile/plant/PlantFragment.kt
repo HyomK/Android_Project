@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.profile.plant
+package com.likefirst.btos.ui.view.profile.plant
 
 import android.net.ConnectivityManager
 import android.os.Bundle
