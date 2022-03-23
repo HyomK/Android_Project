@@ -45,9 +45,9 @@ import com.likefirst.btos.data.remote.users.view.AutoLoginView
 import com.likefirst.btos.data.remote.users.view.GetProfileView
 import com.likefirst.btos.data.remote.users.view.LoginView
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.view.main.MainActivity
 import com.likefirst.btos.utils.*
 import com.likefirst.btos.databinding.ActivityLoginBinding
+import com.likefirst.btos.ui.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.GlobalScope

@@ -1,4 +1,4 @@
-package com.likefirst.btos.data.module
+package com.likefirst.btos.data.remote.plant
 
 import com.google.gson.annotations.SerializedName
 import com.likefirst.btos.ApplicationClass

@@ -12,9 +12,9 @@ import com.likefirst.btos.R
 import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.databinding.FragmentProfileBinding
 import com.likefirst.btos.ui.BaseFragment
-import com.likefirst.btos.ui.view.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.view.main.MainActivity
-import com.likefirst.btos.ui.view.profile.plant.PlantFragment
+import com.likefirst.btos.ui.profile.plant.PlantFragment
+import com.likefirst.btos.ui.view.profile.premium.PremiumFragment
 import com.likefirst.btos.ui.view.profile.setting.NoticeActivity
 import com.likefirst.btos.ui.view.profile.setting.SettingFragment
 import com.likefirst.btos.ui.view.profile.setting.SuggestionFragment
@@ -106,9 +106,7 @@ class ProfileFragment:BaseFragment<FragmentProfileBinding>(FragmentProfileBindin
     }
 
     fun initProfile(){
-        val plantDB = PlantDatabase.getInstance(requireContext())!!
         val userDatabase = UserDatabase.getInstance(requireContext())!!
-//        val plant =plantDB.plantDao().getSelectedPlant()!!
         val plant = plantViewModel.getSelectedPlant()
         val plantName=requireContext()!!.resources.getStringArray(R.array.plantEng)!!
         val profile = requireContext()!!.resources.getIdentifier(

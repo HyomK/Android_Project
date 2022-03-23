@@ -1,15 +1,19 @@
 package com.likefirst.btos.ui.view.posting
 
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.likefirst.btos.R
+import com.likefirst.btos.data.local.UserDatabase
 import com.likefirst.btos.data.remote.posting.response.*
 import com.likefirst.btos.data.remote.posting.service.SendService
 import com.likefirst.btos.data.remote.posting.view.DeleteReplyView
@@ -20,12 +24,13 @@ import com.likefirst.btos.data.remote.posting.viewmodel.MailboxRepository
 import com.likefirst.btos.databinding.ActivityMailReplyBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.view.main.CustomDialogFragment
+
 import com.likefirst.btos.utils.dateToString
 import com.likefirst.btos.utils.getUserIdx
 import kotlinx.coroutines.*
 import java.util.*
 
-class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView,DeleteReplyView{
+class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailReplyBinding::inflate),SendReplyView{
 
 
     lateinit var reply : MailInfoResponse
@@ -43,11 +48,9 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
     override fun initAfterBinding() {
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
-        binding.MailReplyMenuList.setDropDownBackgroundDrawable(resources.getDrawable(R.drawable.drop_menu_bg))
-        binding.MailReplyMenuList.setAdapter(adapter)
-        binding.MailReplyHideView.visibility=View.VISIBLE
-        binding.MailReplyMenuSp.visibility=View.GONE
         binding.mailReplyDateTv.text = dateToString(Date())
+        val userDB = UserDatabase.getInstance(this)!!.userDao()
+        setFont(userDB.getFontIdx()!!)
         initListener()
 
     }
@@ -79,43 +82,13 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
                         job.await()
                         binding.mailReplyLoadingPb.visibility=View.GONE
                     }
-
                 }
             })
             dialog.show(supportFragmentManager, "CustomDialog")
         }
 
 
-        binding.MailReplyMenuList.setOnItemClickListener { adapterView, view, i, l ->
-            val dialog = CustomDialogFragment()
-            binding.MailReplyHideView.visibility=View.VISIBLE
-            when (i) {
-                //삭제
-                0 -> {
-                    val btn= arrayOf("확인","취소")
-                    dialog.arguments= bundleOf(
-                        "bodyContext" to "정말 삭제하시겠습니까?",
-                        "btnData" to btn
-                    )
-                    // 버튼 클릭 이벤트 설정
-                    dialog.setButtonClickListener(object:
-                        CustomDialogFragment.OnButtonClickListener {
-                        override fun onButton1Clicked() {
-                            replyService.setDeleteReplyView(this@MailReplyActivity)
-                            CoroutineScope(Dispatchers.Main).launch {
-                                setLoadingView()
-                                replyService.deleteReply(reply.typeIdx)
 
-                            }
-                        }
-                        override fun onButton2Clicked() {
-                        }
-                    })
-                    dialog.show(supportFragmentManager, "CustomDialog")
-                }
-            }
-
-        }
 
         binding.MailReplyBodyEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -152,14 +125,18 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
 
     fun setReplySuccessView(){
         isSuccess=true
-        binding.MailReplyMenuSp.visibility=View.VISIBLE
-        binding.MailReplyMenuBtn.visibility= View.VISIBLE
-        binding.MailReplyHideView.visibility=View.VISIBLE
         binding.MailReplyCheckBtn.visibility=View.GONE
         binding.MailReplyBodyEt.isFocusable=false
         binding.MailReplyBodyEt.isClickable=false
         binding.MailReplyBodyEt.isFocusableInTouchMode=false // 입력막기
         Snackbar.make(binding.mailReplyContentLayout,"편지가 발송되었습니다.",Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun setFont(idx:Int){
+        val fonts= resources.getStringArray(R.array.fontEng)
+        val fontId= resources.getIdentifier(fonts[idx],"font", packageName)
+        binding.MailReplyBodyEt.typeface = ResourcesCompat.getFont(this,fontId)
+        binding.mailReplyDateTv.typeface = ResourcesCompat.getFont(this,fontId)
     }
 
 
@@ -183,12 +160,4 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         Log.e("Reply-api-fail",message.toString())
     }
 
-    override fun onDeleteReplySuccess() {
-        binding.mailReplyLoadingPb.visibility=View.GONE
-        Snackbar.make(binding.mailReplyContentLayout,"편지가 삭제되었습니다.",Snackbar.LENGTH_SHORT).show()
-    }
-
-    override fun onDeleteReplyFailure(code: Int, message: String) {
-        binding.mailReplyLoadingPb.visibility=View.GONE
-    }
 }

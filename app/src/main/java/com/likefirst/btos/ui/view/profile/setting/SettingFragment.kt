@@ -22,6 +22,7 @@ import com.likefirst.btos.ui.view.main.MainActivity
 import com.likefirst.btos.utils.*
 import kotlin.system.exitProcess
 import com.google.firebase.auth.FirebaseAuth
+import com.likefirst.btos.ui.view.profile.setting.SettingBirthDialog
 
 
 class SettingFragment:BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)

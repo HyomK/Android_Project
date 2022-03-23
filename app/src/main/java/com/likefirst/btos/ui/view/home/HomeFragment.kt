@@ -1,4 +1,4 @@
-package com.likefirst.btos.ui.view.home
+package com.likefirst.btos.ui.home
 
 import android.content.Intent
 import android.os.Build
@@ -33,8 +33,9 @@ import com.likefirst.btos.data.remote.users.service.UpdateUserService
 import com.likefirst.btos.data.remote.users.view.UpdateIsSadView
 import com.likefirst.btos.databinding.FragmentHomeBinding
 import com.likefirst.btos.ui.BaseFragment
-import com.likefirst.btos.ui.view.main.CustomDialogFragment
 import com.likefirst.btos.ui.view.main.MainActivity
+import com.likefirst.btos.ui.view.home.MailboxFragment
+import com.likefirst.btos.ui.view.main.CustomDialogFragment
 import com.likefirst.btos.ui.view.posting.DiaryActivity
 import com.likefirst.btos.ui.view.posting.MailWriteActivity
 import com.likefirst.btos.ui.view.splash.LoginActivity
@@ -69,8 +70,8 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         val plantName= requireContext().resources.getStringArray(R.array.plantEng)
         plantModel.getCurrentPlantInfo().observe(viewLifecycleOwner,Observer{
                 it-> run {
-              updatePot(binding.lottieAnimation,plantName[it.plantIdx-1],it.currentLevel)
-           }
+            updatePot(binding.lottieAnimation,plantName[it.plantIdx-1],it.currentLevel)
+        }
         })
     }
     override fun initAfterBinding() {
@@ -234,28 +235,28 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
         MobileAds.initialize(requireContext())
 //        val testDeviceIds = arrayListOf("1FA90365DB7395FC489D988564B3F2D7")
         MobileAds.setRequestConfiguration(
-              RequestConfiguration.Builder()
+            RequestConfiguration.Builder()
 //             .setTestDeviceIds(testDeviceIds)
-           .build()
-           )
+                .build()
+        )
 
-          val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3439488559531418/3923063443")
-    // 테스트 기기 추가
-    // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
-          val adLoadCallback = object: RewardedAdLoadCallback() {
-              override fun onRewardedAdLoaded() {
-            // Ad successfully loaded.
-               Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
+        val mRewardedVideoAd = RewardedAd(requireContext(), "ca-app-pub-3439488559531418/3923063443")
+        // 테스트 기기 추가
+        // TODO: 실제로 앱 배포할 때에는 테스트 기기 추가하는 코드를 지워야 합니다.
+        val adLoadCallback = object: RewardedAdLoadCallback() {
+            override fun onRewardedAdLoaded() {
+                // Ad successfully loaded.
+                Log.d("rewardLoadSuccess", "Reward Loading Successed!!!")
             }
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-            // Ad failed to load.
-              Log.e("rewardLoadError", adError.toString())
-              }
-          }
-          mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
-          animationView.setOnClickListener {
+                // Ad failed to load.
+                Log.e("rewardLoadError", adError.toString())
+            }
+        }
+        mRewardedVideoAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+        animationView.setOnClickListener {
             showUpdateSadPotDialog(mRewardedVideoAd)
-           }
+        }
         //Google Admob 구현
 
 
@@ -384,29 +385,29 @@ public class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBindin
     override fun onUpdateFailure(code: Int, message: String) {
         when (code){
             2002, 2003 -> {
-                    // 로그아웃
-                    val dialog = CustomDialogFragment()
-                    val data = arrayOf("확인")
-                    dialog.arguments= bundleOf(
-                        "bodyContext" to  "유효하지 않은 회원정보입니다. 다시 로그인 해주세요.",
-                        "btnData" to data
-                    )
-                    dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
-                        override fun onButton1Clicked() {
-                            val gso = getGSO()
-                            val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-                            googleSignInClient.signOut()
-                            removeJwt()
-                            val intent = Intent(requireContext(), LoginActivity::class.java)
-                            startActivity(intent)
-                            exitProcess(0)
-                        }
+                // 로그아웃
+                val dialog = CustomDialogFragment()
+                val data = arrayOf("확인")
+                dialog.arguments= bundleOf(
+                    "bodyContext" to  "유효하지 않은 회원정보입니다. 다시 로그인 해주세요.",
+                    "btnData" to data
+                )
+                dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+                    override fun onButton1Clicked() {
+                        val gso = getGSO()
+                        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+                        googleSignInClient.signOut()
+                        removeJwt()
+                        val intent = Intent(requireContext(), LoginActivity::class.java)
+                        startActivity(intent)
+                        exitProcess(0)
+                    }
 
-                        override fun onButton2Clicked() {
+                    override fun onButton2Clicked() {
 
-                        }
-                    })
-                    dialog.show(this.parentFragmentManager, "logoutDialog")
+                    }
+                })
+                dialog.show(this.parentFragmentManager, "logoutDialog")
             }
             4000, 5016 -> Snackbar.make(requireView(), "데이터베이스 연결에 실패하였습니다. 다시 시도해 주세요.", Snackbar.LENGTH_SHORT).show()
         }

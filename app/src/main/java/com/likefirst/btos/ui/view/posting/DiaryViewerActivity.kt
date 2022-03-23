@@ -17,11 +17,11 @@ import com.likefirst.btos.data.remote.posting.view.DeleteDiaryView
 import com.likefirst.btos.databinding.ActivityDiaryViewerBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.view.main.CustomDialogFragment
-import com.likefirst.btos.ui.view.main.MainActivity
 import com.likefirst.btos.ui.view.splash.LoginActivity
 import com.likefirst.btos.utils.getGSO
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.removeJwt
+import com.likefirst.btos.ui.view.main.MainActivity
 import kotlin.system.exitProcess
 
 

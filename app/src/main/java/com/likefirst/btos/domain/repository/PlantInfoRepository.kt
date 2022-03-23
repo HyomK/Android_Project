@@ -2,8 +2,8 @@ package com.likefirst.btos.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.likefirst.btos.data.entities.Plant
-import com.likefirst.btos.data.module.PlantRequest
-import com.likefirst.btos.data.module.PlantResponse
+import com.likefirst.btos.data.remote.plant.PlantRequest
+import com.likefirst.btos.data.remote.plant.PlantResponse
 import retrofit2.Response
 
 interface PlantInfoRepository {

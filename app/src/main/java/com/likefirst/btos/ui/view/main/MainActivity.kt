@@ -14,14 +14,13 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationBarView
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.entities.firebase.NotificationDTO
 import com.likefirst.btos.data.local.NotificationDatabase
 import com.likefirst.btos.data.remote.notify.response.NoticeDetailResponse
 import com.likefirst.btos.databinding.ActivityMainBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.view.archive.ArchiveFragment
-import com.likefirst.btos.ui.view.history.HistoryFragment
-import com.likefirst.btos.ui.view.home.HomeFragment
 import com.likefirst.btos.ui.view.home.MailViewActivity
 import com.likefirst.btos.ui.view.profile.ProfileFragment
 import com.likefirst.btos.ui.view.profile.setting.NoticeActivity
@@ -29,10 +28,10 @@ import android.widget.RadioGroup
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
-import com.likefirst.btos.data.entities.DiaryViewerInfo
 import com.likefirst.btos.data.remote.notify.response.Alarm
 import com.likefirst.btos.data.remote.notify.response.AlarmInfo
 import com.likefirst.btos.data.remote.notify.service.AlarmService
+import com.likefirst.btos.data.remote.notify.service.NoticeService
 import com.likefirst.btos.data.remote.notify.view.*
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.service.DiaryService
@@ -43,9 +42,12 @@ import com.likefirst.btos.data.remote.posting.view.MailLetterView
 import com.likefirst.btos.data.remote.posting.view.MailReplyView
 import com.likefirst.btos.ui.view.history.HistoryUpdateFragment
 import com.likefirst.btos.ui.view.posting.DiaryViewerActivity
-import com.likefirst.btos.ui.view.profile.plant.PlantFragment
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
+import com.likefirst.btos.ui.history.HistoryFragment
+import com.likefirst.btos.ui.home.HomeFragment
+import com.likefirst.btos.ui.profile.plant.PlantFragment
+import com.likefirst.btos.ui.view.main.AlarmRVAdapter
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.removeNotice
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,9 +58,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
     private val homeFragment = HomeFragment()
     private val archiveFragment = ArchiveFragment()
     private val historyFragment = HistoryFragment()
-    private val historyUpdateFragment = HistoryUpdateFragment()
     private val profileFragment= ProfileFragment()
-    private val plantFragment=PlantFragment()
+    private val plantFragment= PlantFragment()
     private var backPressedMillis : Long = 0
 
     var isDrawerOpen =true
@@ -145,10 +146,6 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
            val bundle = Bundle()
            bundle.putBoolean("isNewUser", true)
            homeFragment.arguments = bundle
-           supportFragmentManager.beginTransaction()
-               .replace(R.id.fr_layout, homeFragment, "home")
-               .setReorderingAllowed(true)
-               .commitNowAllowingStateLoss()
        }
         supportFragmentManager.beginTransaction()
             .replace(R.id.fr_layout, homeFragment, "home")
@@ -183,7 +180,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (homeFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
-                            .hide(historyUpdateFragment)
+                            .hide(historyFragment)
                             .hide(profileFragment)
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -193,7 +190,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(profileFragment)
-                            .hide(historyUpdateFragment)
+                            .hide(historyFragment)
                             .add(R.id.fr_layout, homeFragment, "home")
                             .show(homeFragment)
                             .setReorderingAllowed(true)
@@ -207,12 +204,12 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     val editor= getSharedPreferences("HistoryBackPos", AppCompatActivity.MODE_PRIVATE).edit()
                     editor.clear()
                     editor.commit()
-                    if(historyUpdateFragment.isAdded){
+                    if(historyFragment.isAdded){
                         supportFragmentManager.beginTransaction()
                             .hide(archiveFragment)
                             .hide(homeFragment)
                             .hide(profileFragment)
-                            .show(historyUpdateFragment)
+                            .show(historyFragment)
                             .setReorderingAllowed(true)
                             .commitNowAllowingStateLoss()
                         Log.d("historyClick", "added")
@@ -221,8 +218,8 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                             .hide(homeFragment)
                             .hide(archiveFragment)
                             .hide(profileFragment)
-                            .add(R.id.fr_layout, historyUpdateFragment, "history")
-                            .show(historyUpdateFragment)
+                            .add(R.id.fr_layout, historyFragment, "history")
+                            .show(historyFragment)
                             .setReorderingAllowed(true)
                             .commitAllowingStateLoss()
                         Log.d("historyClick", "noadded")
@@ -239,7 +236,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (archiveFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .hide(historyUpdateFragment)
+                            .hide(historyFragment)
                             .hide(profileFragment)
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -249,7 +246,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(profileFragment)
-                            .hide(historyUpdateFragment)
+                            .hide(historyFragment)
                             .add(R.id.fr_layout, archiveFragment, "archive")
                             .show(archiveFragment)
                             .setReorderingAllowed(true)
@@ -263,7 +260,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     if (profileFragment.isAdded) {
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
-                            .hide(historyUpdateFragment)
+                            .hide(historyFragment)
                             .hide(archiveFragment)
                             .show(profileFragment)
                             .setReorderingAllowed(true)
@@ -273,7 +270,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                         supportFragmentManager.beginTransaction()
                             .hide(homeFragment)
                             .hide(archiveFragment)
-                            .hide(historyUpdateFragment)
+                            .hide(historyFragment)
                             .add(R.id.fr_layout, profileFragment, "profile")
                             .show(profileFragment)
                             .setReorderingAllowed(true)
@@ -389,13 +386,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
                     .show(homeFragment)
                     .hide(archiveFragment)
                     .hide(profileFragment)
-                    .hide(historyUpdateFragment)
+                    .hide(historyFragment)
                     .commitNow()
             } else {
                 supportFragmentManager.beginTransaction()
                     .hide(archiveFragment)
                     .hide(profileFragment)
-                    .hide(historyUpdateFragment)
+                    .hide(historyFragment)
                     .add(R.id.fr_layout, homeFragment)
                     .commitNow()
             }
@@ -405,7 +402,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     fun initAlarmAdapter(alarmList : ArrayList<Alarm>){
         val adapter = AlarmRVAdapter(alarmList)
-        adapter.setMyItemCLickLister(object:AlarmRVAdapter.AlarmItemClickListener{
+        adapter.setMyItemCLickLister(object: AlarmRVAdapter.AlarmItemClickListener{
             override fun onClickItem(alarm: Alarm, position: Int) {
                 val notificationDatabase = NotificationDatabase.getInstance(this@MainActivity)!!
                 notificationDatabase.NotificationDao().setIsChecked(alarm.alarmIdx)
@@ -425,6 +422,13 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
         result.map { i->run{
             notificationDatabase.NotificationDao().insert(NotificationDTO(i.alarmIdx,i.content,i.createdAt,false))
         } }
+        if(notificationDatabase.NotificationDao().itemCount() > 100){
+            val prev = notificationDatabase.NotificationDao().getNotifications()
+            val subList = prev.subList(0,prev.size - 100 -1)
+            subList.forEach {
+                notificationDatabase.NotificationDao().delete(it)
+            }
+        }
         initAlarmAdapter(result)
     }
 

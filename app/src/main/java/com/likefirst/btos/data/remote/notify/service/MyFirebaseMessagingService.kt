@@ -8,7 +8,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.likefirst.btos.ui.view.main.MainActivity
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.work.OneTimeWorkRequest
@@ -20,6 +19,7 @@ import com.likefirst.btos.data.remote.notify.view.FcmTokenView
 import com.likefirst.btos.data.remote.notify.view.NoticeAPIView
 import com.likefirst.btos.data.remote.plant.repositoryImpl.PlantInfoRepositoryImpl
 import com.likefirst.btos.data.remote.plant.repositoryImpl.PlantNotificationRepositoryImpl
+import com.likefirst.btos.ui.view.main.MainActivity
 import com.likefirst.btos.utils.getAlarmSound
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.saveNotification
@@ -36,18 +36,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.i(TAG, remoteMessage.toString());
 
-        // 서버에서 직접 보냈을 때
-        if(remoteMessage.notification != null){
-            sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body!!)
-            if (true) {
-                scheduleJob();
-            } else {
-                handleNow();
-            }
-        }
-
         // 다른 기기에서 서버로 보냈을 때
-        else if(remoteMessage.data.isNotEmpty()){
+        if(remoteMessage.data.isNotEmpty()){
+            Log.i(TAG, "get from data");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 sendMessageNotification(remoteMessage.data )
             }
@@ -59,6 +50,36 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),FcmTokenView {
             } else {
                 handleNow();
             }
+        }
+
+
+        // 서버에서 직접 보냈을 때
+       else if(remoteMessage.notification != null){
+            Log.i(TAG, "get from notification ");
+            sendNotification(remoteMessage.notification?.title, remoteMessage.notification?.body!!)
+            if (true) {
+                scheduleJob();
+            } else {
+                handleNow();
+            }
+        }
+
+
+    }
+
+    override fun handleIntent(intent: Intent) {
+        try {
+            if (intent.extras != null) {
+                val builder = RemoteMessage.Builder("MessagingService")
+                for (key in intent.extras!!.keySet()) {
+                    builder.addData(key!!, intent.extras!![key].toString())
+                }
+                onMessageReceived(builder.build())
+            } else {
+                super.handleIntent(intent)
+            }
+        } catch (e: java.lang.Exception) {
+            super.handleIntent(intent)
         }
     }
 

@@ -212,8 +212,14 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/layout/toolbar_layout.xml" value="0.22" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS/app/src/main/res/menu/overflow_menu.xml" value="0.19074074074074074" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/drawable/diary_repeat_bg.xml" value="0.11944444444444445" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/drawable/history_repeat_bg.xml" value="0.11944444444444445" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/drawable/ic_bg_diary.xml" value="0.11944444444444445" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.1765625" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.11548913043478261" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_history.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/item_archive_calendar_vp.xml" value="0.21822916666666667" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/item_history.xml" value="0.1765625" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/setting_birth_dialog.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/ic_dropdown.xml" value="0.2671875" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/tutorial_indicator.xml" value="0.2671875" />

@@ -63,13 +63,20 @@ class PlantRVAdapter(val context : Context) : RecyclerView.Adapter<PlantRVAdapte
        if(plant.plantStatus=="inactive"){ //미보유 아이템
            holder.layout.setBackgroundResource(R.drawable.profile_shop_bg)
            holder.plantLevel.text=plant.maxLevel.toString()+"단계"
-           holder.status.visibility=View.GONE
+
            holder.selectBtn.visibility=View.VISIBLE
            holder.selectBtn.text=won
            holder.maxIv.setBackgroundResource(R.drawable.ic_max_gray_bg)
            holder.selectBtn.setOnClickListener{
                mItemClickLister.onClickBuyItem(dataSet[position].first)
            }
+           // 준비중 setup
+
+          // holder.status.visibility=View.GONE
+           holder.selectBtn.visibility=View.GONE
+           holder.plantImage.isClickable=false
+           holder.status.text="준비중"
+
        }else {
            holder.layout.setBackgroundResource(R.drawable.profile_bg)
            holder.plantLevel.text=plant.currentLevel.toString()+"단계"
@@ -80,6 +87,10 @@ class PlantRVAdapter(val context : Context) : RecyclerView.Adapter<PlantRVAdapte
            if(plant.plantStatus=="selected"){
                holder.selectBtn.visibility=View.GONE
                holder.status.visibility=View.VISIBLE
+
+               //selected 만 선택되도록 함
+               holder.plantImage.setOnClickListener { mItemClickLister.onClickInfoItem(dataSet[position].first)  }
+
            }else{ //보유 아이템
                holder.status.visibility==View.GONE
                holder.selectBtn.visibility=View.VISIBLE
@@ -88,9 +99,13 @@ class PlantRVAdapter(val context : Context) : RecyclerView.Adapter<PlantRVAdapte
                    mItemClickLister.onClickSelectItem(dataSet[position].first ,position)
 
                }
+
+               holder.selectBtn.visibility=View.GONE
+               holder.plantImage.isClickable=false
+               holder.status.text="준비중"
            }
        }
-        holder.plantImage.setOnClickListener { mItemClickLister.onClickInfoItem(dataSet[position].first)  }
+
     }
 
     override fun getItemCount(): Int {

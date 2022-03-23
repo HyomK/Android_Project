@@ -33,6 +33,7 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
         val userDB = UserDatabase.getInstance(requireContext())?.userDao()
         val settingService = SettingUserService()
         var birth: Int =userDB!!.getUser().birth
+      //  binding.birthTill.isHintEnabled=false
         if(birth == 0)  binding.birthTill.hint="선택안함"
         else binding.birthTill.hint=birth.toString()
 
@@ -117,7 +118,14 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
         fun onButton2Clicked()
 
     }
-
+    fun setLoadingView(){
+        binding.birthLoadingPb.visibility= View.VISIBLE
+        binding.birthLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+    }
     override fun onStart() {
         super.onStart();
         val lp : WindowManager.LayoutParams  =  WindowManager.LayoutParams()
@@ -139,15 +147,5 @@ class SettingBirthDialog : DialogFragment(), SetSettingUserView {
     }
     // 클릭 이벤트 실행
     private lateinit var buttonClickListener: OnButtonClickListener
-
-
-    fun setLoadingView(){
-        binding.birthLoadingPb.visibility= View.VISIBLE
-        binding.birthLoadingPb.apply {
-            setAnimation("sprout_loading.json")
-            visibility = View.VISIBLE
-            playAnimation()
-        }
-    }
 
 }

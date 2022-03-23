@@ -13,8 +13,7 @@ import com.likefirst.btos.data.entities.Content
 import com.likefirst.btos.data.entities.SenderList
 import com.likefirst.btos.databinding.ItemHistoryBinding
 
-class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val userIdx : Int, val filtering: LiveData<String>)
-    : RecyclerView.Adapter<HistoryBasicRecyclerViewAdapter.ViewHolder>(){
+class HistoryAdapter(private val context: Context?, private val userIdx : Int, val filtering: LiveData<String>): RecyclerView.Adapter<HistoryAdapter.ViewHolder>(){
 
     inner class DataSet(){
         var senderItems = ArrayList<SenderList>()
@@ -39,15 +38,13 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): HistoryBasicRecyclerViewAdapter.ViewHolder {
+    ): HistoryAdapter.ViewHolder {
         val binding : ItemHistoryBinding = ItemHistoryBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: HistoryBasicRecyclerViewAdapter.ViewHolder, pos: Int) {
-
+    override fun onBindViewHolder(holder: HistoryAdapter.ViewHolder, pos: Int) {
         var position =getItemViewType(pos)
-        Log.e("bindingHolder","${position}/${pos}")
         if(data.senderItems.isNotEmpty()){
             holder.senderBind(data.senderItems[position])
             holder.binding.itemHistoryLayout.setOnClickListener {
@@ -86,11 +83,8 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
         @SuppressLint("SetTextI18n")
         fun senderBind(item : SenderList){
             if(item.firstContent.type == "diary"){
-                binding.itemHistoryBg.setBackgroundResource(R.drawable.diary_repeat_bg)
+                binding.itemHistoryBg.setImageResource(R.drawable.ic_bg_diary)
             }
-            binding.itemHistoryArrow.visibility = View.VISIBLE
-            binding.itemHistorySenderTitle.visibility = View.VISIBLE
-
             binding.itemHistorySenderTitle.text = "${item.firstContent.senderNickName} (${item.historyListNum})"
             binding.itemHistoryContent.text = item.firstContent.content
             binding.itemHistoryDate.text = item.firstContent.sendAt
@@ -110,34 +104,29 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
 
         }
         fun dlBind(item : Content){
-            Log.e("binding-dl",filtering.value.toString()+"/${item.emotionIdx?.toInt()}")
+
             if(filtering.value== "diary"){
-                binding.itemHistoryBg.setBackgroundResource(R.drawable.diary_repeat_bg)
-                if(item.emotionIdx?.toInt() != 0) {
-                    val emotion = context!!.resources.getIdentifier("emotion"+item.emotionIdx, "drawable", context.packageName)
-                    Log.e("binding-dl","${emotion}")
-                    binding.itemHistoryEmotion.setImageResource(emotion)
-                    binding.itemHistoryEmotion.visibility=View.VISIBLE
-                }
+                binding.itemHistoryBg.setImageResource(R.drawable.ic_bg_diary)
             }else{
                 binding.itemHistoryBg.setBackgroundResource(R.drawable.history_repeat_bg)
-                binding.itemHistoryEmotion.visibility = View.GONE
             }
-
             binding.itemHistoryArrow.visibility = View.GONE
             binding.itemHistorySenderTitle.visibility = View.GONE
             binding.itemHistoryContent.text = item.content
             binding.itemHistoryDate.text = item.sendAt
             binding.itemHistorySender.text = item.senderNickName
-
+            if(item.emotionIdx != "0") {
+                val emotion = context!!.resources.getIdentifier("emotion"+item.emotionIdx, "drawable", context.packageName)
+                binding.itemHistoryEmotion.setImageResource(emotion)
+            }else{
+                binding.itemHistoryEmotion.visibility = View.GONE
+            }
             if(item.doneListNum != 0){
                 val done = context!!.resources.getIdentifier("leaf"+item.doneListNum, "drawable", context.packageName)
                 binding.itemHistoryDone.setImageResource(done)
             }else{
                 binding.itemHistoryDone.visibility = View.GONE
             }
-
-
         }
     }
 

@@ -16,9 +16,6 @@ class HistoryDetailActivity: BaseActivity<ActivityHistoryListBinding>(ActivityHi
 
     val positioning : Int = -1
     lateinit var recyclerView: RecyclerView
-    var userIdx: Int = 0
-    lateinit var type : String
-    var typeIdx: Int = 0
 
     override fun initAfterBinding() {
         recyclerView = binding.historyDetailRv
@@ -37,20 +34,20 @@ class HistoryDetailActivity: BaseActivity<ActivityHistoryListBinding>(ActivityHi
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
-
-        val intent = getIntent()
-//        val bundle = intent.getBundleExtra("historyInfo")
-//        userIdx = bundle?.getString("userIdx").toString()
-//        type = bundle?.getString("type").toString()
-//        typeIdx = bundle?.getString("typeIdx").toString()
-        userIdx = intent.getIntExtra("userIdx",0)
-        type = intent.getStringExtra("type").toString()
-        typeIdx = intent.getIntExtra("typeIdx",0)
+        var userIdx = intent.getIntExtra("userIdx",0)
+        var type = intent.getStringExtra("type").toString()
+        var typeIdx = intent.getIntExtra("typeIdx",0)
         Log.e("HISTORYDETAIL",userIdx.toString()+type+typeIdx.toString())
         val historyService = HistoryService()
         historyService.setHistoryDetailView(this)
 //        historyService.historyDetail(userIdx.toInt(), type, typeIdx.toInt(), recyclerViewAdapter)
-        historyService.historyDetail(83, "diary", 149, recyclerViewAdapter)
+        historyService.historyDetail(userIdx, type, typeIdx, recyclerViewAdapter)
+
+//        val bundle = intent.getBundleExtra("historyInfo")
+//        userIdx = bundle?.getString("userIdx").toString()
+//        type = bundle?.getString("type").toString()
+//        typeIdx = bundle?.getString("typeIdx").toString()
+
     }
 
     override fun onHistoryDetailLoading() {
@@ -61,7 +58,16 @@ class HistoryDetailActivity: BaseActivity<ActivityHistoryListBinding>(ActivityHi
         response: ArrayList<HistoryList>,
         recyclerViewAdapter: HistoryDetailRecyclerViewAdapter,
     ) {
-
+        recyclerViewAdapter.setHistoryItems(response)
+        recyclerViewAdapter.notifyDataSetChanged()
+        val size = recyclerViewAdapter.itemCount
+        var count = 0
+        response.forEach {
+            if (it.positioning) {
+                recyclerView.scrollToPosition(count)
+            }
+            count++
+        }
     }
 
     override fun onHistoryDetailFailure(code: Int, message: String) {

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -43,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_bg_received"
+            android:background="@drawable/history_repeat_bg"
             app:layout_constraintBottom_toBottomOf="@id/item_history_layout"
             app:layout_constraintEnd_toEndOf="@id/item_history_layout"
             app:layout_constraintStart_toStartOf="@+id/item_history_layout"

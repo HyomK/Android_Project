@@ -1,8 +1,8 @@
 package com.likefirst.btos.data.remote.plant.dataSource
 
-import com.likefirst.btos.data.module.PlantApiInterface
-import com.likefirst.btos.data.module.PlantRequest
-import com.likefirst.btos.data.module.PlantResponse
+import com.likefirst.btos.data.remote.plant.PlantApiInterface
+import com.likefirst.btos.data.remote.plant.PlantRequest
+import com.likefirst.btos.data.remote.plant.PlantResponse
 import retrofit2.Response
 import javax.inject.Inject
 

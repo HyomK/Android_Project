@@ -3,8 +3,8 @@ package com.likefirst.btos.data.remote.plant.repositoryImpl
 import androidx.lifecycle.LiveData
 import com.likefirst.btos.data.entities.Plant
 import com.likefirst.btos.data.local.PlantInfoDao
-import com.likefirst.btos.data.module.PlantRequest
-import com.likefirst.btos.data.module.PlantResponse
+import com.likefirst.btos.data.remote.plant.PlantRequest
+import com.likefirst.btos.data.remote.plant.PlantResponse
 import com.likefirst.btos.data.remote.plant.dataSource.PlantInfoRemoteDataSource
 import com.likefirst.btos.domain.repository.PlantInfoRepository
 import retrofit2.Response

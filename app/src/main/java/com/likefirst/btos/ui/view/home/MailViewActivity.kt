@@ -12,10 +12,9 @@ import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.service.BlackListService
 import com.likefirst.btos.data.remote.users.view.SetBlockView
 import com.likefirst.btos.databinding.ActivityMailViewBinding
-
 import com.likefirst.btos.ui.BaseActivity
-import com.likefirst.btos.ui.view.main.CustomDialogFragment
 import com.likefirst.btos.ui.view.posting.MailReplyActivity
+import com.likefirst.btos.ui.view.main.CustomDialogFragment
 
 
 class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewBinding::inflate),SetBlockView{
@@ -56,7 +55,7 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                 override fun onButton1Clicked(){
                 }
                 override fun onButton2Clicked() {
-                    val intent = Intent(this@MailViewActivity,MailReplyActivity::class.java)
+                    val intent = Intent(this@MailViewActivity, MailReplyActivity::class.java)
                     intent.putExtra("reply",mail)
                     startActivity(intent)
                 }

@@ -1,8 +1,8 @@
 package com.likefirst.btos.data.remote.posting
 
 import com.likefirst.btos.ApplicationClass
-import com.likefirst.btos.data.module.PlantRequest
-import com.likefirst.btos.data.module.PlantResponse
+import com.likefirst.btos.data.remote.plant.PlantRequest
+import com.likefirst.btos.data.remote.plant.PlantResponse
 import com.likefirst.btos.data.remote.BaseResponse
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.response.MailboxResponse
@@ -50,11 +50,10 @@ interface MailboxApiInterface {
     ): Response<MailboxResponse>
 
 
-
     companion object {
         private const val BASE_URL: String = ApplicationClass.BASE_URL
 
-        fun create(): MailboxApiInterface {
+        fun create(): HistoryApi {
             val logger = HttpLoggingInterceptor().apply {
                 level =
                     HttpLoggingInterceptor.Level.BASIC
@@ -69,7 +68,7 @@ interface MailboxApiInterface {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(MailboxApiInterface ::class.java)
+                .create(HistoryApi::class.java)
         }
     }
 }

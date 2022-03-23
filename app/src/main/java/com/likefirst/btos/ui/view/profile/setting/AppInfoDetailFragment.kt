@@ -6,7 +6,8 @@ import com.likefirst.btos.ui.BaseFragment
 import com.likefirst.btos.ui.view.main.MainActivity
 
 
-class AppInfoDetailFragment: BaseFragment<FragmentAppinfoDetailBinding>(FragmentAppinfoDetailBinding::inflate),MainActivity.onBackPressedListener {
+class AppInfoDetailFragment: BaseFragment<FragmentAppinfoDetailBinding>(FragmentAppinfoDetailBinding::inflate),
+    MainActivity.onBackPressedListener {
     override fun initAfterBinding() {
 
         val title =  arguments?.getString("title","")
