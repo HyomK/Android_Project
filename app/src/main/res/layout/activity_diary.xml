@@ -129,6 +129,7 @@
 
 
             <EditText
+                style="@style/EditTheme"
                 android:id="@+id/diary_contents_et"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
