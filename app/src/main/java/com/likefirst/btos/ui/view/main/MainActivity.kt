@@ -47,6 +47,7 @@ import com.likefirst.btos.ui.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.view.profile.plant.PlantFragment
 import com.likefirst.btos.ui.view.main.AlarmRVAdapter
+import com.likefirst.btos.ui.view.posting.MailDiaryActivity
 import com.likefirst.btos.utils.getUserIdx
 import com.likefirst.btos.utils.removeNotice
 import dagger.hilt.android.AndroidEntryPoint
@@ -483,7 +484,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(ActivityMainBinding::infla
 
     override fun onDiarySuccess(resp: MailInfoResponse) {
         val diary = DiaryViewerInfo(resp.senderNickName,resp.emotionIdx,resp.sendAt,resp.content!!,true,resp.doneList!!)
-        val intent = Intent(this@MainActivity,DiaryViewerActivity::class.java)
+        val intent = Intent(this@MainActivity,MailDiaryActivity::class.java)
         intent.putExtra("diaryInfo",diary)
         startActivity(intent)
     }

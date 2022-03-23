@@ -24,6 +24,7 @@ import com.likefirst.btos.data.remote.posting.viewmodel.MailViewModel
 import com.likefirst.btos.data.remote.posting.viewmodel.MailViewModelFactory
 import com.likefirst.btos.data.remote.posting.viewmodel.MailboxRepository
 import com.likefirst.btos.ui.view.main.MainActivity
+import com.likefirst.btos.ui.view.posting.MailDiaryActivity
 import com.likefirst.btos.utils.getUserIdx
 
 
@@ -108,7 +109,7 @@ class MailboxFragment: BaseFragment<FragmentMailboxBinding>(FragmentMailboxBindi
 
     fun getDiary(diary: MailInfoResponse){
         val Diary = DiaryViewerInfo( diary.senderNickName, diary.emotionIdx, diary.sendAt, diary.content!!, true, diary.doneList!!)
-        val  intent: Intent = Intent(requireContext(),DiaryViewerActivity::class.java)
+        val  intent: Intent = Intent(requireContext(), MailDiaryActivity::class.java)
         intent.putExtra("diaryInfo",Diary)
         requireActivity().startActivity(intent)
     }
