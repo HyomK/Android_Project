@@ -70,7 +70,7 @@ class SendService {
     }
 
     fun deleteReply(replyIdx: Int){
-        sendReplyView.onSendReplyLoading()
+        deleteReplyView.onDeleteReplyLoading()
         sendService.deleteReply(replyIdx).enqueue(object:Callback<BaseResponse<String>>{
             override fun onResponse(
                 call: Call<BaseResponse<String>>,
