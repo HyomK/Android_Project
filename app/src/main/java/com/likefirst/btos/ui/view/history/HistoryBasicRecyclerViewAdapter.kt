@@ -45,7 +45,6 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
     }
 
     override fun onBindViewHolder(holder: HistoryBasicRecyclerViewAdapter.ViewHolder, pos: Int) {
-
         var position =getItemViewType(pos)
         Log.e("bindingHolder","${position}/${pos}")
         if(data.senderItems.isNotEmpty()){
@@ -87,6 +86,16 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
         fun senderBind(item : SenderList){
             if(item.firstContent.type == "diary"){
                 binding.itemHistoryBg.setBackgroundResource(R.drawable.diary_repeat_bg)
+                if(item.firstContent.emotionIdx != "0") {
+                    val emotion = context!!.resources.getIdentifier("emotion"+item.firstContent.emotionIdx, "drawable", context.packageName)
+                    binding.itemHistoryEmotion.setImageResource(emotion)
+                    binding.itemHistoryEmotion.visibility = View.VISIBLE
+                }else{
+                    binding.itemHistoryEmotion.visibility = View.GONE
+                }
+            }else{
+                binding.itemHistoryBg.setBackgroundResource(R.drawable.history_repeat_bg)
+                binding.itemHistoryEmotion.visibility = View.GONE
             }
             binding.itemHistoryArrow.visibility = View.VISIBLE
             binding.itemHistorySenderTitle.visibility = View.VISIBLE
@@ -95,12 +104,7 @@ class HistoryBasicRecyclerViewAdapter(private val context: Context?, private val
             binding.itemHistoryContent.text = item.firstContent.content
             binding.itemHistoryDate.text = item.firstContent.sendAt
             binding.itemHistorySender.text = item.firstContent.senderNickName
-            if(item.firstContent.emotionIdx != "0") {
-                val emotion = context!!.resources.getIdentifier("emotion"+item.firstContent.emotionIdx, "drawable", context.packageName)
-                binding.itemHistoryEmotion.setImageResource(emotion)
-            }else{
-                binding.itemHistoryEmotion.visibility = View.GONE
-            }
+
             if(item.firstContent.doneListNum != 0){
                 val done = context!!.resources.getIdentifier("leaf"+item.firstContent.doneListNum, "drawable", context.packageName)
                 binding.itemHistoryDone.setImageResource(done)

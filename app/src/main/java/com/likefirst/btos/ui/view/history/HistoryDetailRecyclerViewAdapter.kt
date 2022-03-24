@@ -56,19 +56,22 @@ class HistoryDetailRecyclerViewAdapter(
             binding.itemHistoryDetailBgIv.setImageResource(0)
             if(item.type == "letter" || item.type == "reply"){
                 binding.itemHistoryDetailBgIv.setBackgroundResource(R.drawable.history_repeat_bg)
+                binding.diaryViewerEmotionIv.visibility = View.GONE
             }else if(item.type == "diary"){
-                binding.itemHistoryDetailBgIv.setImageResource(R.drawable.ic_bg_diary)
+                binding.itemHistoryDetailBgIv.setBackgroundResource(R.drawable.diary_repeat_bg)
+                if(item.emotionIdx != "0") {
+                    val emotion = context!!.resources.getIdentifier("emotion"+item.emotionIdx, "drawable", context.packageName)
+                    binding.diaryViewerEmotionIv.setImageResource(emotion)
+                    binding.diaryViewerEmotionIv.visibility = View.VISIBLE
+                    binding.diaryViewerEmotionTv.text = emotionName[item.emotionIdx.toString().toInt()-1]
+                }else{
+                    binding.diaryViewerEmotionIv.visibility = View.GONE
+                }
             }
             binding.diaryViewerContentsTv.text = item.content
             binding.diaryViewerDateTv.text = item.sendAt
             binding.diaryViewerNameTv.text = item.senderNickName
-            if(item.emotionIdx != "0") {
-                val emotion = context!!.resources.getIdentifier("emotion"+item.emotionIdx, "drawable", context.packageName)
-                binding.diaryViewerEmotionIv.setImageResource(emotion)
-                binding.diaryViewerEmotionTv.text = emotionName[item.emotionIdx.toString().toInt()-1]
-            }else{
-                binding.diaryViewerEmotionIv.visibility = View.GONE
-            }
+
             if(item.doneList != null){
                 binding.diaryViewerDoneListRv.visibility = View.VISIBLE
                 val doneListAdapter = DiaryDoneListRVAdapter("history", context, userDB.getFontIdx()!!)

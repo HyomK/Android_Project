@@ -346,8 +346,10 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>(FragmentHistoryBindi
 
     fun setLoadingView(){
         binding.historyBasicLoadingPb.visibility = View.VISIBLE
-        for (i in 0 until  binding.historyRadiogroup.childCount) {
-            binding.historyRadiogroup.getChildAt(i).isEnabled=false
+        runBlocking {
+            for (i in 0 until  binding.historyRadiogroup.childCount) {
+                binding.historyRadiogroup.getChildAt(i).isEnabled=false
+            }
         }
         binding.historyBasicLoadingPb.apply {
             setAnimation("sprout_loading.json")

@@ -74,7 +74,6 @@
                     android:layout_height="wrap_content"
                     style="@style/settingListStyle"
                     android:text="푸시 알림"
-                    android:visibility="gone"
                     />
 
 
@@ -87,7 +86,6 @@
                     app:layout_constraintEnd_toEndOf="@id/setting_toggle_iv"
                     app:layout_constraintStart_toStartOf="@id/setting_toggle_iv"
                     app:layout_constraintBottom_toBottomOf="@id/setting_toggle_iv"
-                    android:visibility="gone"
                     />
 
                 <ImageView
@@ -99,7 +97,6 @@
                     app:layout_constraintBottom_toBottomOf="@id/setting_push"
                     android:src="@drawable/ic_toggle_true"
                     android:layout_marginEnd="35dp"
-                    android:visibility="gone"
                     />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
