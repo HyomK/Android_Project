@@ -119,8 +119,8 @@
     <!--posting-->
     <string-array name="report_items">
         <item>삭제</item>
-        <item>신고</item>
-        <item>차단</item>
+       <!-- <item>신고</item>
+        <item>차단</item>-->
     </string-array>
     <string name="diary_contents_hint">오늘 하루는 어땠나요?</string>
     <string name="diary_public">공개</string>

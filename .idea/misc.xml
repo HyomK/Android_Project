@@ -216,8 +216,11 @@
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/drawable/history_repeat_bg.xml" value="0.11944444444444445" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/drawable/ic_bg_diary.xml" value="0.11944444444444445" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/activity_diary.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/activity_mail_view.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/activity_mail_write.xml" value="0.1" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.11548913043478261" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_history.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_setting.xml" value="0.14666666666666667" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/item_archive_calendar_vp.xml" value="0.21822916666666667" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/item_history.xml" value="0.1765625" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/setting_birth_dialog.xml" value="0.16621376811594202" />

@@ -7,17 +7,28 @@ import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.likefirst.btos.R
+import com.likefirst.btos.data.entities.Content
+import com.likefirst.btos.data.entities.PageInfo
+import com.likefirst.btos.data.remote.history.view.SenderDetailView
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
+import com.likefirst.btos.data.remote.posting.service.SendService
+import com.likefirst.btos.data.remote.posting.view.DeleteReplyView
+import com.likefirst.btos.data.remote.posting.view.SendReplyView
 import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.service.BlackListService
 import com.likefirst.btos.data.remote.users.view.SetBlockView
 import com.likefirst.btos.databinding.ActivityMailViewBinding
 import com.likefirst.btos.ui.BaseActivity
+import com.likefirst.btos.ui.view.history.HistoryBasicRecyclerViewAdapter
 import com.likefirst.btos.ui.view.posting.MailReplyActivity
 import com.likefirst.btos.ui.view.main.CustomDialogFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewBinding::inflate),SetBlockView{
+class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewBinding::inflate),SetBlockView,DeleteReplyView{
 
     override fun initAfterBinding() {
         val bundle : Bundle = intent.getBundleExtra("MailView")!!
@@ -78,7 +89,11 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
                     // 버튼 클릭 이벤트 설정
                     dialog.setButtonClickListener(object:
                         CustomDialogFragment.OnButtonClickListener {
-                        override fun onButton1Clicked() {}
+                        override fun onButton1Clicked() {
+                            val deleteService = SendService()
+                            deleteService.setDeleteReplyView(this@MailViewActivity)
+                            deleteService.deleteReply(mail?.typeIdx)
+                        }
                         override fun onButton2Clicked() {}
                     })
                     dialog.show(supportFragmentManager, "CustomDialog")
@@ -148,5 +163,31 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
 
     }
 
+
+    fun setLoadingView(){
+        binding.mailViewLoadingPb.visibility= View.VISIBLE
+        binding.mailViewLoadingPb.apply {
+            setAnimation("sprout_loading.json")
+            visibility = View.VISIBLE
+            playAnimation()
+        }
+    }
+
+    override fun onDeleteReplyLoading() {
+        setLoadingView()
+    }
+
+
+    override fun onDeleteReplySuccess() {
+        binding.mailViewLoadingPb.visibility= View.GONE
+        CoroutineScope(Dispatchers.Main).launch{
+            delay(1000)
+            finish()
+        }
+    }
+
+    override fun onDeleteReplyFailure(code: Int, message: String) {
+        binding.mailViewLoadingPb.visibility= View.GONE
+    }
 
 }
