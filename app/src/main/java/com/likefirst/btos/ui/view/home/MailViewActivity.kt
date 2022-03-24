@@ -13,11 +13,10 @@ import com.likefirst.btos.data.remote.history.view.SenderDetailView
 import com.likefirst.btos.data.remote.posting.response.MailInfoResponse
 import com.likefirst.btos.data.remote.posting.service.SendService
 import com.likefirst.btos.data.remote.posting.view.DeleteReplyView
-import com.likefirst.btos.data.remote.posting.view.SendReplyView
+import com.likefirst.btos.databinding.ActivityMailViewBinding
 import com.likefirst.btos.data.remote.users.response.BlackList
 import com.likefirst.btos.data.remote.users.service.BlackListService
 import com.likefirst.btos.data.remote.users.view.SetBlockView
-import com.likefirst.btos.databinding.ActivityMailViewBinding
 import com.likefirst.btos.ui.BaseActivity
 import com.likefirst.btos.ui.view.history.HistoryBasicRecyclerViewAdapter
 import com.likefirst.btos.ui.view.posting.MailReplyActivity
@@ -36,6 +35,9 @@ class MailViewActivity : BaseActivity<ActivityMailViewBinding>(ActivityMailViewB
         val blockService = BlackListService()
         blockService.setBlockView(this)
         binding.mailViewBodyTv.text= mail?.content
+        binding.letterWriteSendOp.visibility=View.GONE
+        binding.letterViewMenuBtn.visibility=View.GONE
+
 
         if(mail?.senderNickName =="저편너머"){
             binding.mailViewDateTv.visibility= View.GONE

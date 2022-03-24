@@ -49,6 +49,7 @@ class MailReplyActivity: BaseActivity<ActivityMailReplyBinding>(ActivityMailRepl
         val menuItem = resources.getStringArray(R.array.delete_items)
         val adapter= ArrayAdapter(this, R.layout.menu_dropdown_item, menuItem)
         binding.mailReplyDateTv.text = dateToString(Date())
+
         val userDB = UserDatabase.getInstance(this)!!.userDao()
         setFont(userDB.getFontIdx()!!)
         initListener()
