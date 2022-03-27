@@ -43,7 +43,7 @@ import com.likefirst.btos.ui.view.history.HistoryUpdateFragment
 import com.likefirst.btos.ui.view.posting.DiaryViewerActivity
 import com.likefirst.btos.utils.Model.LiveSharedPreferences
 import com.likefirst.btos.data.remote.notify.viewmodel.NotifyViewModel
-import com.likefirst.btos.ui.history.HistoryFragment
+import com.likefirst.btos.ui.view.history.HistoryFragment
 import com.likefirst.btos.ui.home.HomeFragment
 import com.likefirst.btos.ui.view.profile.plant.PlantFragment
 import com.likefirst.btos.ui.view.main.AlarmRVAdapter

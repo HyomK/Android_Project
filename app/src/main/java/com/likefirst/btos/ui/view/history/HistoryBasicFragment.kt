@@ -171,8 +171,7 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
         binding.historyBasicNoResultIv.visibility = View.GONE
         binding.historyBasicNoResultTv.visibility = View.GONE
         val result = response.list
-
-        recyclerViewAdapter.setSenderItems(result)
+        //recyclerViewAdapter.setSenderItems(result)
         if (pageInfo.hasNext!!){
             requiredPageNum++
         } else {
@@ -214,7 +213,7 @@ class HistoryBasicFragment() : BaseFragment<FragmentHistoryBasicBinding>(Fragmen
        /* if(searchText!=null) {
           recyclerViewAdapter.cleardlItems()
         }*/
-        recyclerViewAdapter.setdlItems(result)
+       // recyclerViewAdapter.setdlItems(result)
       //  recyclerViewAdapter.notifyItemRangeInserted((requiredPageNum-1)*20,(requiredPageNum-1)*20+pageInfo.dataNum_currentPage!!)
         if (pageInfo.hasNext!!){
             requiredPageNum++

@@ -24,7 +24,9 @@ data class Content(
     @ColumnInfo(name = "doneListNum") var doneListNum: Int? = 0,
     @ColumnInfo(name = "sendAt_raw") var sendAt_raw: String?= "",
     @ColumnInfo(name = "sendAt") var sendAt: String?= "",
-    @ColumnInfo(name = "senderNickName") var senderNickName: String?=""
+    @ColumnInfo(name = "senderNickName") var senderNickName: String?="",
+    @ColumnInfo(name = "senderActive") var senderActive: Boolean,
+    @ColumnInfo(name = "senderFontIdx") var senderFontIdx: Int?=1,
 )
 
 //본문 보기 -> HistoryList

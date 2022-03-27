@@ -28,12 +28,15 @@ class HistorySearchViewModel  @Inject constructor(private val repository :Histor
         get() = _dl_li_res
 
     private val _sender_detail_res = MutableLiveData<ApiResult<HistorySenderDetailResponse>>()
-    val sender_detail : LiveData<ApiResult<HistorySenderDetailResponse>>
+    val sender_detail_res : LiveData<ApiResult<HistorySenderDetailResponse>>
         get() = _sender_detail_res
 
-    private val _dl_detail_res = MutableLiveData<ApiResult<HistoryDetailResponse>>()
-    val dl_detail : LiveData<ApiResult<HistoryDetailResponse>>
-        get() = _dl_detail_res
+
+    private val _req_flag =  MutableLiveData<Boolean>()
+    val req_flag :LiveData<Boolean>
+        get()=_req_flag
+
+
 
     private val SEARCH_TIMEOUT = 500L
     /*
@@ -67,8 +70,14 @@ class HistorySearchViewModel  @Inject constructor(private val repository :Histor
         }
 
 
-    fun getSenderList( req: HistoryRequest)= CoroutineScope(Dispatchers.IO).launch {
+    fun postRequest(flag :Boolean,req: HistoryRequest ){
+        _req_flag.postValue(flag)    // false -> init / true -> scroll
+        if(req.filtering =="sender") getSenderList(req)
+        else getDiaryLetterList(req)
 
+    }
+
+    fun getSenderList(req: HistoryRequest)= CoroutineScope(Dispatchers.IO).launch {
         _sender_li_res.postValue(ApiResult.loading())
         repository.historyListSender(req.userIdx!!, req.pageNum!!, req.filtering!!, req.search).let{
             if(it.isSuccessful){
@@ -81,7 +90,6 @@ class HistorySearchViewModel  @Inject constructor(private val repository :Histor
     }
 
     fun getDiaryLetterList( req: HistoryRequest)= CoroutineScope(Dispatchers.IO).launch {
-
         _dl_li_res.postValue(ApiResult.loading())
         repository.historyListDiaryLetter(req.userIdx!!, req.pageNum!!, req.filtering!!, req.search).let{
             if(it.isSuccessful){
@@ -93,16 +101,18 @@ class HistorySearchViewModel  @Inject constructor(private val repository :Histor
         }
     }
 
-    fun getSenderDetailList( userIdx: Int,
+    fun getSenderDetailList( flag  : Boolean,
+                             userIdx: Int,
                              senderNickName: String,
                              pageNum: Int,
                              search: String?)= CoroutineScope(Dispatchers.IO).launch {
 
+        _req_flag.postValue(flag)
         _sender_detail_res.postValue(ApiResult.loading())
-
         repository.historyListSenderDetail(userIdx, senderNickName,pageNum, search).let{
             if(it.isSuccessful){
-                _sender_detail_res.postValue(ApiResult.success(it.code(),it.body()))
+                if(it.body()?.code==1000) _sender_detail_res.postValue(ApiResult.success(it.code(),it.body()))
+                else _sender_detail_res.postValue(ApiResult.error(it.code(),it.message()))
             }else{
                 _sender_detail_res.postValue(ApiResult.error(it.code(),it.message()))
             }
@@ -110,7 +120,7 @@ class HistorySearchViewModel  @Inject constructor(private val repository :Histor
     }
 
 
-    fun getDetailList( userIdx: Int,
+  /*  fun getDetailList( userIdx: Int,
                             type: String,
                             typeIdx: Int,)= CoroutineScope(Dispatchers.IO).launch {
 
@@ -123,7 +133,7 @@ class HistorySearchViewModel  @Inject constructor(private val repository :Histor
             }
         }
     }
-
+*/
 
 }
 

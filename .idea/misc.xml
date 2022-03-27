@@ -214,7 +214,15 @@
         <entry key="..\:/UMC/BTOS/app/src/main/res/menu/overflow_menu.xml" value="0.19074074074074074" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/drawable/history_repeat_bg.xml" value="0.22447916666666667" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/activity_mail_view.xml" value="0.25" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_flowerpot.xml" value="0.1721014492753623" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_history.xml" value="0.14673913043478262" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_history_sender_detail.xml" value="0.20625" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_profile.xml" value="0.20416666666666666" />
         <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/fragment_setting.xml" value="0.1" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/item_history.xml" value="0.15896739130434784" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/item_history_loading.xml" value="0.20260416666666667" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/toolbar_history_detail.xml" value="0.20625" />
+        <entry key="..\:/UMC/BTOS_Refactoring/BTOS/app/src/main/res/layout/toolbar_history_senderdetail.xml" value="0.20625" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/ic_dropdown.xml" value="0.2671875" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/tutorial_indicator.xml" value="0.2671875" />
         <entry key="..\:/Users/kms10/AndroidStudioProjects/BTOS/app/src/main/res/drawable/tutorial_indicator_default_dot.xml" value="0.2671875" />
